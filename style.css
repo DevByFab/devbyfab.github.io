@@ -1,0 +1,1445 @@
+:root {
+  --bg: #111;
+  --fg: #fff;
+  --gray: #333;
+  --gray-light: #444;
+  --violet: #8f5fff;
+  --violet-dark: #6a3fdc;
+  --border-radius: 12px;
+  --font-main: 'Inter', Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: rgba(17,17,17,0.95);
+  box-shadow: 0 2px 8px #0002;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  opacity: 0;
+  transform: translateY(-32px);
+  animation: nav-fadein 1.2s cubic-bezier(.77,0,.18,1) 0.1s forwards;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+nav ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 1.05rem;
+  padding: 0.2em 0.5em;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+nav a.active, nav a:hover {
+  background: var(--gray-light);
+}
+
+main {
+  max-width: 1100px; /* AUGMENTE main à 1100px au lieu de 900px */
+  margin: 2.5rem auto 0 auto;
+  padding: 0 1rem 2rem 1rem;
+  flex: 1 0 auto;
+}
+
+/* Centrage vertical du main sur la page About */
+.about-page main {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Espacement régulier entre les blocs About (plus petit) */
+.about-block {
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #0001;
+  margin-bottom: 1.6rem; /* réduit l'espace entre chaque bloc */
+  padding: 2.2rem 2.2rem 1.7rem 2.2rem;
+  width: 100%;
+  max-width: 600px;
+  min-width: 320px;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+  position: relative;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2.2rem;
+  /* Animation d'entrée */
+  opacity: 0;
+  transform: translateY(40px);
+  animation: about-fadein 1.1s cubic-bezier(.77,0,.18,1) forwards;
+}
+.about-block:not(:first-child) {
+  /* Décalage d'animation pour effet fluide */
+  animation-delay: 0.15s;
+}
+.about-block:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.about-block:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+/* Animation d'entrée pour les blocs About */
+@keyframes about-fadein {
+  from { opacity: 0; transform: translateY(40px);}
+  to   { opacity: 1; transform: none;}
+}
+
+/* Dernier bloc : pas de margin-bottom */
+.about-block:last-child {
+  margin-bottom: 0;
+}
+
+/* Corrige le flex pour les blocs About sans avatar */
+.about-block > div:not(.avatar),
+.about-block > h2,
+.about-block > ul {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Pour les blocs About sans avatar, garde le même alignement */
+.about-block:not(.about-left) {
+  align-items: flex-start;
+}
+
+/* Responsive : garde la largeur uniforme sur mobile */
+@media (max-width: 700px) {
+  .about-page main {
+    min-height: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .about-block {
+    margin-bottom: 1.3rem;
+    max-width: 98vw;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+}
+
+/* Bloc Langages maîtrisés : réduit la hauteur et espace interne */
+.about-block.about-right .skills-list {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  gap: 1rem;
+}
+.about-block.about-right {
+  padding-top: 1.3rem;
+  padding-bottom: 1.1rem;
+}
+
+/* Bloc Objectifs futurs et Langages maîtrisés : titre sur deux lignes, même style et taille que "Style de travail" */
+.about-block.about-right h2,
+.about-block.about-right h2 span {
+  font-size: 2rem; /* même taille que les autres titres h2 */
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-align: left;
+  margin-bottom: 0.1rem;
+  opacity: 1;
+  margin-left: 0;
+  /* ...autres styles si besoin... */
+}
+
+/* Responsive : ajuste aussi sur mobile */
+@media (max-width: 700px) {
+  .about-block {
+    margin-bottom: 0.8rem;
+    /* ...existing code... */
+  }
+  .about-block.about-right {
+    padding-top: 0.8rem;
+    padding-bottom: 0.7rem;
+  }
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 60vh;
+}
+
+.hero-content {
+  flex: 1 1 320px;
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #ccc;
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8em 2em;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.btn-primary {
+  background: var(--violet);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--violet-dark);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px #8f5fff44;
+}
+
+.btn-secondary {
+  background: var(--gray-light);
+  color: var(--violet);
+}
+.btn-secondary:hover {
+  background: var(--gray);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.hero-illustration {
+  flex: 0 0 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#bg-anim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 60% 40%, #8f5fff22 0%, transparent 70%),
+              radial-gradient(ellipse at 30% 80%, #8f5fff11 0%, transparent 80%);
+  filter: blur(40px);
+  animation: bgmove 12s linear infinite alternate;
+}
+@keyframes bgmove {
+  0% { background-position: 60% 40%, 30% 80%; }
+  100% { background-position: 70% 50%, 20% 70%; }
+}
+
+.about-hero {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+.avatar {
+  flex: 0 0 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero h1 {
+  margin-bottom: 0.7rem;
+  font-size: 2rem;
+}
+.about-hero p {
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+.about-skills, .about-style, .about-goals {
+  margin-bottom: 2rem;
+}
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+.skills-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 1.1rem;
+}
+.icon-skill {
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: grayscale(1) brightness(1.5) sepia(1) hue-rotate(260deg) saturate(2);
+}
+.icon-skill.python { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="8" y="22" font-size="16" fill="white">Py</text></svg>'); }
+.icon-skill.css {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="16" y="20" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,Arial,sans-serif">CSS</text></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.icon-skill.html {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="16" y="20" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,Arial,sans-serif">HT5</text></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.icon-skill.js { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="10" y="22" font-size="16" fill="white">JS</text></svg>'); }
+.icon-skill.sqlite { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="2" y="22" font-size="16" fill="white">SQLite</text></svg>'); }
+.icon-skill.mysql {
+  /* Utilise le même logo que SQLite */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="2" y="22" font-size="16" fill="white">SQLite</text></svg>');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.about-style ul, .about-goals ul {
+  list-style: disc inside;
+  margin: 0.5rem 0 0 1rem;
+  color: #ccc;
+  font-size: 1.05rem;
+}
+
+/* Centrage et style pour l'intro des services */
+.services-intro {
+  text-align: center;
+  margin-bottom: 2.2rem;
+}
+
+.services-intro h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.1rem;
+  margin-top: 0;
+}
+
+.services-intro .services-slogan {
+  font-size: 1.18rem;
+  color: #bdbdbd;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-top: -0.7rem;
+  letter-spacing: 0.1px;
+}
+
+/* Nouvelle grille de cartes services avec couleurs personnalisées */
+.services-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2.2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background: linear-gradient(135deg, #232234 60%, #181828 100%);
+  border-radius: 18px;
+  box-shadow: 0 2px 18px #0003;
+  padding: 2.1rem 1.7rem 1.7rem 1.7rem;
+  min-width: 240px;
+  max-width: 320px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+  position: relative;
+  transition: transform 0.22s cubic-bezier(.77,0,.18,1), box-shadow 0.22s, background 0.22s;
+  border: 1.5px solid #28284a;
+}
+
+.service-card:hover {
+  transform: translateY(-10px) scale(1.035);
+  box-shadow: 0 8px 32px #8f5fff33, 0 2px 18px #0005;
+  background: linear-gradient(135deg, #2d2650 60%, #181828 100%);
+  border-color: var(--violet);
+}
+
+.service-card .service-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--violet);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  opacity: 0.85;
+}
+
+.service-card h2 {
+  font-size: 1.22rem;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.service-card p {
+  color: #eee;
+  flex: 1;
+  font-size: 1.07rem;
+  margin: 0 0 0.7rem 0;
+}
+
+.service-card .btn {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+/* Responsive : passe en colonne sur mobile */
+@media (max-width: 1100px) {
+  .services-cards {
+    flex-wrap: wrap;
+    gap: 1.3rem;
+  }
+  .service-card {
+    min-width: 220px;
+    max-width: 98vw;
+  }
+}
+@media (max-width: 700px) {
+  .services-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+  }
+  .service-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 98vw;
+  }
+}
+
+/* Animation d'entrée pour la barre de menu */
+nav {
+  opacity: 0;
+  transform: translateY(-32px);
+  animation: nav-fadein 1.2s cubic-bezier(.77,0,.18,1) 0.1s forwards;
+}
+
+@keyframes nav-fadein {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Animations d'entrée Home (plus smooth, plus lent) */
+.anim-fadein-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  animation: fadein-left 1.5s cubic-bezier(.77,0,.18,1) 0.3s forwards;
+}
+.anim-fadein-right {
+  opacity: 0;
+  transform: translateX(40px);
+  animation: fadein-right 1.5s cubic-bezier(.77,0,.18,1) 0.6s forwards;
+}
+.anim-fadein-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadein-up 1.2s cubic-bezier(.77,0,.18,1) 1.0s forwards;
+}
+
+@keyframes fadein-left {
+  80% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadein-right {
+  80% {
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadein-up {
+  80% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Animation d'entrée pour le titre et slogan */
+@keyframes fadein-title {
+  0% { opacity: 0; transform: translateY(-32px);}
+  100% { opacity: 1; transform: none;}
+}
+.services-intro h1,
+.services-intro .services-slogan {
+  opacity: 0;
+  animation: fadein-title 1s cubic-bezier(.77,0,.18,1) 0.1s forwards;
+}
+.services-intro .services-slogan {
+  animation-delay: 0.35s;
+}
+
+/* Animation d'entrée pour le contact rapide */
+@keyframes fadein-contact {
+  0% { opacity: 0; transform: translateY(32px);}
+  100% { opacity: 1; transform: none;}
+}
+.services-quick-contact {
+  opacity: 0;
+  animation: fadein-contact 1s cubic-bezier(.77,0,.18,1) 1.1s forwards;
+}
+
+/* Pour forcer le scroll et "pousser" le footer plus bas sur desktop */
+@media (min-width: 801px) {
+  main {
+    min-height: 80vh;
+  }
+}
+
+/* Pour mobile/tablette, on garde le responsive naturel */
+@media (max-width: 800px) {
+  .hero, .about-hero, .services-cards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  main {
+    padding: 0 0.5rem 2rem 0.5rem;
+    min-height: 0; /* Pas de min-height forcé sur mobile */
+  }
+}
+@media (max-width: 500px) {
+  .hero-content h1, .about-hero h1 {
+    font-size: 1.2rem;
+  }
+  .service-card {
+    padding: 1.2rem 0.7rem;
+  }
+}
+
+/* Police plus pro pour la page About */
+body, html {
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+}
+
+/* Bloc escalier About - corrections alignement, avatar, espacements */
+.about-block {
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #0001;
+  margin-bottom: 1.6rem; /* réduit l'espace entre chaque bloc */
+  padding: 2.2rem 2.2rem 1.7rem 2.2rem;
+  width: 100%;
+  max-width: 600px;
+  min-width: 320px;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+  position: relative;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2.2rem;
+  /* Animation d'entrée */
+  opacity: 0;
+  transform: translateY(40px);
+  animation: about-fadein 1.1s cubic-bezier(.77,0,.18,1) forwards;
+}
+.about-block:not(:first-child) {
+  /* Décalage d'animation pour effet fluide */
+  animation-delay: 0.15s;
+}
+.about-block:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.about-block:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+/* Animation d'entrée pour les blocs About */
+@keyframes about-fadein {
+  from { opacity: 0; transform: translateY(40px);}
+  to   { opacity: 1; transform: none;}
+}
+
+/* Dernier bloc : pas de margin-bottom */
+.about-block:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive : garde le centrage et l'espacement sur mobile */
+@media (max-width: 700px) {
+  .about-page main {
+    min-height: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .about-block {
+    margin-bottom: 0.8rem;
+    max-width: 98vw;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+  .about-block.about-right {
+    padding-top: 0.8rem;
+    padding-bottom: 0.7rem;
+  }
+}
+
+/* Bloc "À propos de moi" : titre plus gros, inchangé */
+.about-block.about-left h1 {
+  font-size: 2rem;
+  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.7rem 0;
+}
+
+/* Titres des autres blocs About (2 lignes, centrés verticalement, plus petit) */
+.about-block:not(.about-left) {
+  align-items: center;
+}
+.about-block:not(.about-left) h2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  line-height: 1.13;
+  margin: 0 0 0.2rem 0;
+  min-width: 120px;
+}
+.about-block:not(.about-left) h2 span {
+  display: block;
+  text-align: left;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  opacity: 1;
+  margin-left: 0;
+}
+
+/* Bloc "Style de travail" : titre sur 2 lignes, centré verticalement, même style que les autres (sauf "À propos de moi") */
+.about-block.about-left h2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  line-height: 1.13;
+  margin: 0 0 0.2rem 0;
+  min-width: 120px;
+}
+.about-block.about-left h2 span {
+  display: block;
+  text-align: left;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  opacity: 1;
+  margin-left: 0;
+}
+.about-block.about-left {
+  align-items: center;
+}
+
+/* Liste stylée et compacte pour Style de travail et Objectif futur */
+
+.about-block.about-left ul,
+.about-block.about-right ul:not(.skills-list) {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.2rem 1.2rem;
+}
+
+.about-block.about-left ul li,
+.about-block.about-right ul:not(.skills-list) li {
+  position: relative;
+  padding-left: 1.1em;
+  font-size: 1.05rem;
+  color: #e0e0e0;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  line-height: 1.45;
+  letter-spacing: 0.05px;
+  margin-bottom: 0;
+}
+
+.about-block.about-left ul li::before {
+  content: '';
+  position: absolute;
+  left: 0.1em;
+  top: 0.32em;
+  /* Pas de transform, juste un top adapté */
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8f5fff 60%, #6a3fdc 100%);
+  box-shadow: 0 1px 4px #8f5fff22;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.about-block.about-right ul:not(.skills-list) li::before {
+  content: '';
+  position: absolute;
+  left: 0.1em;
+  top: 0.48em;
+  /* Pas de transform, juste un top adapté */
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8f5fff 60%, #6a3fdc 100%);
+  box-shadow: 0 1px 4px #8f5fff22;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Responsive : repasse en colonne unique sur mobile */
+@media (max-width: 500px) {
+  .about-block.about-left ul,
+  .about-block.about-right ul:not(.skills-list) {
+    grid-template-columns: 1fr;
+    gap: 0.2rem 0;
+  }
+}
+
+/* Bloc Langages maîtrisés : grille 2 colonnes, alignement et fond plus foncé */
+.about-block.about-right .skills-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem 1.2rem;
+  background: rgba(30, 30, 40, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  align-items: center;
+  justify-items: start;
+}
+
+.about-block.about-right .skills-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: 1.08rem;
+  color: #e0e0e0;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  line-height: 1.4;
+  letter-spacing: 0.05px;
+  margin-bottom: 0;
+  padding: 0.1em 0;
+}
+
+.about-block.about-right .skills-list li .icon-skill {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #232234;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px #0002;
+  margin-right: 0.3em;
+  margin-left: 0;
+  /* accentue le contraste */
+  filter: grayscale(0.1) brightness(1.2) drop-shadow(0 1px 2px #0004);
+}
+
+/* Responsive : repasse en colonne unique sur mobile */
+@media (max-width: 500px) {
+  .about-block.about-right .skills-list {
+    grid-template-columns: 1fr;
+    gap: 0.2rem 0;
+    justify-items: start;
+  }
+}
+
+/* ----------- PAGE CONTACT (Sur mesure) ----------- */
+.contact-section {
+  max-width: 700px;
+  margin: 2.5rem auto 0 auto;
+  background: rgba(30,30,40,0.18);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px #8f5fff22, 0 2px 18px #0003;
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  position: relative;
+  animation: fadein-contact 1.1s cubic-bezier(.77,0,.18,1) 0.2s both;
+  border: 1.5px solid #28284a;
+}
+.contact-section h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 1.2rem;
+  text-shadow: 0 2px 8px #8f5fff33;
+  font-family: 'Montserrat', Arial, sans-serif;
+  animation: fadein-title 1.1s cubic-bezier(.77,0,.18,1) 0.1s both;
+}
+.custom-bot-desc {
+  font-size: 1.13rem;
+  color: #e0e0f7;
+  margin-bottom: 2.2rem;
+  line-height: 1.7;
+  animation: fadein-up 1.2s cubic-bezier(.77,0,.18,1) 0.3s both;
+}
+.custom-bot-desc ul {
+  margin: 1.2rem 0 1.2rem 1.2rem;
+  padding: 0;
+  color: #bdbdf7;
+  font-size: 1.08rem;
+  list-style: disc inside;
+  line-height: 1.6;
+}
+.custom-bot-desc h2 {
+  font-size: 1.3rem;
+  color: #8f5fff;
+  margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #8f5fff22;
+}
+.custom-bot-desc ol {
+  margin: 1.1rem 0 1.2rem 1.2rem;
+  color: #e0e0fa;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.custom-bot-desc b {
+  color: #8f5fff;
+  font-weight: 700;
+}
+.custom-bot-desc a {
+  color: #8f5fff;
+  text-decoration: underline;
+  transition: color 0.18s;
+}
+.custom-bot-desc a:hover {
+  color: #fff;
+}
+
+/* Contact rapide bloc (identique à services) */
+.services-quick-contact {
+  width: 100%;
+  max-width: 700px;
+  margin: 2.5rem auto 0 auto;
+  padding: 1.1rem 2rem;
+  background: rgba(255,255,255,0.09);
+  border-radius: 32px;
+  box-shadow: 0 2px 12px #0001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 1.13rem;
+  color: #e0e0e0;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  min-height: 0;
+  border: 1.5px solid rgba(140,140,255,0.13);
+  transition: box-shadow 0.18s, background 0.18s;
+  animation: fadein-contact 1s cubic-bezier(.77,0,.18,1) 1.1s both;
+  margin-bottom: 1.2rem;
+}
+.services-quick-contact a {
+  color: #8f5fff;
+  text-decoration: underline;
+  transition: color 0.18s;
+}
+.services-quick-contact a:hover {
+  color: #fff;
+}
+.services-quick-contact .discord-tag {
+  color: #bdbdf7;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.services-quick-contact .quick-contact-label {
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.85;
+  margin-right: 0.7rem;
+}
+.services-quick-contact .quick-sep {
+  color: #aaa;
+  opacity: 0.5;
+  margin: 0 0.7rem;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+@media (max-width: 700px) {
+  .contact-section, .services-quick-contact {
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+    border-radius: 16px;
+  }
+  .services-quick-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 1rem;
+  }
+  .services-quick-contact .quick-sep {
+    display: none;
+  }
+}
+
+/* Animations déjà présentes dans le fichier, mais on les rappelle ici pour clarté */
+@keyframes fadein-title {
+  0% { opacity: 0; transform: translateY(-32px);}
+  100% { opacity: 1; transform: none;}
+}
+@keyframes fadein-contact {
+  0% { opacity: 0; transform: translateY(32px);}
+  100% { opacity: 1; transform: none;}
+}
+@keyframes fadein-up {
+  0% { opacity: 0; transform: translateY(30px);}
+  100% { opacity: 1; transform: none;}
+}
+
+/* Pour mobile : ajustements spécifiques à la page de contact */
+@media (max-width: 700px) {
+  .contact-section {
+    padding: 1.1rem 0.7rem;
+    border-radius: 16px;
+  }
+  .contact-section h1 {
+    font-size: 1.8rem;
+  }
+  .custom-bot-desc {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .custom-bot-desc ul {
+    margin-left: 0.7rem;
+  }
+  .services-quick-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 18px;
+  }
+  .services-quick-contact .quick-sep {
+    display: none;
+  }
+}
+
+/* Footer : styles généraux et animation d'entrée */
+footer {
+  width: 100%;
+  position: static;
+  left: unset;
+  right: unset;
+  margin-left: 0;
+  margin-right: 0;
+  background: #000;
+  color: #fff;
+  padding: 1.1rem 1rem 0.7rem 1rem; /* Hauteur réduite */
+  font-size: 1rem;
+  letter-spacing: 0.1px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin-top: 54px;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.77,0,.18,1), transform 0.7s cubic-bezier(.77,0,.18,1);
+}
+
+footer.footer-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-separator {
+  height: 3px;
+  width: 100%;
+  position: relative;
+  left: 0;
+  transform: none;
+  background: linear-gradient(90deg, transparent 0 0%, var(--violet) 0% 100%, transparent 100% 100%);
+  border-radius: 2px;
+  margin: 0 0 1rem 0;
+  top: 0;
+  z-index: 1;
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 1rem auto 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-content a {
+  color: var(--violet);
+  text-decoration: underline;
+  transition: color 0.18s;
+}
+.footer-content a:hover {
+  color: var(--violet-dark);
+}
+
+.footer-copy {
+  font-size: 0.98rem;
+  color: #aaa;
+  margin-top: 0.3rem;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    font-size: 0.98rem;
+    gap: 0.3rem;
+  }
+  .footer-separator {
+    margin-bottom: 0;
+  }
+}
+
+/* Scrollbar custom (Webkit: Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+  background: #181828;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4e2e8e 0%, #2d1a4d 100%);
+  border-radius: 8px;
+  min-height: 40px;
+  border: 2px solid #181828;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #3a226a 0%, #2d1a4d 100%);
+}
+
+/* Scrollbar custom (Firefox) */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #3a226a #181828;
+}
+
+/* Style custom pour le select langue*/
+.lang-select {
+  background: var(--violet);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 1.5rem;
+  font-size: 1rem;
+  /* Transition spécifique - ne pas affecter background-image */
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px #0002;
+  outline: none;
+  min-width: 60px;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Flèche avec !important pour forcer */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 20 20' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 7l3 3 3-3' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.7em center !important;
+  background-size: 1.1em !important;
+  padding-right: 2.2em !important;
+}
+
+.lang-select:hover, .lang-select:focus {
+  background-color: var(--violet-dark);
+  transform: scale(1.07);
+  /* Maintenir la flèche même pendant hover */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 20 20' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 7l3 3 3-3' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") !important;
+}
+
+.lang-select option {
+  color: #fff;
+  background: var(--violet);
+  font-weight: bold;
+  font-family: var(--font-main), Arial, sans-serif;
+  font-size: 1rem;
+  padding: 0.5em 1em;
+}
+
+/* Pour Webkit (Chrome/Safari/Edge Chromium) : forcer fond violet et texte blanc sur le menu déroulant */
+.lang-select:focus option,
+.lang-select:active option {
+  background: var(--violet);
+  color: #fff;
+}
+
+/* Pour Firefox : fond violet et texte blanc sur le menu déroulant */
+.lang-select:-moz-focusring option,
+.lang-select option:checked {
+  background: var(--violet);
+  color: #fff;
+}
+
+/* Carrousel 3D */
+.services-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto 2.5rem auto;
+  gap: 1.5rem;
+  position: relative;
+  min-height: 420px;
+  max-width: 100vw;
+  width: 100%;
+  user-select: none;
+}
+
+.carousel-arrow {
+  background: rgba(30,30,40,0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 2.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 12px #0004;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.18s, transform 0.18s;
+}
+.carousel-arrow:hover {
+  background: var(--violet);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.carousel-arrow-left {
+  margin-right: -140px;
+}
+
+.carousel-arrow-right {
+  margin-left: -140px;
+}
+
+.carousel-track {
+  position: relative;
+  width: 900px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1600px;
+  /* Pour mobile, on réduit la largeur */
+  max-width: 98vw;
+}
+
+.carousel-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 340px;
+  height: 420px;
+  max-width: 90vw;
+  min-width: 220px;
+  background: linear-gradient(135deg, #232234 60%, #181828 100%);
+  border-radius: 22px;
+  box-shadow: 0 2px 18px #0003;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 2.1rem 1.7rem 1.7rem 1.7rem;
+  border: 1.5px solid #28284a;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) scale(0.92);
+  transition:
+    transform 0.6s cubic-bezier(.77,0,.18,1),
+    opacity 0.5s cubic-bezier(.77,0,.18,1),
+    box-shadow 0.3s,
+    filter 0.5s cubic-bezier(.77,0,.18,1);
+  z-index: 1;
+}
+
+.carousel-card.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+  transform: translateX(-50%) scale(1.08) rotateY(0deg);
+  filter: none;
+  background: linear-gradient(135deg, #2d2650 60%, #181828 100%);
+  border-color: var(--violet);
+}
+
+.carousel-card.left {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  transform: translateX(-220%) scale(0.93) rotateY(30deg);
+  filter: brightness(0.5) blur(1.5px);
+  box-shadow: 0 2px 18px #0005;
+}
+
+.carousel-card.right {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  transform: translateX(120%) scale(0.93) rotateY(-30deg);
+  filter: brightness(0.5) blur(1.5px);
+  box-shadow: 0 2px 18px #0005;
+}
+
+.carousel-card:not(.active):not(.left):not(.right) {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transform: translateX(-50%) scale(0.92) rotateY(0deg);
+  filter: blur(2px) brightness(0.4);
+}
+
+/* Animation d'entrée fade-in pour les cartes du carrousel */
+@keyframes fadein-carousel-card {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+/* .carousel-card {  } removed: empty ruleset */
+.carousel-card.anim-fadein {
+  animation: fadein-carousel-card 0.7s cubic-bezier(.77,0,.18,1) both;
+}
+
+/* Responsive carousel */
+@media (max-width: 1100px) {
+  .carousel-track {
+    width: 98vw;
+    min-width: 0;
+    max-width: 98vw;
+  }
+  .carousel-card {
+    width: 98vw;
+    max-width: 98vw;
+    min-width: 0;
+  }
+}
+@media (max-width: 700px) {
+  .carousel-track {
+    width: 100vw;
+    min-width: 0;
+    max-width: 100vw;
+    height: 370px;
+  }
+  .carousel-card,
+  .carousel-card.active,
+  .carousel-card.left,
+  .carousel-card.right {
+    width: 95vw;
+    max-width: 95vw;
+    min-width: 0;
+    height: 340px;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+  .carousel-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Bloc contact rapide - style de la bulle */
+.services-quick-contact {
+  width: 100%;
+  max-width: 900px;
+  margin: 200px auto 0 auto;
+  padding: 0.85rem 2rem;
+  background: rgba(255,255,255,0.07);
+  border-radius: 32px;
+  box-shadow: 0 2px 12px #0001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 1.13rem;
+  color: #e0e0e0;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  min-height: 0;
+  border: 1.5px solid rgba(140,140,255,0.08);
+  transition: box-shadow 0.18s;
+}
+
+.services-quick-contact a {
+  color: var(--violet);
+  text-decoration: underline;
+  transition: color 0.18s;
+}
+.services-quick-contact a:hover {
+  color: var(--violet-dark);
+}
+
+.services-quick-contact .discord-tag {
+  color: #bdbdbd;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.services-quick-contact .quick-contact-label {
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.85;
+  margin-right: 0.7rem;
+}
+
+.services-quick-contact .quick-sep {
+  color: #aaa;
+  opacity: 0.5;
+  margin: 0 0.7rem;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+@media (max-width: 700px) {
+  .services-quick-contact {
+    margin: 90px auto 0 auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 18px;
+  }
+  .services-quick-contact .quick-sep {
+    display: none;
+  }
+}
+
+/* Legal Section */
+.legal-section {
+  max-width: 700px;
+  margin: 2.5rem auto 0 auto;
+  background: rgba(30,30,40,0.18);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px #8f5fff22, 0 2px 18px #0003;
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  position: relative;
+  border: 1.5px solid #28284a;
+  font-size: 1.13rem;
+  color: #e0e0f7;
+  line-height: 1.7;
+  animation: fadein-contact 1.1s cubic-bezier(.77,0,.18,1) 0.2s both;
+}
+.legal-section h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  color: #fff;
+  text-shadow: 0 2px 8px #8f5fff33;
+  font-family: 'Montserrat', Arial, sans-serif;
+  animation: fadein-title 1.1s cubic-bezier(.77,0,.18,1) 0.1s both;
+}
+.legal-section a {
+  color: #8f5fff;
+  text-decoration: underline;
+  transition: color 0.18s;
+}
+.legal-section a:hover {
+  color: #fff;
+}
+@media (max-width: 700px) {
+  .legal-section {
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+    border-radius: 16px;
+    font-size: 1rem;
+  }
+}
