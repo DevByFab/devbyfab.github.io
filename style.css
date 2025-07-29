@@ -1368,14 +1368,15 @@ html {
     perspective: none;
   }
   .carousel-card {
+    /* largeur réduite de 50px, hauteur augmentée de 50px */
     position: absolute;
     left: 50%;
     top: 0;
-    width: 92vw;
-    max-width: 420px;
-    min-width: 220px;
+    width: calc(92vw - 50px);
+    max-width: 370px;
+    min-width: 170px;
     height: auto;
-    min-height: 320px;
+    min-height: 370px;
     margin: 0 auto;
     border-radius: 18px;
     padding: 1.2rem 1rem;
@@ -1451,9 +1452,10 @@ html {
     color: #fff;
     transform: scale(1.08);
   }
-  /* Hide desktop arrows */
-  .carousel-arrow-left, .carousel-arrow-right {
-    display: none;
+  /* Hide desktop arrows on mobile */
+  .carousel-arrow-left,
+  .carousel-arrow-right {
+    display: none !important;
   }
 }
 
