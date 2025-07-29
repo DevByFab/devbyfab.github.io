@@ -65,52 +65,111 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Carrousel 3D services
+// Carrousel 3D services + mobile pile
 window.addEventListener('DOMContentLoaded', () => {
   const track = document.querySelector('.carousel-track');
   const cards = Array.from(document.querySelectorAll('.carousel-card'));
   const leftBtn = document.querySelector('.carousel-arrow-left');
   const rightBtn = document.querySelector('.carousel-arrow-right');
+  const mobileLeftBtn = document.getElementById('carousel-arrow-mobile-left');
+  const mobileRightBtn = document.getElementById('carousel-arrow-mobile-right');
   let current = 0;
   let animating = false;
 
+  function isMobile() {
+    return window.matchMedia('(max-width: 700px)').matches;
+  }
+
   function updateCarousel() {
-    cards.forEach((card, idx) => {
-      card.classList.remove('active', 'left', 'right');
-      if (idx === current) card.classList.add('active');
-      else if (idx === (current - 1 + cards.length) % cards.length) card.classList.add('left');
-      else if (idx === (current + 1) % cards.length) card.classList.add('right');
-    });
+    if (isMobile()) {
+      cards.forEach((card, idx) => {
+        card.classList.remove('active', 'slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right', 'left', 'right');
+        if (idx === current) card.classList.add('active');
+        else card.classList.remove('active');
+      });
+    } else {
+      cards.forEach((card, idx) => {
+        card.classList.remove('active', 'left', 'right', 'slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right');
+        if (idx === current) card.classList.add('active');
+        else if (idx === (current - 1 + cards.length) % cards.length) card.classList.add('left');
+        else if (idx === (current + 1) % cards.length) card.classList.add('right');
+      });
+    }
+  }
+
+  function goToMobile(idx, direction) {
+    if (animating || idx === current) return;
+    animating = true;
+    const prev = current;
+    const next = idx;
+    const outClass = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
+    const inClass = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
+
+    cards[prev].classList.remove('active', 'slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right');
+    cards[prev].classList.add(outClass);
+    cards[next].classList.remove('active', 'slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right');
+    cards[next].classList.add(inClass);
+
+    setTimeout(() => {
+      cards[prev].classList.remove(outClass);
+      cards[next].classList.remove(inClass);
+      cards[next].classList.add('active');
+      current = next;
+      animating = false;
+    }, 450);
   }
 
   function goTo(idx, direction) {
-    if (animating || idx === current) return;
-    animating = true;
-    current = idx;
+    if (isMobile()) {
+      goToMobile(idx, direction);
+    } else {
+      if (animating || idx === current) return;
+      animating = true;
+      current = idx;
+      updateCarousel();
+      setTimeout(() => { animating = false; }, 600);
+    }
+  }
+
+  function handleResize() {
     updateCarousel();
-    setTimeout(() => { animating = false; }, 600); // durée = transition CSS
   }
 
   if (cards.length) {
     updateCarousel();
-    leftBtn.addEventListener('click', () => {
-      goTo((current - 1 + cards.length) % cards.length, 'left');
-    });
-    rightBtn.addEventListener('click', () => {
-      goTo((current + 1) % cards.length, 'right');
-    });
+    // Desktop arrows
+    if (leftBtn && rightBtn) {
+      leftBtn.addEventListener('click', () => {
+        goTo((current - 1 + cards.length) % cards.length, 'left');
+      });
+      rightBtn.addEventListener('click', () => {
+        goTo((current + 1) % cards.length, 'right');
+      });
+    }
+    // Mobile arrows
+    if (mobileLeftBtn && mobileRightBtn) {
+      mobileLeftBtn.addEventListener('click', () => {
+        goTo((current - 1 + cards.length) % cards.length, 'left');
+      });
+      mobileRightBtn.addEventListener('click', () => {
+        goTo((current + 1) % cards.length, 'right');
+      });
+    }
     // Swipe support mobile
     let startX = null;
-    track.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-    });
-    track.addEventListener('touchend', e => {
-      if (startX === null) return;
-      let dx = e.changedTouches[0].clientX - startX;
-      if (dx > 40) leftBtn.click();
-      else if (dx < -40) rightBtn.click();
-      startX = null;
-    });
+    if (track) {
+      track.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+      });
+      track.addEventListener('touchend', e => {
+        if (startX === null) return;
+        let dx = e.changedTouches[0].clientX - startX;
+        if (dx > 40) goTo((current - 1 + cards.length) % cards.length, 'left');
+        else if (dx < -40) goTo((current + 1) % cards.length, 'right');
+        startX = null;
+      });
+    }
+    window.addEventListener('resize', handleResize);
   }
 });
 
@@ -130,7 +189,7 @@ const translations = {
     ],
     "contact.h2": "Comment ça marche ?",
     "contact.ol1": [
-      "<b>Contactez-moi</b> par <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">mail</a> ou sur Discord : <span class=\"discord-tag\">nextzer02</span>",
+      "<b>Contactez-moi</b> par <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">mail</a> ou sur Discord : <span class=\"discord-tag\">devbyfab</span>",
       "<b>On discute ensemble</b> de toutes les fonctionnalités, commandes et besoins spécifiques pour votre bot.",
       "<b>L’offre sur mesure inclut de base toutes les fonctionnalités du pack complet</b> (modération, logs, base de données, paginations, MP, etc.).",
       "<b>Un prix fixe</b> est défini une fois toutes les fonctionnalités choisies, selon la complexité et le temps estimé."
@@ -209,10 +268,10 @@ const translations = {
   },
   EN: {
     "contact.title": "Custom Offer — Personalized Discord Bots",
-    "contact.desc1": "Do you have a specific idea or a unique need for your Discord server? I create custom bots tailored to your needs and your community.",
+    "contact.desc1": "You have a specific idea or a unique need for your Discord server? I create custom bots tailored to your needs and your community.",
     "contact.ul1": [
       "Advanced moderation, logs, user management",
-      "Custom commands, interactions, games, mini-games",
+      "Custom commands, interactions, mini-games",
       "Twitch, YouTube, external API integration",
       "Role, channel, permissions, reaction management",
       "Database, statistics, automations",
@@ -221,7 +280,7 @@ const translations = {
     ],
     "contact.h2": "How does it work?",
     "contact.ol1": [
-      "<b>Contact me</b> by <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> or on Discord: <span class=\"discord-tag\">nextzer02</span>",
+      "<b>Contact me</b> by <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> or on Discord: <span class=\"discord-tag\">devbyfab</span>",
       "<b>We discuss together</b> all the features, commands, and specific needs for your bot.",
       "<b>The custom offer includes by default all features of the full pack</b> (moderation, logs, database, paginations, DMs, etc.).",
       "<b>A fixed price</b> is set once all features are chosen, depending on complexity and estimated time."
@@ -312,7 +371,7 @@ const translations = {
     ],
     "contact.h2": "Como funciona?",
     "contact.ol1": [
-      "<b>Entre em contato comigo</b> por <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> ou no Discord: <span class=\"discord-tag\">nextzer02</span>",
+      "<b>Entre em contato comigo</b> por <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> ou no Discord: <span class=\"discord-tag\">devbyfab</span>",
       "<b>Conversamos juntos</b> sobre todas as funcionalidades, comandos e necessidades específicas para seu bot.",
       "<b>A oferta sob medida já inclui todas as funcionalidades do pacote completo</b> (moderação, logs, banco de dados, paginações, MPs, etc.).",
       "<b>Um preço fixo</b> é definido assim que todas as funcionalidades forem escolhidas, de acordo com a complexidade e o tempo estimado."
@@ -487,7 +546,7 @@ function translateContact(lang) {
   if (quick) {
     quick.querySelector('.quick-contact-label').textContent = t["contact.quick"];
     quick.querySelectorAll('span')[1].innerHTML = t["contact.email"] + `<a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a>`;
-    quick.querySelectorAll('span')[3].innerHTML = t["contact.discord"] + `<span class="discord-tag">nextzer02</span>`;
+    quick.querySelectorAll('span')[3].innerHTML = t["contact.discord"] + `<span class="discord-tag">devbyfab</span>`;
     quick.querySelectorAll('span')[5].innerHTML = t["contact.fiverr"] + `<a href="https://fiverr.com/" target="_blank">Lien Fiverr</a>`;
   }
 }
@@ -503,7 +562,7 @@ function translateContactQuick(lang) {
       <span class="quick-contact-label">${t["contact.quick"]}</span>
       <span>${t["contact.email"]}<a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
       <span class="quick-sep">|</span>
-      <span>${t["contact.discord"]}<span class="discord-tag">nextzer02</span></span>
+      <span>${t["contact.discord"]}<span class="discord-tag">devbyfab</span></span>
       <span class="quick-sep">|</span>
       <span>${t["contact.fiverr"]}<a href="https://fiverr.com/" target="_blank">Lien Fiverr</a></span>
     `;
