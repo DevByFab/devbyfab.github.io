@@ -1602,3 +1602,182 @@ html {
     display: none;
   }
 }
+
+/* --- Amélioration responsive du bloc contact-section sur mobile --- */
+@media (max-width: 700px) {
+  .contact-section {
+    max-width: 98vw;
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+    border-radius: 16px;
+    font-size: 1rem;
+    margin: 1.2rem auto 0 auto;
+    box-sizing: border-box;
+    /* Permet le retour à la ligne du contenu */
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .custom-bot-desc ul,
+  .custom-bot-desc ol {
+    padding-left: 1.1rem;
+    margin-left: 0;
+    font-size: 0.98rem;
+    word-break: break-word;
+  }
+}
+
+/* --- Responsive pour le bloc quick contact sur mobile (services & contact) --- */
+@media (max-width: 700px) {
+  .services-quick-contact {
+    flex-wrap: wrap;
+    white-space: normal;
+    overflow-x: visible;
+    gap: 0.5rem 1.2rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-width: 98vw;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98rem;
+    border-radius: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  .services-quick-contact span,
+  .services-quick-contact a {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .services-quick-contact .quick-contact-label {
+    flex-basis: 100%;
+    width: 100%;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .services-quick-contact .quick-sep {
+    display: none;
+  }
+  .services-quick-contact.services-contact-page,
+  .services-quick-contact.services-services-page {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+/* --- Centrage des cartes et des flèches du carrousel sur mobile --- */
+@media (max-width: 700px) {
+  .services-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    justify-content: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .service-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 98vw;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carousel-track {
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .carousel-card {
+    margin-left: auto;
+    margin-right: auto;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .carousel-arrows-mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.7rem;
+    gap: 1.2rem;
+  }
+  .carousel-arrow,
+  .carousel-arrow-left,
+  .carousel-arrow-right {
+    width: 44px;
+    height: 44px;
+    font-size: 1.7rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #0004;
+    background: rgba(30,30,40,0.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, transform 0.18s;
+    line-height: 1;
+    padding-bottom: 5px;
+    margin: 0 0.7rem 0 0.7rem;
+  }
+  .carousel-arrow:hover,
+  .carousel-arrow-left:hover,
+  .carousel-arrow-right:hover {
+    background: var(--violet);
+    color: #fff;
+    transform: scale(1.08);
+  }
+}
+
+/* --- Desktop : centrer les cartes et les flèches aussi --- */
+@media (min-width: 701px) {
+  .services-cards {
+    justify-content: center;
+    align-items: stretch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .carousel-track {
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .carousel-card {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .carousel-arrow,
+  .carousel-arrow-left,
+  .carousel-arrow-right {
+    width: 48px;
+    height: 48px;
+    font-size: 2.2rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #0004;
+    background: rgba(30,30,40,0.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, transform 0.18s;
+    line-height: 1;
+    padding-bottom: 5px;
+    margin: 0 0.7rem 0 0.7rem;
+  }
+  .carousel-arrow:hover,
+  .carousel-arrow-left:hover,
+  .carousel-arrow-right:hover {
+    background: var(--violet);
+    color: #fff;
+    transform: scale(1.08);
+  }
+}
