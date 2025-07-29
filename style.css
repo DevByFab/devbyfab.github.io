@@ -1368,21 +1368,21 @@ html {
     perspective: none;
   }
   .carousel-card {
-    /* largeur réduite de 50px, hauteur augmentée de 50px */
+    /* largeur réduite, hauteur augmentée */
     position: absolute;
     left: 50%;
     top: 0;
-    width: calc(92vw - 50px);
-    max-width: 370px;
+    width: calc(90vw - 50px);      /* largeur réduite */
+    max-width: 320px;              /* largeur max stricte */
     min-width: 170px;
     height: auto;
-    min-height: 370px;
+    min-height: 420px;             /* hauteur augmentée */
     margin: 0 auto;
     border-radius: 18px;
     padding: 1.2rem 1rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;           /* centre tout le contenu horizontalement */
     justify-content: flex-start;
     box-sizing: border-box;
     opacity: 0;
@@ -1414,12 +1414,15 @@ html {
   }
   .carousel-card .btn {
     min-width: 120px;
-    width: auto;
+    width: 100%;                   /* bouton prend toute la largeur */
     max-width: 100%;
     font-size: 1.08rem;
     padding: 0.7em 1.5em;
     margin-top: 0.7rem;
     box-sizing: border-box;
+    display: block;
+    text-align: center;            /* texte centré */
+    align-self: center;            /* bouton centré dans la carte */
   }
   .carousel-arrows-mobile {
     display: flex;
