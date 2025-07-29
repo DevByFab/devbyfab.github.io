@@ -1368,21 +1368,21 @@ html {
     perspective: none;
   }
   .carousel-card {
-    /* largeur réduite, hauteur augmentée */
+    /* largeur plus petite pour éviter le débordement, hauteur ok */
     position: absolute;
     left: 50%;
     top: 0;
-    width: calc(90vw - 50px);      /* largeur réduite */
-    max-width: 320px;              /* largeur max stricte */
-    min-width: 170px;
+    width: 88vw;
+    max-width: 290px;
+    min-width: 150px;
     height: auto;
-    min-height: 420px;             /* hauteur augmentée */
+    min-height: 420px;
     margin: 0 auto;
     border-radius: 18px;
     padding: 1.2rem 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;           /* centre tout le contenu horizontalement */
+    align-items: center;
     justify-content: flex-start;
     box-sizing: border-box;
     opacity: 0;
@@ -1414,15 +1414,15 @@ html {
   }
   .carousel-card .btn {
     min-width: 120px;
-    width: 100%;                   /* bouton prend toute la largeur */
+    width: 100%;
     max-width: 100%;
     font-size: 1.08rem;
     padding: 0.7em 1.5em;
     margin-top: 0.7rem;
     box-sizing: border-box;
     display: block;
-    text-align: center;            /* texte centré */
-    align-self: center;            /* bouton centré dans la carte */
+    text-align: center;
+    align-self: center;
   }
   .carousel-arrows-mobile {
     display: flex;
@@ -1433,7 +1433,8 @@ html {
     margin-top: 0.7rem;
     gap: 1.2rem;
   }
-  .carousel-arrow {
+  /* Style mobile pour les deux flèches */
+  .carousel-arrows-mobile .carousel-arrow {
     width: 44px;
     height: 44px;
     font-size: 1.7rem;
@@ -1441,7 +1442,7 @@ html {
     box-shadow: 0 2px 12px #0004;
     background: rgba(30,30,40,0.85);
     color: #fff;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     transition: background 0.18s, transform 0.18s;
@@ -1450,12 +1451,12 @@ html {
     margin: 0 0.7rem 0 0.7rem;
     border: none;
   }
-  .carousel-arrow:hover {
+  .carousel-arrows-mobile .carousel-arrow:hover {
     background: var(--violet);
     color: #fff;
     transform: scale(1.08);
   }
-  /* Hide desktop arrows on mobile */
+  /* Cache les flèches desktop sur mobile */
   .carousel-arrow-left,
   .carousel-arrow-right {
     display: none !important;
