@@ -140,7 +140,7 @@ const translations = {
     "contact.email": "Email : ",
     "contact.discord": "Discord : ",
     "contact.fiverr": "Fiverr : ",
-    "home.heroTitle": "Développeur freelance, bots Discord & web sur mesure.",
+    "home.heroTitle": "DevByFab — Custom Discord bots & freelance dev",
     "home.heroDesc": "Je crée des bots Discord personnalisés, des outils web et des solutions adaptées à vos besoins. Sérieux, rapide, à l’écoute.",
     "home.cta1": "Voir les services",
     "home.cta2": "Contact rapide",
@@ -231,7 +231,7 @@ const translations = {
     "contact.email": "Email: ",
     "contact.discord": "Discord: ",
     "contact.fiverr": "Fiverr: ",
-    "home.heroTitle": "Freelance Developer, Custom Discord Bots & Web.",
+    "home.heroTitle": "DevByFab — Custom Discord bots & freelance dev",
     "home.heroDesc": "I create custom Discord bots, web tools, and solutions tailored to your needs. Reliable, fast, and attentive.",
     "home.cta1": "See services",
     "home.cta2": "Quick contact",
@@ -322,7 +322,7 @@ const translations = {
     "contact.email": "Email: ",
     "contact.discord": "Discord: ",
     "contact.fiverr": "Fiverr: ",
-    "home.heroTitle": "Desenvolvedor freelancer, bots Discord & web sob medida.",
+    "home.heroTitle": "DevByFab — Custom Discord bots & freelance dev",
     "home.heroDesc": "Crio bots Discord personalizados, ferramentas web e soluções adaptadas às suas necessidades. Sério, rápido, atento.",
     "home.cta1": "Ver serviços",
     "home.cta2": "Contato rápido",
@@ -662,6 +662,18 @@ function translateNavFooter(lang) {
     }
   });
 }
+
+// Menu burger responsive
+window.addEventListener('DOMContentLoaded', () => {
+  const burger = document.querySelector('.burger-menu');
+  const navUl = document.querySelector('nav ul');
+  if (burger && navUl) {
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      navUl.classList.toggle('open');
+    });
+  }
+});
 
 // Init traduction au chargement
 window.addEventListener('DOMContentLoaded', () => {
