@@ -1357,85 +1357,68 @@ html {
   }
   .carousel-track {
     width: 100vw;
-    min-width: 0;
     max-width: 100vw;
-    height: auto;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
     position: relative;
     perspective: none;
   }
   .carousel-card {
-    position: relative;
-    left: 0;
+    position: absolute;
+    left: 50%;
     top: 0;
-    width: 95vw;
-    max-width: 95vw;
-    min-width: 0;
+    width: 92vw;
+    max-width: 420px;
+    min-width: 220px;
     height: auto;
     min-height: 320px;
     margin: 0 auto;
+    border-radius: 18px;
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
     z-index: 1;
-    transform: none;
-    transition: none;
-    box-shadow: 0 2px 18px #0003;
-    /* Hide all by default */
-    display: none;
+    transform: translateX(-50%) scale(0.93);
+    transition:
+      transform 0.45s cubic-bezier(.77,0,.18,1),
+      opacity 0.35s cubic-bezier(.77,0,.18,1),
+      z-index 0.3s;
   }
   .carousel-card.active {
     opacity: 1;
     pointer-events: auto;
-    z-index: 2;
+    z-index: 3;
+    transform: translateX(-50%) scale(1.04);
+    background: linear-gradient(135deg, #2d2650 60%, #181828 100%);
+    border-color: var(--violet);
     display: flex;
-    animation: none;
   }
-  .carousel-card.slide-in-right {
+  .carousel-card:not(.active) {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transform: translateX(-50%) scale(0.93);
+    background: linear-gradient(135deg, #232234 60%, #181828 100%);
+    border-color: #28284a;
     display: flex;
-    animation: slideInRight 0.45s cubic-bezier(.77,0,.18,1);
   }
-  .carousel-card.slide-in-left {
-    display: flex;
-    animation: slideInLeft 0.45s cubic-bezier(.77,0,.18,1);
-  }
-  .carousel-card.slide-out-left {
-    display: flex;
-    animation: slideOutLeft 0.45s cubic-bezier(.77,0,.18,1);
-  }
-  .carousel-card.slide-out-right {
-    display: flex;
-    animation: slideOutRight 0.45s cubic-bezier(.77,0,.18,1);
-  }
-
-  @keyframes slideInRight {
-    from { opacity: 0; transform: translateX(100vw);}
-    to   { opacity: 1; transform: translateX(0);}
-  }
-  @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-100vw);}
-    to   { opacity: 1; transform: translateX(0);}
-  }
-  @keyframes slideOutLeft {
-    from { opacity: 1; transform: translateX(0);}
-    to   { opacity: 0; transform: translateX(-100vw);}
-  }
-  @keyframes slideOutRight {
-    from { opacity: 1; transform: translateX(0);}
-    to   { opacity: 0; transform: translateX(100vw);}
-  }
-
-  .carousel-arrow {
-    position: static;
-    margin: 0 0.7rem 0 0.7rem;
-    width: 44px;
-    height: 44px;
-    font-size: 1.7rem;
-    border-radius: 50%;
-    box-shadow: 0 2px 12px #0004;
-    /* Place arrows below the card */
-    order: 2;
+  .carousel-card .btn {
+    min-width: 120px;
+    width: auto;
+    max-width: 100%;
+    font-size: 1.08rem;
+    padding: 0.7em 1.5em;
+    margin-top: 0.7rem;
+    box-sizing: border-box;
   }
   .carousel-arrows-mobile {
     display: flex;
@@ -1445,6 +1428,28 @@ html {
     width: 100%;
     margin-top: 0.7rem;
     gap: 1.2rem;
+  }
+  .carousel-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 1.7rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #0004;
+    background: rgba(30,30,40,0.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, transform 0.18s;
+    line-height: 1;
+    padding-bottom: 5px;
+    margin: 0 0.7rem 0 0.7rem;
+    border: none;
+  }
+  .carousel-arrow:hover {
+    background: var(--violet);
+    color: #fff;
+    transform: scale(1.08);
   }
   /* Hide desktop arrows */
   .carousel-arrow-left, .carousel-arrow-right {
