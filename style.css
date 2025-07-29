@@ -1200,6 +1200,8 @@ html {
   justify-content: center;
   z-index: 2;
   transition: background 0.18s, transform 0.18s;
+  line-height: 1;
+  padding-bottom: 5px;
 }
 .carousel-arrow:hover {
   background: var(--violet);
@@ -1441,5 +1443,133 @@ html {
     padding: 1.1rem 0.7rem 1rem 0.7rem;
     border-radius: 16px;
     font-size: 1rem;
+  }
+}
+
+/* --- MENU BURGER RESPONSIVE --- */
+.burger-menu {
+  display: none;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  position: relative;
+}
+.burger-menu .burger-lines {
+  display: block;
+  width: 28px;
+  height: 20px;
+  position: relative;
+}
+.burger-menu .burger-lines span {
+  display: block;
+  height: 3.5px;
+  width: 100%;
+  background: var(--fg);
+  border-radius: 2px;
+  margin: 0 0 5px 0;
+  transition: all 0.3s cubic-bezier(.77,0,.18,1);
+}
+.burger-menu .burger-lines span:last-child {
+  margin-bottom: 0;
+}
+
+/* Animation croix si menu ouvert (optionnel, à gérer en JS) */
+.burger-menu.open .burger-lines span:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+}
+.burger-menu.open .burger-lines span:nth-child(2) {
+  opacity: 0;
+}
+.burger-menu.open .burger-lines span:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+}
+
+/* Responsive nav */
+@media (max-width: 800px) {
+  nav ul {
+    display: none;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: #181828;
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    min-width: 160px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px #0006;
+    padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+    z-index: 15;
+    transition: opacity 0.2s;
+  }
+  nav ul.open {
+    display: flex;
+  }
+  .burger-menu {
+    display: flex;
+  }
+  nav {
+    flex-direction: row;
+    gap: 0;
+    position: relative;
+  }
+  .logo {
+    z-index: 21;
+  }
+}
+
+/* --- FOOTER RESPONSIVE --- */
+@media (max-width: 700px) {
+  footer {
+    padding: 0.7rem 0.3rem 0.5rem 0.3rem;
+    font-size: 0.95rem;
+    margin-top: 24px;
+  }
+  .footer-content {
+    gap: 0.2rem;
+    font-size: 0.95rem;
+  }
+  .footer-separator {
+    margin-bottom: 0.2rem;
+  }
+}
+
+/* --- SERVICES & CONTACT RESPONSIVE --- */
+@media (max-width: 700px) {
+  .services-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+  }
+  .service-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 98vw;
+    padding: 1.2rem 0.7rem;
+  }
+  .services-intro {
+    padding: 0 0.5rem;
+  }
+  .contact-section, .services-quick-contact, .legal-section {
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+    border-radius: 16px;
+    font-size: 1rem;
+    max-width: 98vw;
+  }
+}
+
+/* --- Amélioration du centrage du menu burger et du menu déroulant --- */
+@media (max-width: 800px) {
+  nav {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+  .burger-menu {
+    margin-left: auto;
   }
 }
