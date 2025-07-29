@@ -517,8 +517,8 @@ function translateHome(lang) {
   if (!t) return;
 
   // Titre principal
-  const h1 = document.querySelector('.hero-content h1');
-  if (h1) h1.textContent = t["home.heroTitle"];
+  // const h1 = document.querySelector('.hero-content h1');
+  // if (h1) h1.textContent = t["home.heroTitle"];
 
   // Description
   const p = document.querySelector('.hero-content p');
