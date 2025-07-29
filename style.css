@@ -911,9 +911,9 @@ body, html {
 /* Contact rapide bloc (identique à services) */
 .services-quick-contact {
   width: 100%;
-  max-width: 700px;
+  max-width: 1100px;
   margin: 2.5rem auto 0 auto;
-  padding: 1.1rem 2rem;
+  padding: 1.1rem 2.5rem;
   background: rgba(255,255,255,0.09);
   border-radius: 32px;
   box-shadow: 0 2px 12px #0001;
@@ -928,7 +928,8 @@ body, html {
   border: 1.5px solid rgba(140,140,255,0.13);
   transition: box-shadow 0.18s, background 0.18s;
   animation: fadein-contact 1s cubic-bezier(.77,0,.18,1) 1.1s both;
-  margin-bottom: 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 .services-quick-contact a {
   color: #8f5fff;
@@ -956,62 +957,93 @@ body, html {
   font-weight: 700;
   font-size: 1.1em;
 }
+
+/* Responsive pour mobile */
 @media (max-width: 700px) {
-  .contact-section, .services-quick-contact {
-    padding: 1.1rem 0.7rem 1rem 0.7rem;
-    border-radius: 16px;
-  }
   .services-quick-contact {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-    font-size: 1rem;
-  }
-  .services-quick-contact .quick-sep {
-    display: none;
+    max-width: 100vw;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98rem;
+    border-radius: 16px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    gap: 0.7rem;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
   }
 }
 
-/* Animations déjà présentes dans le fichier, mais on les rappelle ici pour clarté */
-@keyframes fadein-title {
-  0% { opacity: 0; transform: translateY(-32px);}
-  100% { opacity: 1; transform: none;}
-}
-@keyframes fadein-contact {
-  0% { opacity: 0; transform: translateY(32px);}
-  100% { opacity: 1; transform: none;}
-}
-@keyframes fadein-up {
-  0% { opacity: 0; transform: translateY(30px);}
-  100% { opacity: 1; transform: none;}
+/* --- GLOBAL VISUAL STYLE --- */
+/* (Removed empty .services-quick-contact ruleset) */
+
+/* --- POSITIONNEMENT SPÉCIFIQUE SERVICES --- */
+.services-quick-contact.services-services-page {
+  margin: 170px auto 0 -50px;
+  max-width: 1000px;
+  justify-content: center;
+  align-items: center;
+  position: static;
+  left: unset;
+  transform: none;
+  text-align: center;
+  /* ...autres styles spécifiques éventuels... */
 }
 
-/* Pour mobile : ajustements spécifiques à la page de contact */
+/* --- POSITIONNEMENT SPÉCIFIQUE CONTACT --- */
+.services-quick-contact.services-contact-page {
+  margin: 80px auto 0 -50px;
+  max-width: 1000px;
+  justify-content: center;
+  align-items: center;
+  position: static;
+  left: unset;
+  transform: none;
+  text-align: center;
+  /* ...autres styles spécifiques éventuels... */
+}
+
+/* Responsive pour mobile */
 @media (max-width: 700px) {
-  .contact-section {
-    padding: 1.1rem 0.7rem;
+  .services-quick-contact.services-services-page {
+    margin: 1.2rem auto 0 auto;
+    max-width: 98vw;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98rem;
     border-radius: 16px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    gap: 0.7rem;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    left: unset;
+    transform: none;
+    text-align: center;
   }
-  .contact-section h1 {
-    font-size: 1.8rem;
-  }
-  .custom-bot-desc {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .custom-bot-desc ul {
-    margin-left: 0.7rem;
-  }
-  .services-quick-contact {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-    font-size: 1rem;
-    padding: 0.7rem 1rem;
-    border-radius: 18px;
-  }
-  .services-quick-contact .quick-sep {
-    display: none;
+  .services-quick-contact.services-contact-page {
+    margin: 1.2rem auto 0 auto;
+    max-width: 98vw;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98rem;
+    border-radius: 16px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    gap: 0.7rem;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    left: unset;
+    transform: none;
+    text-align: center;
   }
 }
 
@@ -1113,7 +1145,7 @@ html {
   scrollbar-color: #3a226a #181828;
 }
 
-/* Style custom pour le select langue*/
+/* Style custom pour le select langue */
 .lang-select {
   background: var(--violet);
   color: #fff;
@@ -1317,132 +1349,106 @@ html {
   }
 }
 @media (max-width: 700px) {
+  .services-carousel {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 0;
+  }
   .carousel-track {
     width: 100vw;
     min-width: 0;
     max-width: 100vw;
-    height: 370px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    perspective: none;
   }
-  .carousel-card,
-  .carousel-card.active,
-  .carousel-card.left,
-  .carousel-card.right {
+  .carousel-card {
+    position: relative;
+    left: 0;
+    top: 0;
     width: 95vw;
     max-width: 95vw;
     min-width: 0;
-    height: 340px;
-    padding: 1.2rem 0.7rem 1rem 0.7rem;
-  }
-  .carousel-arrow {
-    width: 38px;
-    height: 38px;
-    font-size: 1.5rem;
-  }
-}
-
-/* Bloc contact rapide - style de la bulle */
-.services-quick-contact {
-  width: 100%;
-  max-width: 900px;
-  margin: 200px auto 0 auto;
-  padding: 0.85rem 2rem;
-  background: rgba(255,255,255,0.07);
-  border-radius: 32px;
-  box-shadow: 0 2px 12px #0001;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.2rem;
-  font-size: 1.13rem;
-  color: #e0e0e0;
-  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
-  min-height: 0;
-  border: 1.5px solid rgba(140,140,255,0.08);
-  transition: box-shadow 0.18s;
-}
-
-.services-quick-contact a {
-  color: var(--violet);
-  text-decoration: underline;
-  transition: color 0.18s;
-}
-.services-quick-contact a:hover {
-  color: var(--violet-dark);
-}
-
-.services-quick-contact .discord-tag {
-  color: #bdbdbd;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-}
-
-.services-quick-contact .quick-contact-label {
-  font-weight: 700;
-  color: #fff;
-  opacity: 0.85;
-  margin-right: 0.7rem;
-}
-
-.services-quick-contact .quick-sep {
-  color: #aaa;
-  opacity: 0.5;
-  margin: 0 0.7rem;
-  font-weight: 700;
-  font-size: 1.1em;
-}
-
-@media (max-width: 700px) {
-  .services-quick-contact {
-    margin: 90px auto 0 auto;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-    font-size: 1rem;
-    padding: 0.7rem 1rem;
-    border-radius: 18px;
-  }
-  .services-quick-contact .quick-sep {
+    height: auto;
+    min-height: 320px;
+    margin: 0 auto;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transform: none;
+    transition: none;
+    box-shadow: 0 2px 18px #0003;
+    /* Hide all by default */
     display: none;
   }
-}
+  .carousel-card.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+    display: flex;
+    animation: none;
+  }
+  .carousel-card.slide-in-right {
+    display: flex;
+    animation: slideInRight 0.45s cubic-bezier(.77,0,.18,1);
+  }
+  .carousel-card.slide-in-left {
+    display: flex;
+    animation: slideInLeft 0.45s cubic-bezier(.77,0,.18,1);
+  }
+  .carousel-card.slide-out-left {
+    display: flex;
+    animation: slideOutLeft 0.45s cubic-bezier(.77,0,.18,1);
+  }
+  .carousel-card.slide-out-right {
+    display: flex;
+    animation: slideOutRight 0.45s cubic-bezier(.77,0,.18,1);
+  }
 
-/* Legal Section */
-.legal-section {
-  max-width: 700px;
-  margin: 2.5rem auto 0 auto;
-  background: rgba(30,30,40,0.18);
-  border-radius: 22px;
-  box-shadow: 0 4px 32px #8f5fff22, 0 2px 18px #0003;
-  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
-  position: relative;
-  border: 1.5px solid #28284a;
-  font-size: 1.13rem;
-  color: #e0e0f7;
-  line-height: 1.7;
-  animation: fadein-contact 1.1s cubic-bezier(.77,0,.18,1) 0.2s both;
-}
-.legal-section h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 1.2rem;
-  color: #fff;
-  text-shadow: 0 2px 8px #8f5fff33;
-  font-family: 'Montserrat', Arial, sans-serif;
-  animation: fadein-title 1.1s cubic-bezier(.77,0,.18,1) 0.1s both;
-}
-.legal-section a {
-  color: #8f5fff;
-  text-decoration: underline;
-  transition: color 0.18s;
-}
-.legal-section a:hover {
-  color: #fff;
-}
-@media (max-width: 700px) {
-  .legal-section {
-    padding: 1.1rem 0.7rem 1rem 0.7rem;
-    border-radius: 16px;
-    font-size: 1rem;
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100vw);}
+    to   { opacity: 1; transform: translateX(0);}
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-100vw);}
+    to   { opacity: 1; transform: translateX(0);}
+  }
+  @keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0);}
+    to   { opacity: 0; transform: translateX(-100vw);}
+  }
+  @keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0);}
+    to   { opacity: 0; transform: translateX(100vw);}
+  }
+
+  .carousel-arrow {
+    position: static;
+    margin: 0 0.7rem 0 0.7rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.7rem;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px #0004;
+    /* Place arrows below the card */
+    order: 2;
+  }
+  .carousel-arrows-mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.7rem;
+    gap: 1.2rem;
+  }
+  /* Hide desktop arrows */
+  .carousel-arrow-left, .carousel-arrow-right {
+    display: none;
   }
 }
 
@@ -1500,6 +1506,8 @@ html {
     position: absolute;
     top: 60px;
     right: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     min-width: 160px;
     border-radius: 12px;
     box-shadow: 0 4px 24px #0006;
@@ -1571,5 +1579,26 @@ html {
   }
   .burger-menu {
     margin-left: auto;
+  }
+}
+
+/* Hide mobile carousel arrows on desktop */
+.carousel-arrows-mobile {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .carousel-arrows-mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.7rem;
+    gap: 1.2rem;
+  }
+  /* Hide desktop arrows on mobile */
+  .carousel-arrow-left, .carousel-arrow-right {
+    display: none;
   }
 }
