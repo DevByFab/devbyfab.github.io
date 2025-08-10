@@ -794,8 +794,27 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Init traduction au chargement + animations
+// Fonction pour mettre à jour l'URL selon la page
+function updatePageURL() {
+  const path = location.pathname;
+  if (path.endsWith('index.html')) {
+    history.replaceState(null, '', '/Home');
+  } else if (path.endsWith('about.html')) {
+    history.replaceState(null, '', '/about');
+  } else if (path.endsWith('services.html')) {
+    history.replaceState(null, '', '/services');
+  } else if (path.endsWith('contact.html')) {
+    history.replaceState(null, '', '/contact');
+  } else if (path.endsWith('legal.html')) {
+    history.replaceState(null, '', '/legal');
+  }
+}
+
+// Init traduction au chargement + animations + URL
 window.addEventListener('DOMContentLoaded', () => {
+  // Met à jour l'URL dès le chargement
+  updatePageURL();
+  
   // Applique la langue stockée si présente
   let selectedValue = 'FR';
   if (langSelect) {
@@ -820,6 +839,11 @@ window.addEventListener('DOMContentLoaded', () => {
       restartAnimations();
     }
   }, 100);
+});
+
+// Écoute les changements de navigation (bouton précédent/suivant)
+window.addEventListener('popstate', () => {
+  updatePageURL();
 });
 
 
