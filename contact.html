@@ -95,5 +95,10 @@
     </div>
   </footer>
   <script src="main.js"></script>
+  <script>
+  if (location.pathname.endsWith('contact.html')) {
+    history.replaceState(null, '', '/contact');
+  }
+  </script>
 </body>
 </html>
