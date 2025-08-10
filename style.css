@@ -289,9 +289,9 @@ main {
 }
 .avatar {
   flex: 0 0 110px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--gray-light);
+  border-radius: 0; /* Supprime le border-radius qui crop */
+  overflow: visible; /* Change de hidden à visible */
+  background: transparent; /* Supprime le fond gris */
   display: flex;
   align-items: center;
   justify-content: center;
