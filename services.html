@@ -101,5 +101,10 @@
     </div>
   </footer>
   <script src="main.js"></script>
+  <script>
+    if (location.pathname.endsWith('services.html')) {
+      history.replaceState(null, '', '/services');
+    }
+  </script>
 </body>
 </html>

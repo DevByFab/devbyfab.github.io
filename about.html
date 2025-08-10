@@ -97,11 +97,11 @@
     </div>
   </footer>
   <script src="main.js"></script>
+  <script>
+    if (location.pathname.endsWith('about.html')) {
+      history.replaceState(null, '', '/about');
+    }
+  </script>
 </body>
 </html>
-      </div>
-    </div>
-  </footer>
-  <script src="main.js"></script>
-</body>
 </html>

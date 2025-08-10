@@ -66,5 +66,10 @@
     </div>
   </footer>
   <script src="main.js"></script>
+  <script>
+    if (location.pathname.endsWith('legal.html')) {
+      history.replaceState(null, '', '/legal');
+    }
+  </script>
 </body>
 </html>
