@@ -2,21 +2,81 @@
 const LANGS = ['FR', 'EN', 'PT'];
 let langIdx = 0;
 
-// CORRECTION : utiliser 'lang-select' au lieu de 'lang-btn'
+// Fonction pour réactiver les animations
+function restartAnimations() {
+  // Relance toutes les animations CSS en réinitialisant les propriétés d'animation
+  document.querySelectorAll('.anim-fadein-left, .anim-fadein-right, .anim-fadein-up').forEach(el => {
+    el.style.animation = 'none';
+    // Force reflow
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
+  
+  // Animation pour les blocs About
+  document.querySelectorAll('.about-block').forEach(el => {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
+  
+  // Animation pour services-intro
+  document.querySelectorAll('.services-intro h1, .services-intro .services-slogan').forEach(el => {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
+  
+  // Animation pour contact-section
+  const contactSection = document.querySelector('.contact-section');
+  if (contactSection) {
+    contactSection.style.animation = 'none';
+    void contactSection.offsetWidth;
+    contactSection.style.animation = '';
+  }
+  
+  // Animation du footer
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.style.transition = 'none';
+    footer.classList.remove('footer-visible');
+    void footer.offsetWidth;
+    footer.style.transition = '';
+    footer.classList.add('footer-visible');
+  }
+  
+  // Animation des services-quick-contact
+  document.querySelectorAll('.services-quick-contact').forEach(el => {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
+}
+
+// Fonction centrale pour appliquer la langue partout
+function applyLanguage(lang) {
+  translateContact(lang);
+  translateHome(lang);
+  translateAbout(lang);
+  translateServices(lang);
+  translateLegal(lang);
+  translateContactQuick(lang);
+  translateNavFooter(lang);
+}
+
+// Gestion du select langue + stockage
 const langSelect = document.getElementById('lang-select');
 if (langSelect) {
-  // Pour un <select>, on écoute l'événement 'change' au lieu de 'click'
+  // Applique la langue stockée au chargement
+  const storedLang = localStorage.getItem('selectedLang');
+  if (storedLang && langSelect.value !== storedLang) {
+    langSelect.value = storedLang;
+  }
+
   langSelect.addEventListener('change', (e) => {
     const selectedValue = e.target.value;
-    console.log('Langue sélectionnée:', selectedValue);
-    // Ici vous pouvez ajouter votre logique de traduction
-    translateContact(selectedValue);
-    translateHome(selectedValue);
-    translateAbout(selectedValue);
-    translateServices(selectedValue);
-    translateLegal(selectedValue);
-    translateContactQuick(selectedValue);
-    translateNavFooter(selectedValue);
+    localStorage.setItem('selectedLang', selectedValue); // Sauvegarde la langue
+    applyLanguage(selectedValue); // Applique la langue partout
+    restartAnimations(); // Relance les animations
   });
   
   // Si vous voulez cycler au clic (au lieu d'utiliser le dropdown natif)
@@ -734,12 +794,32 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Init traduction au chargement
+// Init traduction au chargement + animations
 window.addEventListener('DOMContentLoaded', () => {
-  const selectedValue = langSelect.value;
-  translateLegal(selectedValue);
-  translateContactQuick(selectedValue);
-  translateNavFooter(selectedValue);
+  // Applique la langue stockée si présente
+  let selectedValue = 'FR';
+  if (langSelect) {
+    const storedLang = localStorage.getItem('selectedLang');
+    if (storedLang) {
+      langSelect.value = storedLang;
+      selectedValue = storedLang;
+    } else {
+      selectedValue = langSelect.value;
+    }
+  }
+  
+  // Applique la langue complète au chargement (pas seulement nav/footer)
+  applyLanguage(selectedValue);
+  
+  // Active les animations initiales
+  setTimeout(() => {
+    const footer = document.querySelector('footer');
+    if (footer && footer.classList.contains('footer-visible')) {
+      // Le footer est déjà visible, pas besoin de relancer
+    } else {
+      restartAnimations();
+    }
+  }, 100);
 });
 
 
