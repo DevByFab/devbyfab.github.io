@@ -607,7 +607,7 @@ function translateContact(lang) {
     quick.querySelector('.quick-contact-label').textContent = t["contact.quick"];
     quick.querySelectorAll('span')[1].innerHTML = t["contact.email"] + `<a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a>`;
     quick.querySelectorAll('span')[3].innerHTML = t["contact.discord"] + `<span class="discord-tag">devbyfab</span>`;
-    quick.querySelectorAll('span')[5].innerHTML = t["contact.fiverr"] + `<a href="https://fiverr.com/" target="_blank">Lien Fiverr</a>`;
+    quick.querySelectorAll('span')[5].innerHTML = t["contact.fiverr"] + `<a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank">Lien Fiverr</a>`;
   }
 }
 
@@ -624,7 +624,7 @@ function translateContactQuick(lang) {
       <span class="quick-sep">|</span>
       <span>${t["contact.discord"]}<span class="discord-tag">devbyfab</span></span>
       <span class="quick-sep">|</span>
-      <span>${t["contact.fiverr"]}<a href="https://fiverr.com/" target="_blank">Lien Fiverr</a></span>
+      <span>${t["contact.fiverr"]}<a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank">Lien Fiverr</a></span>
     `;
   });
 }
@@ -741,7 +741,7 @@ function translateServices(lang) {
       btn.href = "contact.html";
       btn.className = "btn btn-secondary";
     } else if (btn) {
-      btn.href = "https://fiverr.com/";
+      btn.href = "https://fr.fiverr.com/s/e61Pkr4";
       btn.className = "btn btn-primary";
     }
   });
