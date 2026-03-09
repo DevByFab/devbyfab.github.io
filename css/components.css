@@ -288,7 +288,7 @@
 .icon-skill.html { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="16" y="20" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat,Arial,sans-serif">HT5</text></svg>'); }
 .icon-skill.js { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="10" y="22" font-size="16" fill="white">JS</text></svg>'); }
 .icon-skill.sqlite { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="2" y="22" font-size="16" fill="white">SQLite</text></svg>'); }
-.icon-skill.mysql { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="2" y="22" font-size="16" fill="white">SQLite</text></svg>'); }
+.icon-skill.mysql { background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="gray"/><text x="2" y="22" font-size="16" fill="white">MySQL</text></svg>'); }
 
 /* --- Tech Badges (NEW) --- */
 .badge {

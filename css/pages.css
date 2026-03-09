@@ -144,7 +144,6 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 0.3rem 1.2rem;
   list-style: none;
-  padding: 0;
   margin: 0.5rem 0 0.2rem 0;
   background: rgba(30, 30, 40, 0.22);
   border-radius: 10px;
