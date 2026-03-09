@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Mentions légales du site DevByFab.">
-  <title>Mentions légales — DevByFab</title>
+  <meta name="description" content="Legal Notice — DevByFab developer portfolio.">
+  <title>Legal Notice — DevByFab</title>
+  <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -16,7 +20,7 @@
       <a href="index.html" class="logo">
         <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
       </a>
-      <button class="burger-menu" aria-label="Ouvrir le menu">
+      <button class="burger-menu" aria-label="Open menu">
         <span class="burger-lines">
           <span></span><span></span><span></span>
         </span>
@@ -24,57 +28,53 @@
       <div class="nav-center">
         <ul>
           <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-          <li><a href="about.html" data-i18n="nav.about">À propos</a></li>
-          <li><a href="projects.html" data-i18n="nav.projects">Projets</a></li>
-          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Sur mesure</a></li>
+          <li><a href="about.html" data-i18n="nav.about">About</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
-      <select id="lang-select" class="lang-select" aria-label="Changer la langue">
-        <option value="FR" selected>FR</option>
-        <option value="EN">EN</option>
-        <option value="PT">PT</option>
-      </select>
     </nav>
   </header>
+
   <main>
-    <section class="legal-section">
-      <h1 id="legal-title" data-i18n="legal.title">Mentions légales</h1>
-      <div id="legal-content" data-i18n-html="legal.content">
-        <p>
-          <b>Éditeur du site :</b> DevByFab<br>
-          <b>Contact :</b> devbyfab@gmail.com<br>
-          <b>Plateforme d’hébergement :</b> <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
-        </p>
-        <p>
-          Ce site est un portfolio à titre informatif.<br>
-          Aucune donnée personnelle n'est collectée.<br>
-          Les services présentés sont proposés via des plateformes tierces (ex : Fiverr, Discord).
-        </p>
-      </div>
+    <section class="page-hero">
+      <h1 data-i18n="legal.title">Legal Notice</h1>
+    </section>
+
+    <section class="legal-grid">
+      <article class="project-card project-card--legal">
+        <div class="project-card__body" id="legal-content" data-i18n-html="legal.content">
+          <p>
+            <b>Site publisher:</b> DevByFab<br>
+            <b>Contact:</b> devbyfab@gmail.com<br>
+            <b>Hosting platform:</b> <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
+          </p>
+          <p>
+            This site is a personal portfolio for informational purposes.<br>
+            No personal data is collected.<br>
+            All projects presented are personal or open-source works.
+          </p>
+        </div>
+      </article>
     </section>
   </main>
+
   <div id="bg-anim"></div>
   <footer>
     <div class="footer-separator"></div>
     <div class="footer-content">
       <div>
-        <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
         <span>· Discord : <span class="discord-tag">devbyfab</span></span>
-        <span>· <a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank" rel="noopener">Fiverr</a></span>
+        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
       </div>
       <div class="footer-copy">
-        © DevByFab 2025. <span data-i18n="footer.rights">Tous droits réservés.</span>
-        <span> · <a href="legal.html" data-i18n="footer.legal">Mentions légales</a></span>
+        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
+        <span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></span>
       </div>
     </div>
   </footer>
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
-  <script>
-    if (location.pathname.endsWith('legal.html')) {
-      history.replaceState(null, '', '/legal');
-    }
-  </script>
 </body>
 </html>

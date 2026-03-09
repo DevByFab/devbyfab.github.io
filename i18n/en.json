@@ -1,61 +1,34 @@
 {
-  "contact.title": "Custom Offer — Personalized Discord Bots",
-  "contact.desc1": "You have a specific idea or a unique need for your Discord server? I create custom bots tailored to your needs and your community.",
-  "contact.ul1": [
-    "Advanced moderation, logs, user management",
-    "Custom commands, interactions, mini-games",
-    "Twitch, YouTube, external API integration",
-    "Role, channel, permissions, reaction management",
-    "Database, statistics, automations",
-    "Streamer features, notifications, paginations, embeds…",
-    "And much more: anything is possible, just ask!"
-  ],
-  "contact.h2": "How does it work?",
-  "contact.ol1": [
-    "<b>Contact me</b> by <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> or on Discord: <span class=\"discord-tag\">devbyfab</span>",
-    "<b>We discuss together</b> all the features, commands, and specific needs for your bot.",
-    "<b>The custom offer includes by default all features of the full pack</b> (moderation, logs, database, paginations, DMs, etc.).",
-    "<b>A fixed price</b> is set once all features are chosen, depending on complexity and estimated time."
-  ],
-  "contact.final": "<b>You only pay once everything is clear and validated.</b><br>Feel free to contact me to discuss your project, even if you just have an idea or a question!",
-  "contact.quick": "Quick contact:",
-  "contact.email": "Email: ",
-  "contact.discord": "Discord: ",
-  "contact.fiverr": "Fiverr: ",
+  "nav.home": "Home",
+  "nav.about": "About",
+  "nav.projects": "Projects",
+  "nav.contact": "Contact",
 
-  "home.heroTitle": "DevByFab — Custom Discord bots & freelance dev",
-  "home.heroDesc": "I create custom Discord bots, web tools, and solutions tailored to your needs. Reliable, fast, and attentive.",
-  "home.heroBtn1": "See services",
-  "home.heroBtn2": "Quick contact",
+  "home.heroTitle": "DevByFab",
+  "home.heroSubtitle": "Full-Stack Developer & Passionate Builder",
+  "home.heroDesc": "I build web applications, CLI tools, and browser extensions. Explore my projects and get in touch.",
+  "home.heroBtn1": "View Projects",
+  "home.heroBtn2": "Contact Me",
+  "home.projectsTitle": "Featured Projects",
 
-  "about.title": "About me",
-  "about.desc": "Passionate freelance developer, specialized in creating custom Discord bots and web solutions. Serious, versatile, and always attentive to your needs.",
-  "about.skillsTitle1": "Languages",
-  "about.skillsTitle2": "mastered",
-  "about.skillsList": ["Python", "HTML", "CSS", "JavaScript", "SQLite", "MySQL"],
-  "about.styleTitle1": "Work",
-  "about.styleTitle2": "style",
-  "about.styleList": ["Versatile", "Serious", "Chill", "Attentive"],
-  "about.goalsTitle1": "Future",
-  "about.goalsTitle2": "goals",
-  "about.goalsList": [
-    "Advanced Twitch integrations",
-    "Even more custom Discord bots",
-    "Learning new technologies"
-  ],
-
-  "services.introTitle": "Freelance service, custom Discord bot creation.",
-  "services.slogan": "Your projects are unique, our solutions are authentic.",
-  "services.cards": [
-    { "title": "Starter", "h2": "Basic moderation + embed messages", "desc": "Simple moderation commands and custom embed messages.", "btn": "Order" },
-    { "title": "Logs+", "h2": "Moderation + logs (no database)", "desc": "Add Discord event logs, advanced moderation, no database.", "btn": "Order" },
-    { "title": "Full Pack", "h2": "Full pack (database, paginations, DMs)", "desc": "Complete management: database, paginations, private messages, logs, moderation.", "btn": "Order" },
-    { "title": "Custom", "h2": "Custom", "desc": "Full customization: moderation, logs, database, paginations, embeds, DMs, Twitch API integration, streamer features…", "btn": "Learn more" }
-  ],
+  "about.title": "About Me",
+  "about.subtitle": "Passionate developer building real-world solutions.",
+  "about.bioTitle": "Who am I?",
+  "about.desc": "Passionate developer specializing in Python and web technologies. I build complete applications — SaaS extensions, web platforms, CLI tools — always striving to learn and improve.",
+  "about.skillsTitle": "Tech Stack",
+  "about.styleTitle": "Work Style",
+  "about.style1": "Versatile",
+  "about.style2": "Serious",
+  "about.style3": "Chill",
+  "about.style4": "Attentive",
+  "about.goalsTitle": "Future Goals",
+  "about.goal1": "SaaS application development",
+  "about.goal2": "Exploring new frameworks",
+  "about.goal3": "Continuous learning of new technologies",
 
   "projects.title": "Projects",
   "projects.subtitle": "Full-stack, back-end and advanced tooling technical projects.",
-  "projects.viewProject": "View project",
+  "projects.viewProject": "View Project",
   "projects.viewGithub": "GitHub",
   "projects.card1.title": "Chromium SaaS Extension — Manifest V3",
   "projects.card1.desc": "Full browser extension with SaaS architecture, subscription system, and secure back-end API.",
@@ -64,15 +37,13 @@
   "projects.card3.title": "Python CLI — Hybrid Cryptography",
   "projects.card3.desc": "Command-line tool for hybrid file and message encryption, with RSA/AES key management.",
 
-  "nav.home": "Home",
-  "nav.about": "About",
-  "nav.projects": "Projects",
-  "nav.services": "Services",
-  "nav.contact": "Custom",
+  "contact.title": "Contact",
+  "contact.subtitle": "A question, an idea, a collaboration? Get in touch.",
+  "contact.emailLabel": "Email",
 
   "footer.rights": "All rights reserved.",
   "footer.legal": "Legal Notice",
 
   "legal.title": "Legal Notice",
-  "legal.content": "<p><b>Site publisher:</b> DevByFab<br><b>Contact:</b> devbyfab@gmail.com<br><b>Hosting platform:</b> <a href=\"https://pages.github.com\" target=\"_blank\">GitHub Pages</a></p><p>This site is a portfolio for informational purposes.<br>No personal data is collected.<br>The services presented are offered via third-party platforms (e.g.: Fiverr, Discord).</p>"
+  "legal.content": "<p><b>Site publisher:</b> DevByFab<br><b>Contact:</b> devbyfab@gmail.com<br><b>Hosting platform:</b> <a href=\"https://pages.github.com\" target=\"_blank\" rel=\"noopener\">GitHub Pages</a></p><p>This site is a personal portfolio for informational purposes.<br>No personal data is collected.<br>All projects presented are personal or open-source works.</p>"
 }
