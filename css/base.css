@@ -1,0 +1,135 @@
+/* ============================================
+   BASE — Variables, Reset, Typography, Animations
+   ============================================ */
+
+:root {
+  --bg: #111;
+  --fg: #fff;
+  --gray: #333;
+  --gray-light: #444;
+  --violet: #8f5fff;
+  --violet-dark: #6a3fdc;
+  --card-bg: #232234;
+  --card-bg-active: #2d2650;
+  --card-border: #28284a;
+  --border-radius: 12px;
+  --font-main: 'Inter', Arial, sans-serif;
+  --font-heading: 'Montserrat', 'Inter', Arial, sans-serif;
+}
+
+/* --- Reset & Global --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* --- Background Animation --- */
+#bg-anim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 60% 40%, #8f5fff22 0%, transparent 70%),
+              radial-gradient(ellipse at 30% 80%, #8f5fff11 0%, transparent 80%);
+  filter: blur(40px);
+  animation: bgmove 12s linear infinite alternate;
+}
+
+/* --- Scrollbar (Webkit) --- */
+::-webkit-scrollbar {
+  width: 6px;
+  background: #181828;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4e2e8e 0%, #2d1a4d 100%);
+  border-radius: 8px;
+  min-height: 40px;
+  border: 2px solid #181828;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #3a226a 0%, #2d1a4d 100%);
+}
+
+/* --- Scrollbar (Firefox) --- */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #3a226a #181828;
+}
+
+/* ============================================
+   KEYFRAMES
+   ============================================ */
+
+@keyframes bgmove {
+  0%   { background-position: 60% 40%, 30% 80%; }
+  100% { background-position: 70% 50%, 20% 70%; }
+}
+
+@keyframes nav-fadein {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadein-left {
+  80%  { opacity: 1; transform: translateX(4px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes fadein-right {
+  80%  { opacity: 1; transform: translateX(-4px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes fadein-up {
+  80%  { opacity: 1; transform: translateY(-2px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes fadein-title {
+  0%   { opacity: 0; transform: translateY(-32px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes fadein-contact {
+  0%   { opacity: 0; transform: translateY(32px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes about-fadein {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadein-carousel-card {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* --- Animation utility classes --- */
+.anim-fadein-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  animation: fadein-left 1.5s cubic-bezier(.77,0,.18,1) 0.3s forwards;
+}
+.anim-fadein-right {
+  opacity: 0;
+  transform: translateX(40px);
+  animation: fadein-right 1.5s cubic-bezier(.77,0,.18,1) 0.6s forwards;
+}
+.anim-fadein-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadein-up 1.2s cubic-bezier(.77,0,.18,1) 1.0s forwards;
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Projets techniques — DevByFab. Extension Chromium SaaS, écosystème TCG, CLI cryptographie.">
+  <title>Projets — DevByFab</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/projects.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+      </a>
+      <button class="burger-menu" aria-label="Ouvrir le menu">
+        <span class="burger-lines">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      <div class="nav-center">
+        <ul>
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="about.html" data-i18n="nav.about">À propos</a></li>
+          <li><a href="projects.html" class="active" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Sur mesure</a></li>
+        </ul>
+      </div>
+      <select id="lang-select" class="lang-select" aria-label="Changer la langue">
+        <option value="FR" selected>FR</option>
+        <option value="EN">EN</option>
+        <option value="PT">PT</option>
+      </select>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero / Intro -->
+    <section class="projects-hero">
+      <h1 data-i18n="projects.title">Projets</h1>
+      <p class="projects-subtitle" data-i18n="projects.subtitle">Projets techniques full-stack, back-end et outils avancés.</p>
+    </section>
+
+    <!-- Projects Grid — 3 cards, Z-scan layout -->
+    <section class="projects__grid">
+
+      <!-- Card 1: Extension Chromium SaaS -->
+      <article class="project-card project-card--featured">
+        <div class="project-card__header">
+          <div class="project-card__icon">🧩</div>
+          <span class="badge badge--status badge--wip">WIP</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card1.title">Extension Chromium SaaS — Manifest V3</h2>
+          <p class="project-card__desc" data-i18n="projects.card1.desc">Extension navigateur complète avec architecture SaaS, système d'abonnement, et API back-end sécurisée.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Manifest V3</span>
+          <span class="badge badge--tech">JavaScript</span>
+          <span class="badge badge--tech">FastAPI</span>
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">Stripe</span>
+          <span class="badge badge--tech">SQLite</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="#" class="btn btn--sm btn-primary" data-i18n="projects.viewProject">Voir le projet</a>
+          <a href="#" class="btn btn--sm btn-secondary" data-i18n="projects.viewGithub">GitHub</a>
+        </div>
+      </article>
+
+      <!-- Card 2: TCG Ecosystem -->
+      <article class="project-card">
+        <div class="project-card__header">
+          <div class="project-card__icon">🃏</div>
+          <span class="badge badge--status badge--wip">WIP</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card2.title">Écosystème TCG — Web App + Discord Bot</h2>
+          <p class="project-card__desc" data-i18n="projects.card2.desc">Plateforme de jeu de cartes à collectionner avec interface web, bot Discord intégré et système de combat en temps réel.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">Discord.py</span>
+          <span class="badge badge--tech">FastAPI</span>
+          <span class="badge badge--tech">HTML/CSS/JS</span>
+          <span class="badge badge--tech">SQLite</span>
+          <span class="badge badge--tech">WebSocket</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="#" class="btn btn--sm btn-primary" data-i18n="projects.viewProject">Voir le projet</a>
+          <a href="#" class="btn btn--sm btn-secondary" data-i18n="projects.viewGithub">GitHub</a>
+        </div>
+      </article>
+
+      <!-- Card 3: CLI Crypto -->
+      <article class="project-card">
+        <div class="project-card__header">
+          <div class="project-card__icon">🔐</div>
+          <span class="badge badge--status badge--live">LIVE</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card3.title">CLI Python — Cryptographie Hybride</h2>
+          <p class="project-card__desc" data-i18n="projects.card3.desc">Outil en ligne de commande pour le chiffrement hybride de fichiers et messages, avec gestion de clés RSA/AES.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">AES-256</span>
+          <span class="badge badge--tech">RSA</span>
+          <span class="badge badge--tech">CLI</span>
+          <span class="badge badge--tech">Cryptography</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="#" class="btn btn--sm btn-primary" data-i18n="projects.viewProject">Voir le projet</a>
+          <a href="#" class="btn btn--sm btn-secondary" data-i18n="projects.viewGithub">GitHub</a>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <div id="bg-anim"></div>
+
+  <footer>
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <div>
+        <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
+        <span>· <a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank">Fiverr</a></span>
+      </div>
+      <div class="footer-copy">
+        © DevByFab 2025. <span data-i18n="footer.rights">Tous droits réservés.</span>
+        <span> · <a href="legal.html" data-i18n="footer.legal">Mentions légales</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    if (location.pathname.endsWith('projects.html')) {
+      history.replaceState(null, '', '/projects');
+    }
+  </script>
+</body>
+</html>
