@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Contactez DevByFab pour un devis personnalisé ou toute question sur les bots Discord et le développement web.">
+  <title>Sur mesure — DevByFab</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+      </a>
+      <button class="burger-menu" aria-label="Ouvrir le menu">
+        <span class="burger-lines">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      <div class="nav-center">
+        <ul>
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="about.html" data-i18n="nav.about">À propos</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="contact.html" class="active" data-i18n="nav.contact">Sur mesure</a></li>
+        </ul>
+      </div>
+      <select id="lang-select" class="lang-select" aria-label="Changer la langue">
+        <option value="FR" selected>FR</option>
+        <option value="EN">EN</option>
+        <option value="PT">PT</option>
+      </select>
+    </nav>
+  </header>
+  <main>
+    <section class="contact-section">
+      <h1 data-i18n="contact.title">Offre sur mesure — Bots Discord personnalisés</h1>
+      <div class="custom-bot-desc">
+        <p data-i18n="contact.desc1">
+          Vous avez une idée précise ou un besoin unique pour votre serveur Discord ? Je réalise des bots sur mesure, adaptés à vos envies et à votre communauté.
+        </p>
+        <h2 data-i18n="contact.h2">Comment ça marche ?</h2>
+        <ol>
+          <li>
+            <b>Contactez-moi</b> par <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">mail</a> ou sur Discord : <span class="discord-tag">devbyfab</span>
+          </li>
+          <li>
+            <b>On discute ensemble</b> de toutes les fonctionnalités, commandes et besoins spécifiques pour votre bot.
+          </li>
+          <li>
+            <b>L’offre sur mesure inclut de base toutes les fonctionnalités du pack complet</b> (modération, logs, base de données, paginations, MP, etc.).
+          </li>
+          <li>
+            <b>Un prix fixe</b> est défini une fois toutes les fonctionnalités choisies, selon la complexité et le temps estimé.
+          </li>
+        </ol>
+        <p>
+          <b>Vous ne payez qu’une fois que tout est clair et validé.</b><br>
+          N’hésitez pas à me contacter pour discuter de votre projet, même si vous n’avez qu’une idée ou une question !
+        </p>
+      </div>
+    </section>
+    <section class="services-quick-contact services-contact-page">
+      <span class="quick-contact-label">Contact rapide :</span>
+      <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+      <span class="quick-sep">|</span>
+      <span>Discord : <span class="discord-tag">devbyfab</span></span>
+      <span class="quick-sep">|</span>
+      <span>Fiverr : <a href="https://fiverr.com/" target="_blank" rel="noopener">Lien Fiverr</a></span>
+    </section>
+  </main>
+  <div id="bg-anim"></div>
+  <footer>
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <div>
+        <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
+        <span>· <a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank" rel="noopener">Fiverr</a></span>
+      </div>
+      <div class="footer-copy">
+        © DevByFab 2025. <span data-i18n="footer.rights">Tous droits réservés.</span>
+        <span> · <a href="legal.html" data-i18n="footer.legal">Mentions légales</a></span>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+  if (location.pathname.endsWith('contact.html')) {
+    history.replaceState(null, '', '/contact');
+  }
+  </script>
+</body>
+</html>
