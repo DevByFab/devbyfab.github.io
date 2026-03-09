@@ -1,0 +1,78 @@
+{
+  "contact.title": "Oferta sob medida — Bots Discord personalizados",
+  "contact.desc1": "Você tem uma ideia específica ou uma necessidade única para seu servidor Discord? Eu crio bots sob medida, adaptados às suas necessidades e à sua comunidade.",
+  "contact.ul1": [
+    "Moderação avançada, logs, gestão de usuários",
+    "Comandos personalizados, interações, jogos, mini-jogos",
+    "Integração com Twitch, YouTube, APIs externas",
+    "Gestão de cargos, canais, permissões, reações",
+    "Banco de dados, estatísticas, automações",
+    "Funcionalidades para streamers, notificações, paginações, embeds…",
+    "E muito mais: tudo é possível, basta pedir!"
+  ],
+  "contact.h2": "Como funciona?",
+  "contact.ol1": [
+    "<b>Entre em contato comigo</b> por <a href=\"https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com\" target=\"_blank\" rel=\"noopener\">email</a> ou no Discord: <span class=\"discord-tag\">devbyfab</span>",
+    "<b>Conversamos juntos</b> sobre todas as funcionalidades, comandos e necessidades específicas para seu bot.",
+    "<b>A oferta sob medida já inclui todas as funcionalidades do pacote completo</b> (moderação, logs, banco de dados, paginações, MPs, etc.).",
+    "<b>Um preço fixo</b> é definido assim que todas as funcionalidades forem escolhidas, de acordo com a complexidade e o tempo estimado."
+  ],
+  "contact.final": "<b>Você só paga quando tudo estiver claro e validado.</b><br>Não hesite em me contatar para discutir seu projeto, mesmo que você só tenha uma ideia ou uma dúvida!",
+  "contact.quick": "Contato rápido:",
+  "contact.email": "Email: ",
+  "contact.discord": "Discord: ",
+  "contact.fiverr": "Fiverr: ",
+
+  "home.heroTitle": "DevByFab — Custom Discord bots & freelance dev",
+  "home.heroDesc": "Crio bots Discord personalizados, ferramentas web e soluções adaptadas às suas necessidades. Sério, rápido, atento.",
+  "home.heroBtn1": "Ver serviços",
+  "home.heroBtn2": "Contato rápido",
+
+  "about.title": "Sobre mim",
+  "about.desc": "Desenvolvedor freelancer apaixonado, especializado na criação de bots Discord e soluções web sob medida. Sério, versátil e sempre atento às suas necessidades.",
+  "about.skillsTitle1": "Linguagens",
+  "about.skillsTitle2": "dominadas",
+  "about.skillsList": ["Python", "HTML", "CSS", "JavaScript", "SQLite", "MySQL"],
+  "about.styleTitle1": "Estilo",
+  "about.styleTitle2": "de trabalho",
+  "about.styleList": ["Versátil", "Sério", "Tranquilo", "Atento"],
+  "about.goalsTitle1": "Objetivo",
+  "about.goalsTitle2": "futuro",
+  "about.goalsList": [
+    "Integrações avançadas com Twitch",
+    "Bots Discord ainda mais personalizados",
+    "Aprender novas tecnologias"
+  ],
+
+  "services.introTitle": "Serviço freelancer, criação de bots Discord sob medida.",
+  "services.slogan": "Seus projetos são únicos, nossas soluções são autênticas.",
+  "services.cards": [
+    { "title": "Starter", "h2": "Moderação básica + mensagens embed", "desc": "Comandos de moderação simples e mensagens personalizadas em embed.", "btn": "Encomendar" },
+    { "title": "Logs+", "h2": "Moderação + logs (sem banco de dados)", "desc": "Adição de logs de eventos do Discord, moderação avançada, sem banco de dados.", "btn": "Encomendar" },
+    { "title": "Full Pack", "h2": "Pacote completo (banco de dados, paginações, MPs)", "desc": "Gestão completa: banco de dados, paginações, mensagens privadas, logs, moderação.", "btn": "Encomendar" },
+    { "title": "Sob medida", "h2": "Sob medida", "desc": "Personalização total: moderação, logs, banco de dados, paginações, embeds, MPs, integração Twitch API, funcionalidades para streamers…", "btn": "Saiba mais" }
+  ],
+
+  "projects.title": "Projetos",
+  "projects.subtitle": "Projetos técnicos full-stack, back-end e ferramentas avançadas.",
+  "projects.viewProject": "Ver projeto",
+  "projects.viewGithub": "GitHub",
+  "projects.card1.title": "Extensão Chromium SaaS — Manifest V3",
+  "projects.card1.desc": "Extensão de navegador completa com arquitetura SaaS, sistema de assinatura e API back-end segura.",
+  "projects.card2.title": "Ecossistema TCG — Web App + Discord Bot",
+  "projects.card2.desc": "Plataforma de jogo de cartas colecionáveis com interface web, bot Discord integrado e sistema de batalha em tempo real.",
+  "projects.card3.title": "CLI Python — Criptografia Híbrida",
+  "projects.card3.desc": "Ferramenta de linha de comando para criptografia híbrida de arquivos e mensagens, com gestão de chaves RSA/AES.",
+
+  "nav.home": "Home",
+  "nav.about": "Sobre",
+  "nav.projects": "Projetos",
+  "nav.services": "Serviços",
+  "nav.contact": "Sob medida",
+
+  "footer.rights": "Todos os direitos reservados.",
+  "footer.legal": "Aviso Legal",
+
+  "legal.title": "Aviso Legal",
+  "legal.content": "<p><b>Editora do site:</b> DevByFab<br><b>Contato:</b> devbyfab@gmail.com<br><b>Plataforma de hospedagem:</b> <a href=\"https://pages.github.com\" target=\"_blank\">GitHub Pages</a></p><p>Este site é um portfólio para fins informativos.<br>Nenhum dado pessoal é coletado.<br>Os serviços apresentados são oferecidos por plataformas terceiras (ex: Fiverr, Discord).</p>"
+}
