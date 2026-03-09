@@ -33,6 +33,16 @@ html, body {
   box-sizing: border-box;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* --- Background Animation --- */
 #bg-anim {
   position: fixed;
@@ -98,23 +108,13 @@ html {
 }
 
 @keyframes fadein-title {
-  0%   { opacity: 0; transform: translateY(-32px); }
+  0%   { opacity: 0; transform: translateY(-24px); }
   100% { opacity: 1; transform: none; }
 }
 
-@keyframes fadein-contact {
-  0%   { opacity: 0; transform: translateY(32px); }
-  100% { opacity: 1; transform: none; }
-}
-
-@keyframes about-fadein {
-  from { opacity: 0; transform: translateY(40px); }
+@keyframes fadein-card {
+  from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: none; }
-}
-
-@keyframes fadein-carousel-card {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 /* --- Animation utility classes --- */

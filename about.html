@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="À propos de Fab, développeur freelance spécialisé bots Discord et web.">
-  <title>À propos — DevByFab</title>
+  <meta name="description" content="About DevByFab — Passionate full-stack developer specializing in Python, web technologies, and software engineering.">
+  <title>About — DevByFab</title>
+  <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
 </head>
-<body class="about-page">
+<body>
   <header>
     <nav>
       <a href="index.html" class="logo">
         <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
       </a>
-      <button class="burger-menu" aria-label="Ouvrir le menu">
+      <button class="burger-menu" aria-label="Open menu">
         <span class="burger-lines">
           <span></span><span></span><span></span>
         </span>
@@ -24,88 +28,105 @@
       <div class="nav-center">
         <ul>
           <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-          <li><a href="about.html" class="active" data-i18n="nav.about">À propos</a></li>
-          <li><a href="projects.html" data-i18n="nav.projects">Projets</a></li>
-          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Sur mesure</a></li>
+          <li><a href="about.html" class="active" data-i18n="nav.about">About</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
-      <select id="lang-select" class="lang-select" aria-label="Changer la langue">
-        <option value="FR" selected>FR</option>
-        <option value="EN">EN</option>
-        <option value="PT">PT</option>
-      </select>
     </nav>
   </header>
+
   <main>
-    <div class="about-block about-left">
-      <div class="avatar">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="width:100px;height:auto;object-fit:contain;background:transparent;">
-      </div>
-      <div>
-        <h1 data-i18n="about.title">À propos de moi</h1>
-        <p data-i18n="about.desc">Développeur freelance passionné, spécialisé dans la création de bots Discord et de solutions web sur mesure. Sérieux, polyvalent et toujours à l'écoute de vos besoins.</p>
-      </div>
-    </div>
-    <div class="about-block about-right">
-      <h2>
-        <span data-i18n="about.skillsTitle1">Langages</span>
-        <span data-i18n="about.skillsTitle2">maîtrisés</span>
-      </h2>
-      <ul class="skills-list">
-        <li><span class="icon-skill python"></span>Python</li>
-        <li><span class="icon-skill html"></span>HTML</li>
-        <li><span class="icon-skill css"></span>CSS</li>
-        <li><span class="icon-skill js"></span>JavaScript</li>
-        <li><span class="icon-skill sqlite"></span>SQLite</li>
-        <li><span class="icon-skill mysql"></span>MySQL</li>
-      </ul>
-    </div>
-    <div class="about-block about-left">
-      <h2>
-        <span data-i18n="about.styleTitle1">Style</span>
-        <span data-i18n="about.styleTitle2">de travail</span>
-      </h2>
-      <ul>
-        <li>Polyvalent</li>
-        <li>Sérieux</li>
-        <li>Posé</li>
-        <li>À l’écoute</li>
-      </ul>
-    </div>
-    <div class="about-block about-right">
-      <h2>
-        <span class="objectif" data-i18n="about.goalsTitle1">Objectif</span>
-        <span class="futur" data-i18n="about.goalsTitle2">futur</span>
-      </h2>
-      <ul>
-        <li>Intégrations Twitch avancées</li>
-        <li>Bots Discord encore plus personnalisés</li>
-        <li>Apprentissage de nouvelles technologies</li>
-      </ul>
-    </div>
+    <!-- Hero -->
+    <section class="page-hero">
+      <h1 data-i18n="about.title">About Me</h1>
+      <p class="page-hero__subtitle" data-i18n="about.subtitle">Passionate developer building real-world solutions.</p>
+    </section>
+
+    <!-- About Grid -->
+    <section class="about-grid">
+      <!-- Card 1: Bio (featured) -->
+      <article class="project-card project-card--about project-card--featured-about">
+        <div class="project-card__header">
+          <div class="about-avatar">
+            <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          </div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="about.bioTitle">Who am I?</h2>
+          <p class="project-card__desc" data-i18n="about.desc">Passionate developer specializing in Python and web technologies. I build complete applications — SaaS extensions, web platforms, CLI tools — always striving to learn and improve.</p>
+        </div>
+      </article>
+
+      <!-- Card 2: Skills -->
+      <article class="project-card project-card--about">
+        <div class="project-card__header">
+          <div class="project-card__icon">💻</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="about.skillsTitle">Tech Stack</h2>
+        </div>
+        <div class="project-card__tags about-skills-tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">HTML</span>
+          <span class="badge badge--tech">CSS</span>
+          <span class="badge badge--tech">JavaScript</span>
+          <span class="badge badge--tech">SQLite</span>
+          <span class="badge badge--tech">MySQL</span>
+          <span class="badge badge--tech">FastAPI</span>
+          <span class="badge badge--tech">Discord.py</span>
+        </div>
+      </article>
+
+      <!-- Card 3: Work Style -->
+      <article class="project-card project-card--about">
+        <div class="project-card__header">
+          <div class="project-card__icon">⚡</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="about.styleTitle">Work Style</h2>
+          <ul class="about-list" id="about-style-list">
+            <li data-i18n="about.style1">Versatile</li>
+            <li data-i18n="about.style2">Serious</li>
+            <li data-i18n="about.style3">Chill</li>
+            <li data-i18n="about.style4">Attentive</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 4: Goals -->
+      <article class="project-card project-card--about">
+        <div class="project-card__header">
+          <div class="project-card__icon">🎯</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="about.goalsTitle">Future Goals</h2>
+          <ul class="about-list" id="about-goals-list">
+            <li data-i18n="about.goal1">SaaS application development</li>
+            <li data-i18n="about.goal2">Exploring new frameworks</li>
+            <li data-i18n="about.goal3">Continuous learning of new technologies</li>
+          </ul>
+        </div>
+      </article>
+    </section>
   </main>
+
   <div id="bg-anim"></div>
   <footer>
     <div class="footer-separator"></div>
     <div class="footer-content">
       <div>
-        <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
         <span>· Discord : <span class="discord-tag">devbyfab</span></span>
-        <span>· <a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank" rel="noopener">Fiverr</a></span>
+        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
       </div>
       <div class="footer-copy">
-        © DevByFab 2025. <span data-i18n="footer.rights">Tous droits réservés.</span>
-        <span> · <a href="legal.html" data-i18n="footer.legal">Mentions légales</a></span>
+        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
+        <span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></span>
       </div>
     </div>
   </footer>
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
-  <script>
-    if (location.pathname.endsWith('about.html')) {
-      history.replaceState(null, '', '/about');
-    }
-  </script>
 </body>
 </html>
