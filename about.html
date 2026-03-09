@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="À propos de Fab, développeur freelance spécialisé bots Discord et web.">
+  <title>À propos — DevByFab</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="about-page">
+  <header>
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+      </a>
+      <button class="burger-menu" aria-label="Ouvrir le menu">
+        <span class="burger-lines">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      <div class="nav-center">
+        <ul>
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="about.html" class="active" data-i18n="nav.about">À propos</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">Projets</a></li>
+          <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Sur mesure</a></li>
+        </ul>
+      </div>
+      <select id="lang-select" class="lang-select" aria-label="Changer la langue">
+        <option value="FR" selected>FR</option>
+        <option value="EN">EN</option>
+        <option value="PT">PT</option>
+      </select>
+    </nav>
+  </header>
+  <main>
+    <div class="about-block about-left">
+      <div class="avatar">
+        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="width:100px;height:auto;object-fit:contain;background:transparent;">
+      </div>
+      <div>
+        <h1 data-i18n="about.title">À propos de moi</h1>
+        <p data-i18n="about.desc">Développeur freelance passionné, spécialisé dans la création de bots Discord et de solutions web sur mesure. Sérieux, polyvalent et toujours à l'écoute de vos besoins.</p>
+      </div>
+    </div>
+    <div class="about-block about-right">
+      <h2>
+        <span data-i18n="about.skillsTitle1">Langages</span>
+        <span data-i18n="about.skillsTitle2">maîtrisés</span>
+      </h2>
+      <ul class="skills-list">
+        <li><span class="icon-skill python"></span>Python</li>
+        <li><span class="icon-skill html"></span>HTML</li>
+        <li><span class="icon-skill css"></span>CSS</li>
+        <li><span class="icon-skill js"></span>JavaScript</li>
+        <li><span class="icon-skill sqlite"></span>SQLite</li>
+        <li><span class="icon-skill mysql"></span>MySQL</li>
+      </ul>
+    </div>
+    <div class="about-block about-left">
+      <h2>
+        <span data-i18n="about.styleTitle1">Style</span>
+        <span data-i18n="about.styleTitle2">de travail</span>
+      </h2>
+      <ul>
+        <li>Polyvalent</li>
+        <li>Sérieux</li>
+        <li>Posé</li>
+        <li>À l’écoute</li>
+      </ul>
+    </div>
+    <div class="about-block about-right">
+      <h2>
+        <span class="objectif" data-i18n="about.goalsTitle1">Objectif</span>
+        <span class="futur" data-i18n="about.goalsTitle2">futur</span>
+      </h2>
+      <ul>
+        <li>Intégrations Twitch avancées</li>
+        <li>Bots Discord encore plus personnalisés</li>
+        <li>Apprentissage de nouvelles technologies</li>
+      </ul>
+    </div>
+  </main>
+  <div id="bg-anim"></div>
+  <footer>
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <div>
+        <span>Email : <a href="https://mail.google.com/mail/?view=cm&to=devbyfab@gmail.com" target="_blank" rel="noopener">devbyfab@gmail.com</a></span>
+        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
+        <span>· <a href="https://fr.fiverr.com/s/e61Pkr4" target="_blank" rel="noopener">Fiverr</a></span>
+      </div>
+      <div class="footer-copy">
+        © DevByFab 2025. <span data-i18n="footer.rights">Tous droits réservés.</span>
+        <span> · <a href="legal.html" data-i18n="footer.legal">Mentions légales</a></span>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    if (location.pathname.endsWith('about.html')) {
+      history.replaceState(null, '', '/about');
+    }
+  </script>
+</body>
+</html>
