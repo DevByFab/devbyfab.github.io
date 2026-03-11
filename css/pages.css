@@ -461,6 +461,13 @@
   }
 }
 
+@media (max-width: 920px) {
+  .discordbot-grid,
+  .cryotabs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 700px) {
   .page-hero h1 {
     font-size: 1.8rem;
@@ -495,6 +502,30 @@
   .cryotabs-grid {
     gap: 1rem;
   }
+  .project-card--discord-module .project-card__title,
+  .project-card--cryo-module .project-card__title {
+    font-size: 1.06rem;
+    line-height: 1.35;
+  }
+  .discordbot-list li,
+  .cryotabs-list li {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .project-card--discord-overview .project-card__tags,
+  .project-card--cryo-overview .project-card__tags {
+    gap: 0.35rem;
+  }
+  .project-card--discord-overview .project-card__footer,
+  .project-card--cryo-overview .project-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+  }
+  .project-card--discord-overview .project-card__footer .btn,
+  .project-card--cryo-overview .project-card__footer .btn {
+    width: 100%;
+  }
 }
 
 /* Mobile: 1 col for projects */
@@ -521,5 +552,18 @@
   }
   .section-title {
     font-size: 1.3rem;
+  }
+  .project-card--discord-overview .project-card__icon,
+  .project-card--discord-module .project-card__icon,
+  .project-card--cryo-overview .project-card__icon,
+  .project-card--cryo-module .project-card__icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+  .discordbot-list li,
+  .cryotabs-list li {
+    padding-left: 1rem;
+    font-size: 0.93rem;
   }
 }
