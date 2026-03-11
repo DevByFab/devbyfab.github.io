@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="CryoTabs portfolio: ultra-light RAM optimizer and workspace manager extension built with Manifest V3 and a SaaS-ready architecture.">
+  <meta name="i18n-base" content="../i18n">
+  <title data-i18n="cryo.pageTitle">CryoTabs — DevByFab</title>
+  <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="../index.html" class="logo">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+      </a>
+      <button class="burger-menu" aria-label="Open menu">
+        <span class="burger-lines">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      <div class="nav-center">
+        <ul>
+          <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="../about.html" data-i18n="nav.about">About</a></li>
+          <li><a href="../projects.html" class="active" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="../contact.html" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1 data-i18n="cryo.title">CryoTabs: RAM Optimizer & Workspace Manager</h1>
+      <p class="page-hero__subtitle" data-i18n="cryo.subtitle">An ultra-light Chromium extension (~400 KB), built with Manifest V3 to reduce memory pressure and structure tab-heavy workflows.</p>
+    </section>
+
+    <section class="cryotabs-overview">
+      <article class="project-card project-card--cryo-overview">
+        <div class="project-card__header">
+          <div class="project-card__icon">🧊</div>
+          <span class="badge badge--status badge--live" data-i18n="cryo.overviewBadge">PERFORMANCE CORE</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.overviewTitle">Performance and privacy first, SaaS-ready by design</h2>
+          <p class="project-card__desc" data-i18n="cryo.overviewDesc">CryoTabs avoids heavy frameworks and intrusive injection patterns. V1 focuses on local reliability and low memory usage, while the internal data model is already prepared for a Freemium cloud sync architecture in V2.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Manifest V3</span>
+          <span class="badge badge--tech">Vanilla JS</span>
+          <span class="badge badge--tech">Service Worker</span>
+          <span class="badge badge--tech">chrome.storage</span>
+          <span class="badge badge--tech">i18n</span>
+          <span class="badge badge--tech">SaaS Roadmap</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="../projects.html" class="btn btn--sm btn-secondary" data-i18n="cryo.backProjects">Back to Projects</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="cryotabs-grid">
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🚨</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.problem.title">Market Problem: Heavy tab managers that waste RAM</h2>
+          <p class="project-card__desc" data-i18n="cryo.problem.desc">Most competitors became bloated products: large payloads, aggressive scripts, and fragile async sync logic.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.problem.i1">Many solutions consume several MB and inject logic into every page context.</li>
+            <li data-i18n="cryo.problem.i2">The extension itself can consume more resources than it actually saves.</li>
+            <li data-i18n="cryo.problem.i3">Async Chrome APIs frequently cause tab duplication bugs during state synchronization.</li>
+            <li data-i18n="cryo.problem.i4">Users need reliability, speed, and control without cloud lock-in from day one.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🗂️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m1.title">1. Zero-Duplication Workspace Engine</h2>
+          <p class="project-card__desc" data-i18n="cryo.m1.desc">Persistent workspaces are backed by strict local synchronization rules to keep tab state coherent.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m1.i1">Logical workspace grouping with persistence in chrome.storage.local.</li>
+            <li data-i18n="cryo.m1.i2">Lifecycle-aware listeners track creation, updates, moves, and closures.</li>
+            <li data-i18n="cryo.m1.i3">State mismatch handling prevents corruption when tabs disappear mid-save.</li>
+            <li data-i18n="cryo.m1.i4">Deduplication safeguards block duplicate tab records during concurrent events.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">⚙️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m2.title">2. Smart Sleep Engine for RAM Optimization</h2>
+          <p class="project-card__desc" data-i18n="cryo.m2.desc">Inactive tabs are discarded in the background to reduce memory pressure while preserving user flow.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m2.i1">Automated tab discard for inactive sessions and hidden workloads.</li>
+            <li data-i18n="cryo.m2.i2">Domain whitelist for critical web apps that must stay fully active.</li>
+            <li data-i18n="cryo.m2.i3">Regex whitelist mode for power users with advanced matching needs.</li>
+            <li data-i18n="cryo.m2.i4">Time-based scheduling to enable or disable optimization by hour.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🛟</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m3.title">3. Known Good State Snapshot Recovery</h2>
+          <p class="project-card__desc" data-i18n="cryo.m3.desc">A panic-safe restore path lets users recover a fully functional workspace state in one click.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m3.i1">Manual recovery button to revert from bad edits or accidental cleanup.</li>
+            <li data-i18n="cryo.m3.i2">Quota-aware design respects the 5 MB storage limit from Chrome.</li>
+            <li data-i18n="cryo.m3.i3">Auto-clean policy keeps only one snapshot by replacing the previous backup.</li>
+            <li data-i18n="cryo.m3.i4">Maximum safety for the user with minimal storage footprint.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🎛️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m4.title">4. Progressive Disclosure UI/UX</h2>
+          <p class="project-card__desc" data-i18n="cryo.m4.desc">The interface is intentionally compact: essential controls first, advanced controls on demand.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m4.i1">Main popup limited to 6 essential actions for low-friction operation.</li>
+            <li data-i18n="cryo.m4.i2">Native dark/light adaptation based on system preferences.</li>
+            <li data-i18n="cryo.m4.i3">Advanced parameters isolated in dedicated dropdown sections.</li>
+            <li data-i18n="cryo.m4.i4">Built-in i18n with automatic language detection and 3-language support.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🛠️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m5.title">5. Lightweight Stack & Code Quality Discipline</h2>
+          <p class="project-card__desc" data-i18n="cryo.m5.desc">The implementation favors deterministic behavior, low overhead, and long-term maintainability.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m5.i1">HTML5, CSS3, and Vanilla JavaScript (ES6+) without heavy frameworks.</li>
+            <li data-i18n="cryo.m5.i2">Strict Manifest V3 architecture with ephemeral service worker lifecycle.</li>
+            <li data-i18n="cryo.m5.i3">Approximate package size of 400 KB, significantly lighter than typical alternatives.</li>
+            <li data-i18n="cryo.m5.i4">Static analysis and cleanup via SonarQube and ESLint, including dead code removal and leak prevention.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cryo-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🚀</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="cryo.m6.title">6. SaaS V2 Roadmap: Cloud Sync & Premium Layer</h2>
+          <p class="project-card__desc" data-i18n="cryo.m6.desc">V1 already embeds sync-ready markers to support a smooth transition to a cross-device freemium cloud model.</p>
+          <ul class="cryotabs-list">
+            <li data-i18n="cryo.m6.i1">Cross-browser and cross-device workspace sync across Chromium environments.</li>
+            <li data-i18n="cryo.m6.i2">Google OAuth for passwordless, low-friction secure authentication.</li>
+            <li data-i18n="cryo.m6.i3">Supabase PostgreSQL backend with TLS in transit, encryption at rest, and RLS data isolation.</li>
+            <li data-i18n="cryo.m6.i4">Public one-click workspace sharing links for viral adoption scenarios.</li>
+            <li data-i18n="cryo.m6.i5">Monetization planned with Lemon Squeezy as Merchant of Record.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="bg-anim"></div>
+  <footer>
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <div>
+        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
+        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
+        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
+      </div>
+      <div class="footer-copy">
+        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
+        <span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></span>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+  <script src="../js/i18n.js"></script>
+</body>
+</html>
