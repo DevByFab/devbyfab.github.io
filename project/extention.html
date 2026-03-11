@@ -9,31 +9,29 @@
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/base.css?v=20260311r2">
-  <link rel="stylesheet" href="../css/layout.css?v=20260311r2">
-  <link rel="stylesheet" href="../css/components.css?v=20260311r2">
-  <link rel="stylesheet" href="../css/pages.css?v=20260311r2">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
 </head>
 <body>
-  <header>
-    <nav>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <header class="site-header scrolled">
+    <nav class="nav-container">
       <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
       </a>
       <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-lines">
-          <span></span><span></span><span></span>
-        </span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
       </button>
-      <div class="nav-center">
-        <ul>
-          <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
-          <li><a href="../about.html" data-i18n="nav.about">About</a></li>
-          <li><a href="../projects.html" class="active" data-i18n="nav.projects">Projects</a></li>
-          <li><a href="../contact.html" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </div>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
@@ -43,7 +41,7 @@
       <p class="page-hero__subtitle" data-i18n="cryo.subtitle">An ultra-light Chromium extension (~400 KB), built with Manifest V3 to reduce memory pressure and structure tab-heavy workflows.</p>
     </section>
 
-    <section class="cryotabs-overview">
+    <section class="cryotabs-overview" data-anim="fade-up">
       <article class="project-card project-card--cryo-overview">
         <div class="project-card__header">
           <div class="project-card__icon">🧊</div>
@@ -62,13 +60,13 @@
           <span class="badge badge--tech">SaaS Roadmap</span>
         </div>
         <div class="project-card__footer">
-          <a href="../projects.html" class="btn btn--sm btn-secondary" data-i18n="cryo.backProjects">Back to Projects</a>
+          <a href="../index.html#projects" class="btn btn--sm btn-ghost" data-i18n="cryo.backProjects">← Back to Projects</a>
         </div>
       </article>
     </section>
 
-    <section class="cryotabs-grid">
-      <article class="project-card project-card--cryo-module">
+    <section class="cryotabs-grid" data-anim="stagger">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🚨</div>
         </div>
@@ -84,7 +82,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🗂️</div>
         </div>
@@ -100,7 +98,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">⚙️</div>
         </div>
@@ -116,7 +114,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🛟</div>
         </div>
@@ -132,7 +130,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🎛️</div>
         </div>
@@ -148,7 +146,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🛠️</div>
         </div>
@@ -164,7 +162,7 @@
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module">
+      <article class="project-card project-card--cryo-module" data-anim-child>
         <div class="project-card__header">
           <div class="project-card__icon">🚀</div>
         </div>
@@ -183,21 +181,16 @@
     </section>
   </main>
 
-  <div id="bg-anim"></div>
-  <footer>
+  <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <div>
-        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
-        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
-        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
-      </div>
-      <div class="footer-copy">
-        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
-        <span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></span>
-      </div>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/i18n.js"></script>
 </body>

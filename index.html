@@ -8,100 +8,244 @@
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <a href="index.html" class="logo">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+
+  <!-- Animated background -->
+  <div class="bg-gradient" aria-hidden="true"></div>
+
+  <!-- Header — morphs on scroll -->
+  <header class="site-header" id="site-header">
+    <nav class="nav-container">
+      <a href="#hero" class="logo">
+        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
       </a>
       <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-lines">
-          <span></span><span></span><span></span>
-        </span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
       </button>
-      <div class="nav-center">
-        <ul>
-          <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
-          <li><a href="about.html" data-i18n="nav.about">About</a></li>
-          <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
-          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </div>
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Home</a></li>
+        <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-content anim-fadein-left">
-        <h1 data-i18n="home.heroTitle">DevByFab</h1>
-        <p class="hero-subtitle" data-i18n="home.heroSubtitle">Full-Stack Developer &amp; Passionate Builder</p>
-        <p class="hero-desc" data-i18n="home.heroDesc">I build web applications, CLI tools, and browser extensions. Explore my projects and get in touch.</p>
-        <div class="cta-group anim-fadein-up">
-          <a href="projects.html" class="btn btn-primary" data-i18n="home.heroBtn1">View Projects</a>
-          <a href="contact.html" class="btn btn-secondary" data-i18n="home.heroBtn2">Contact Me</a>
+
+    <!-- ==================== HERO ==================== -->
+    <section id="hero" class="section section--hero">
+      <canvas id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
+      <div class="hero-content">
+        <h1 class="hero-title" data-i18n="home.heroTitle">DevByFab</h1>
+        <p class="hero-subtitle" data-i18n="home.heroSubtitle">Full-Stack Developer & Jack of all trades</p>
+        <p class="hero-tagline" data-i18n="home.heroDesc">Turning random ideas into working tools.</p>
+        <a href="#about" class="scroll-cta" aria-label="Scroll to explore">
+          <span class="scroll-cta__text" data-i18n="home.heroExplore">Explore</span>
+          <span class="scroll-cta__arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="section section--about">
+      <div class="section-container">
+        <div class="section-header" data-anim="fade-up">
+          <h2 class="section-title" data-i18n="about.title">About Me</h2>
+          <p class="section-subtitle" data-i18n="about.subtitle">Code, coke, and systems that run.</p>
+        </div>
+
+        <div class="about-grid">
+          <!-- Bio -->
+          <div class="about-bio" data-anim="fade-up">
+            <div class="about-bio__avatar">
+              <img src="img/Logo_Sans_Fond.png" alt="DevByFab">
+            </div>
+            <div class="about-bio__text">
+              <h3 data-i18n="about.bioTitle">Who am I?</h3>
+              <p data-i18n="about.desc">I'm 20 and I spend my time testing out new tech. I don't fit into a box: I explore, I break things, and I build them back better. My projects speak for themselves.</p>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="about-card glass-card" data-anim="fade-up">
+            <h3 data-i18n="about.skillsTitle">Tech Stack</h3>
+            <div class="about-skills">
+              <span class="badge badge--tech">Python</span>
+              <span class="badge badge--tech">JavaScript</span>
+              <span class="badge badge--tech">HTML / CSS</span>
+              <span class="badge badge--tech">FastAPI</span>
+              <span class="badge badge--tech">Discord.py</span>
+              <span class="badge badge--tech">MySQL</span>
+              <span class="badge badge--tech">Supabase</span>
+              <span class="badge badge--tech">Manifest V3</span>
+              <span class="badge badge--tech">Gemini API</span>
+              <span class="badge badge--tech">Twitch API</span>
+              <span class="badge badge--tech">Git</span>
+            </div>
+          </div>
+
+          <!-- Vibe -->
+          <div class="about-card glass-card" data-anim="fade-up">
+            <h3 data-i18n="about.styleTitle">My vibe</h3>
+            <ul class="about-list">
+              <li data-i18n="about.style1">Jack of all trades</li>
+              <li data-i18n="about.style2">Self-taught</li>
+              <li data-i18n="about.style3">Efficient</li>
+              <li data-i18n="about.style4">Curious</li>
+            </ul>
+          </div>
+
+          <!-- Goals -->
+          <div class="about-card glass-card" data-anim="fade-up">
+            <h3 data-i18n="about.goalsTitle">Future Goals</h3>
+            <ul class="about-list">
+              <li data-i18n="about.goal1">Deployment of scalable SaaS solutions (Cloud/Serverless).</li>
+              <li data-i18n="about.goal2">Advanced automation and interconnected ecosystems (Webhooks/API).</li>
+              <li data-i18n="about.goal3">Deepening expertise in Cybersecurity and System Hardening.</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="hero-illustration anim-fadein-right">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+    </section>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="section section--projects">
+      <div class="section-container">
+        <div class="section-header" data-anim="fade-up">
+          <h2 class="section-title" data-i18n="projects.title">Projects</h2>
+          <p class="section-subtitle" data-i18n="projects.subtitle">My playground: back-end, security, and tools out of nowhere.</p>
+        </div>
+
+        <div class="bento-grid" data-anim="stagger">
+          <!-- CryoTabs — Featured large card -->
+          <article class="bento-card bento-card--wide glass-card" data-anim-child>
+            <div class="bento-card__header">
+              <div class="bento-card__icon">🧩</div>
+              <span class="badge badge--status badge--wip">WIP</span>
+            </div>
+            <div class="bento-card__body">
+              <h3 class="bento-card__title" data-i18n="projects.card1.title">CryoTabs — RAM Optimizer & Workspace Manager</h3>
+              <p class="bento-card__desc" data-i18n="projects.card1.desc">Ultra-light Manifest V3 extension (~400 KB) built to optimize RAM usage, organize tab workspaces, and evolve into a freemium cross-browser SaaS.</p>
+            </div>
+            <div class="bento-card__tags">
+              <span class="badge badge--tech">Manifest V3</span>
+              <span class="badge badge--tech">Vanilla JS</span>
+              <span class="badge badge--tech">chrome.storage</span>
+              <span class="badge badge--tech">SaaS</span>
+            </div>
+            <div class="bento-card__actions">
+              <a href="project/extention.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+            </div>
+          </article>
+
+          <!-- BoTokard -->
+          <article class="bento-card glass-card" data-anim-child>
+            <div class="bento-card__header">
+              <div class="bento-card__icon">🃏</div>
+              <span class="badge badge--status badge--wip">WIP</span>
+            </div>
+            <div class="bento-card__body">
+              <h3 class="bento-card__title" data-i18n="projects.card2.title">BoTokard — Discord Community Engine</h3>
+              <p class="bento-card__desc" data-i18n="projects.card2.desc">Asynchronous Discord bot for TCG gameplay, Gemini AI interactions, moderation audit logs, Twitch operations, and audio streaming.</p>
+            </div>
+            <div class="bento-card__tags">
+              <span class="badge badge--tech">Python</span>
+              <span class="badge badge--tech">Discord.py</span>
+              <span class="badge badge--tech">MySQL</span>
+              <span class="badge badge--tech">Gemini API</span>
+            </div>
+            <div class="bento-card__actions">
+              <a href="project/discordbot.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+            </div>
+          </article>
+
+          <!-- Python CLI -->
+          <article class="bento-card glass-card" data-anim-child>
+            <div class="bento-card__header">
+              <div class="bento-card__icon">🔐</div>
+              <span class="badge badge--status badge--live">LIVE</span>
+            </div>
+            <div class="bento-card__body">
+              <h3 class="bento-card__title" data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h3>
+              <p class="bento-card__desc" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
+            </div>
+            <div class="bento-card__tags">
+              <span class="badge badge--tech">Python</span>
+              <span class="badge badge--tech">RSA</span>
+              <span class="badge badge--tech">AES</span>
+              <span class="badge badge--tech">CLI</span>
+            </div>
+            <div class="bento-card__actions">
+              <a href="project/clipython.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+              <a href="https://github.com/devbyfab" class="btn btn-ghost btn--sm" target="_blank" rel="noopener" data-i18n="projects.viewGithub">GitHub</a>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
-    <!-- Featured projects preview -->
-    <section class="home-projects">
-      <h2 class="section-title anim-fadein-up" data-i18n="home.projectsTitle">Featured Projects</h2>
-      <div class="home-projects__grid">
-        <a href="projects.html" class="project-card project-card--mini">
-          <div class="project-card__header">
-            <div class="project-card__icon">🧩</div>
-            <span class="badge badge--status badge--wip">WIP</span>
-          </div>
-          <div class="project-card__body">
-            <h3 class="project-card__title" data-i18n="projects.card1.title">Chromium SaaS Extension — Manifest V3</h3>
-          </div>
-        </a>
-        <a href="projects.html" class="project-card project-card--mini">
-          <div class="project-card__header">
-            <div class="project-card__icon">🃏</div>
-            <span class="badge badge--status badge--wip">WIP</span>
-          </div>
-          <div class="project-card__body">
-            <h3 class="project-card__title" data-i18n="projects.card2.title">TCG Ecosystem — Web App + Discord Bot</h3>
-          </div>
-        </a>
-        <a href="projects.html" class="project-card project-card--mini">
-          <div class="project-card__header">
-            <div class="project-card__icon">🔐</div>
-            <span class="badge badge--status badge--live">LIVE</span>
-          </div>
-          <div class="project-card__body">
-            <h3 class="project-card__title" data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h3>
-          </div>
-        </a>
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" class="section section--contact">
+      <div class="section-container">
+        <div class="section-header" data-anim="fade-up">
+          <h2 class="section-title" data-i18n="contact.title">Contact</h2>
+          <p class="section-subtitle" data-i18n="contact.subtitle">A question, an idea, a collaboration? Get in touch.</p>
+        </div>
+
+        <div class="contact-grid" data-anim="fade-up">
+          <a href="mailto:devbyfab@gmail.com" class="contact-card glass-card">
+            <div class="contact-card__icon">✉️</div>
+            <div class="contact-card__info">
+              <span class="contact-card__label" data-i18n="contact.emailLabel">Email</span>
+              <span class="contact-card__value">devbyfab@gmail.com</span>
+            </div>
+          </a>
+          <a href="https://discord.com/users/devbyfab" class="contact-card glass-card" target="_blank" rel="noopener">
+            <div class="contact-card__icon">💬</div>
+            <div class="contact-card__info">
+              <span class="contact-card__label">Discord</span>
+              <span class="contact-card__value">devbyfab</span>
+            </div>
+          </a>
+          <a href="https://github.com/devbyfab" class="contact-card glass-card" target="_blank" rel="noopener">
+            <div class="contact-card__icon">🐙</div>
+            <div class="contact-card__info">
+              <span class="contact-card__label">GitHub</span>
+              <span class="contact-card__value">devbyfab</span>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
+
   </main>
 
-  <div id="bg-anim"></div>
-  <footer>
+  <!-- Footer -->
+  <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <div>
-        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
-        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
-        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
-      </div>
-      <div class="footer-copy">
-        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
-        <span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></span>
-      </div>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></p>
     </div>
   </footer>
+
+  <!-- Libraries: GSAP + ScrollTrigger + Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- App scripts -->
+  <script src="js/particles.js"></script>
+  <script src="js/animations.js"></script>
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
 </body>
