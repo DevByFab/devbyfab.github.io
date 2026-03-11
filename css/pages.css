@@ -321,6 +321,59 @@
 }
 
 /* ============================================
+   CRYOTABS DETAIL PAGE
+   ============================================ */
+
+.cryotabs-overview {
+  max-width: 980px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.project-card--cryo-overview {
+  padding: 2rem 1.8rem 1.6rem;
+}
+
+.cryotabs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.project-card--cryo-module {
+  text-align: left;
+}
+
+.cryotabs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cryotabs-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  color: #b0b0c0;
+  line-height: 1.5;
+  font-size: 0.98rem;
+}
+
+.cryotabs-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.56rem;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+/* ============================================
    LEGAL PAGE
    ============================================ */
 
@@ -434,6 +487,12 @@
     padding: 1.5rem 1.2rem;
   }
   .discordbot-grid {
+    gap: 1rem;
+  }
+  .project-card--cryo-overview {
+    padding: 1.5rem 1.2rem;
+  }
+  .cryotabs-grid {
     gap: 1rem;
   }
 }
