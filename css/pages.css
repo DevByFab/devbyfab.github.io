@@ -282,7 +282,7 @@
 
 .discordbot-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.3rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -320,6 +320,25 @@
   background: var(--violet);
 }
 
+.project-card--discord-module,
+.project-card--discord-overview {
+  min-width: 0;
+}
+
+.project-card--discord-module .project-card__title,
+.project-card--discord-module .project-card__desc,
+.project-card--discord-overview .project-card__title,
+.project-card--discord-overview .project-card__desc,
+.discordbot-list li {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.project-card--discord-overview .project-card__tags .badge {
+  white-space: normal;
+  text-wrap: balance;
+}
+
 /* ============================================
    CRYOTABS DETAIL PAGE
    ============================================ */
@@ -335,7 +354,7 @@
 
 .cryotabs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.3rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -371,6 +390,25 @@
   height: 0.38rem;
   border-radius: 50%;
   background: var(--violet);
+}
+
+.project-card--cryo-module,
+.project-card--cryo-overview {
+  min-width: 0;
+}
+
+.project-card--cryo-module .project-card__title,
+.project-card--cryo-module .project-card__desc,
+.project-card--cryo-overview .project-card__title,
+.project-card--cryo-overview .project-card__desc,
+.cryotabs-list li {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.project-card--cryo-overview .project-card__tags .badge {
+  white-space: normal;
+  text-wrap: balance;
 }
 
 /* ============================================
@@ -565,5 +603,26 @@
   .cryotabs-list li {
     padding-left: 1rem;
     font-size: 0.93rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-hero h1 {
+    font-size: 1.55rem;
+    line-height: 1.2;
+  }
+  .page-hero__subtitle {
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+  .project-card--discord-overview,
+  .project-card--cryo-overview,
+  .project-card--discord-module,
+  .project-card--cryo-module {
+    padding: 1.25rem 0.95rem 1.05rem;
+  }
+  .project-card--discord-overview .badge,
+  .project-card--cryo-overview .badge {
+    font-size: 0.72rem;
   }
 }
