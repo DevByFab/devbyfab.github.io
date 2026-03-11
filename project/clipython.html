@@ -3,61 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Contact DevByFab — Get in touch for questions, ideas, or collaboration.">
-  <title>Contact — DevByFab</title>
-  <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
+  <meta name="description" content="Python CLI — Hybrid Cryptography tool by DevByFab. RSA/AES encryption for files and messages.">
+  <meta name="i18n-base" content="../i18n">
+  <title>Python CLI — Cryptography — DevByFab</title>
+  <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <a href="index.html" class="logo">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <header class="site-header scrolled">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
       </a>
       <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-lines">
-          <span></span><span></span><span></span>
-        </span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
       </button>
-      <div class="nav-center">
-        <ul>
-          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-          <li><a href="about.html" data-i18n="nav.about">About</a></li>
-          <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
-          <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </div>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
+  <main>
+    <section class="page-hero">
+      <h1 data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h1>
+      <p class="page-hero__sub" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
+      <div class="page-hero__badges">
+        <span class="badge badge--tech">Python</span>
+        <span class="badge badge--tech">RSA</span>
+        <span class="badge badge--tech">AES</span>
+        <span class="badge badge--tech">CLI</span>
+        <span class="badge badge--wip">WIP</span>
+      </div>
+    </section>
 
+    <section class="detail-content">
+      <div class="detail-overview glass-card" data-anim="fade-up">
+        <h2>Overview</h2>
+        <p>A Python command-line interface for hybrid cryptography — combining RSA asymmetric encryption for secure key exchange with AES symmetric encryption for fast data processing. Supports file and message encryption with an intuitive terminal UI.</p>
+      </div>
 
+      <div class="detail-grid" data-anim="stagger">
+        <article class="glass-card detail-card" data-anim-child>
+          <h3>🔐 Hybrid Encryption</h3>
+          <p>RSA-2048 for key exchange, AES-256-CBC for payload. Best of both worlds: security and performance.</p>
+        </article>
+        <article class="glass-card detail-card" data-anim-child>
+          <h3>🗂️ File & Message</h3>
+          <p>Encrypt/decrypt both text messages and binary files with a unified interface.</p>
+        </article>
+        <article class="glass-card detail-card" data-anim-child>
+          <h3>🔑 Key Management</h3>
+          <p>Generate, export, and import RSA key pairs. Organized keystore for multi-recipient workflows.</p>
+        </article>
+        <article class="glass-card detail-card" data-anim-child>
+          <h3>💻 Terminal UI</h3>
+          <p>Rich interactive CLI with menus, progress bars, and color-coded output for clear feedback.</p>
+        </article>
+      </div>
 
+      <div class="project-card__footer">
+        <a href="../index.html#projects" class="btn btn--sm btn-ghost">← Back to Projects</a>
+      </div>
+    </section>
+  </main>
 
-
-
-  <div id="bg-anim"></div>
-  <footer>
+  <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <div>
-        <span>Email : <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></span>
-        <span>· Discord : <span class="discord-tag">devbyfab</span></span>
-        <span>· <a href="https://github.com/devbyfab" target="_blank" rel="noopener">GitHub</a></span>
-      </div>
-      <div class="footer-copy">
-        &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
-        <span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></span>
-      </div>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
     </div>
   </footer>
-  <script src="js/main.js"></script>
-  <script src="js/i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/i18n.js"></script>
 </body>
 </html>

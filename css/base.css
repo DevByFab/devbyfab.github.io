@@ -1,36 +1,66 @@
 /* ============================================
-   BASE — Variables, Reset, Typography, Animations
+   BASE — Variables, Reset, Typography
+   DevByFab — Dark Modern Portfolio v2
    ============================================ */
 
 :root {
-  --bg: #111;
-  --fg: #fff;
-  --gray: #333;
-  --gray-light: #444;
+  /* Background */
+  --bg-deep: #07060d;
+  --bg-section: #0c0b18;
+  --bg-section-alt: #0a0916;
+
+  /* Accent — Violet + Blue Night */
   --violet: #8f5fff;
+  --violet-light: #b18aff;
   --violet-dark: #6a3fdc;
-  --card-bg: #232234;
-  --card-bg-active: #2d2650;
-  --card-border: #28284a;
-  --border-radius: 12px;
+  --violet-glow: rgba(143, 95, 255, 0.15);
+  --violet-glow-strong: rgba(143, 95, 255, 0.3);
+  --blue-night: #1a1a3e;
+  --blue-accent: #2d2b6b;
+
+  /* Text */
+  --text-primary: #f0eef6;
+  --text-secondary: #9896b0;
+  --text-dim: #6b6988;
+
+  /* Cards — glassmorphism */
+  --card-bg: rgba(26, 26, 62, 0.35);
+  --card-bg-hover: rgba(26, 26, 62, 0.55);
+  --card-border: rgba(143, 95, 255, 0.1);
+  --card-border-hover: rgba(143, 95, 255, 0.35);
+
+  /* Misc */
+  --border-radius: 16px;
+  --border-radius-sm: 10px;
   --font-main: 'Inter', Arial, sans-serif;
-  --font-heading: 'Montserrat', 'Inter', Arial, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', Arial, sans-serif;
+
+  /* Status */
+  --green: #22c55e;
+  --yellow: #facc15;
+  --gray-muted: #9ca3af;
 }
 
 /* --- Reset & Global --- */
-html, body {
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background: var(--bg);
-  color: var(--fg);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #3a226a #0c0b18;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
   font-family: var(--font-main);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 a {
@@ -41,95 +71,45 @@ a {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
-/* --- Background Animation --- */
-#bg-anim {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 60% 40%, #8f5fff22 0%, transparent 70%),
-              radial-gradient(ellipse at 30% 80%, #8f5fff11 0%, transparent 80%);
-  filter: blur(40px);
-  animation: bgmove 12s linear infinite alternate;
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--violet);
+  color: #fff;
 }
 
 /* --- Scrollbar (Webkit) --- */
 ::-webkit-scrollbar {
   width: 6px;
-  background: #181828;
+  background: var(--bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #4e2e8e 0%, #2d1a4d 100%);
+  background: linear-gradient(180deg, var(--violet) 0%, var(--blue-night) 100%);
   border-radius: 8px;
   min-height: 40px;
-  border: 2px solid #181828;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #3a226a 0%, #2d1a4d 100%);
+  background: linear-gradient(180deg, var(--violet-light) 0%, var(--violet-dark) 100%);
 }
 
-/* --- Scrollbar (Firefox) --- */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #3a226a #181828;
+/* --- Animated Background (static gradient — no continuous animation for perf) --- */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(143, 95, 255, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 50%, rgba(26, 26, 62, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(143, 95, 255, 0.06) 0%, transparent 60%);
 }
 
-/* ============================================
-   KEYFRAMES
-   ============================================ */
-
-@keyframes bgmove {
-  0%   { background-position: 60% 40%, 30% 80%; }
-  100% { background-position: 70% 50%, 20% 70%; }
-}
-
-@keyframes nav-fadein {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes fadein-left {
-  80%  { opacity: 1; transform: translateX(4px); }
-  100% { opacity: 1; transform: none; }
-}
-
-@keyframes fadein-right {
-  80%  { opacity: 1; transform: translateX(-4px); }
-  100% { opacity: 1; transform: none; }
-}
-
-@keyframes fadein-up {
-  80%  { opacity: 1; transform: translateY(-2px); }
-  100% { opacity: 1; transform: none; }
-}
-
-@keyframes fadein-title {
-  0%   { opacity: 0; transform: translateY(-24px); }
-  100% { opacity: 1; transform: none; }
-}
-
-@keyframes fadein-card {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: none; }
-}
-
-/* --- Animation utility classes --- */
-.anim-fadein-left {
-  opacity: 0;
-  transform: translateX(-40px);
-  animation: fadein-left 1.5s cubic-bezier(.77,0,.18,1) 0.3s forwards;
-}
-.anim-fadein-right {
-  opacity: 0;
-  transform: translateX(40px);
-  animation: fadein-right 1.5s cubic-bezier(.77,0,.18,1) 0.6s forwards;
-}
-.anim-fadein-up {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadein-up 1.2s cubic-bezier(.77,0,.18,1) 1.0s forwards;
+/* --- Smooth scroll target offset for fixed header --- */
+section[id] {
+  scroll-margin-top: 80px;
 }
