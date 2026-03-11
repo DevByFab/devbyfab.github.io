@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Contact DevByFab — Get in touch for questions, ideas, or collaboration.">
-  <title>Contact — DevByFab</title>
-  <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
+  <meta name="description" content="BoTokard Discord bot portfolio: TCG engine, Gemini AI, moderation audit logs, Twitch operations, and audio streaming.">
+  <meta name="i18n-base" content="../i18n">
+  <title data-i18n="discordbot.pageTitle">BoTokard Discord Bot — DevByFab</title>
+  <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
 </head>
 <body>
   <header>
     <nav>
-      <a href="index.html" class="logo">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
+      <a href="../index.html" class="logo">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo" style="height:48px;width:auto;object-fit:contain;">
       </a>
       <button class="burger-menu" aria-label="Open menu">
         <span class="burger-lines">
@@ -27,21 +28,127 @@
       </button>
       <div class="nav-center">
         <ul>
-          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-          <li><a href="about.html" data-i18n="nav.about">About</a></li>
-          <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
-          <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
+          <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="../about.html" data-i18n="nav.about">About</a></li>
+          <li><a href="../projects.html" class="active" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="../contact.html" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>
     </nav>
   </header>
 
+  <main>
+    <section class="page-hero">
+      <h1 data-i18n="discordbot.title">BoTokard: Functional Capabilities</h1>
+      <p class="page-hero__subtitle" data-i18n="discordbot.subtitle">A Python Discord bot designed as an asynchronous control layer between community interactions, game logic, and external APIs.</p>
+    </section>
 
+    <section class="discordbot-overview">
+      <article class="project-card project-card--discord-overview">
+        <div class="project-card__header">
+          <div class="project-card__icon">🤖</div>
+          <span class="badge badge--status badge--live" data-i18n="discordbot.overviewBadge">PRODUCTION CORE</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.overviewTitle">One bot, five synchronized systems</h2>
+          <p class="project-card__desc" data-i18n="discordbot.overviewDesc">BoTokard does more than answer commands. It orchestrates gameplay, moderation, engagement features, and live operations while staying connected to a shared MySQL data model used by the web ecosystem.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">Discord.py</span>
+          <span class="badge badge--tech">MySQL</span>
+          <span class="badge badge--tech">Gemini API</span>
+          <span class="badge badge--tech">Twitch API</span>
+          <span class="badge badge--tech">AsyncIO</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="../projects.html" class="btn btn--sm btn-secondary" data-i18n="discordbot.backProjects">Back to Projects</a>
+        </div>
+      </article>
+    </section>
 
+    <section class="discordbot-grid">
+      <article class="project-card project-card--discord-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🃏</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.m1.title">1. TCG Engine & Cross-Platform Economy</h2>
+          <p class="project-card__desc" data-i18n="discordbot.m1.desc">The bot owns the complete game loop and keeps player state consistent between Discord and the web app.</p>
+          <ul class="discordbot-list">
+            <li data-i18n="discordbot.m1.i1">Secure player profile bootstrap with live tracking of XP, levels, cards, and items.</li>
+            <li data-i18n="discordbot.m1.i2">Gacha and RNG pipeline with conditional drops, including special fragment assembly events.</li>
+            <li data-i18n="discordbot.m1.i3">Fraud-resistant trade flow with anti-duplication and transactional consistency checks.</li>
+            <li data-i18n="discordbot.m1.i4">Automated quests, achievements, and battle pass progression to reinforce retention.</li>
+          </ul>
+        </div>
+      </article>
 
+      <article class="project-card project-card--discord-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🧠</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.m2.title">2. Gemini AI Integration & Engagement Tools</h2>
+          <p class="project-card__desc" data-i18n="discordbot.m2.desc">BoTokard boosts interaction quality and community retention with adaptive AI and interactive tools.</p>
+          <ul class="discordbot-list">
+            <li data-i18n="discordbot.m2.i1">Context-aware conversational agent using Google Gemini API for adaptive replies.</li>
+            <li data-i18n="discordbot.m2.i2">Dynamic poll interfaces through Discord UI components with live vote tracking.</li>
+            <li data-i18n="discordbot.m2.i3">RNG and hash-based mini-games for text-channel engagement and community rituals.</li>
+            <li data-i18n="discordbot.m2.i4">Feature set designed to keep channels active without flooding moderation teams.</li>
+          </ul>
+        </div>
+      </article>
 
+      <article class="project-card project-card--discord-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🛡️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.m3.title">3. Database Audit Trail & Moderation</h2>
+          <p class="project-card__desc" data-i18n="discordbot.m3.desc">A professional moderation module built for high-traffic servers and full accountability.</p>
+          <ul class="discordbot-list">
+            <li data-i18n="discordbot.m3.i1">Advanced sanction commands for warns, mutes, kicks, bans, and safe bulk purges.</li>
+            <li data-i18n="discordbot.m3.i2">Every moderation action is persisted in MySQL for complete traceability.</li>
+            <li data-i18n="discordbot.m3.i3">On-demand lookup of user disciplinary records directly inside Discord.</li>
+            <li data-i18n="discordbot.m3.i4">Automatic log routing for moderation events, TCG transactions, and system errors.</li>
+          </ul>
+        </div>
+      </article>
 
+      <article class="project-card project-card--discord-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🎥</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.m4.title">4. Twitch Broadcast Control Interface</h2>
+          <p class="project-card__desc" data-i18n="discordbot.m4.desc">The bot acts as a streaming assistant through secure, bidirectional Twitch API integrations.</p>
+          <ul class="discordbot-list">
+            <li data-i18n="discordbot.m4.i1">Secure commands to update live metadata such as stream title and category.</li>
+            <li data-i18n="discordbot.m4.i2">Webhook listeners that announce stream starts with rich-formatted alerts.</li>
+            <li data-i18n="discordbot.m4.i3">Clip generation workflow with manual fallback to guarantee highlight capture.</li>
+            <li data-i18n="discordbot.m4.i4">Runtime monitoring designed for reliable show control from Discord.</li>
+          </ul>
+        </div>
+      </article>
 
+      <article class="project-card project-card--discord-module">
+        <div class="project-card__header">
+          <div class="project-card__icon">🎵</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="discordbot.m5.title">5. High-Fidelity Audio Streaming</h2>
+          <p class="project-card__desc" data-i18n="discordbot.m5.desc">A robust asynchronous media player designed for dependable voice channel playback.</p>
+          <ul class="discordbot-list">
+            <li data-i18n="discordbot.m5.i1">Playback state machine covering play, pause, resume, and hard stop.</li>
+            <li data-i18n="discordbot.m5.i2">Dynamic queue structure for collaborative song stacking in real time.</li>
+            <li data-i18n="discordbot.m5.i3">Advanced queue controls with single-track loop and full playlist loop.</li>
+            <li data-i18n="discordbot.m5.i4">Built for resilient operation under concurrent user commands.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+  </main>
 
   <div id="bg-anim"></div>
   <footer>
@@ -54,11 +161,11 @@
       </div>
       <div class="footer-copy">
         &copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span>
-        <span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></span>
+        <span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></span>
       </div>
     </div>
   </footer>
-  <script src="js/main.js"></script>
-  <script src="js/i18n.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/i18n.js"></script>
 </body>
 </html>
