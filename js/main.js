@@ -103,12 +103,35 @@
     });
   }
 
+  /* ========== PROJECT BACK BUTTON ========== */
+  function initProjectBackButton() {
+    var backButtons = document.querySelectorAll('[data-project-back]');
+    if (!backButtons.length) return;
+
+    function update() {
+      var doc = document.documentElement;
+      var scrollTop = window.scrollY || doc.scrollTop || 0;
+      var maxScroll = Math.max(doc.scrollHeight - window.innerHeight, 0);
+      var expanded = maxScroll > 0 && scrollTop >= (maxScroll - 140);
+
+      backButtons.forEach(function (button) {
+        button.classList.toggle('is-expanded', expanded);
+      });
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  }
+
   /* ========== INIT ========== */
   function init() {
     initHeader();
     initBurger();
     initScrollSpy();
     initSmoothScroll();
+    initProjectBackButton();
   }
 
   if (document.readyState === 'loading') {
