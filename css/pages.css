@@ -290,7 +290,8 @@
 
 /* Overview sections for detail pages */
 .discordbot-overview,
-.cryotabs-overview {
+.cryotabs-overview,
+.clipython-overview {
   max-width: 900px;
   margin: 0 auto 2rem;
   padding: 0 2rem;
@@ -454,11 +455,14 @@
 
 /* Legacy class compat for detail pages */
 .discordbot-grid,
-.cryotabs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; max-width: 1100px; margin: 0 auto 3rem; padding: 0 2rem; }
+.cryotabs-grid,
+.clipython-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; max-width: 1100px; margin: 0 auto 3rem; padding: 0 2rem; }
 .project-card--discord-overview,
-.project-card--cryo-overview { padding: 2rem; }
+.project-card--cryo-overview,
+.project-card--cli-overview { padding: 2rem; }
 .project-card--discord-module,
-.project-card--cryo-module { text-align: left; }
+.project-card--cryo-module,
+.project-card--cli-module { text-align: left; }
 .discordbot-list,
 .cryotabs-list { list-style: none; padding: 0; margin: 0.5rem 0 0 0; display: flex; flex-direction: column; gap: 0.5rem; }
 .discordbot-list li,

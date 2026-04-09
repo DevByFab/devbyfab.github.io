@@ -29,6 +29,7 @@
   "projects.subtitle": "O meu campo de jogos: back-end, segurança e ferramentas vindas do nada.",
   "projects.viewProject": "Ver projeto",
   "projects.viewGithub": "GitHub",
+  "projects.backProjects": "Voltar aos projetos",
   "projects.card1.title": "CryoTabs — Otimizador de RAM e Gestor de Workspaces",
   "projects.card1.desc": "Extensão Manifest V3 ultra-leve (~400 KB) criada para otimizar RAM, organizar separadores em workspaces e evoluir para um SaaS Freemium inter-Chromium.",
   "projects.card2.title": "BoTokard — Motor de Comunidade Discord",

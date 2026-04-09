@@ -38,46 +38,105 @@
   <main>
     <section class="page-hero">
       <h1 data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h1>
-      <p class="page-hero__sub" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
+      <p class="page-hero__subtitle" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
       <div class="page-hero__badges">
         <span class="badge badge--tech">Python</span>
         <span class="badge badge--tech">RSA</span>
         <span class="badge badge--tech">AES</span>
         <span class="badge badge--tech">CLI</span>
-        <span class="badge badge--wip">WIP</span>
+        <span class="badge badge--status badge--wip">WIP</span>
       </div>
     </section>
 
-    <section class="detail-content">
-      <div class="detail-overview glass-card" data-anim="fade-up">
-        <h2>Overview</h2>
-        <p>A Python command-line interface for hybrid cryptography — combining RSA asymmetric encryption for secure key exchange with AES symmetric encryption for fast data processing. Supports file and message encryption with an intuitive terminal UI.</p>
-      </div>
+    <section class="clipython-overview" data-anim="fade-up">
+      <article class="project-card project-card--cli-overview">
+        <div class="project-card__header">
+          <div class="project-card__icon">🔐</div>
+          <span class="badge badge--status badge--wip">WIP</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title">A compact terminal workflow for secure file handling</h2>
+          <p class="project-card__desc">The CLI keeps the flow direct: generate keys, encrypt payloads, and restore them with a predictable sequence that avoids unnecessary noise.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Hybrid Encryption</span>
+          <span class="badge badge--tech">Key Storage</span>
+          <span class="badge badge--tech">Terminal UX</span>
+          <span class="badge badge--tech">Security</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="../index.html#projects" class="btn btn--sm btn-ghost" data-i18n="projects.backProjects">Back to Projects</a>
+        </div>
+      </article>
+    </section>
 
-      <div class="detail-grid" data-anim="stagger">
-        <article class="glass-card detail-card" data-anim-child>
-          <h3>🔐 Hybrid Encryption</h3>
-          <p>RSA-2048 for key exchange, AES-256-CBC for payload. Best of both worlds: security and performance.</p>
-        </article>
-        <article class="glass-card detail-card" data-anim-child>
-          <h3>🗂️ File & Message</h3>
-          <p>Encrypt/decrypt both text messages and binary files with a unified interface.</p>
-        </article>
-        <article class="glass-card detail-card" data-anim-child>
-          <h3>🔑 Key Management</h3>
-          <p>Generate, export, and import RSA key pairs. Organized keystore for multi-recipient workflows.</p>
-        </article>
-        <article class="glass-card detail-card" data-anim-child>
-          <h3>💻 Terminal UI</h3>
-          <p>Rich interactive CLI with menus, progress bars, and color-coded output for clear feedback.</p>
-        </article>
-      </div>
+    <section class="clipython-grid" data-anim="stagger">
+      <article class="project-card project-card--cli-module" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🗝️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title">1. Hybrid Encryption Core</h2>
+          <p class="project-card__desc">RSA protects the exchange while AES handles the payload. The workflow stays explicit from key generation to decryption.</p>
+          <ul class="detail-list">
+            <li>RSA-2048 handles secure key exchange before any payload work starts.</li>
+            <li>AES-256-CBC keeps bulk encryption fast and practical for real files.</li>
+            <li>Each step is staged so the security flow stays deterministic and easy to reason about.</li>
+          </ul>
+        </div>
+      </article>
 
-      <div class="project-card__footer">
-        <a href="../index.html#projects" class="btn btn--sm btn-ghost">← Back to Projects</a>
-      </div>
+      <article class="project-card project-card--cli-module" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🗂️</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title">2. File & Message Workflow</h2>
+          <p class="project-card__desc">Text and binary files use the same entry points, so the CLI stays compact even when switching targets.</p>
+          <ul class="detail-list">
+            <li>Encrypt and decrypt short messages without changing the overall workflow.</li>
+            <li>Handle binary files through the same interface for a consistent user path.</li>
+            <li>Keep validation and error handling visible instead of hiding failures behind abstractions.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cli-module" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🔑</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title">3. Key Management & Keystore</h2>
+          <p class="project-card__desc">Generate, export, import, and organize key pairs for repeatable secure sessions.</p>
+          <ul class="detail-list">
+            <li>Create RSA key pairs from the CLI without leaving the workflow.</li>
+            <li>Export and import keys to support reusable sessions and multiple environments.</li>
+            <li>Keep a structured keystore so future automation stays predictable.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="project-card project-card--cli-module" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">💻</div>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title">4. Terminal UX & Feedback</h2>
+          <p class="project-card__desc">Menus, progress cues, and color-coded output make the tool readable even in long sessions.</p>
+          <ul class="detail-list">
+            <li>Use compact menus so the CLI stays fast to navigate.</li>
+            <li>Surface progress and state clearly during longer operations.</li>
+            <li>Keep errors readable so debugging stays practical instead of opaque.</li>
+          </ul>
+        </div>
+      </article>
     </section>
   </main>
+
+  <a class="project-back-cta" href="../index.html#projects" data-project-back>
+    <span class="project-back-cta__icon" aria-hidden="true">←</span>
+    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+  </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>

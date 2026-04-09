@@ -29,6 +29,7 @@
   "projects.subtitle": "My playground: back-end, security, and tools out of nowhere.",
   "projects.viewProject": "View Project",
   "projects.viewGithub": "GitHub",
+  "projects.backProjects": "Back to Projects",
   "projects.card1.title": "CryoTabs — RAM Optimizer & Workspace Manager",
   "projects.card1.desc": "Ultra-light Manifest V3 extension (~400 KB) built to optimize RAM usage, organize tab workspaces, and evolve into a freemium cross-browser SaaS.",
   "projects.card2.title": "BoTokard — Discord Community Engine",
