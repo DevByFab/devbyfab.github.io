@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Web game concepts by DevByFab: incremental browser games inspired by Cookie Clicker and Universal Paperclips.">
+  <meta name="i18n-base" content="../i18n">
+  <title data-i18n="webgames.pageTitle">Web Games — DevByFab</title>
+  <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <header class="site-header scrolled">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+      </a>
+      <button class="burger-menu" aria-label="Open menu">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="../index.html#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="../index.html#webgames" class="nav-link active" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1 data-i18n="webgames.allTitle">All Web Games</h1>
+      <p class="page-hero__subtitle" data-i18n="webgames.allSubtitle">Current game concepts inspired by Cookie Clicker and Universal Paperclips.</p>
+    </section>
+
+    <section class="detail-grid" data-anim="stagger">
+      <article id="the-infinite-botnet" class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🕸️</div>
+          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="webgames.card1.title">The Infinite Botnet</h2>
+          <p class="project-card__desc" data-i18n="webgames.card1.desc">Scale a harmless script into a global botnet economy. Automation grows fast, ethics grows faster.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Incremental</span>
+          <span class="badge badge--tech">Automation</span>
+          <span class="badge badge--tech">Ethics</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="../games/infinite-botnet/index.html" class="btn btn-primary btn--sm" data-i18n="webgames.playPrototype">Play Prototype</a>
+        </div>
+      </article>
+
+      <article id="saas-pocalypse" class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">📉</div>
+          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="webgames.card2.title">SaaS-pocalypse</h2>
+          <p class="project-card__desc" data-i18n="webgames.card2.desc">Build a tiny startup clicker that spirals into platform wars, churn storms, and survival economics.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Clicker</span>
+          <span class="badge badge--tech">SaaS</span>
+          <span class="badge badge--tech">Strategy</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="#saas-pocalypse" class="btn btn-ghost btn--sm" data-i18n="webgames.viewGame">View Concept</a>
+        </div>
+      </article>
+
+      <article id="the-cleanest-code" class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🧼</div>
+          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="webgames.card3.title">The Cleanest Code</h2>
+          <p class="project-card__desc" data-i18n="webgames.card3.desc">Optimize code purity metrics until refactors become ideology. Every improvement has a hidden trade-off.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Optimization</span>
+          <span class="badge badge--tech">Systems</span>
+          <span class="badge badge--tech">Satire</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="#the-cleanest-code" class="btn btn-ghost btn--sm" data-i18n="webgames.viewGame">View Concept</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <a class="project-back-cta" href="../index.html#webgames" data-project-back>
+    <span class="project-back-cta__icon" aria-hidden="true">←</span>
+    <span class="project-back-cta__label" data-i18n="webgames.backGames">Back to Web Games</span>
+  </a>
+
+  <footer class="site-footer">
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Playable prototype of The Infinite BotNet, a fictional incremental cybersecurity-themed game.">
+  <meta name="i18n-base" content="../../i18n">
+  <title data-i18n="botnet.pageTitle">The Infinite BotNet - Playable Prototype - DevByFab</title>
+  <link rel="icon" type="image/png" href="../../img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="botnet-body">
+  <div class="botnet-bg" aria-hidden="true"></div>
+
+  <header class="botnet-topbar">
+    <div class="botnet-topbar__left">
+      <a class="botnet-back" href="../../project/webgames.html#the-infinite-botnet" data-i18n="botnet.backToConcept">Back to Concept</a>
+      <div class="botnet-meta">
+        <span class="botnet-meta__label" data-i18n="botnet.phaseLabel">Phase</span>
+        <strong class="botnet-meta__value" id="phase-label" data-i18n="botnet.phaseGarage">Garage</strong>
+      </div>
+      <div class="botnet-meta">
+        <span class="botnet-meta__label" data-i18n="botnet.nextPhaseLabel">Next</span>
+        <strong class="botnet-meta__value" id="phase-next-goal">100 bots</strong>
+      </div>
+      <div class="botnet-meta">
+        <span class="botnet-meta__label" data-i18n="botnet.workerLabel">Engine</span>
+        <strong class="botnet-meta__value worker-indicator" id="worker-status">
+          <span class="worker-boot" data-i18n="botnet.workerBooting">Booting...</span>
+          <span class="worker-online" data-i18n="botnet.workerOnline">Worker Online</span>
+          <span class="worker-error" data-i18n="botnet.workerError">Worker Error</span>
+        </strong>
+      </div>
+    </div>
+
+    <div class="botnet-topbar__right">
+      <div class="botnet-settings" id="settings-menu">
+        <button id="btn-settings" class="botnet-btn botnet-btn--small botnet-btn--settings" type="button" aria-expanded="false" aria-controls="settings-panel">
+          <span class="settings-icon" aria-hidden="true">⚙</span>
+          <span data-i18n="botnet.settings">Settings</span>
+        </button>
+
+        <section id="settings-panel" class="settings-panel" hidden>
+          <h2 data-i18n="botnet.sectionSave">Save / Load</h2>
+          <p class="panel-hint" data-i18n="botnet.saveHint">Autosave runs every 10 seconds. You can also export/import Base64 manually.</p>
+          <textarea id="save-transfer" rows="5" data-i18n-placeholder="botnet.savePlaceholder" placeholder="Paste an export string here to import..."></textarea>
+          <div class="action-grid action-grid--tight settings-actions">
+            <button id="btn-export-save" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnExport">Export Base64</button>
+            <button id="btn-import-save" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnImport">Import Base64</button>
+            <button id="btn-reset-game" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnReset">Reset Session</button>
+          </div>
+          <p class="panel-hint settings-hint" data-i18n="botnet.settingsHint">All game settings will progressively be grouped here.</p>
+        </section>
+      </div>
+    </div>
+  </header>
+
+  <main class="botnet-shell">
+    <section class="botnet-main">
+      <div class="botnet-heading">
+        <h1 data-i18n="botnet.title">The Infinite BotNet</h1>
+        <p data-i18n="botnet.subtitle">From garage script to autonomous network empire.</p>
+      </div>
+
+      <div class="resource-grid">
+        <article class="resource-card">
+          <h2 data-i18n="botnet.resourceBots">Bots</h2>
+          <p class="resource-value" id="bots-value">0</p>
+        </article>
+        <article class="resource-card">
+          <h2 data-i18n="botnet.resourceTargets">Queued IPs</h2>
+          <p class="resource-value" id="targets-value">0</p>
+        </article>
+        <article class="resource-card">
+          <h2 data-i18n="botnet.resourceMoney">Dark Money</h2>
+          <p class="resource-value" id="money-value">0</p>
+        </article>
+        <article class="resource-card">
+          <h2 data-i18n="botnet.resourcePortfolio">Portfolio</h2>
+          <p class="resource-value" id="portfolio-resource-value">0</p>
+        </article>
+      </div>
+
+      <section class="botnet-panel">
+        <h2 data-i18n="botnet.sectionActions">Manual Operations</h2>
+        <div class="action-grid">
+          <button id="btn-scan" class="botnet-btn botnet-btn--primary" data-i18n="botnet.btnScan">SCAN VULNERABLE IP</button>
+          <button id="btn-exploit" class="botnet-btn" data-i18n="botnet.btnExploit">ATTEMPT EXPLOIT (Manual)</button>
+        </div>
+      </section>
+
+      <section class="botnet-panel">
+        <h2 data-i18n="botnet.sectionProgress">Operation Progress</h2>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <span data-i18n="botnet.scanProgress">Scanner charge</span>
+            <span id="scan-progress-label">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Scanner progress">
+            <span id="scan-progress-fill"></span>
+          </div>
+        </div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <span data-i18n="botnet.exploitProgress">Exploit cooldown</span>
+            <span id="exploit-progress-label" data-i18n="botnet.statusReady">READY</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Exploit cooldown progress">
+            <span id="exploit-progress-fill"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="botnet-panel">
+        <h2 data-i18n="botnet.sectionTerminal">Terminal Feed</h2>
+        <ul class="terminal-feed" id="terminal-feed" aria-live="polite"></ul>
+      </section>
+    </section>
+
+    <aside class="botnet-side">
+      <section class="botnet-panel is-empty" id="upgrades-panel" hidden>
+        <h2 data-i18n="botnet.sectionUpgrades">Upgrades</h2>
+
+        <div class="upgrade-catalog" id="upgrades-catalog">
+          <article class="upgrade-row" data-item-id="python-scanner" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeScannerName">Basic Python Scanner</h3>
+              <p data-i18n="botnet.upgradeScannerDesc">Automates target discovery at 1 IP per second.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>10</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="python-scanner" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="default-wordlist" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeWordlistName">Default Password Wordlist</h3>
+              <p data-i18n="botnet.upgradeWordlistDesc">Exploit loop runs 2x faster and becomes more reliable.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>40</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="default-wordlist" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="rapid-loader" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeRapidName">Rapid Payload Loader</h3>
+              <p data-i18n="botnet.upgradeRapidDesc">Cuts manual scan-to-target friction and speeds exploit cadence.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>90</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="rapid-loader" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="async-daemon" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeAsyncName">Async Exploit Daemon</h3>
+              <p data-i18n="botnet.upgradeAsyncDesc">Runs autonomous exploitation cycles in parallel.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>180</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="async-daemon" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="worm-fabric" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeWormName">Self-Replicating Worm Fabric</h3>
+              <p data-i18n="botnet.upgradeWormDesc">Massively boosts autonomous scan and exploit throughput.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>1200</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="worm-fabric" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="stealth-c2" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeStealthName">Stealth C2 Mesh</h3>
+              <p data-i18n="botnet.upgradeStealthDesc">Deepens monetization throughput and improves payload reliability.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>10000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="stealth-c2" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="ai-orchestrator" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeOrchestratorName">AI Orchestrator Core</h3>
+              <p data-i18n="botnet.upgradeOrchestratorDesc">Turns your operation into a high-scale autonomous network engine.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>80000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="ai-orchestrator" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="infect-boost-1" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeInfectBoost1Name">Infection Calibration I</h3>
+              <p data-i18n="botnet.upgradeInfectBoost1Desc">Improves payload hit-rate by fine-tuning exploit signatures.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>25000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="infect-boost-1" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="infect-boost-2" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeInfectBoost2Name">Infection Calibration II</h3>
+              <p data-i18n="botnet.upgradeInfectBoost2Desc">Further raises exploit consistency at medium scale.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>50000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="infect-boost-2" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="infect-boost-3" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeInfectBoost3Name">Infection Calibration III</h3>
+              <p data-i18n="botnet.upgradeInfectBoost3Desc">Hardens autonomous payload adaptation for late automation tiers.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>100000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="infect-boost-3" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="scan-cluster-1" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeScanCluster1Name">Scanner Cluster I</h3>
+              <p data-i18n="botnet.upgradeScanCluster1Desc">Deploys additional asynchronous scanner workers.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>180000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="scan-cluster-1" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="scan-cluster-2" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeScanCluster2Name">Scanner Cluster II</h3>
+              <p data-i18n="botnet.upgradeScanCluster2Desc">Expands scanner mesh throughput for high-volume infection funnels.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>360000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="scan-cluster-2" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="exploit-swarm-1" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeExploitSwarm1Name">Exploit Swarm I</h3>
+              <p data-i18n="botnet.upgradeExploitSwarm1Desc">Adds autonomous exploit threads to keep infection momentum.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>220000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="exploit-swarm-1" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="exploit-swarm-2" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeExploitSwarm2Name">Exploit Swarm II</h3>
+              <p data-i18n="botnet.upgradeExploitSwarm2Desc">Massively increases exploit thread concurrency in late automation.</p>
+              <p class="cost-line"><span data-i18n="botnet.costBots">Cost</span>: <strong data-item-cost>480000</strong> Bots</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="exploit-swarm-2" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+        </div>
+      </section>
+
+      <div class="feature-slot feature-slot--market" id="market-slot" aria-hidden="true" hidden>
+        <section class="botnet-panel" id="market-panel" hidden>
+          <h2 data-i18n="botnet.sectionMarket">Market</h2>
+          <p data-i18n="botnet.marketDesc">Convert bots into dark money over time to fund zero-day bursts.</p>
+
+          <button id="btn-toggle-monetize" class="botnet-btn botnet-btn--primary">
+            <span class="show-when-idle" data-i18n="botnet.btnMonetizeStart">START MONETIZATION</span>
+            <span class="show-when-active" data-i18n="botnet.btnMonetizeStop">PAUSE MONETIZATION</span>
+          </button>
+          <p class="market-state"><span data-i18n="botnet.workerLabel">Engine</span>: <strong id="market-state-label" class="market-indicator"><span class="market-paused" data-i18n="botnet.statusPaused">Paused</span><span class="market-active" data-i18n="botnet.statusActive">Active</span></strong></p>
+
+          <article class="upgrade-row" data-item-id="dark-auction" hidden>
+            <div>
+              <h3 data-i18n="botnet.marketDarkAuctionName">Dark Auction Integrator</h3>
+              <p data-i18n="botnet.marketDarkAuctionDesc">Improves monetization efficiency and raises conversion yield.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>500</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="dark-auction" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="quantum-broker" hidden>
+            <div>
+              <h3 data-i18n="botnet.marketQuantumName">Quantum Broker Layer</h3>
+              <p data-i18n="botnet.marketQuantumDesc">Multiplies dark money conversion and stabilizes high-volume flow.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>5000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="quantum-broker" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="market-futures-1" hidden>
+            <div>
+              <h3 data-i18n="botnet.marketFutures1Name">Dark Futures Engine I</h3>
+              <p data-i18n="botnet.marketFutures1Desc">Adds synthetic routing to improve conversion throughput.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>20000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="market-futures-1" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="market-futures-2" hidden>
+            <div>
+              <h3 data-i18n="botnet.marketFutures2Name">Dark Futures Engine II</h3>
+              <p data-i18n="botnet.marketFutures2Desc">Stabilizes extreme-value dark market operations.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>70000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="market-futures-2" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="zero-day-toolkit" hidden>
+            <div>
+              <h3 data-i18n="botnet.upgradeZeroDayName">Zero-Day Burst</h3>
+              <p data-i18n="botnet.upgradeZeroDayDesc">Instantly infect 5000 devices.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>2500</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="zero-day-toolkit" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+        </section>
+      </div>
+
+      <div class="feature-slot feature-slot--invest" id="invest-slot" aria-hidden="true" hidden>
+        <section class="botnet-panel" id="invest-panel" hidden>
+          <h2 data-i18n="botnet.sectionInvest">Investment Lab</h2>
+          <p data-i18n="botnet.investDesc">Deploy dark money into synthetic funds for long-run portfolio growth.</p>
+          <p class="panel-hint"><span data-i18n="botnet.investBatchLabel">Current tranche</span>: <strong id="invest-batch-value">150</strong> $</p>
+
+          <div class="action-grid action-grid--tight">
+            <button id="btn-invest-pulse" class="botnet-btn botnet-btn--primary" data-i18n="botnet.btnInvestPulse">INVEST TRANCHE</button>
+            <button id="btn-cashout-portfolio" class="botnet-btn" data-i18n="botnet.btnCashout">CASH OUT PORTFOLIO</button>
+            <button id="btn-toggle-invest-mode" class="botnet-btn">
+              <span class="show-when-stable" data-i18n="botnet.btnInvestModeAggressive">SWITCH TO AGGRESSIVE</span>
+              <span class="show-when-aggressive" data-i18n="botnet.btnInvestModeStable">SWITCH TO STABLE</span>
+            </button>
+          </div>
+
+          <p class="market-state"><span data-i18n="botnet.resourcePortfolio">Portfolio</span>: <strong id="portfolio-value">0</strong></p>
+          <p class="market-state"><span data-i18n="botnet.investModeLabel">Strategy</span>: <strong id="invest-mode-label" class="invest-mode-indicator"><span class="invest-stable" data-i18n="botnet.statusStable">Stable</span><span class="invest-aggressive" data-i18n="botnet.statusAggressive">Aggressive</span></strong></p>
+
+          <article class="upgrade-row" data-item-id="venture-desk" hidden>
+            <div>
+              <h3 data-i18n="botnet.investVentureDeskName">Venture Desk</h3>
+              <p data-i18n="botnet.investVentureDeskDesc">Unlocks larger tranches and safer baseline yield.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>3000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="venture-desk" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="risk-hedger" hidden>
+            <div>
+              <h3 data-i18n="botnet.investRiskHedgerName">Risk Hedger</h3>
+              <p data-i18n="botnet.investRiskHedgerDesc">Improves aggressive gains while reducing volatility spikes.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>12000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="risk-hedger" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="quant-fund" hidden>
+            <div>
+              <h3 data-i18n="botnet.investQuantFundName">Quant Fund Cluster</h3>
+              <p data-i18n="botnet.investQuantFundDesc">Significantly raises stable returns and batch capacity.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>48000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="quant-fund" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+
+          <article class="upgrade-row" data-item-id="ai-trader" hidden>
+            <div>
+              <h3 data-i18n="botnet.investAiTraderName">AI Trader Mesh</h3>
+              <p data-i18n="botnet.investAiTraderDesc">Endgame investment layer with bigger entries and controlled aggression.</p>
+              <p class="cost-line"><span data-i18n="botnet.costMoney">Cost</span>: <strong data-item-cost>150000</strong> $</p>
+            </div>
+            <button class="botnet-btn botnet-btn--small" data-buy-item="ai-trader" data-i18n="botnet.btnBuy">Buy</button>
+          </article>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <span id="ready-label-template" data-i18n="botnet.statusReady" hidden>READY</span>
+
+  <script src="../../js/i18n.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

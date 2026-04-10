@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="All DevByFab projects in one place: extensions, bots, and command-line tools.">
+  <meta name="i18n-base" content="../i18n">
+  <title data-i18n="projects.pageTitle">All Projects — DevByFab</title>
+  <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <header class="site-header scrolled">
+    <nav class="nav-container">
+      <a href="../index.html" class="logo">
+        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+      </a>
+      <button class="burger-menu" aria-label="Open menu">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="../index.html#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1 data-i18n="projects.allTitle">All Projects</h1>
+      <p class="page-hero__subtitle" data-i18n="projects.allSubtitle">A complete view of my current portfolio work.</p>
+    </section>
+
+    <section class="detail-grid" data-anim="stagger">
+      <article class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🧩</div>
+          <span class="badge badge--status badge--wip">WIP</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card1.title">CryoTabs — RAM Optimizer & Workspace Manager</h2>
+          <p class="project-card__desc" data-i18n="projects.card1.desc">Ultra-light Manifest V3 extension (~400 KB) built to optimize RAM usage, organize tab workspaces, and evolve into a freemium cross-browser SaaS.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Manifest V3</span>
+          <span class="badge badge--tech">Vanilla JS</span>
+          <span class="badge badge--tech">chrome.storage</span>
+          <span class="badge badge--tech">SaaS</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="extention.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+        </div>
+      </article>
+
+      <article class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🃏</div>
+          <span class="badge badge--status badge--wip">WIP</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card2.title">BoTokard — Discord Community Engine</h2>
+          <p class="project-card__desc" data-i18n="projects.card2.desc">Asynchronous Discord bot for TCG gameplay, Gemini AI interactions, moderation audit logs, Twitch operations, and audio streaming.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">Discord.py</span>
+          <span class="badge badge--tech">MySQL</span>
+          <span class="badge badge--tech">Gemini API</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="discordbot.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+        </div>
+      </article>
+
+      <article class="project-card" data-anim-child>
+        <div class="project-card__header">
+          <div class="project-card__icon">🔐</div>
+          <span class="badge badge--status badge--live">LIVE</span>
+        </div>
+        <div class="project-card__body">
+          <h2 class="project-card__title" data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h2>
+          <p class="project-card__desc" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
+        </div>
+        <div class="project-card__tags">
+          <span class="badge badge--tech">Python</span>
+          <span class="badge badge--tech">RSA</span>
+          <span class="badge badge--tech">AES</span>
+          <span class="badge badge--tech">CLI</span>
+        </div>
+        <div class="project-card__footer">
+          <a href="clipython.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+          <a href="https://github.com/devbyfab" class="btn btn-ghost btn--sm" target="_blank" rel="noopener" data-i18n="projects.viewGithub">GitHub</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <a class="project-back-cta" href="../index.html#projects" data-project-back>
+    <span class="project-back-cta__icon" aria-hidden="true">←</span>
+    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+  </a>
+
+  <footer class="site-footer">
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/i18n.js"></script>
+</body>
+</html>
