@@ -213,6 +213,16 @@
   grid-column: 1 / -1;
 }
 
+.section-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.section-actions .btn {
+  min-width: 210px;
+}
+
 /* ============================================
    CONTACT SECTION
    ============================================ */
@@ -573,6 +583,10 @@
 
   .legal-card {
     padding: 1.5rem 1.2rem;
+  }
+
+  .section-actions .btn {
+    width: min(100%, 320px);
   }
 
   .project-card--discord-overview,
