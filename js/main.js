@@ -103,6 +103,96 @@
     });
   }
 
+  /* ========== BOTNET ENDING SIGNAL (PORTFOLIO EASTER EGG) ========== */
+  function initBotnetArchiveSignal() {
+    var signalKey = 'infiniteBotnet.portfolioSignal.v1';
+    var raw = localStorage.getItem(signalKey);
+    if (!raw) return;
+
+    var payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch (_) {
+      return;
+    }
+
+    if (!payload || typeof payload !== 'object') return;
+
+    var selected = typeof payload.selected === 'string' ? payload.selected : 'none';
+    var triad = Boolean(payload.triadSigil);
+    if (selected === 'none' && !triad) return;
+
+    var body = document.body;
+    if (!body) return;
+
+    body.classList.add('botnet-ending-active');
+    if (selected && selected !== 'none') {
+      body.classList.add('botnet-ending-' + selected);
+    }
+    if (triad) {
+      body.classList.add('botnet-ending-triad');
+    }
+
+    var lang = ((document.documentElement.getAttribute('lang') || navigator.language || 'en') + '').toLowerCase();
+    var locale = 'en';
+    if (lang.indexOf('fr') === 0) locale = 'fr';
+    if (lang.indexOf('pt') === 0) locale = 'pt';
+
+    var messages = {
+      en: {
+        ghost: 'Archive signal: Ghost Exit route imprinted. The portfolio remains partially cloaked.',
+        overmind: 'Archive signal: Overmind route active. System aesthetics are being rewritten.',
+        archivist: 'Archive signal: Archivist route active. Continuity protocol stabilizing the archive.',
+        triad: 'Archive signal: Triad Sigil confirmed. All endings synced in one unstable timeline.'
+      },
+      fr: {
+        ghost: 'Signal archive: route Sortie Fantome imprimee. Le portfolio reste partiellement masque.',
+        overmind: 'Signal archive: route Overmind active. L esthetique du systeme est en reecriture.',
+        archivist: 'Signal archive: route Archiviste active. Le protocole de continuite stabilise l archive.',
+        triad: 'Signal archive: Sigil Triade confirme. Toutes les fins coexistent dans une timeline instable.'
+      },
+      pt: {
+        ghost: 'Sinal de arquivo: rota Saida Fantasma gravada. O portfolio permanece parcialmente oculto.',
+        overmind: 'Sinal de arquivo: rota Overmind ativa. A estetica do sistema esta a ser reescrita.',
+        archivist: 'Sinal de arquivo: rota Archivista ativa. O protocolo de continuidade estabiliza o arquivo.',
+        triad: 'Sinal de arquivo: Sigilo Triade confirmado. Todos os finais coexistem numa timeline instavel.'
+      }
+    };
+
+    var dict = messages[locale] || messages.en;
+    var message = triad ? dict.triad : (dict[selected] || dict.ghost);
+
+    var existing = document.getElementById('botnet-archive-banner');
+    if (existing) {
+      existing.remove();
+    }
+
+    var banner = document.createElement('div');
+    banner.id = 'botnet-archive-banner';
+    banner.className = 'botnet-archive-banner';
+    banner.textContent = message;
+
+    var heroContent = document.querySelector('#hero .hero-content');
+    if (heroContent) {
+      heroContent.appendChild(banner);
+    } else {
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+
+    if (triad) {
+      var tapCount = 0;
+      banner.addEventListener('click', function () {
+        tapCount += 1;
+        if (tapCount < 5) return;
+        tapCount = 0;
+        body.classList.add('botnet-archive-glitch');
+        setTimeout(function () {
+          body.classList.remove('botnet-archive-glitch');
+        }, 8000);
+      });
+    }
+  }
+
   /* ========== PROJECT BACK BUTTON ========== */
   function initProjectBackButton() {
     var backButtons = document.querySelectorAll('[data-project-back]');
@@ -127,6 +217,7 @@
 
   /* ========== INIT ========== */
   function init() {
+    initBotnetArchiveSignal();
     initHeader();
     initBurger();
     initScrollSpy();

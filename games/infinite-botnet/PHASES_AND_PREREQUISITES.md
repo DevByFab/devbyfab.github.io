@@ -1,183 +1,121 @@
-# The Infinite BotNet - Phases, Prerequisites, Upgrades, Features
+# The Infinite BotNet - Phases, Branches, War/Heat, Endings
 
-This file documents the current long-session progression model implemented in V1 engine.
+This file documents the current progression model implemented in worker save version 3.
+
+## Core Design Goals
+- Long session pacing with regular decisions.
+- Parallel upgrade choices at similar thresholds (no hard linear chain).
+- Multiple economies: bots, dark money, portfolio, war intel, Hz, brain matter, computronium.
+- Endgame routes that can alter portfolio presentation outside the game page.
 
 ## Phase Ladder (by bot count)
 1. `Garage`: >= 0 bots
 2. `Automation`: >= 100 bots
 3. `Monetization`: >= 10,000 bots
 4. `Botnet War`: >= 1,000,000 bots
-5. `Infrastructure`: >= 50,000,000 bots
-6. `Opinion Ops`: >= 500,000,000 bots
-7. `Machine Awakening`: >= 2,000,000,000 bots
-8. `Biological Barrier`: >= 8,000,000,000 bots
-9. `Singular Intelligence`: >= 50,000,000,000 bots
-10. `Matrix Exit`: >= 1,000,000,000,000 bots
+5. `Cloud Dominion`: >= 50,000,000 bots
+6. `Opinion Forge`: >= 500,000,000 bots
+7. `Grid Overmind`: >= 2,000,000,000 bots
+8. `Neural Breach`: >= 8,000,000,000 bots
+9. `Singularity Core`: >= 50,000,000,000 bots
+10. `Matrix Breach`: >= 1,000,000,000,000 bots
 
-No hard ending is enforced; progression can continue indefinitely.
+No hard ending is enforced. The run can keep scaling after route unlocks.
 
-## Core Loop Prerequisites
-1. `Scan target` requires no prereq.
-2. `Manual exploit` requires at least 1 queued IP and cooldown ready.
-3. `Monetization toggle` appears/works once the market unlock threshold is reached (10000 bots).
-4. `Investment lab` appears/works after buying `dark-auction` and reaching 25000 bots.
+## Feature Unlock Rules
+1. `Market` unlocks at 10,000 bots.
+2. `Investment Lab` unlocks at 25,000 bots and at least 1,000 dark money.
+3. `Relay Inbox` unlocks at 500 bots.
+4. `Botnet War` unlocks at 1,000,000 bots.
+5. `Frequency lattice` unlocks at 50,000,000 bots.
+6. `Brain mining` unlocks at 8,000,000,000 bots.
+7. `Computronium forge` unlocks at 50,000,000,000 bots.
+8. `Matrix breach console` unlocks in Matrix Breach phase with at least 120 computronium.
+9. `Endings panel` unlocks once at least one route condition is satisfied.
 
-## Upgrade Catalog (Bots)
-All items below follow the same rule:
-- Item appears only when all prerequisites are met.
-- Item disappears after purchase.
+## Catalog Visibility Rules
+1. Items become visible at `requireBots` threshold when parent feature is unlocked.
+2. One-time items hide after purchase.
+3. Repeatable items remain visible (`zero-day-toolkit`).
+4. Main progression intentionally avoids strict `requireItems` chains.
 
-1. `python-scanner`
-- Cost: 10 Bots
-- Appears at: 10 Bots
-- Requires items: none
-- Effect: +1 auto scan/sec
+## Economy Summary
+- `Bots`: infection power and most early-mid costs.
+- `Dark Money`: market/invest/war economy costs.
+- `Portfolio`: investment growth pool.
+- `War Intel`: earned from successful war strikes, used for route progression.
+- `Relay Messages`: periodic intercepted packets that grant tactical boosts.
+- `Hz`: high-frequency neural lattice output generated from large-scale bot pressure.
+- `Brain Matter`: mined from Hz once neural phase is unlocked.
+- `Computronium`: forged from brain matter + dark money for matrix operations.
 
-2. `default-wordlist`
-- Cost: 40 Bots
-- Appears at: 40 Bots
-- Requires items: python-scanner
-- Effect: exploit cooldown reduced, success rate increased
+## Advanced Late-Phase Loops
+- `Cloud Dominion+`: phase economy pulse can lease dark money for direct bot growth while monetization is active.
+- `Opinion Forge+`: portfolio scale can drip passive war intel.
+- `Grid Overmind+`: high war streaks create extra heat pressure, demanding more disciplined scrub cadence.
+- `Neural Breach+`: Hz converts to brain matter through neural mining throughput.
+- `Singularity Core+`: brain matter + dark money forge computronium and feed extra Hz harmony output.
+- `Matrix Breach`: stability decay, bypass windows, signed F12 injections, and backlash risk.
 
-3. `rapid-loader`
-- Cost: 90 Bots
-- Appears at: 90 Bots
-- Requires items: default-wordlist
-- Effect: faster manual target flow + exploit cadence
+## Matrix Console Loop
+- `ARM BYPASS`: spends Hz + computronium to open a short injection window.
+- `INJECT PAYLOAD`: requires exact signed command (`inject <token> --f12`) and advances breach progress.
+- `STABILIZE MATRIX`: spends dark money to recover matrix stability and lower heat.
+- Stability collapse triggers watchdog backlash (bot purge + progress regression).
+- Full breach completion force-unlocks triad route state and grants a late-run reward burst.
 
-4. `async-daemon`
-- Cost: 180 Bots
-- Appears at: 180 Bots
-- Requires items: rapid-loader
-- Effect: +1 auto exploit/sec
+## Heat / War Loop
+- Heat range: 0-10000.
+- Heat rises with high automation pressure and monetization.
+- Heat can be reduced by `SCRUB TRACE SIGNATURES`.
+- Very high heat triggers detection pressure events that can purge bots.
+- War strikes consume bots, then resolve as win/loss for large reward swings.
 
-5. `worm-fabric`
-- Cost: 1200 Bots
-- Appears at: 1200 Bots
-- Requires items: async-daemon
-- Effect: +4 auto scan/sec, +2 auto exploit/sec
+## Branch Highlights
 
-6. `stealth-c2`
-- Cost: 10000 Bots
-- Appears at: 10000 Bots
-- Requires items: worm-fabric
-- Effect: exploit reliability boost, monetization unlock path
+### Upgrade branch (bots)
+- Early acceleration: `python-scanner`, `default-wordlist`, `rapid-loader`, `async-daemon`.
+- Mid scaling: `worm-fabric`, `stealth-c2`, `infect-*`, `ai-orchestrator`.
+- Late pair choices: `scan-cluster-*` and `exploit-swarm-*`.
+- High tier route setup: `ghost-protocol`, `neural-lure`.
 
-7. `ai-orchestrator`
-- Cost: 80000 Bots
-- Appears at: 80000 Bots
-- Requires items: stealth-c2
-- Effect: large automation boost (scan/exploit/reliability)
+### Market branch (dark money)
+- Core multipliers: `dark-auction`, `quantum-broker`, `market-futures-*`.
+- Repeatable catch-up lever: `zero-day-toolkit`.
 
-8. `infect-boost-1`
-- Cost: 25000 Bots
-- Appears at: 25000 Bots
-- Requires items: stealth-c2
-- Effect: exploit reliability boost
+### Investment branch (dark money)
+- Portfolio progression: `venture-desk`, `risk-hedger`, `quant-fund`, `ai-trader`.
 
-9. `infect-boost-2`
-- Cost: 50000 Bots
-- Appears at: 50000 Bots
-- Requires items: infect-boost-1
-- Effect: exploit reliability boost
+### War branch (bots + dark money)
+- Heat control and detection defense: `heat-sink-array`, `c2-obfuscator`.
+- Strike power and rewards: `war-forge`, `predatory-proxy`.
 
-10. `infect-boost-3`
-- Cost: 100000 Bots
-- Appears at: 100000 Bots
-- Requires items: infect-boost-2
-- Effect: exploit reliability boost
+## Ending Routes (Matrix Breach phase)
+1. `Ghost Exit`
+- Low heat discipline and reliable war intel progression.
+- Intended fantasy: silent exfiltration / stealth supremacy.
 
-11. `scan-cluster-1`
-- Cost: 180000 Bots
-- Appears at: 180000 Bots
-- Requires items: ai-orchestrator
-- Effect: +12 auto scan/sec
+2. `Overmind Ascension`
+- High-heat domination with heavy war victories.
+- Intended fantasy: hostile AI takeover.
 
-12. `scan-cluster-2`
-- Cost: 360000 Bots
-- Appears at: 360000 Bots
-- Requires items: scan-cluster-1
-- Effect: +18 auto scan/sec
+3. `Archivist Accord`
+- Economic mastery (dark money + portfolio) with controlled war losses.
+- Intended fantasy: continuity protocol preserving the archive.
 
-13. `exploit-swarm-1`
-- Cost: 220000 Bots
-- Appears at: 220000 Bots
-- Requires items: ai-orchestrator
-- Effect: +4 auto exploit/sec
+When all three routes are unlocked, the `Triad Sigil` triggers as a hidden meta-state.
 
-14. `exploit-swarm-2`
-- Cost: 480000 Bots
-- Appears at: 480000 Bots
-- Requires items: exploit-swarm-1
-- Effect: +7 auto exploit/sec
+## Portfolio Easter Egg Signal
+The game writes a localStorage signal (`infiniteBotnet.portfolioSignal.v1`) containing:
+- selected ending route
+- unlocked route map
+- triad state
+- takeover level
 
-## Market Feature Catalog (Dark Money)
-All items below follow the same rule:
-- Item appears only when all prerequisites are met.
-- Item disappears after purchase.
+The portfolio home page reads this signal and adapts visuals/banners accordingly.
 
-1. `dark-auction`
-- Cost: 500 $
-- Appears at: 15000 Bots
-- Requires items: stealth-c2
-- Effect: monetization multiplier + conversion boost
-
-2. `quantum-broker`
-- Cost: 5000 $
-- Appears at: 120000 Bots
-- Requires items: dark-auction
-- Effect: major monetization multiplier boost
-
-3. `zero-day-toolkit`
-- Cost: 2500 $
-- Appears at: 50000 Bots
-- Requires items: stealth-c2
-- Effect: instant +5000 Bots burst
-
-4. `market-futures-1`
-- Cost: 20000 $
-- Appears at: 300000 Bots
-- Requires items: quantum-broker
-- Effect: extra monetization multiplier + conversion speed
-
-5. `market-futures-2`
-- Cost: 70000 $
-- Appears at: 700000 Bots
-- Requires items: market-futures-1
-- Effect: late-stage monetization boost
-
-## Investment Feature Catalog (Dark Money)
-All items below follow the same rule:
-- Item appears only when all prerequisites are met.
-- Item disappears after purchase.
-
-1. `venture-desk`
-- Cost: 3000 $
-- Appears at: 25000 Bots
-- Requires items: dark-auction
-- Effect: larger investment tranche + better stable return
-
-2. `risk-hedger`
-- Cost: 12000 $
-- Appears at: 90000 Bots
-- Requires items: venture-desk
-- Effect: stronger aggressive return with reduced volatility
-
-3. `quant-fund`
-- Cost: 48000 $
-- Appears at: 300000 Bots
-- Requires items: risk-hedger
-- Effect: large stable growth boost + bigger tranche
-
-4. `ai-trader`
-- Cost: 150000 $
-- Appears at: 800000 Bots
-- Requires items: quant-fund
-- Effect: endgame investment scaling boost
-
-## Visibility Rule for Future Features
-For every future functionality:
-1. Add a catalog entry with explicit prereqs (`requireBots`, `requireItems`, resource `costType`).
-2. Keep feature hidden until prereqs are met.
-3. Hide feature permanently after purchase if one-time upgrade.
-4. Keep parent section hidden until at least one child feature is unlocked.
+## Notes For Future Features
+1. Keep adding parallel choices (2-3 options per tier) rather than single mandatory ladders.
+2. Keep one repeatable helper in each major economy branch.
+3. Expand war subsystem with defenses, rival archetypes, and timed world events.
+4. Expand endings with optional route-specific mini-objectives.
