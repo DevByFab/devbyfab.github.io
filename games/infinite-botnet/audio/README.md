@@ -2,6 +2,17 @@
 
 Drop your royalty-free audio files here using the names below.
 
+For curated sound source ideas and license-safe workflow, see:
+- `ROYALTY_FREE_SFX_GUIDE.md`
+
+## Current in-game mapping (runtime)
+- Ambience loop: `server-drone.mp3`
+- UI click: `ui-click.mp3`
+- Error feedback: `error-message.mp3`
+- Upgrade unlock: `achievement-unlocked.mp3`
+- Phase shift: `level-up.mp3`
+- Incoming message: `universfield-message-incoming.mp3`
+
 ## UI
 - `ui_click_scan.ogg`
 - `ui_click_exploit.ogg`

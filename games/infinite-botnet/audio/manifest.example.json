@@ -1,28 +1,26 @@
 {
   "ui": {
-    "scanClick": "ui_click_scan.ogg",
-    "exploitClick": "ui_click_exploit.ogg",
-    "upgradeBuy": "ui_upgrade_buy.ogg",
-    "settingsOpen": "ui_settings_open.ogg",
-    "settingsClose": "ui_settings_close.ogg",
-    "error": "ui_error.ogg"
+    "scanClick": "ui-click.mp3",
+    "exploitClick": "ui-click.mp3",
+    "upgradeBuy": "achievement-unlocked.mp3",
+    "settingsOpen": "ui-click.mp3",
+    "settingsClose": "ui-click.mp3",
+    "error": "error-message.mp3"
   },
   "events": {
-    "targetFound": "event_target_found.ogg",
-    "exploitSuccess": "event_exploit_success.ogg",
-    "exploitFail": "event_exploit_fail.ogg",
-    "marketUnlock": "event_market_unlock.ogg",
-    "phaseShift": "event_phase_shift.ogg"
+    "targetFound": "ui-click.mp3",
+    "exploitSuccess": "ui-click.mp3",
+    "exploitFail": "error-message.mp3",
+    "marketUnlock": "achievement-unlocked.mp3",
+    "phaseShift": "level-up.mp3",
+    "incomingMessage": "universfield-message-incoming.mp3"
   },
   "ambience": {
-    "low": "ambience_server_low.ogg",
-    "mid": "ambience_server_mid.ogg",
-    "high": "ambience_server_high.ogg",
-    "overclock": "ambience_server_overclock.ogg"
+    "main": "server-drone.mp3"
   },
   "stingers": {
-    "upgradeTier2": "stinger_upgrade_tier2.ogg",
-    "upgradeTier3": "stinger_upgrade_tier3.ogg",
-    "marketTier2": "stinger_market_tier2.ogg"
+    "upgradeTier2": "achievement-unlocked.mp3",
+    "upgradeTier3": "level-up.mp3",
+    "marketTier2": "level-up.mp3"
   }
 }

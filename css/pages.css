@@ -67,6 +67,61 @@
   transform: translateY(20px);
 }
 
+.botnet-archive-banner {
+  margin: 1.2rem auto 0;
+  max-width: 640px;
+  padding: 0.8rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(143, 95, 255, 0.35);
+  background: linear-gradient(135deg, rgba(18, 14, 35, 0.88) 0%, rgba(35, 24, 62, 0.86) 100%);
+  color: var(--text-primary);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  box-shadow: 0 12px 28px rgba(15, 8, 28, 0.35);
+  cursor: default;
+}
+
+body.botnet-ending-active .bg-gradient {
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+
+body.botnet-ending-ghost .bg-gradient {
+  filter: hue-rotate(-25deg) saturate(1.15);
+  opacity: 0.92;
+}
+
+body.botnet-ending-overmind .bg-gradient {
+  filter: hue-rotate(35deg) saturate(1.35) contrast(1.08);
+  opacity: 1;
+}
+
+body.botnet-ending-archivist .bg-gradient {
+  filter: hue-rotate(-55deg) saturate(1.1) brightness(1.05);
+  opacity: 0.95;
+}
+
+body.botnet-ending-triad .bg-gradient {
+  filter: saturate(1.55) contrast(1.15);
+  opacity: 1;
+}
+
+body.botnet-ending-overmind .site-header,
+body.botnet-ending-triad .site-header {
+  box-shadow: 0 8px 34px rgba(143, 95, 255, 0.18);
+}
+
+body.botnet-archive-glitch .site-header,
+body.botnet-archive-glitch .hero-title {
+  animation: botnetGlitch 280ms steps(2) infinite;
+}
+
+@keyframes botnetGlitch {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(1px, -1px); }
+  66% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
 /* Scroll CTA */
 .scroll-cta {
   display: inline-flex;
