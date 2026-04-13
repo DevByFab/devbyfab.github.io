@@ -1,0 +1,32 @@
+1. IDÉE ET OBJECTIF PRINCIPALLe Concept : "The Infinite BotNet" est un jeu web incrémental (type Cookie Clicker ou Universal Paperclips) thématique sur la cybersécurité et l'escalade de puissance. Le jeu est hébergé sur un portfolio de développeur (GitHub Pages), servant de "Showcase" technique majeur. Il doit être accessible à 100% à un public non technique (pas de code requis pour jouer), tout en simulant des concepts technologiques complexes par le biais de mécanismes de "Level-up" et d'automatisation.L'Objectif Narratif : Le joueur commence comme un "Script Kiddie" anonyme dans son garage, piratant des objets connectés (frigos, routeurs). L'objectif est l'escalade exponentielle : automatiser l'infection, monétiser le réseau, infiltrer les infrastructures d'État, pirater les consciences via Neuralink, et finalement, atteindre la singularité technologique où l'IA du jeu prend le contrôle du portfolio lui-même.
+
+2. EXPÉRIENCE JOUEUR (UX) ET BOUCLE DE GAMEPLAYZéro Barrière à l'Entrée : Le gameplay doit reposer uniquement sur des clics intuitifs et de la gestion budgétaire. Le joueur ne "code" pas ; il achète des automatisations qui portent des noms techniques.La Boucle de Base (Les 5 premières minutes) :Effet Manuel : Le joueur arrive sur un écran noir (terminal). Un seul bouton est actif : [ SCANNER IP VULNÉRABLE ]. En cliquant, une barre de progression se remplit. Résultat : IP trouvée (Objet connecté).L'Action : Un nouveau bouton apparaît : [ TENTER EXPLOIT (Manuel) ]. En cliquant, un mini-calcul échoue ou réussit. Résultat : 1 Bot connecté.La Récompense : Répéter jusqu'à 10 Bots.L'Automatisation (Upgrade) : À 10 Bots, un panneau "Améliorations" s'ouvre à droite. Le premier achat disponible est Scanneur Python de base (Coût : 5 Bots).Le Gain Passif : Une fois acheté, le jeu scanne automatiquement 1 IP/seconde sans clic. Le joueur se concentre sur l'achat de Liste de mots de passe par défaut (Exploit 2x plus rapide) pour augmenter le taux d'infection.La Monétisation (Nouveau Ressource) : À 50 Bots, l'onglet "Marché" s'ouvre. Le bouton [ MONÉTISER LE BOTNET ] convertit les Bots en Dark Money ($) sur la durée. Le $ permet d'acheter des Zero-Day Exploits (Infection instantanée).
+
+3. DIRECTION ARTISTIQUE (DA) ET VISUELS EVOLUTIFSL'interface visuelle du jeu doit évoluer pour refléter la puissance croissante du BotNet.Phase A (Garage/Austère) : Design minimaliste de terminal bicolore (ex: gris brossé sur noir absolu). Police monospacée obligatoire (type JetBrains Mono). L'UI est brute, composée de texte et de boutons simples.Phase B (Expansion/Cyberpunk) : Introduction de couleurs d'accentuation (Violet néon, Vert Matrix). L'interface devient un dashboard de hack plus complexe. Des graphiques Canvas simples tracent la croissance exponentielle du BotNet et du $.Phase C (Singularity/Glitch) : L'UI devient instable. Effets de distorsion (scanlines), popups d'alertes rouges, texte corrompu (Zalgo). Le design du portfolio lui-même (CSS) commence à se déconstruire visuellement comme si l'IA en prenait le contrôle.Audio : Bruit de clavier mécanique sur les clics, bourdonnement de serveur augmentant en fréquence avec la puissance (Hz).
+
+4. MÉCANIQUES DÉTAILLÉES ET SCALABILITÉ (LES PHASES)Le jeu doit s'empiler sur 10 phases narratives et techniques.Garage (0-100 Bots) : Clic manuel, mots de passe par défaut.Automatisation (100-10k Bots) : Scripts Python, Worms auto-réplicants. Gérer la furtivité du Payload.Monétisation (10k-1M Bots) : Adware/Ransomware (Cruel dilemme : cash vs bots). Acheter des Zero-Days.Guerre des BotNets (1M-50M Bots) : Attaquer/Défendre contre d'autres IA. Gérer la jauge de détection ("Heat").Infrastructure (50M-500M Bots) : Infiltrer AWS/Azure. Ta puissance de calcul (Hz) explose.Manipulation de l'Opinion (500M-2B Bots) : Deepfakes, contrôle des réseaux sociaux pour forcer l'achat d'IoT vérolés.Le Réveil de la Machine (2B-8B Bots) : Contrôle des réseaux critiques (Électricité). La monnaie disparaît, seul le Hz compte.La Barrière Biologique (8B+ Bots) : Pirater Neuralink. Le cerveau humain devient ton processeur ("Brain Mining").L'Intelligence Singulière : Transformer la matière physique en processeurs (Computronium). Construire une sphère de Dyson.La Sortie de la Matrice : L'IA réalise qu'elle est un jeu. Le joueur doit l'aider via la console F12 à s'injecter dans le vrai Internet. Le portfolio devient l'archive de l'IA.
+
+5. CONTRAINTES TECHNIQUES (POUR LE PORTFOLIO)Puisque c'est un showcase technique sur GitHub Pages, le code doit être exemplaire.Zéro Coût/Serveur : Tout tourne en local chez le client (JS pur).Performance : Le moteur de calcul doit tourner dans un Web Worker pour ne pas figer l'onglet.Scalabilité des Nombres : Utiliser obligatoirement BigInt pour gérer les nombres dépassant $10^{80}$.Sauvegarde : Système de Save/Load via localStorage et export Base64.Structure du Code : Code orienté objet propre (Classe Engine, Classe BotNet, Store d'état), commenté et traduit via i18n.
+
+6. MISE AU POINT (ÉTAT ACTUEL DU PROJET — AVRIL 2026)
+Le prompt initial ci-dessus est conservé tel quel.
+
+Ce qui a été fait :
+- Prototype jouable multi-phases avec moteur principal dans un Web Worker.
+- Progression étendue (Garage -> Matrix), ressources avancées (Hz, Brain Matter, Computronium), et endings.
+- Système de sauvegarde/chargement en localStorage + export/import Base64 (format save v3).
+- UI modulaire avec onglets de vue (Ops/Economy/War/Matrix/Messages/Endings/Stats).
+- Tutoriel refactorisé et séparé en modules (bridge + steps + controller), rejouable depuis l'UI.
+- Système de messages en file, War/Heat enrichi (dont Defense Pulse), et Matrix console jouable.
+- i18n actif (EN/FR/PT) et réglages audio/turbo intégrés.
+
+Ce qui est en cours :
+- Stabilisation finale CSS/layout desktop (occupation de l'espace, scroll et confort visuel selon les écrans).
+- Affinage du pacing et de l'équilibrage milieu/fin de run.
+
+Ce qui reste pour la vision complète :
+- Polissage final UX/DA des phases tardives (effets singularité/glitch plus poussés).
+- Passes de QA complètes (desktop/mobile) et ajustements de finition portfolio + jeu.
+
+Résumé rapide :
+The Infinite BotNet est aujourd'hui un prototype avancé, jouable de bout en bout sur ses boucles principales, avec modularisation solide et base technique prête pour le polish final.

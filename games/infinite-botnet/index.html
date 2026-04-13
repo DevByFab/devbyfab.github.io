@@ -38,6 +38,8 @@
     </div>
 
     <div class="botnet-topbar__right">
+      <button id="btn-open-tutorial" class="botnet-btn botnet-btn--small botnet-btn--help" type="button" data-i18n="botnet.help">Help</button>
+
       <div class="botnet-settings" id="settings-menu">
         <button id="btn-settings" class="botnet-btn botnet-btn--small botnet-btn--settings" type="button" aria-expanded="false" aria-controls="settings-panel">
           <span class="settings-icon" aria-hidden="true">⚙</span>
@@ -113,6 +115,12 @@
               <output id="audio-message-value">72%</output>
             </label>
           </div>
+
+          <h2 data-i18n="botnet.sectionTutorial">Tutorial</h2>
+          <p class="panel-hint" data-i18n="botnet.tutorialHint">Need a refresher? Replay the onboarding any time.</p>
+          <div class="action-grid action-grid--tight settings-actions">
+            <button id="btn-replay-tutorial" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnReplayTutorial">Replay Tutorial</button>
+          </div>
         </section>
       </div>
     </div>
@@ -127,11 +135,11 @@
 
       <nav class="view-nav" aria-label="Section Navigation">
         <button class="view-nav-btn is-active" type="button" data-view-nav="core" data-i18n="botnet.viewCore">Core Ops</button>
-        <button class="view-nav-btn" type="button" data-view-nav="economy" data-i18n="botnet.viewEconomy" hidden>Economy</button>
-        <button class="view-nav-btn" type="button" data-view-nav="war" data-i18n="botnet.viewWar" hidden>War</button>
-        <button class="view-nav-btn" type="button" data-view-nav="matrix" data-i18n="botnet.viewMatrix" hidden>Matrix</button>
-        <button class="view-nav-btn" type="button" data-view-nav="messages" data-i18n="botnet.viewMessages" hidden>Messages</button>
-        <button class="view-nav-btn" type="button" data-view-nav="endings" data-i18n="botnet.viewEndings" hidden>Endings</button>
+        <button class="view-nav-btn" type="button" data-view-nav="economy" data-i18n="botnet.viewEconomy">Economy</button>
+        <button class="view-nav-btn" type="button" data-view-nav="war" data-i18n="botnet.viewWar">War</button>
+        <button class="view-nav-btn" type="button" data-view-nav="matrix" data-i18n="botnet.viewMatrix">Matrix</button>
+        <button class="view-nav-btn" type="button" data-view-nav="messages" data-i18n="botnet.viewMessages">Messages</button>
+        <button class="view-nav-btn" type="button" data-view-nav="endings" data-i18n="botnet.viewEndings">Endings</button>
         <button class="view-nav-btn" type="button" data-view-nav="stats" data-i18n="botnet.viewStats">Stats</button>
       </nav>
 
@@ -175,30 +183,6 @@
         <div class="action-grid">
           <button id="btn-scan" class="botnet-btn botnet-btn--primary" data-i18n="botnet.btnScan">SCAN VULNERABLE IP</button>
           <button id="btn-exploit" class="botnet-btn" data-i18n="botnet.btnExploit">ATTEMPT EXPLOIT (Manual)</button>
-        </div>
-      </section>
-
-      <section class="botnet-panel" id="progress-panel" data-resizable-panel="progress-panel" data-view-section="core">
-        <h2 data-i18n="botnet.sectionProgress">Operation Progress</h2>
-
-        <div class="progress-block">
-          <div class="progress-head">
-            <span data-i18n="botnet.scanProgress">Scanner charge</span>
-            <span id="scan-progress-label">0%</span>
-          </div>
-          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Scanner progress">
-            <span id="scan-progress-fill"></span>
-          </div>
-        </div>
-
-        <div class="progress-block">
-          <div class="progress-head">
-            <span data-i18n="botnet.exploitProgress">Exploit cooldown</span>
-            <span id="exploit-progress-label" data-i18n="botnet.statusReady">READY</span>
-          </div>
-          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Exploit cooldown progress">
-            <span id="exploit-progress-fill"></span>
-          </div>
         </div>
       </section>
 
@@ -373,6 +357,30 @@
         </div>
       </section>
 
+      <section class="botnet-panel" id="progress-panel" data-resizable-panel="progress-panel" data-view-section="core">
+        <h2 data-i18n="botnet.sectionProgress">Operation Progress</h2>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <span data-i18n="botnet.scanProgress">Scanner charge</span>
+            <span id="scan-progress-label">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Scanner progress">
+            <span id="scan-progress-fill"></span>
+          </div>
+        </div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <span data-i18n="botnet.exploitProgress">Exploit cooldown</span>
+            <span id="exploit-progress-label" data-i18n="botnet.statusReady">READY</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Exploit cooldown progress">
+            <span id="exploit-progress-fill"></span>
+          </div>
+        </div>
+      </section>
+
       <div class="feature-slot feature-slot--market" id="market-slot" data-view-section="economy" aria-hidden="true" hidden>
         <section class="botnet-panel" id="market-panel" data-resizable-panel="market-panel" hidden>
           <h2 data-i18n="botnet.sectionMarket">Market</h2>
@@ -501,20 +509,25 @@
           <p class="market-state"><span data-i18n="botnet.inboxProcessedLabel">Processed</span>: <strong id="mail-processed-value">0</strong></p>
           <p class="market-state"><span data-i18n="botnet.inboxNextLabel">Next intercept</span>: <strong id="mail-next-value" data-i18n="botnet.statusReady">READY</strong></p>
 
-          <article class="upgrade-row mail-preview" id="mail-preview" hidden>
-            <div>
-              <h3 id="mail-subject" data-i18n="botnet.inboxNoMessage">No pending message</h3>
-              <p id="mail-body" data-i18n="botnet.inboxNoMessage">No pending message</p>
-              <p class="cost-line"><span data-i18n="botnet.inboxRewardLabel">Reward</span>: <strong id="mail-reward-value">-</strong></p>
-              <p class="cost-line"><span data-i18n="botnet.inboxQuarantineCostLabel">Quarantine cost</span>: <strong id="mail-quarantine-cost-value">0</strong> $</p>
-            </div>
-            <div class="mail-preview-actions">
-              <button id="btn-claim-mail" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnClaimMessage">PROCESS MESSAGE</button>
-              <button id="btn-quarantine-mail" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnQuarantineMessage">QUARANTINE</button>
-            </div>
-          </article>
+          <div class="mail-panel-layout">
+            <article class="upgrade-row mail-preview" id="mail-preview" hidden>
+              <div>
+                <h3 id="mail-subject" data-i18n="botnet.inboxNoMessage">No pending message</h3>
+                <p id="mail-body" data-i18n="botnet.inboxNoMessage">No pending message</p>
+                <p class="cost-line"><span data-i18n="botnet.inboxRewardLabel">Reward</span>: <strong id="mail-reward-value">-</strong></p>
+                <p class="cost-line"><span data-i18n="botnet.inboxQuarantineCostLabel">Quarantine cost</span>: <strong id="mail-quarantine-cost-value">0</strong> $</p>
+              </div>
+              <div class="mail-preview-actions">
+                <button id="btn-claim-mail" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnClaimMessage">PROCESS MESSAGE</button>
+                <button id="btn-quarantine-mail" class="botnet-btn botnet-btn--small" data-i18n="botnet.btnQuarantineMessage">QUARANTINE</button>
+              </div>
+            </article>
 
-          <ul class="mail-queue" id="mail-queue" aria-live="polite"></ul>
+            <section class="mail-queue-shell">
+              <h3 class="mail-queue-title" data-i18n="botnet.inboxQueueLabel">Queue backlog</h3>
+              <ul class="mail-queue" id="mail-queue" aria-live="polite"></ul>
+            </section>
+          </div>
         </section>
       </div>
 
@@ -526,20 +539,24 @@
           <div class="action-grid action-grid--tight">
             <button id="btn-war-attack" class="botnet-btn botnet-btn--primary" data-i18n="botnet.btnWarAttack">LAUNCH WAR STRIKE</button>
             <button id="btn-war-scrub" class="botnet-btn" data-i18n="botnet.btnWarScrub">SCRUB TRACE SIGNATURES</button>
+            <button id="btn-war-fortify" class="botnet-btn" data-i18n="botnet.btnWarFortify">DEPLOY DEFENSE PULSE</button>
           </div>
 
           <p class="panel-hint"><span data-i18n="botnet.warAttackCostLabel">Attack cost</span>: <strong id="war-attack-cost-value">0</strong> Bots</p>
           <p class="panel-hint"><span data-i18n="botnet.warScrubCostLabel">Scrub cost</span>: <strong id="war-scrub-cost-value">0</strong> $</p>
+          <p class="panel-hint"><span data-i18n="botnet.warFortifyCostLabel">Defense pulse cost</span>: <strong id="war-fortify-cost-money-value">0</strong> $ / <strong id="war-fortify-cost-intel-value">0</strong> Intel</p>
 
           <p class="market-state"><span data-i18n="botnet.warHeatLabel">Heat</span>: <strong id="heat-value" class="heat-indicator">0%</strong></p>
           <div class="progress-track progress-track--heat" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Heat progression">
             <span id="heat-progress-fill"></span>
           </div>
 
+          <p class="market-state"><span data-i18n="botnet.warDefenseStatusLabel">Defense field</span>: <strong id="war-defense-value" class="war-defense-indicator" data-i18n="botnet.statusOffline">OFFLINE</strong></p>
           <p class="market-state"><span data-i18n="botnet.resourceWarIntel">War Intel</span>: <strong id="war-intel-value">0</strong></p>
           <p class="market-state"><span data-i18n="botnet.warWinsLabel">War wins</span>: <strong id="war-wins-value">0</strong></p>
           <p class="market-state"><span data-i18n="botnet.warLossesLabel">War losses</span>: <strong id="war-losses-value">0</strong></p>
           <p class="market-state"><span data-i18n="botnet.warCooldownLabel">Strike cooldown</span>: <strong id="war-cooldown-value" data-i18n="botnet.statusReady">READY</strong></p>
+          <p class="market-state"><span data-i18n="botnet.warFortifyCooldownLabel">Defense cooldown</span>: <strong id="war-fortify-cooldown-value" data-i18n="botnet.statusReady">READY</strong></p>
 
           <article class="upgrade-row" data-item-id="heat-sink-array" hidden>
             <div>
@@ -628,12 +645,82 @@
     </aside>
   </main>
 
+  <div id="tutorial-overlay" class="tutorial-overlay" hidden>
+    <section class="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <header class="tutorial-modal__head">
+        <div class="tutorial-meta">
+          <p class="tutorial-kicker" data-i18n="botnet.tutorialLabel">Tutorial</p>
+          <p class="tutorial-progress" id="tutorial-progress">1 / 6</p>
+        </div>
+      </header>
+      <div class="tutorial-layout">
+        <div class="tutorial-main">
+          <h2 id="tutorial-title">Welcome to The Infinite BotNet</h2>
+          <p id="tutorial-body">Start by scanning vulnerable IPs, then exploit them to grow your swarm.</p>
+          <ul id="tutorial-checklist" class="tutorial-checklist" hidden></ul>
+        </div>
+
+        <aside class="tutorial-context">
+          <p class="tutorial-context__label" data-i18n="botnet.tutorialFocusLabel">Focus area</p>
+          <p class="tutorial-focus-value" id="tutorial-focus">Core Operations</p>
+          <p class="tutorial-context__label" data-i18n="botnet.tutorialActionLabel">Do this now</p>
+          <p class="tutorial-action-value" id="tutorial-action">Click the highlighted panel first.</p>
+        </aside>
+      </div>
+      <div class="tutorial-actions">
+        <button id="btn-tutorial-prev" class="botnet-btn botnet-btn--small" type="button" data-i18n="botnet.btnTutorialPrev">Back</button>
+        <button id="btn-tutorial-skip" class="botnet-btn botnet-btn--small" type="button" data-i18n="botnet.btnTutorialSkip">Skip</button>
+        <button id="btn-tutorial-next" class="botnet-btn botnet-btn--small botnet-btn--primary" type="button" data-i18n="botnet.btnTutorialNext">Next</button>
+      </div>
+    </section>
+  </div>
+
   <span id="ready-label-template" data-i18n="botnet.statusReady" hidden>READY</span>
+  <span id="offline-label-template" data-i18n="botnet.statusOffline" hidden>OFFLINE</span>
+  <span id="mail-queue-full-template" data-i18n="botnet.inboxQueueFull" hidden>QUEUE FULL - process messages</span>
+  <span id="feature-locked-template" data-i18n="botnet.lockedFeatureHint" hidden>Feature locked. Keep scaling your botnet.</span>
+  <span id="tutorial-next-label-template" data-i18n="botnet.btnTutorialNext" hidden>Next</span>
+  <span id="tutorial-finish-label-template" data-i18n="botnet.btnTutorialFinish" hidden>Finish</span>
+  <span id="tutorial-step-1-title-template" data-i18n="botnet.tutorialStep1Title" hidden>Welcome to The Infinite BotNet</span>
+  <span id="tutorial-step-1-body-template" data-i18n="botnet.tutorialStep1Body" hidden>Start by scanning vulnerable IPs, then exploit them to grow your swarm.</span>
+  <span id="tutorial-step-2-title-template" data-i18n="botnet.tutorialStep2Title" hidden>Build Your Core Loop</span>
+  <span id="tutorial-step-2-body-template" data-i18n="botnet.tutorialStep2Body" hidden>Automation upgrades accelerate scans and exploits. Buy them as soon as your bots allow.</span>
+  <span id="tutorial-step-3-title-template" data-i18n="botnet.tutorialStep3Title" hidden>Unlock Economy Tools</span>
+  <span id="tutorial-step-3-body-template" data-i18n="botnet.tutorialStep3Body" hidden>Use Market and Investment tabs to convert swarm power into long-run money growth.</span>
+  <span id="tutorial-step-4-title-template" data-i18n="botnet.tutorialStep4Title" hidden>Handle Relay Messages</span>
+  <span id="tutorial-step-4-body-template" data-i18n="botnet.tutorialStep4Body" hidden>Messages can help or hurt. Process rewards or pay to quarantine dangerous ones.</span>
+  <span id="tutorial-step-5-title-template" data-i18n="botnet.tutorialStep5Title" hidden>Control Heat and War</span>
+  <span id="tutorial-step-5-body-template" data-i18n="botnet.tutorialStep5Body" hidden>High Heat increases threats. Scrub traces, fortify defenses, and strike rivals carefully.</span>
+  <span id="tutorial-step-6-title-template" data-i18n="botnet.tutorialStep6Title" hidden>Push to Matrix and Endings</span>
+  <span id="tutorial-step-6-body-template" data-i18n="botnet.tutorialStep6Body" hidden>Late-game systems unlock powerful routes. Choose your final protocol in Endings.</span>
+  <span id="tutorial-step-1-focus-template" data-i18n="botnet.tutorialStep1Focus" hidden>Manual Operations</span>
+  <span id="tutorial-step-1-action-template" data-i18n="botnet.tutorialStep1Action" hidden>Start with one scan, then exploit once the cooldown is ready.</span>
+  <span id="tutorial-step-1-checklist-template" data-i18n="botnet.tutorialStep1Checklist" hidden>Press SCAN to queue targets.|Press EXPLOIT when READY to create bots.</span>
+  <span id="tutorial-step-2-focus-template" data-i18n="botnet.tutorialStep2Focus" hidden>Automation Upgrades</span>
+  <span id="tutorial-step-2-action-template" data-i18n="botnet.tutorialStep2Action" hidden>Buy one available upgrade to automate your core loop.</span>
+  <span id="tutorial-step-2-checklist-template" data-i18n="botnet.tutorialStep2Checklist" hidden>Find a row without lock prerequisites.|Buy one affordable scanner or exploit upgrade.</span>
+  <span id="tutorial-step-3-focus-template" data-i18n="botnet.tutorialStep3Focus" hidden>Economy Controls</span>
+  <span id="tutorial-step-3-action-template" data-i18n="botnet.tutorialStep3Action" hidden>Use monetization for cash, then reinvest to speed growth.</span>
+  <span id="tutorial-step-3-checklist-template" data-i18n="botnet.tutorialStep3Checklist" hidden>Toggle monetization when bots are stable.|Use investment actions when dark money is available.</span>
+  <span id="tutorial-step-4-focus-template" data-i18n="botnet.tutorialStep4Focus" hidden>Relay Inbox</span>
+  <span id="tutorial-step-4-action-template" data-i18n="botnet.tutorialStep4Action" hidden>Process useful messages and quarantine harmful ones.</span>
+  <span id="tutorial-step-4-checklist-template" data-i18n="botnet.tutorialStep4Checklist" hidden>Check reward color and sign before acting.|Process positive rewards, quarantine dangerous entries.</span>
+  <span id="tutorial-step-5-focus-template" data-i18n="botnet.tutorialStep5Focus" hidden>War and Heat</span>
+  <span id="tutorial-step-5-action-template" data-i18n="botnet.tutorialStep5Action" hidden>Keep Heat controlled before launching repeated strikes.</span>
+  <span id="tutorial-step-5-checklist-template" data-i18n="botnet.tutorialStep5Checklist" hidden>Use SCRUB when Heat climbs too high.|Use DEFENSE PULSE before long attack sequences.</span>
+  <span id="tutorial-step-6-focus-template" data-i18n="botnet.tutorialStep6Focus" hidden>Matrix Endgame</span>
+  <span id="tutorial-step-6-action-template" data-i18n="botnet.tutorialStep6Action" hidden>Arm bypass, inject the right command, then stabilize.</span>
+  <span id="tutorial-step-6-checklist-template" data-i18n="botnet.tutorialStep6Checklist" hidden>Follow the command hint exactly.|Balance inject actions with matrix stabilization.</span>
   <span id="ending-label-none" data-i18n="botnet.endingNone" hidden>NONE</span>
   <span id="ending-label-ghost" data-i18n="botnet.endingGhostName" hidden>Ghost Exit</span>
   <span id="ending-label-overmind" data-i18n="botnet.endingOvermindName" hidden>Overmind Ascension</span>
   <span id="ending-label-archivist" data-i18n="botnet.endingArchivistName" hidden>Archivist Accord</span>
 
+  <script src="game.formatters.js"></script>
+  <script src="game.mail-ui.js"></script>
+  <script src="tutorial.steps.js"></script>
+  <script src="tutorial.js"></script>
+  <script src="game.tutorial-bridge.js"></script>
   <script src="../../js/i18n.js"></script>
   <script src="game.js"></script>
 </body>

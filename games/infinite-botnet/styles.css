@@ -13,13 +13,39 @@
   --botnet-danger: #ff6a6a;
   --botnet-warn: #ffbe69;
   --botnet-heat: #ff7f7f;
-  --botnet-scroll-track: #06110d;
-  --botnet-scroll-thumb: #2a7c5f;
-  --botnet-scroll-thumb-hover: #39a67e;
+  --botnet-scroll-track: #03160e;
+  --botnet-scroll-thumb: #1fbf73;
+  --botnet-scroll-thumb-hover: #34e08d;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
+  scrollbar-width: thin;
+  scrollbar-color: var(--botnet-scroll-thumb) var(--botnet-scroll-track);
+}
+
+html::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--botnet-scroll-track);
+}
+
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2be089 0%, #169f5f 100%);
+  border-radius: 999px;
+  border: 1px solid rgba(141, 255, 201, 0.24);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #44f5a0 0%, #21b16f 100%);
 }
 
 .botnet-body,
@@ -51,8 +77,9 @@
 .botnet-body {
   margin: 0;
   min-height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: visible;
   display: flex;
   flex-direction: column;
   color: var(--botnet-text);
@@ -152,7 +179,8 @@
 }
 
 .botnet-topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 15;
   flex: 0 0 auto;
   display: flex;
@@ -177,6 +205,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .botnet-back {
@@ -245,30 +274,30 @@
   position: relative;
   z-index: 1;
   flex: 1 1 auto;
-  min-height: 0;
-  width: min(1720px, 100%);
-  margin: 0;
+  min-height: auto;
+  width: min(1880px, 100%);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(410px, 1.15fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   gap: 1rem;
   padding: 1rem 1.1rem 1.1rem;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .botnet-main {
   display: grid;
   gap: 1rem;
-  min-height: 0;
+  min-height: auto;
   grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
 }
 
 .botnet-side {
   display: grid;
   gap: 1rem;
-  min-height: 0;
+  min-height: auto;
   grid-auto-rows: minmax(190px, auto);
   align-content: start;
-  overflow: auto;
+  overflow: hidden;
   padding-right: 0.1rem;
 }
 
@@ -323,6 +352,11 @@
   box-shadow: 0 0 0 1px rgba(141, 255, 201, 0.26);
 }
 
+.view-nav-btn.is-locked {
+  border-style: dashed;
+  color: #7b8d82;
+}
+
 .view-nav-btn[hidden] {
   display: none !important;
 }
@@ -348,6 +382,11 @@
   font-weight: 500;
 }
 
+.resource-card.is-locked {
+  opacity: 0.56;
+  border-style: dashed;
+}
+
 .resource-value {
   margin: 0.4rem 0 0;
   color: var(--botnet-accent);
@@ -362,17 +401,19 @@
   flex-direction: column;
   gap: 0.78rem;
   min-height: 0;
+  position: relative;
   border: 1px solid var(--botnet-border);
   border-radius: 0.78rem;
   background: linear-gradient(165deg, #08110e 0%, #050a08 100%);
   padding: 1.05rem;
   box-shadow: inset 0 0 0 1px rgba(141, 255, 201, 0.04);
+  overflow: hidden;
 }
 
 .botnet-panel[data-resizable-panel] {
   resize: vertical;
   min-height: 150px;
-  max-height: 82vh;
+  max-height: none;
   overflow: auto;
 }
 
@@ -384,7 +425,7 @@
   background: linear-gradient(165deg, #07100d 0%, #040806 100%);
 }
 
-.botnet-side .botnet-panel {
+.botnet-side .botnet-panel[data-resizable-panel] {
   overflow: auto;
 }
 
@@ -426,6 +467,23 @@
 .feature-slot.is-active {
   border-color: transparent;
   background: transparent;
+}
+
+.feature-slot.is-locked {
+  border-color: rgba(141, 255, 201, 0.26);
+}
+
+.botnet-panel.is-locked {
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.botnet-panel.is-locked::before {
+  content: attr(data-lock-reason);
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  font-size: 0.74rem;
+  color: #a6bbaf;
 }
 
 .is-view-hidden {
@@ -487,6 +545,10 @@
   align-items: center;
   gap: 0.45rem;
   background: rgba(9, 20, 15, 0.96);
+}
+
+.botnet-btn--help {
+  background: rgba(7, 17, 13, 0.92);
 }
 
 .settings-icon {
@@ -628,6 +690,20 @@
   margin-top: 0.14rem;
 }
 
+.upgrade-row.is-locked {
+  border-style: dashed;
+  opacity: 0.62;
+}
+
+.upgrade-row.is-unaffordable {
+  border-color: rgba(255, 190, 105, 0.28);
+}
+
+.upgrade-row.is-purchased {
+  border-color: rgba(141, 255, 201, 0.4);
+  background: rgba(12, 26, 20, 0.82);
+}
+
 .upgrade-row[hidden] {
   display: none;
 }
@@ -664,13 +740,36 @@
 }
 
 .mail-preview {
-  min-height: 84px;
+  min-height: 100%;
+  margin: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 220px);
 }
 
 .mail-preview-actions {
   display: grid;
   gap: 0.4rem;
-  align-self: stretch;
+  align-self: start;
+}
+
+.mail-panel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(250px, 0.95fr);
+  gap: 0.62rem;
+  align-items: start;
+}
+
+.mail-queue-shell {
+  border: 1px solid rgba(141, 255, 201, 0.17);
+  border-radius: 0.6rem;
+  background: rgba(7, 16, 12, 0.6);
+  padding: 0.6rem;
+}
+
+.mail-queue-title {
+  margin: 0 0 0.42rem;
+  color: var(--botnet-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .mail-queue {
@@ -679,6 +778,8 @@
   padding: 0;
   display: grid;
   gap: 0.4rem;
+  max-height: 34vh;
+  overflow: auto;
 }
 
 .mail-queue__item {
@@ -805,8 +906,16 @@
   color: var(--botnet-accent);
 }
 
+.war-defense-indicator.is-active {
+  color: #9be8ff;
+}
+
 #mail-reward-value.is-negative {
   color: var(--botnet-danger);
+}
+
+#mail-next-value.is-queue-full {
+  color: var(--botnet-warn);
 }
 
 .heat-indicator {
@@ -866,6 +975,152 @@
   color: #6f8779;
 }
 
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 42;
+  --spot-left: calc(50vw - 120px);
+  --spot-top: calc(50vh - 76px);
+  --spot-width: 240px;
+  --spot-height: 152px;
+  --card-left: calc(50vw - 210px);
+  --card-top: calc(50vh - 110px);
+  background: rgba(2, 5, 4, 0.26);
+}
+
+.tutorial-overlay::after {
+  content: '';
+  position: fixed;
+  left: var(--spot-left);
+  top: var(--spot-top);
+  width: var(--spot-width);
+  height: var(--spot-height);
+  border-radius: 0.78rem;
+  border: 2px solid rgba(141, 255, 201, 0.75);
+  box-shadow: 0 0 0 200vmax rgba(2, 5, 4, 0.62), 0 0 26px rgba(141, 255, 201, 0.32);
+  transition: left 240ms ease, top 240ms ease, width 240ms ease, height 240ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tutorial-modal {
+  position: fixed;
+  left: var(--card-left);
+  top: var(--card-top);
+  width: min(640px, calc(100vw - 1.5rem));
+  border: 1px solid rgba(141, 255, 201, 0.34);
+  border-radius: 0.86rem;
+  background: linear-gradient(165deg, #09130f 0%, #050a08 100%);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.46);
+  padding: 1rem;
+  display: grid;
+  gap: 0.72rem;
+  transform: translate3d(0, 0, 0);
+  transition: left 240ms ease, top 240ms ease;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.tutorial-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.tutorial-meta {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.tutorial-kicker,
+.tutorial-progress {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--botnet-muted);
+}
+
+.tutorial-modal h2 {
+  margin: 0;
+  color: var(--botnet-accent);
+  font-size: 1.1rem;
+}
+
+.tutorial-modal p {
+  margin: 0;
+  color: #c6dbcf;
+  line-height: 1.4;
+}
+
+.tutorial-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
+  gap: 0.7rem;
+}
+
+.tutorial-main {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.tutorial-context {
+  border: 1px solid rgba(141, 255, 201, 0.2);
+  border-radius: 0.62rem;
+  background: rgba(4, 9, 7, 0.62);
+  padding: 0.62rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.tutorial-context__label {
+  margin: 0;
+  color: var(--botnet-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tutorial-focus-value,
+.tutorial-action-value {
+  margin: 0;
+  color: #d5ece0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.tutorial-checklist {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.28rem;
+  color: #cae0d4;
+  font-size: 0.79rem;
+}
+
+.tutorial-checklist li {
+  line-height: 1.35;
+}
+
+.tutorial-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.is-tutorial-focus {
+  animation: tutorialPulse 920ms ease-in-out infinite;
+}
+
+@keyframes tutorialPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(141, 255, 201, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(141, 255, 201, 0.16);
+  }
+}
+
 .terminal-feed {
   list-style: none;
   margin: 0;
@@ -910,13 +1165,22 @@
   .resource-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .mail-panel-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mail-queue {
+    max-height: 280px;
+  }
 }
 
 @media (max-width: 1024px) {
   .botnet-body {
     height: auto;
     min-height: 100dvh;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: visible;
   }
 
   .botnet-shell {
@@ -932,12 +1196,12 @@
 
   .botnet-side {
     grid-template-rows: auto auto auto auto auto auto;
-    overflow: visible;
+    overflow: hidden;
     padding-right: 0;
   }
 
   .botnet-side .botnet-panel {
-    overflow: visible;
+    overflow: auto;
   }
 
   .botnet-panel[data-resizable-panel] {
@@ -962,6 +1226,10 @@
     grid-template-columns: 1fr;
   }
 
+  .tutorial-layout {
+    grid-template-columns: 1fr;
+  }
+
   .view-nav-btn {
     flex: 1 1 calc(50% - 0.45rem);
     text-align: center;
@@ -979,10 +1247,11 @@
 
   .botnet-topbar__right {
     width: 100%;
+    justify-content: flex-end;
   }
 
   .botnet-settings {
-    width: 100%;
+    width: auto;
     display: flex;
     justify-content: flex-end;
   }
@@ -1011,10 +1280,29 @@
   .resource-value {
     font-size: clamp(1rem, 5vw, 1.3rem);
   }
+
+  .tutorial-actions {
+    flex-direction: column;
+  }
+
+  .tutorial-actions .botnet-btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 460px) {
   .resource-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1560px) {
+  #upgrades-panel .upgrade-catalog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  #upgrades-panel .upgrade-row + .upgrade-row {
+    margin-top: 0;
   }
 }

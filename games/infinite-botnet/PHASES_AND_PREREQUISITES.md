@@ -23,13 +23,13 @@ This file documents the current progression model implemented in worker save ver
 No hard ending is enforced. The run can keep scaling after route unlocks.
 
 ## Feature Unlock Rules
-1. `Market` unlocks at 10,000 bots.
-2. `Investment Lab` unlocks at 25,000 bots and at least 1,000 dark money.
-3. `Relay Inbox` unlocks at 500 bots.
-4. `Botnet War` unlocks at 1,000,000 bots.
-5. `Frequency lattice` unlocks at 50,000,000 bots.
-6. `Brain mining` unlocks at 8,000,000,000 bots.
-7. `Computronium forge` unlocks at 50,000,000,000 bots.
+1. `Market` unlocks at 1,500 bots.
+2. `Investment Lab` unlocks at 7,000 bots and at least 1,100 dark money.
+3. `Relay Inbox` unlocks at 220 bots.
+4. `Botnet War` unlocks at 750,000 bots.
+5. `Frequency lattice` unlocks at 40,000,000 bots.
+6. `Brain mining` unlocks at 7,000,000,000 bots.
+7. `Computronium forge` unlocks at 40,000,000,000 bots.
 8. `Matrix breach console` unlocks in Matrix Breach phase with at least 120 computronium.
 9. `Endings panel` unlocks once at least one route condition is satisfied.
 
@@ -50,9 +50,9 @@ No hard ending is enforced. The run can keep scaling after route unlocks.
 - `Computronium`: forged from brain matter + dark money for matrix operations.
 
 ## Advanced Late-Phase Loops
-- `Cloud Dominion+`: phase economy pulse can lease dark money for direct bot growth while monetization is active.
-- `Opinion Forge+`: portfolio scale can drip passive war intel.
-- `Grid Overmind+`: high war streaks create extra heat pressure, demanding more disciplined scrub cadence.
+- `Botnet War+`: phase economy pulse can lease dark money for direct bot growth while monetization is active.
+- `Cloud Dominion+`: portfolio scale can drip passive war intel.
+- `Opinion Forge+`: high war streaks create extra heat pressure, demanding more disciplined scrub cadence.
 - `Neural Breach+`: Hz converts to brain matter through neural mining throughput.
 - `Singularity Core+`: brain matter + dark money forge computronium and feed extra Hz harmony output.
 - `Matrix Breach`: stability decay, bypass windows, signed F12 injections, and backlash risk.
@@ -68,6 +68,7 @@ No hard ending is enforced. The run can keep scaling after route unlocks.
 - Heat range: 0-10000.
 - Heat rises with high automation pressure and monetization.
 - Heat can be reduced by `SCRUB TRACE SIGNATURES`.
+- `DEFENSE PULSE` spends dark money (+ intel at high pressure) to deploy a timed mitigation field.
 - Very high heat triggers detection pressure events that can purge bots.
 - War strikes consume bots, then resolve as win/loss for large reward swings.
 
