@@ -78,7 +78,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 80000n,
-    requireBots: 80000n,
+    requireBots: 65000n,
     requireItems: []
   },
   {
@@ -86,7 +86,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 25000n,
-    requireBots: 25000n,
+    requireBots: 18000n,
     requireItems: []
   },
   {
@@ -94,7 +94,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 50000n,
-    requireBots: 50000n,
+    requireBots: 36000n,
     requireItems: []
   },
   {
@@ -102,7 +102,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 100000n,
-    requireBots: 100000n,
+    requireBots: 70000n,
     requireItems: []
   },
   {
@@ -110,7 +110,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 180000n,
-    requireBots: 180000n,
+    requireBots: 130000n,
     requireItems: []
   },
   {
@@ -118,7 +118,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 180000n,
-    requireBots: 180000n,
+    requireBots: 130000n,
     requireItems: []
   },
   {
@@ -126,7 +126,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 360000n,
-    requireBots: 360000n,
+    requireBots: 250000n,
     requireItems: []
   },
   {
@@ -134,7 +134,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 360000n,
-    requireBots: 360000n,
+    requireBots: 250000n,
     requireItems: []
   },
   {
@@ -142,7 +142,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 950000n,
-    requireBots: 900000n,
+    requireBots: 700000n,
     requireItems: []
   },
   {
@@ -150,7 +150,7 @@ var ITEM_DEFS = [
     group: 'upgrade',
     costType: 'bots',
     cost: 2600000n,
-    requireBots: 2200000n,
+    requireBots: 1700000n,
     requireItems: []
   },
   {
@@ -158,7 +158,7 @@ var ITEM_DEFS = [
     group: 'market',
     costType: 'money',
     cost: 500n,
-    requireBots: 2000n,
+    requireBots: 1500n,
     requireItems: []
   },
   {
@@ -166,7 +166,7 @@ var ITEM_DEFS = [
     group: 'market',
     costType: 'money',
     cost: 4200n,
-    requireBots: 12000n,
+    requireBots: 9000n,
     requireItems: []
   },
   {
@@ -174,7 +174,7 @@ var ITEM_DEFS = [
     group: 'market',
     costType: 'money',
     cost: 20000n,
-    requireBots: 120000n,
+    requireBots: 90000n,
     requireItems: []
   },
   {
@@ -182,7 +182,7 @@ var ITEM_DEFS = [
     group: 'market',
     costType: 'money',
     cost: 70000n,
-    requireBots: 420000n,
+    requireBots: 280000n,
     requireItems: []
   },
   {
@@ -199,7 +199,7 @@ var ITEM_DEFS = [
     group: 'invest',
     costType: 'money',
     cost: 3000n,
-    requireBots: 25000n,
+    requireBots: 18000n,
     requireItems: []
   },
   {
@@ -207,7 +207,7 @@ var ITEM_DEFS = [
     group: 'invest',
     costType: 'money',
     cost: 12000n,
-    requireBots: 90000n,
+    requireBots: 70000n,
     requireItems: []
   },
   {
@@ -215,7 +215,7 @@ var ITEM_DEFS = [
     group: 'invest',
     costType: 'money',
     cost: 48000n,
-    requireBots: 300000n,
+    requireBots: 220000n,
     requireItems: []
   },
   {
@@ -223,7 +223,7 @@ var ITEM_DEFS = [
     group: 'invest',
     costType: 'money',
     cost: 150000n,
-    requireBots: 800000n,
+    requireBots: 600000n,
     requireItems: []
   },
   {
@@ -239,7 +239,7 @@ var ITEM_DEFS = [
     group: 'war',
     costType: 'money',
     cost: 250000n,
-    requireBots: 1500000n,
+    requireBots: 1000000n,
     requireItems: []
   },
   {
@@ -247,7 +247,7 @@ var ITEM_DEFS = [
     group: 'war',
     costType: 'bots',
     cost: 4500000n,
-    requireBots: 3000000n,
+    requireBots: 2200000n,
     requireItems: []
   },
   {
@@ -255,7 +255,7 @@ var ITEM_DEFS = [
     group: 'war',
     costType: 'money',
     cost: 750000n,
-    requireBots: 4500000n,
+    requireBots: 3200000n,
     requireItems: []
   }
 ];
@@ -317,11 +317,11 @@ function createInitialState() {
       autoExploitPerSec: 0n,
       exploitCooldownMs: 1200,
       exploitSuccessBps: 6200,
-      monetizeBotsPerSec: 1n,
+      monetizeBotsPerSec: 2n,
       moneyMultiplierBps: 10000n,
       investBatchMoney: 150n,
-      investStableBps: 35n,
-      investAggressiveBaseBps: 55n,
+      investStableBps: 40n,
+      investAggressiveBaseBps: 64n,
       investAggressiveSwingBps: 110n,
       heatBaseGainPerSec: 12,
       heatBaseDecayPerSec: 8,
@@ -339,6 +339,9 @@ function createInitialState() {
       heat: 0,
       attackReadyAtMs: 0,
       attackCooldownMs: 6000,
+      fortifyReadyAtMs: 0,
+      fortifyCooldownMs: 9000,
+      defenseRemainingMs: 0,
       wins: 0n,
       losses: 0n,
       streak: 0
@@ -501,7 +504,11 @@ function areItemRequirementsMet(def) {
 }
 
 function isItemVisible(def) {
-  if (!def.repeatable && isItemPurchased(def.id)) return false;
+  return Boolean(def);
+}
+
+function areItemUnlockRequirementsMet(def) {
+  if (!def) return false;
   if (state.resources.bots < def.requireBots) return false;
   if (!areItemRequirementsMet(def)) return false;
   if (def.group === 'market' && !state.flags.marketUnlocked) return false;
@@ -510,13 +517,21 @@ function isItemVisible(def) {
   return true;
 }
 
-function canBuyItem(def) {
-  if (!isItemVisible(def)) return false;
+function isItemAffordable(def) {
+  if (!def) return false;
 
   if (def.costType === 'money') {
     return state.resources.darkMoney >= def.cost;
   }
+
   return state.resources.bots >= def.cost;
+}
+
+function canBuyItem(def) {
+  if (!isItemVisible(def)) return false;
+  if (!def.repeatable && isItemPurchased(def.id)) return false;
+  if (!areItemUnlockRequirementsMet(def)) return false;
+  return isItemAffordable(def);
 }
 
 function getPhaseInfo(botCount) {
@@ -607,37 +622,37 @@ function selectEndingRoute(id) {
 }
 
 function refreshFlags() {
-  if (!state.flags.marketUnlocked && state.resources.bots >= 1800n) {
+  if (!state.flags.marketUnlocked && state.resources.bots >= 1500n) {
     state.flags.marketUnlocked = true;
     logEvent('Market unlocked: monetization channel now available.');
   }
 
-  if (!state.flags.investUnlocked && state.resources.bots >= 9000n && state.resources.darkMoney >= 1400n) {
+  if (!state.flags.investUnlocked && state.resources.bots >= 7000n && state.resources.darkMoney >= 1100n) {
     state.flags.investUnlocked = true;
     logEvent('Investment lab unlocked: dark capital reserve reached.');
   }
 
-  if (!state.flags.warUnlocked && state.resources.bots >= 1000000n) {
+  if (!state.flags.warUnlocked && state.resources.bots >= 750000n) {
     state.flags.warUnlocked = true;
     logEvent('Botnet war room unlocked: heat and rival AI pressure now online.');
   }
 
-  if (!state.flags.messagesUnlocked && state.resources.bots >= 260n) {
+  if (!state.flags.messagesUnlocked && state.resources.bots >= 220n) {
     state.flags.messagesUnlocked = true;
     logEvent('Relay inbox unlocked: intercepted messages can now be processed.');
   }
 
-  if (!state.flags.frequencyUnlocked && state.resources.bots >= 50000000n) {
+  if (!state.flags.frequencyUnlocked && state.resources.bots >= 40000000n) {
     state.flags.frequencyUnlocked = true;
     logEvent('Frequency lattice unlocked: Hz harvesting now online.');
   }
 
-  if (!state.flags.brainUnlocked && state.resources.bots >= 8000000000n) {
+  if (!state.flags.brainUnlocked && state.resources.bots >= 7000000000n) {
     state.flags.brainUnlocked = true;
     logEvent('Brain mining unlocked: neural matter extraction initialized.');
   }
 
-  if (!state.flags.computroniumUnlocked && state.resources.bots >= 50000000000n) {
+  if (!state.flags.computroniumUnlocked && state.resources.bots >= 40000000000n) {
     state.flags.computroniumUnlocked = true;
     logEvent('Computronium forge unlocked: synthetic cognition stack operational.');
   }
@@ -669,6 +684,30 @@ function getWarScrubCostMoney() {
   var cost = 800n + BigInt(Math.floor(state.war.heat / 5));
   if (cost < 800n) cost = 800n;
   return cost;
+}
+
+function getWarFortifyCostMoney() {
+  var cost = 1600n + state.resources.bots / 18000n + BigInt(Math.floor(state.war.heat / 3));
+  if (cost < 1600n) cost = 1600n;
+  if (cost > 350000000n) cost = 350000000n;
+  return cost;
+}
+
+function getWarFortifyCostIntel() {
+  var cost = state.war.wins / 5n + BigInt(Math.floor(state.war.heat / 1600));
+  if (cost < 0n) cost = 0n;
+  if (cost > 2400n) cost = 2400n;
+  return cost;
+}
+
+function consumeWarDefenseWindow(deltaMs) {
+  if (!state.flags.warUnlocked) return;
+  if (state.war.defenseRemainingMs <= 0) return;
+
+  state.war.defenseRemainingMs -= Math.floor(deltaMs);
+  if (state.war.defenseRemainingMs < 0) {
+    state.war.defenseRemainingMs = 0;
+  }
 }
 
 function updatePeakHeat() {
@@ -834,7 +873,7 @@ function applyComputroniumForgeLoop(deltaMs) {
 
 function applyPhaseEconomyPulse(deltaMs) {
   var phaseIndex = getCurrentPhaseIndex();
-  if (phaseIndex < 4) return;
+  if (phaseIndex < 3) return;
 
   state.timers.phasePulseCarryMs += deltaMs;
   var cycles = Math.floor(state.timers.phasePulseCarryMs / 1000);
@@ -844,7 +883,7 @@ function applyPhaseEconomyPulse(deltaMs) {
 
   var c;
   for (c = 0; c < cycles; c++) {
-    if (phaseIndex >= 4 && state.systems.monetizeActive && state.resources.darkMoney > 0n) {
+    if (phaseIndex >= 3 && state.systems.monetizeActive && state.resources.darkMoney > 0n) {
       var leaseCost = state.rates.investBatchMoney / 6n + 120n;
       if (leaseCost > state.resources.darkMoney) leaseCost = state.resources.darkMoney;
 
@@ -858,14 +897,14 @@ function applyPhaseEconomyPulse(deltaMs) {
       }
     }
 
-    if (phaseIndex >= 5 && state.resources.portfolio > 0n && state.flags.warUnlocked) {
+    if (phaseIndex >= 4 && state.resources.portfolio > 0n && state.flags.warUnlocked) {
       var intelGain = state.resources.portfolio / 250000000n;
       if (intelGain > 0n) {
         state.resources.warIntel += intelGain;
       }
     }
 
-    if (phaseIndex >= 6 && state.flags.warUnlocked && state.war.streak >= 4) {
+    if (phaseIndex >= 5 && state.flags.warUnlocked && state.war.streak >= 4) {
       state.war.heat = clampNumber(state.war.heat + 3, 0, 10000);
       updatePeakHeat();
     }
@@ -1113,16 +1152,16 @@ function rollMessageIntervalMs() {
   var phaseInfo = getPhaseInfo(state.resources.bots);
   var phaseIndex = getPhaseIndexById(phaseInfo.id);
 
-  var minMs = 55000 - phaseIndex * 1800;
-  var maxMs = 110000 - phaseIndex * 4200;
+  var minMs = 45000 - phaseIndex * 1600;
+  var maxMs = 90000 - phaseIndex * 3500;
 
   if (state.flags.warUnlocked) {
-    minMs -= 4000;
-    maxMs -= 9000;
+    minMs -= 3500;
+    maxMs -= 7500;
   }
 
-  minMs = clampNumber(minMs, 28000, 90000);
-  maxMs = clampNumber(maxMs, minMs + 8000, 140000);
+  minMs = clampNumber(minMs, 22000, 70000);
+  maxMs = clampNumber(maxMs, minMs + 6000, 110000);
 
   return minMs + Math.floor(Math.random() * (maxMs - minMs + 1));
 }
@@ -1312,7 +1351,7 @@ function applyMessageLoop(deltaMs) {
     }
 
     if (queue.length >= 10) {
-      state.timers.messageCarryMs = targetInterval - 1;
+      state.timers.messageCarryMs = 0;
       break;
     }
 
@@ -1603,6 +1642,10 @@ function applyHeatDynamics(deltaMs) {
     if (state.systems.monetizeActive) gain += 24;
     if (state.systems.investMode === 'aggressive' && state.resources.portfolio > 0n) gain += 6;
     if (state.systems.investMode === 'stable') decay += 2;
+    if (state.war.defenseRemainingMs > 0) {
+      gain -= 14;
+      decay += 18;
+    }
 
     var exploitPressure = Number(state.rates.autoExploitPerSec > 35n ? 35n : state.rates.autoExploitPerSec);
     var scanPressure = Number(state.rates.autoScanPerSec / 6n);
@@ -1637,7 +1680,10 @@ function applyHeatPressure(deltaMs) {
   for (c = 0; c < cycles; c++) {
     var defenseMitigation = Number(state.rates.warDefenseBps > 1800n ? 1800n : state.rates.warDefenseBps);
     var crackdownChance = 120 + Math.floor((state.war.heat - 7000) * 0.22) - Math.floor(defenseMitigation * 0.08);
-    crackdownChance = clampNumber(crackdownChance, 80, 720);
+    if (state.war.defenseRemainingMs > 0) {
+      crackdownChance -= 220;
+    }
+    crackdownChance = clampNumber(crackdownChance, state.war.defenseRemainingMs > 0 ? 25 : 80, 720);
 
     if (Math.floor(Math.random() * 10000) >= crackdownChance) continue;
 
@@ -1702,6 +1748,7 @@ function applyTick(deltaMs) {
   applyFrequencyLoop(scaledDelta);
   applyBrainMiningLoop(scaledDelta);
   applyComputroniumForgeLoop(scaledDelta);
+  consumeWarDefenseWindow(scaledDelta);
   applyHeatDynamics(scaledDelta);
   applyHeatPressure(scaledDelta);
   applyMatrixDrift(scaledDelta);
@@ -1783,6 +1830,9 @@ function actionWarAttack() {
   var streakBonus = state.war.streak * 140;
   var winBonus = Number(state.war.wins > 250n ? 250n : state.war.wins) * 3;
   var defenseBonus = Number(state.rates.warDefenseBps > 2200n ? 2200n : state.rates.warDefenseBps);
+  if (state.war.defenseRemainingMs > 0) {
+    defenseBonus += 550;
+  }
 
   var chanceBps = state.rates.warAttackBaseBps + streakBonus + winBonus + defenseBonus - heatPenalty;
   chanceBps = clampNumber(chanceBps, 1200, 9300);
@@ -1852,43 +1902,90 @@ function actionWarScrub() {
   logEvent('Trace scrub executed: heat ' + before + ' -> ' + state.war.heat + ' at cost $' + scrubCost.toString() + '.');
 }
 
+function actionWarFortify() {
+  if (!state.flags.warUnlocked) {
+    logEvent('War room still locked. Reach 1M bots first.');
+    return;
+  }
+
+  var now = nowMs();
+  if (now < state.war.fortifyReadyAtMs) {
+    var remain = Math.max(0, state.war.fortifyReadyAtMs - now);
+    logEvent('Defense pulse cooling down (' + remain + ' ms).');
+    return;
+  }
+
+  var moneyCost = getWarFortifyCostMoney();
+  var intelCost = getWarFortifyCostIntel();
+
+  if (state.resources.darkMoney < moneyCost || state.resources.warIntel < intelCost) {
+    logEvent('Insufficient resources to deploy defense pulse.');
+    return;
+  }
+
+  state.resources.darkMoney -= moneyCost;
+  state.resources.warIntel -= intelCost;
+
+  var extensionMs = 32000;
+  if (state.systems.investMode === 'stable') extensionMs += 4000;
+  if (isItemPurchased('heat-sink-array')) extensionMs += 6000;
+  if (isItemPurchased('c2-obfuscator')) extensionMs += 6000;
+  if (state.war.defenseRemainingMs > 0) extensionMs = Math.floor(extensionMs * 0.65);
+
+  state.war.defenseRemainingMs = clampNumber(state.war.defenseRemainingMs + extensionMs, 0, 180000);
+  state.war.fortifyReadyAtMs = now + state.war.fortifyCooldownMs;
+
+  var immediateDrop = 600 + Math.floor(Number(state.rates.warDefenseBps > 2500n ? 2500n : state.rates.warDefenseBps) * 0.12);
+  state.war.heat = clampNumber(state.war.heat - immediateDrop, 0, 10000);
+
+  logEvent(
+    'Defense pulse online: field active for ' +
+      Math.ceil(state.war.defenseRemainingMs / 1000) +
+      's (cost -$' +
+      moneyCost.toString() +
+      ', -' +
+      intelCost.toString() +
+      ' intel).'
+  );
+}
+
 function applyItemEffects(id) {
   switch (id) {
     case 'python-scanner':
-      state.rates.autoScanPerSec += 1n;
+      state.rates.autoScanPerSec += 2n;
       break;
 
     case 'default-wordlist':
-      state.rates.exploitCooldownMs = Math.max(260, Math.floor(state.rates.exploitCooldownMs * 0.78));
-      state.rates.exploitSuccessBps = Math.min(9650, state.rates.exploitSuccessBps + 1000);
+      state.rates.exploitCooldownMs = Math.max(240, Math.floor(state.rates.exploitCooldownMs * 0.72));
+      state.rates.exploitSuccessBps = Math.min(9700, state.rates.exploitSuccessBps + 1200);
       break;
 
     case 'rapid-loader':
-      state.progression.scanStepsRequired = Math.max(2, state.progression.scanStepsRequired - 2);
-      state.rates.exploitCooldownMs = Math.max(200, Math.floor(state.rates.exploitCooldownMs * 0.82));
-      state.rates.exploitSuccessBps = Math.min(9700, state.rates.exploitSuccessBps + 450);
+      state.progression.scanStepsRequired = Math.max(1, state.progression.scanStepsRequired - 2);
+      state.rates.exploitCooldownMs = Math.max(180, Math.floor(state.rates.exploitCooldownMs * 0.78));
+      state.rates.exploitSuccessBps = Math.min(9750, state.rates.exploitSuccessBps + 600);
       break;
 
     case 'async-daemon':
-      state.rates.autoExploitPerSec += 1n;
+      state.rates.autoExploitPerSec += 2n;
       break;
 
     case 'worm-fabric':
-      state.rates.autoScanPerSec += 7n;
-      state.rates.autoExploitPerSec += 3n;
+      state.rates.autoScanPerSec += 8n;
+      state.rates.autoExploitPerSec += 4n;
       break;
 
     case 'stealth-c2':
-      state.rates.exploitSuccessBps = Math.min(9800, state.rates.exploitSuccessBps + 900);
-      state.rates.monetizeBotsPerSec += 3n;
-      state.rates.moneyMultiplierBps += 1500n;
+      state.rates.exploitSuccessBps = Math.min(9830, state.rates.exploitSuccessBps + 1000);
+      state.rates.monetizeBotsPerSec += 4n;
+      state.rates.moneyMultiplierBps += 1800n;
       state.flags.marketUnlocked = true;
       break;
 
     case 'ai-orchestrator':
-      state.rates.autoScanPerSec += 32n;
-      state.rates.autoExploitPerSec += 8n;
-      state.rates.exploitSuccessBps = Math.min(9900, state.rates.exploitSuccessBps + 650);
+      state.rates.autoScanPerSec += 38n;
+      state.rates.autoExploitPerSec += 10n;
+      state.rates.exploitSuccessBps = Math.min(9920, state.rates.exploitSuccessBps + 700);
       break;
 
     case 'infect-boost-1':
@@ -2028,12 +2125,12 @@ function buyItem(id) {
     return;
   }
 
-  if (!isItemVisible(def)) {
+  if (!areItemUnlockRequirementsMet(def)) {
     logEvent('Prerequisites not met for ' + def.id + '.');
     return;
   }
 
-  if (!canBuyItem(def)) {
+  if (!isItemAffordable(def)) {
     logEvent('Insufficient resources for ' + def.id + '.');
     return;
   }
@@ -2128,11 +2225,16 @@ function buildItemsSnapshot() {
 
   for (var i = 0; i < ITEM_DEFS.length; i++) {
     var def = ITEM_DEFS[i];
+    var prereqsMet = areItemUnlockRequirementsMet(def);
+    var affordable = isItemAffordable(def);
     out.push({
       id: def.id,
       group: def.group,
+      repeatable: Boolean(def.repeatable),
       visible: isItemVisible(def),
       purchased: isItemPurchased(def.id),
+      prereqsMet: prereqsMet,
+      affordable: affordable,
       canBuy: canBuyItem(def),
       costType: def.costType,
       cost: def.cost.toString(),
@@ -2198,6 +2300,9 @@ function toSaveObject() {
       heat: state.war.heat,
       attackReadyAtMs: state.war.attackReadyAtMs,
       attackCooldownMs: state.war.attackCooldownMs,
+      fortifyReadyAtMs: state.war.fortifyReadyAtMs,
+      fortifyCooldownMs: state.war.fortifyCooldownMs,
+      defenseRemainingMs: state.war.defenseRemainingMs,
       wins: state.war.wins.toString(),
       losses: state.war.losses.toString(),
       streak: state.war.streak
@@ -2457,6 +2562,9 @@ function loadSaveObject(payload) {
   state.war.heat = clampNumber(Math.floor(parseNumberSafe(source.war && source.war.heat, 0)), 0, 10000);
   state.war.attackReadyAtMs = Math.max(0, Math.floor(parseNumberSafe(source.war && source.war.attackReadyAtMs, 0)));
   state.war.attackCooldownMs = clampNumber(Math.floor(parseNumberSafe(source.war && source.war.attackCooldownMs, 6000)), 1500, 12000);
+  state.war.fortifyReadyAtMs = Math.max(0, Math.floor(parseNumberSafe(source.war && source.war.fortifyReadyAtMs, 0)));
+  state.war.fortifyCooldownMs = clampNumber(Math.floor(parseNumberSafe(source.war && source.war.fortifyCooldownMs, 9000)), 2000, 30000);
+  state.war.defenseRemainingMs = clampNumber(Math.floor(parseNumberSafe(source.war && source.war.defenseRemainingMs, 0)), 0, 180000);
   state.war.wins = parseBigIntSafe(source.war && source.war.wins, 0n);
   state.war.losses = parseBigIntSafe(source.war && source.war.losses, 0n);
   state.war.streak = Math.max(0, Math.floor(parseNumberSafe(source.war && source.war.streak, 0)));
@@ -2571,6 +2679,7 @@ function toSnapshot() {
   var cooldownRemaining = Math.max(0, state.timers.exploitReadyAtMs - now);
   var phaseInfo = getPhaseInfo(state.resources.bots);
   var warCooldown = Math.max(0, state.war.attackReadyAtMs - now);
+  var fortifyCooldown = Math.max(0, state.war.fortifyReadyAtMs - now);
   var pendingQueue = getPendingMessagesQueue();
   var headMessage = pendingQueue.length ? pendingQueue[0] : null;
 
@@ -2630,11 +2739,15 @@ function toSnapshot() {
       heat: state.war.heat,
       heatPct: state.war.heat,
       attackCooldownMs: warCooldown,
+      fortifyCooldownMs: fortifyCooldown,
+      defenseRemainingMs: state.war.defenseRemainingMs,
       wins: state.war.wins.toString(),
       losses: state.war.losses.toString(),
       streak: state.war.streak,
       attackCostBots: getWarAttackCostBots().toString(),
-      scrubCostMoney: getWarScrubCostMoney().toString()
+      scrubCostMoney: getWarScrubCostMoney().toString(),
+      fortifyCostMoney: getWarFortifyCostMoney().toString(),
+      fortifyCostIntel: getWarFortifyCostIntel().toString()
     },
     endings: {
       unlocked: {
@@ -2651,6 +2764,7 @@ function toSnapshot() {
       unread: pendingQueue.length,
       processed: state.messages.processed,
       pendingCount: pendingQueue.length,
+      queueFull: pendingQueue.length >= 10,
       hasPending: Boolean(headMessage),
       subject: headMessage ? headMessage.subject : '',
       body: headMessage ? headMessage.body : '',
@@ -2768,6 +2882,11 @@ onmessage = function (event) {
       case 'ACTION_WAR_SCRUB':
         actionWarScrub();
         postSnapshot('war-scrub', true);
+        break;
+
+      case 'ACTION_WAR_FORTIFY':
+        actionWarFortify();
+        postSnapshot('war-fortify', true);
         break;
 
       case 'ACTION_SELECT_ENDING':

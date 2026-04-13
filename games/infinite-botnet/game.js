@@ -12,6 +12,7 @@
   var AUDIO_STORAGE_KEY = 'infiniteBotnet.audio.v1';
   var PANEL_LAYOUT_STORAGE_KEY = 'infiniteBotnet.panelLayout.v1';
   var VIEW_STORAGE_KEY = 'infiniteBotnet.view.v1';
+  var TUTORIAL_STORAGE_KEY = 'infiniteBotnet.tutorialSeen.v1';
   var AUTOSAVE_MS = 10000;
   var VIEW_ORDER = ['core', 'economy', 'war', 'matrix', 'messages', 'endings', 'stats'];
 
@@ -34,6 +35,16 @@
     message: 0.72
   };
 
+  var AUDIO_ONE_SHOT_KEYS = ['click', 'error', 'upgrade', 'phase', 'message'];
+  var AUDIO_ONE_SHOT_POOL_SIZE = 4;
+  var AUDIO_START_OFFSETS = {
+    click: 0.018,
+    error: 0.022,
+    upgrade: 0.028,
+    phase: 0.024,
+    message: 0.03
+  };
+
   var worker = null;
   var autosaveTimer = null;
   var lastPortfolioSignalHash = '';
@@ -42,20 +53,11 @@
   var lastMailPending = false;
   var currentView = 'core';
 
-  var viewAvailability = {
-    core: true,
-    economy: false,
-    war: false,
-    matrix: false,
-    messages: false,
-    endings: false,
-    stats: true
-  };
-
   var audioState = {
     unlocked: false,
     prefs: null,
-    ambienceTrack: null
+    ambienceTrack: null,
+    oneShotPools: {}
   };
 
   var panelLayoutState = {
@@ -81,6 +83,9 @@
     phaseLabel: document.getElementById('phase-label'),
     phaseNextGoal: document.getElementById('phase-next-goal'),
     readyLabelTemplate: document.getElementById('ready-label-template'),
+    offlineLabelTemplate: document.getElementById('offline-label-template'),
+    mailQueueFullTemplate: document.getElementById('mail-queue-full-template'),
+    featureLockedTemplate: document.getElementById('feature-locked-template'),
 
     endingLabelNone: document.getElementById('ending-label-none'),
     endingLabelGhost: document.getElementById('ending-label-ghost'),
@@ -90,6 +95,8 @@
     settingsMenu: document.getElementById('settings-menu'),
     settingsPanel: document.getElementById('settings-panel'),
     btnSettings: document.getElementById('btn-settings'),
+    btnOpenTutorial: document.getElementById('btn-open-tutorial'),
+    btnReplayTutorial: document.getElementById('btn-replay-tutorial'),
     turboModeSelect: document.getElementById('turbo-mode-select'),
     turboCurrentValue: document.getElementById('turbo-current-value'),
 
@@ -148,9 +155,14 @@
     warWinsValue: document.getElementById('war-wins-value'),
     warLossesValue: document.getElementById('war-losses-value'),
     warCooldownValue: document.getElementById('war-cooldown-value'),
+    warFortifyCooldownValue: document.getElementById('war-fortify-cooldown-value'),
+    warDefenseValue: document.getElementById('war-defense-value'),
     warAttackCostValue: document.getElementById('war-attack-cost-value'),
     warScrubCostValue: document.getElementById('war-scrub-cost-value'),
+    warFortifyCostMoneyValue: document.getElementById('war-fortify-cost-money-value'),
+    warFortifyCostIntelValue: document.getElementById('war-fortify-cost-intel-value'),
     btnWarAttack: document.getElementById('btn-war-attack'),
+    btnWarFortify: document.getElementById('btn-war-fortify'),
     btnWarScrub: document.getElementById('btn-war-scrub'),
 
     matrixSlot: document.getElementById('matrix-slot'),
@@ -212,7 +224,18 @@
     mailQuarantineCostValue: document.getElementById('mail-quarantine-cost-value'),
     mailQueue: document.getElementById('mail-queue'),
     btnClaimMail: document.getElementById('btn-claim-mail'),
-    btnQuarantineMail: document.getElementById('btn-quarantine-mail')
+    btnQuarantineMail: document.getElementById('btn-quarantine-mail'),
+
+    tutorialOverlay: document.getElementById('tutorial-overlay'),
+    tutorialTitle: document.getElementById('tutorial-title'),
+    tutorialBody: document.getElementById('tutorial-body'),
+    tutorialFocus: document.getElementById('tutorial-focus'),
+    tutorialAction: document.getElementById('tutorial-action'),
+    tutorialChecklist: document.getElementById('tutorial-checklist'),
+    tutorialProgress: document.getElementById('tutorial-progress'),
+    btnTutorialPrev: document.getElementById('btn-tutorial-prev'),
+    btnTutorialSkip: document.getElementById('btn-tutorial-skip'),
+    btnTutorialNext: document.getElementById('btn-tutorial-next')
   };
 
   var itemRows = Array.prototype.slice.call(document.querySelectorAll('[data-item-id]'));
@@ -237,41 +260,61 @@
   var warWasUnlocked = false;
   var matrixWasUnlocked = false;
   var endingWasUnlocked = false;
+  var tutorialSteps = Array.isArray(window.BotnetTutorialSteps) && window.BotnetTutorialSteps.length
+    ? window.BotnetTutorialSteps.slice()
+    : [];
+  var tutorialBridge = null;
 
-  function bigIntFrom(raw) {
+  var formattersApi = window.BotnetFormatters || {};
+  var mailUiApi = window.BotnetMailUI || {};
+
+  function pickModuleFn(candidate, fallback) {
+    return typeof candidate === 'function' ? candidate : fallback;
+  }
+
+  var bigIntFrom = pickModuleFn(formattersApi.bigIntFrom, function (raw) {
     try {
       return BigInt(raw || '0');
     } catch (_) {
       return 0n;
     }
-  }
+  });
 
-  function formatBig(raw) {
-    var value = bigIntFrom(raw);
-    var negative = value < 0n;
-    if (negative) value = -value;
+  var formatBig = pickModuleFn(formattersApi.formatBig, function (raw) {
+    return bigIntFrom(raw).toString();
+  });
 
-    var s = value.toString();
-    var group = Math.floor((s.length - 1) / 3);
-    var suffix = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'De'];
-    var out = s;
+  var formatPerSecond = pickModuleFn(formattersApi.formatPerSecond, function (raw) {
+    return formatBig(raw) + '/s';
+  });
 
-    if (group > 0 && group < suffix.length) {
-      var pivot = s.length - group * 3;
-      var head = s.slice(0, pivot);
-      var decimal = s.slice(pivot, pivot + 2).replace(/0+$/, '');
-      out = head + (decimal ? '.' + decimal : '') + suffix[group];
-    } else if (group >= suffix.length) {
-      var m = s.slice(0, 3).replace(/0+$/, '');
-      var mantissa = m.length > 1 ? m[0] + '.' + m.slice(1) : m;
-      out = mantissa + 'e' + (s.length - 1);
+  var clampRange = pickModuleFn(formattersApi.clampRange, function (value, minValue, maxValue) {
+    if (value < minValue) return minValue;
+    if (value > maxValue) return maxValue;
+    return value;
+  });
+
+  var clamp01 = pickModuleFn(formattersApi.clamp01, function (value) {
+    var numeric = Number(value);
+    if (!Number.isFinite(numeric)) return 0;
+    return clampRange(numeric, 0, 1);
+  });
+
+  var isNegativeMailEntry = pickModuleFn(mailUiApi.isNegativeEntry, function () {
+    return false;
+  });
+
+  var renderMailQueueNative = pickModuleFn(mailUiApi.renderQueue, null);
+
+  function renderMailQueueEntries(entries) {
+    if (!els.mailQueue) return;
+
+    if (!renderMailQueueNative) {
+      els.mailQueue.hidden = !Array.isArray(entries) || entries.length === 0;
+      return;
     }
 
-    return negative ? '-' + out : out;
-  }
-
-  function formatPerSecond(raw) {
-    return formatBig(raw) + '/s';
+    renderMailQueueNative(els.mailQueue, entries, 2);
   }
 
   function toLogMetric(raw) {
@@ -442,20 +485,6 @@
     }
   }
 
-  function clamp01(value) {
-    var numeric = Number(value);
-    if (!Number.isFinite(numeric)) return 0;
-    if (numeric < 0) return 0;
-    if (numeric > 1) return 1;
-    return numeric;
-  }
-
-  function clampRange(value, minValue, maxValue) {
-    if (value < minValue) return minValue;
-    if (value > maxValue) return maxValue;
-    return value;
-  }
-
   function normalizeTurboMultiplier(raw) {
     var parsed = Math.floor(Number(raw) || 1);
     if (parsed === 10 || parsed === 50 || parsed === 100) return parsed;
@@ -472,61 +501,6 @@
     if (els.turboCurrentValue) {
       els.turboCurrentValue.textContent = 'x' + String(multiplier);
     }
-  }
-
-  function isNegativeMailEntry(entry) {
-    if (!entry) return false;
-
-    var rewardType = String(entry.rewardType || '').toLowerCase();
-    if (rewardType === 'heat-gain' || rewardType.indexOf('loss') !== -1) {
-      return true;
-    }
-
-    var rewardLabel = String(entry.rewardLabel || entry.reward || '').trim();
-    return rewardLabel.indexOf('-') === 0;
-  }
-
-  function renderMailQueue(entries) {
-    if (!els.mailQueue) return;
-
-    while (els.mailQueue.firstChild) {
-      els.mailQueue.removeChild(els.mailQueue.firstChild);
-    }
-
-    var list = Array.isArray(entries) ? entries : [];
-    els.mailQueue.hidden = list.length === 0;
-    if (!list.length) return;
-
-    list.forEach(function (entry, index) {
-      var item = document.createElement('li');
-      item.className = 'mail-queue__item';
-
-      var negative = isNegativeMailEntry(entry);
-      if (negative) item.classList.add('is-negative');
-
-      var head = document.createElement('div');
-      head.className = 'mail-queue__head';
-
-      var subject = document.createElement('p');
-      subject.className = 'mail-queue__subject';
-      subject.textContent = '#' + String(index + 2) + ' ' + String(entry.subject || 'Intercepted relay packet');
-
-      var reward = document.createElement('span');
-      reward.className = 'mail-queue__reward';
-      if (negative) reward.classList.add('is-negative');
-      reward.textContent = String(entry.rewardLabel || entry.reward || '-');
-
-      head.appendChild(subject);
-      head.appendChild(reward);
-
-      var body = document.createElement('p');
-      body.className = 'mail-queue__body';
-      body.textContent = String(entry.body || '');
-
-      item.appendChild(head);
-      item.appendChild(body);
-      els.mailQueue.appendChild(item);
-    });
   }
 
   function loadViewPreference() {
@@ -552,15 +526,6 @@
     }
   }
 
-  function firstAvailableView() {
-    var i;
-    for (i = 0; i < VIEW_ORDER.length; i++) {
-      var id = VIEW_ORDER[i];
-      if (viewAvailability[id]) return id;
-    }
-    return 'core';
-  }
-
   function applyActiveView() {
     var sections = els.viewSections || [];
     var buttons = els.viewNavButtons || [];
@@ -582,7 +547,6 @@
 
   function setCurrentView(viewId, shouldPersist) {
     if (!viewId || VIEW_ORDER.indexOf(viewId) === -1) return;
-    if (!viewAvailability[viewId]) return;
 
     currentView = viewId;
     applyActiveView();
@@ -596,26 +560,22 @@
   }
 
   function refreshViewNavigation(options) {
-    viewAvailability.core = true;
-    viewAvailability.economy = Boolean(options.economy);
-    viewAvailability.war = Boolean(options.war);
-    viewAvailability.matrix = Boolean(options.matrix);
-    viewAvailability.messages = Boolean(options.messages);
-    viewAvailability.endings = Boolean(options.endings);
-    viewAvailability.stats = true;
-
     (els.viewNavButtons || []).forEach(function (button) {
       var id = button.getAttribute('data-view-nav');
-      var available = Boolean(viewAvailability[id]);
-      button.hidden = !available;
-      button.disabled = !available;
-      button.setAttribute('aria-hidden', available ? 'false' : 'true');
-    });
+      var unlocked = true;
 
-    if (!viewAvailability[currentView]) {
-      currentView = firstAvailableView();
-      saveViewPreference();
-    }
+      if (id === 'economy') unlocked = Boolean(options.economy);
+      if (id === 'war') unlocked = Boolean(options.war);
+      if (id === 'matrix') unlocked = Boolean(options.matrix);
+      if (id === 'messages') unlocked = Boolean(options.messages);
+      if (id === 'endings') unlocked = Boolean(options.endings);
+
+      button.hidden = false;
+      button.disabled = false;
+      button.setAttribute('aria-hidden', 'false');
+      button.setAttribute('aria-disabled', unlocked ? 'false' : 'true');
+      button.classList.toggle('is-locked', !unlocked);
+    });
 
     applyActiveView();
   }
@@ -683,6 +643,36 @@
     audioState.ambienceTrack = track;
   }
 
+  function ensureOneShotPool(fileKey) {
+    if (!fileKey || fileKey === 'ambience' || !AUDIO_FILES[fileKey]) return [];
+
+    if (!audioState.oneShotPools[fileKey]) {
+      var pool = [];
+      var i;
+
+      for (i = 0; i < AUDIO_ONE_SHOT_POOL_SIZE; i++) {
+        var node = new Audio(AUDIO_FILES[fileKey]);
+        node.preload = 'auto';
+        try {
+          node.load();
+        } catch (_) {
+          // Ignore load() edge cases on constrained browsers.
+        }
+        pool.push(node);
+      }
+
+      audioState.oneShotPools[fileKey] = pool;
+    }
+
+    return audioState.oneShotPools[fileKey];
+  }
+
+  function warmOneShotPools() {
+    AUDIO_ONE_SHOT_KEYS.forEach(function (key) {
+      ensureOneShotPool(key);
+    });
+  }
+
   function syncAmbiencePlayback() {
     ensureAmbienceTrack();
 
@@ -708,6 +698,7 @@
   function unlockAudioPlayback() {
     if (audioState.unlocked) return;
     audioState.unlocked = true;
+    warmOneShotPools();
     syncAmbiencePlayback();
   }
 
@@ -720,8 +711,44 @@
     var volume = getAudioVolume(channelKey);
     if (volume <= 0) return;
 
-    var fx = new Audio(src);
-    fx.preload = 'auto';
+    var pool = ensureOneShotPool(fileKey);
+    var fx = null;
+    var i;
+
+    for (i = 0; i < pool.length; i++) {
+      if (pool[i].paused || pool[i].ended) {
+        fx = pool[i];
+        break;
+      }
+    }
+
+    if (!fx && pool.length) {
+      fx = pool[0];
+      try {
+        fx.pause();
+      } catch (_) {
+        // Ignore race between pause/play calls.
+      }
+    }
+
+    if (!fx) {
+      fx = new Audio(src);
+      fx.preload = 'auto';
+    }
+
+    var offset = Number(AUDIO_START_OFFSETS[fileKey] || 0);
+
+    try {
+      if (fx.readyState >= 1) {
+        var maxSeek = Number.isFinite(fx.duration) && fx.duration > 0 ? Math.max(0, fx.duration - 0.03) : offset;
+        fx.currentTime = Math.min(offset, maxSeek);
+      } else {
+        fx.currentTime = 0;
+      }
+    } catch (_) {
+      // Ignore seek errors before metadata is loaded.
+    }
+
     fx.volume = volume;
 
     var maybePromise = fx.play();
@@ -789,6 +816,7 @@
   function initAudioSystem() {
     loadAudioPrefs();
     ensureAmbienceTrack();
+    warmOneShotPools();
     bindAudioControls();
     syncAmbiencePlayback();
 
@@ -985,9 +1013,58 @@
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
+        if (tutorialBridge && typeof tutorialBridge.isOpen === 'function' && tutorialBridge.isOpen()) {
+          closeTutorial(true);
+        }
         setSettingsOpen(false);
       }
     });
+  }
+
+  function resetTutorialProgress() {
+    if (!tutorialBridge || typeof tutorialBridge.reset !== 'function') return;
+    tutorialBridge.reset();
+  }
+
+  function openTutorial(fromStart) {
+    if (!tutorialBridge || typeof tutorialBridge.open !== 'function') return;
+    tutorialBridge.open(Boolean(fromStart));
+  }
+
+  function closeTutorial(markSeen) {
+    if (!tutorialBridge || typeof tutorialBridge.close !== 'function') return;
+    tutorialBridge.close(Boolean(markSeen));
+  }
+
+  function initTutorial() {
+    if (!window.BotnetTutorialBridge || typeof window.BotnetTutorialBridge.create !== 'function') return;
+
+    tutorialBridge = window.BotnetTutorialBridge.create({
+      storageKey: TUTORIAL_STORAGE_KEY,
+      setView: function (viewId) {
+        setCurrentView(viewId, false);
+      },
+      playClick: playClickSound,
+      setSettingsOpen: setSettingsOpen,
+      elements: {
+        helpButton: els.btnOpenTutorial,
+        replayButton: els.btnReplayTutorial,
+        overlay: els.tutorialOverlay,
+        modal: els.tutorialOverlay ? els.tutorialOverlay.querySelector('.tutorial-modal') : null,
+        title: els.tutorialTitle,
+        body: els.tutorialBody,
+        focus: els.tutorialFocus,
+        action: els.tutorialAction,
+        checklist: els.tutorialChecklist,
+        progress: els.tutorialProgress,
+        prevButton: els.btnTutorialPrev,
+        skipButton: els.btnTutorialSkip,
+        nextButton: els.btnTutorialNext
+      },
+      steps: tutorialSteps
+    });
+
+    tutorialBridge.init();
   }
 
   function revealRowOnce(row, id) {
@@ -1002,16 +1079,25 @@
     return true;
   }
 
-  function setMarketFeatureVisible(unlocked) {
-    if (els.marketPanel) {
-      els.marketPanel.hidden = !unlocked;
+  function setFeatureAvailability(slot, panel, unlocked) {
+    var lockMessage = (els.featureLockedTemplate && els.featureLockedTemplate.textContent) || 'Feature locked. Keep scaling your botnet.';
+
+    if (panel) {
+      panel.hidden = false;
+      panel.classList.toggle('is-locked', !unlocked);
+      panel.setAttribute('data-lock-reason', lockMessage);
     }
 
-    if (els.marketSlot) {
-      els.marketSlot.hidden = !unlocked;
-      els.marketSlot.classList.toggle('is-active', unlocked);
-      els.marketSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
+    if (slot) {
+      slot.hidden = false;
+      slot.classList.toggle('is-active', unlocked);
+      slot.classList.toggle('is-locked', !unlocked);
+      slot.setAttribute('aria-hidden', 'false');
     }
+  }
+
+  function setMarketFeatureVisible(unlocked) {
+    setFeatureAvailability(els.marketSlot, els.marketPanel, unlocked);
 
     if (unlocked && !marketWasUnlocked) {
       addFeedLine('Market feature unlocked. New monetization tools are now visible.');
@@ -1021,15 +1107,7 @@
   }
 
   function setInvestFeatureVisible(unlocked) {
-    if (els.investPanel) {
-      els.investPanel.hidden = !unlocked;
-    }
-
-    if (els.investSlot) {
-      els.investSlot.hidden = !unlocked;
-      els.investSlot.classList.toggle('is-active', unlocked);
-      els.investSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
-    }
+    setFeatureAvailability(els.investSlot, els.investPanel, unlocked);
 
     if (unlocked && !investWasUnlocked) {
       addFeedLine('Investment lab unlocked. Portfolio strategies are now available.');
@@ -1039,15 +1117,7 @@
   }
 
   function setMailFeatureVisible(unlocked) {
-    if (els.mailPanel) {
-      els.mailPanel.hidden = !unlocked;
-    }
-
-    if (els.mailSlot) {
-      els.mailSlot.hidden = !unlocked;
-      els.mailSlot.classList.toggle('is-active', unlocked);
-      els.mailSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
-    }
+    setFeatureAvailability(els.mailSlot, els.mailPanel, unlocked);
 
     if (unlocked && !mailWasUnlocked) {
       addFeedLine('Relay inbox unlocked. Intercepted messages can now grant tactical boosts.');
@@ -1057,15 +1127,7 @@
   }
 
   function setWarFeatureVisible(unlocked) {
-    if (els.warPanel) {
-      els.warPanel.hidden = !unlocked;
-    }
-
-    if (els.warSlot) {
-      els.warSlot.hidden = !unlocked;
-      els.warSlot.classList.toggle('is-active', unlocked);
-      els.warSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
-    }
+    setFeatureAvailability(els.warSlot, els.warPanel, unlocked);
 
     if (unlocked && !warWasUnlocked) {
       addFeedLine('War room unlocked. Heat and rival AI retaliation are now active.');
@@ -1075,15 +1137,7 @@
   }
 
   function setMatrixFeatureVisible(unlocked) {
-    if (els.matrixPanel) {
-      els.matrixPanel.hidden = !unlocked;
-    }
-
-    if (els.matrixSlot) {
-      els.matrixSlot.hidden = !unlocked;
-      els.matrixSlot.classList.toggle('is-active', unlocked);
-      els.matrixSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
-    }
+    setFeatureAvailability(els.matrixSlot, els.matrixPanel, unlocked);
 
     if (unlocked && !matrixWasUnlocked) {
       addFeedLine('Matrix breach console unlocked. F12 payload injection is now available.');
@@ -1093,21 +1147,45 @@
   }
 
   function setEndingFeatureVisible(unlocked) {
-    if (els.endingPanel) {
-      els.endingPanel.hidden = !unlocked;
-    }
-
-    if (els.endingSlot) {
-      els.endingSlot.hidden = !unlocked;
-      els.endingSlot.classList.toggle('is-active', unlocked);
-      els.endingSlot.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
-    }
+    setFeatureAvailability(els.endingSlot, els.endingPanel, unlocked);
 
     if (unlocked && !endingWasUnlocked) {
       addFeedLine('Endgame routes unlocked. Portfolio archive can now be altered.');
     }
 
     endingWasUnlocked = unlocked;
+  }
+
+  function primeAlwaysVisibleLayout() {
+    if (els.upgradesPanel) {
+      els.upgradesPanel.hidden = false;
+    }
+
+    itemEntries.forEach(function (entry) {
+      if (!entry || !entry.row) return;
+      entry.row.hidden = false;
+      entry.row.classList.add('is-locked');
+      entry.row.classList.remove('is-unaffordable', 'is-purchased');
+      if (entry.id) {
+        revealedRows[entry.id] = true;
+      }
+      if (entry.buyButton) {
+        entry.buyButton.disabled = true;
+      }
+    });
+
+    setFeatureAvailability(els.marketSlot, els.marketPanel, false);
+    setFeatureAvailability(els.investSlot, els.investPanel, false);
+    setFeatureAvailability(els.mailSlot, els.mailPanel, false);
+    setFeatureAvailability(els.warSlot, els.warPanel, false);
+    setFeatureAvailability(els.matrixSlot, els.matrixPanel, false);
+    setFeatureAvailability(els.endingSlot, els.endingPanel, false);
+
+    [els.resourceHzCard, els.resourceBrainCard, els.resourceComputroniumCard].forEach(function (card) {
+      if (!card) return;
+      card.hidden = false;
+      card.classList.add('is-locked');
+    });
   }
 
   function endingLabelFromId(id) {
@@ -1118,9 +1196,17 @@
     return 'NONE';
   }
 
+  function getReadyLabel() {
+    return (els.readyLabelTemplate && els.readyLabelTemplate.textContent) || 'READY';
+  }
+
+  function getOfflineLabel() {
+    return (els.offlineLabelTemplate && els.offlineLabelTemplate.textContent) || 'OFFLINE';
+  }
+
   function formatCountdownMs(ms) {
     var safe = Math.max(0, Math.floor(Number(ms) || 0));
-    if (safe <= 0) return (els.readyLabelTemplate && els.readyLabelTemplate.textContent) || 'READY';
+    if (safe <= 0) return getReadyLabel();
 
     var seconds = Math.ceil(safe / 1000);
     if (seconds < 60) return String(seconds) + ' s';
@@ -1209,14 +1295,18 @@
       var id = entry.id;
       var item = itemMap[id];
 
-      if (!item || !item.visible) {
-        row.hidden = true;
-        continue;
-      }
-
       row.hidden = false;
       if (revealRowOnce(row, id)) {
         newlyVisibleCount += 1;
+      }
+
+      if (!item) {
+        row.classList.add('is-locked');
+        row.classList.remove('is-unaffordable');
+        if (entry.buyButton) {
+          entry.buyButton.disabled = true;
+        }
+        continue;
       }
 
       if (item.group === 'upgrade') {
@@ -1236,10 +1326,14 @@
       if (buyButton) {
         buyButton.disabled = !item.canBuy;
       }
+
+      row.classList.toggle('is-locked', !Boolean(item.prereqsMet) && !Boolean(item.purchased));
+      row.classList.toggle('is-unaffordable', Boolean(item.prereqsMet) && !Boolean(item.affordable) && !Boolean(item.purchased));
+      row.classList.toggle('is-purchased', Boolean(item.purchased) && !Boolean(item.repeatable));
     }
 
     if (els.upgradesPanel) {
-      els.upgradesPanel.hidden = upgradesVisibleCount === 0;
+      els.upgradesPanel.hidden = false;
       els.upgradesPanel.classList.toggle('is-empty', upgradesVisibleCount === 0);
     }
 
@@ -1308,7 +1402,7 @@
 
     if (els.exploitProgressLabel) {
       if (cooldownMs <= 0) {
-        els.exploitProgressLabel.textContent = (els.readyLabelTemplate && els.readyLabelTemplate.textContent) || 'READY';
+        els.exploitProgressLabel.textContent = getReadyLabel();
       } else {
         els.exploitProgressLabel.textContent = String(cooldownMs) + ' ms';
       }
@@ -1331,15 +1425,18 @@
     setMatrixFeatureVisible(matrixUnlocked);
 
     if (els.resourceHzCard) {
-      els.resourceHzCard.hidden = !frequencyUnlocked;
+      els.resourceHzCard.hidden = false;
+      els.resourceHzCard.classList.toggle('is-locked', !frequencyUnlocked);
     }
 
     if (els.resourceBrainCard) {
-      els.resourceBrainCard.hidden = !brainUnlocked;
+      els.resourceBrainCard.hidden = false;
+      els.resourceBrainCard.classList.toggle('is-locked', !brainUnlocked);
     }
 
     if (els.resourceComputroniumCard) {
-      els.resourceComputroniumCard.hidden = !computroniumUnlocked;
+      els.resourceComputroniumCard.hidden = false;
+      els.resourceComputroniumCard.classList.toggle('is-locked', !computroniumUnlocked);
     }
 
     if (els.btnExploit) {
@@ -1443,7 +1540,12 @@
     }
 
     if (els.mailNextValue) {
-      els.mailNextValue.textContent = formatCountdownMs(messages.nextInMs || 0);
+      if (messages.queueFull) {
+        els.mailNextValue.textContent = (els.mailQueueFullTemplate && els.mailQueueFullTemplate.textContent) || 'QUEUE FULL - process messages';
+      } else {
+        els.mailNextValue.textContent = formatCountdownMs(messages.nextInMs || 0);
+      }
+      els.mailNextValue.classList.toggle('is-queue-full', Boolean(messages.queueFull));
     }
 
     if (els.mailPreview) {
@@ -1470,7 +1572,7 @@
       els.mailQuarantineCostValue.textContent = formatBig(messageHasPending ? messageQuarantineCost : 0n);
     }
 
-    renderMailQueue(messageQueue.slice(1));
+    renderMailQueueEntries(messageQueue.slice(1));
 
     if (els.btnClaimMail) {
       els.btnClaimMail.disabled = !messageHasPending;
@@ -1517,14 +1619,35 @@
     var warCooldownMs = Math.max(0, Number(war.attackCooldownMs || 0));
     if (els.warCooldownValue) {
       if (warCooldownMs <= 0) {
-        els.warCooldownValue.textContent = (els.readyLabelTemplate && els.readyLabelTemplate.textContent) || 'READY';
+        els.warCooldownValue.textContent = getReadyLabel();
       } else {
         els.warCooldownValue.textContent = String(warCooldownMs) + ' ms';
       }
     }
 
+    var warFortifyCooldownMs = Math.max(0, Number(war.fortifyCooldownMs || 0));
+    if (els.warFortifyCooldownValue) {
+      if (warFortifyCooldownMs <= 0) {
+        els.warFortifyCooldownValue.textContent = getReadyLabel();
+      } else {
+        els.warFortifyCooldownValue.textContent = String(warFortifyCooldownMs) + ' ms';
+      }
+    }
+
+    var warDefenseRemainingMs = Math.max(0, Number(war.defenseRemainingMs || 0));
+    if (els.warDefenseValue) {
+      if (warDefenseRemainingMs > 0) {
+        els.warDefenseValue.textContent = formatCountdownMs(warDefenseRemainingMs);
+      } else {
+        els.warDefenseValue.textContent = getOfflineLabel();
+      }
+      els.warDefenseValue.classList.toggle('is-active', warDefenseRemainingMs > 0);
+    }
+
     var warAttackCost = bigIntFrom(war.attackCostBots || '0');
     var warScrubCost = bigIntFrom(war.scrubCostMoney || '0');
+    var warFortifyCostMoney = bigIntFrom(war.fortifyCostMoney || '0');
+    var warFortifyCostIntel = bigIntFrom(war.fortifyCostIntel || '0');
 
     if (els.warAttackCostValue) {
       els.warAttackCostValue.textContent = formatBig(warAttackCost);
@@ -1534,8 +1657,20 @@
       els.warScrubCostValue.textContent = formatBig(warScrubCost);
     }
 
+    if (els.warFortifyCostMoneyValue) {
+      els.warFortifyCostMoneyValue.textContent = formatBig(warFortifyCostMoney);
+    }
+
+    if (els.warFortifyCostIntelValue) {
+      els.warFortifyCostIntelValue.textContent = formatBig(warFortifyCostIntel);
+    }
+
     if (els.btnWarAttack) {
       els.btnWarAttack.disabled = !warUnlocked || bots < warAttackCost || warCooldownMs > 0;
+    }
+
+    if (els.btnWarFortify) {
+      els.btnWarFortify.disabled = !warUnlocked || money < warFortifyCostMoney || warIntel < warFortifyCostIntel || warFortifyCooldownMs > 0;
     }
 
     if (els.btnWarScrub) {
@@ -1577,7 +1712,7 @@
       if (matrix.bypassArmed) {
         els.matrixBypassValue.textContent = formatCountdownMs(matrix.bypassRemainingMs || 0);
       } else {
-        els.matrixBypassValue.textContent = (els.readyLabelTemplate && els.readyLabelTemplate.textContent) || 'READY';
+        els.matrixBypassValue.textContent = getReadyLabel();
       }
     }
 
@@ -1614,6 +1749,10 @@
     var matrixStabilizeCostMoney = bigIntFrom(matrix.stabilizeCostMoney || '0');
     var matrixExited = Boolean(matrix.exited);
     var matrixBypassArmed = Boolean(matrix.bypassArmed);
+
+    if (els.matrixCommandInput) {
+      els.matrixCommandInput.disabled = !matrixUnlocked || matrixExited;
+    }
 
     if (els.btnMatrixArm) {
       els.btnMatrixArm.disabled = !matrixUnlocked || matrixExited || matrixBypassArmed || hz < matrixArmCostHz || computronium < matrixArmCostComp;
@@ -1760,6 +1899,24 @@
     }
   }
 
+  function bindActionButton(button, actionType, payloadFactory) {
+    if (!button) return;
+
+    button.addEventListener('click', function () {
+      playClickSound();
+      post(actionType, payloadFactory ? payloadFactory() : null);
+    });
+  }
+
+  function bindClickHandler(button, handler) {
+    if (!button) return;
+
+    button.addEventListener('click', function (event) {
+      playClickSound();
+      handler(event);
+    });
+  }
+
   function bindEvents() {
     (els.viewNavButtons || []).forEach(function (button) {
       button.addEventListener('click', function () {
@@ -1780,89 +1937,27 @@
       });
     }
 
-    if (els.btnScan) {
-      els.btnScan.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_SCAN');
-      });
-    }
+    [
+      [els.btnScan, 'ACTION_SCAN'],
+      [els.btnExploit, 'ACTION_EXPLOIT'],
+      [els.btnToggleMonetize, 'TOGGLE_MONETIZE'],
+      [els.btnInvestPulse, 'ACTION_INVEST'],
+      [els.btnCashoutPortfolio, 'ACTION_CASHOUT'],
+      [els.btnToggleInvestMode, 'TOGGLE_INVEST_MODE'],
+      [els.btnClaimMail, 'ACTION_CLAIM_MESSAGE'],
+      [els.btnQuarantineMail, 'ACTION_QUARANTINE_MESSAGE'],
+      [els.btnWarAttack, 'ACTION_WAR_ATTACK'],
+      [els.btnWarFortify, 'ACTION_WAR_FORTIFY'],
+      [els.btnWarScrub, 'ACTION_WAR_SCRUB'],
+      [els.btnMatrixArm, 'ACTION_MATRIX_ARM'],
+      [els.btnMatrixStabilize, 'ACTION_MATRIX_STABILIZE']
+    ].forEach(function (entry) {
+      bindActionButton(entry[0], entry[1]);
+    });
 
-    if (els.btnExploit) {
-      els.btnExploit.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_EXPLOIT');
-      });
-    }
-
-    if (els.btnToggleMonetize) {
-      els.btnToggleMonetize.addEventListener('click', function () {
-        playClickSound();
-        post('TOGGLE_MONETIZE');
-      });
-    }
-
-    if (els.btnInvestPulse) {
-      els.btnInvestPulse.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_INVEST');
-      });
-    }
-
-    if (els.btnCashoutPortfolio) {
-      els.btnCashoutPortfolio.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_CASHOUT');
-      });
-    }
-
-    if (els.btnToggleInvestMode) {
-      els.btnToggleInvestMode.addEventListener('click', function () {
-        playClickSound();
-        post('TOGGLE_INVEST_MODE');
-      });
-    }
-
-    if (els.btnClaimMail) {
-      els.btnClaimMail.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_CLAIM_MESSAGE');
-      });
-    }
-
-    if (els.btnQuarantineMail) {
-      els.btnQuarantineMail.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_QUARANTINE_MESSAGE');
-      });
-    }
-
-    if (els.btnWarAttack) {
-      els.btnWarAttack.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_WAR_ATTACK');
-      });
-    }
-
-    if (els.btnWarScrub) {
-      els.btnWarScrub.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_WAR_SCRUB');
-      });
-    }
-
-    if (els.btnMatrixArm) {
-      els.btnMatrixArm.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_MATRIX_ARM');
-      });
-    }
-
-    if (els.btnMatrixInject) {
-      els.btnMatrixInject.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_MATRIX_INJECT', { command: els.matrixCommandInput ? els.matrixCommandInput.value : '' });
-      });
-    }
+    bindActionButton(els.btnMatrixInject, 'ACTION_MATRIX_INJECT', function () {
+      return { command: els.matrixCommandInput ? els.matrixCommandInput.value : '' };
+    });
 
     if (els.matrixCommandInput) {
       els.matrixCommandInput.addEventListener('keydown', function (event) {
@@ -1873,33 +1968,15 @@
       });
     }
 
-    if (els.btnMatrixStabilize) {
-      els.btnMatrixStabilize.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_MATRIX_STABILIZE');
+    [
+      [els.btnEndingGhost, 'ghost'],
+      [els.btnEndingOvermind, 'overmind'],
+      [els.btnEndingArchivist, 'archivist']
+    ].forEach(function (entry) {
+      bindActionButton(entry[0], 'ACTION_SELECT_ENDING', function () {
+        return { id: entry[1] };
       });
-    }
-
-    if (els.btnEndingGhost) {
-      els.btnEndingGhost.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_SELECT_ENDING', { id: 'ghost' });
-      });
-    }
-
-    if (els.btnEndingOvermind) {
-      els.btnEndingOvermind.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_SELECT_ENDING', { id: 'overmind' });
-      });
-    }
-
-    if (els.btnEndingArchivist) {
-      els.btnEndingArchivist.addEventListener('click', function () {
-        playClickSound();
-        post('ACTION_SELECT_ENDING', { id: 'archivist' });
-      });
-    }
+    });
 
     itemButtons.forEach(function (button) {
       button.addEventListener('click', function () {
@@ -1910,26 +1987,20 @@
       });
     });
 
-    if (els.btnExportSave) {
-      els.btnExportSave.addEventListener('click', function () {
-        playClickSound();
-        requestManualExport();
-      });
-    }
+    bindClickHandler(els.btnExportSave, function () {
+      requestManualExport();
+    });
 
-    if (els.btnImportSave) {
-      els.btnImportSave.addEventListener('click', function () {
-        playClickSound();
-        importFromTextarea();
-      });
-    }
+    bindClickHandler(els.btnImportSave, function () {
+      importFromTextarea();
+    });
 
-    if (els.btnResetGame) {
-      els.btnResetGame.addEventListener('click', function () {
-        playClickSound();
-        post('RESET_GAME');
-      });
-    }
+    bindClickHandler(els.btnResetGame, function () {
+      resetTutorialProgress();
+      post('RESET_GAME');
+      setSettingsOpen(false);
+      openTutorial(true);
+    });
 
     window.addEventListener('beforeunload', function () {
       post('REQUEST_EXPORT', { mode: 'autosave' });
@@ -2004,6 +2075,7 @@
 
   function init() {
     initSettingsMenu();
+    initTutorial();
     loadViewPreference();
     refreshViewNavigation({
       economy: false,
@@ -2012,6 +2084,7 @@
       messages: false,
       endings: false
     });
+    primeAlwaysVisibleLayout();
     renderTurboMode(1);
     initPanelLayoutSystem();
     initAudioSystem();
