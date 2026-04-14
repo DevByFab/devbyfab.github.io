@@ -120,7 +120,7 @@ export function commandMatrixInject(
 
   const normalized = String(commandText || '').trim();
   if (normalized === state.matrix.expectedCommand) {
-    const gain = 4 + Math.floor(Math.random() * 4);
+    const gain = 4 + Math.floor(Math.random() * 3);
     const stabilityHit = 70 + Math.floor(Math.random() * 70);
 
     state.matrix.breachProgress = clamp(state.matrix.breachProgress + gain, 0, 100);

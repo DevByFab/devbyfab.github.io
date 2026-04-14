@@ -55,11 +55,11 @@ src/
 - Economy baseline already removes guaranteed infinite conversion loops.
 - War and matrix now expose readable costs/cooldowns/probabilities in UI.
 - Message system is now event-driven and FR-first by default.
-- Balancing harness currently reports median completion around 7.7h (close to 8h floor target).
+- Balancing harness currently reports median completion around 8.2h (inside 8h-12h target band).
 
 ## Next Work Items
 
-- Calibrate economy pacing toward 8h-12h target run length.
+- Preserve pacing envelope while adding richer late-game decisions.
 - Expand consequence-driven narrative branching and faction voices.
 - Add dedicated visual layers for war and matrix timelines.
 - Rebuild tutorial around strategic choices.

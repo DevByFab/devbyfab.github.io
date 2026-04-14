@@ -129,7 +129,7 @@ function applyLateResources(state: EngineState, deltaMs: number): void {
     return;
   }
 
-  const forgeRate = maxBigInt(0n, state.resources.brainMatter / 7_200_000n);
+  const forgeRate = maxBigInt(0n, state.resources.brainMatter / 8_800_000n);
   const possibleForge = scalePerSecond(forgeRate, deltaMs);
   if (possibleForge > 0n && state.resources.darkMoney > possibleForge) {
     state.resources.brainMatter -= possibleForge;
