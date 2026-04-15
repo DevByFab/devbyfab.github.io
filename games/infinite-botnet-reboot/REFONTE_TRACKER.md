@@ -4,7 +4,7 @@
 - Scope: Big-bang rebuild (no incremental patching of legacy game).
 - Priority: economy, war/heat, matrix clarity, messages/lore, visuals/motion, tutorial.
 - Stack: Modern build tooling + TypeScript-first architecture.
-- Runtime target: 8h to 12h full run.
+- Runtime target: deep roadmap 12h to 20h full run (current baseline calibration remains 8h to 12h).
 - Save compatibility: not required with legacy save format.
 - Art direction: phase-evolving look (desktop-first).
 - Language priority: French first.
@@ -30,14 +30,23 @@
 - [x] M1.1 Create shared game state types.
 - [x] M1.2 Add worker command/event protocol.
 - [x] M1.3 Wire React app store to worker snapshots.
+- [x] M1.4 Harden startup reliability (Vite base path + explicit worker boot errors).
+- [x] M1.5 Replace tabbed shell with compact dashboard-first layout (console integrated, settings hub, no page scroll desktop).
+- [x] M1.6 Add phase requirement gates + progression counters + first strict upgrade chain engine.
+- [x] M1.7 Enforce P0-P5 staged discovery (exploit cooldown pacing, phased message rewards, progressive upgrade reveal).
+- [x] M1.8 UX iteration pass: hide visual phase progression, compact console/upgrades, guided tutorial replay, and FR i18n extraction for reboot UI.
+- [x] M1.9 IA/DA realignment pass: dashboard narrowed to Core Ops + Upgrades + Console, systems split into dedicated tabs, tutorial inter-tab routing, and medium-dim spotlight readability.
 - [x] M2.1 Tune economy v2 formulas against long-run targets.
 - [x] M2.2 Push median run from 7.75h into 8h+ target band.
 - [ ] M3.1 Calibrate war reward-risk profile and pressure curve.
 - [ ] M4.1 Calibrate matrix stability and collapse cadence.
 - [ ] M5.1 Extend narrative templates with consequence branching.
 - [ ] M6.1 Add dedicated war and matrix visual layers.
+- [x] M6.2 Integrate ambient + gameplay audio cues (UI/events/stingers) with settings mix.
+- [x] M6.3 Upgrade P0 lore cinematic runtime (scene transitions, blur depth, read pacing gate, keyboard controls, bridge).
 
 ### Next Up
+- [ ] M2.3 Recalibrate pacing envelope from 8h-12h baseline to 12h-20h deep target.
 - [ ] M7.1 Rebuild tutorial flow around strategic decisions.
 - [x] M8.1 Build balancing harness for 8h-12h runs.
 - [ ] M8.2 Run desktop QA pass and record blockers.
@@ -52,14 +61,22 @@
 - 2026-04-15: Economy and war calibration pass applied (phase-scaled monetization cap, softened maintenance fallback, heat/detection smoothing, matrix unlock gating).
 - 2026-04-15: Harness snapshot after calibration: median completion 7.77h, all seeds complete under 14h, next target is to push median into 8h+.
 - 2026-04-15: M2.2 achieved via late-game computronium pacing tuning; harness now reports median 8.22h with 10/10 runs in target band.
+- 2026-04-15: Startup hardening pass shipped (production base path strategy + worker boot timeout/error surfacing + local launch guidance in README).
+- 2026-04-15: Deep architecture implementation started: tab navigation shell, phase multi-criteria gate requirements, progression counters, and strict upgrade purchase chains wired in worker + UI.
+- 2026-04-15: Gameplay reset sprint started: dashboard-first compact UI, settings modal with channel volumes, first-launch lore/tutorial overlays, phase-gated system visibility, exploit cooldown pacing, and phase-gated message reward taxonomy.
+- 2026-04-15: Follow-up UX implementation completed: visual phase block hidden, CLI/upgrades footprint reduced, top-right tutorial replay added, Settings replay for lore/tutorial added, full guided section-by-section tutorial spotlight implemented, and reboot text extracted to i18n/fr.json.
+- 2026-04-15: IA/DA refactor shipped: one-tab-per-system navigation, resources always visible, dashboard scope reduced to Scan/Exploit/CLI + Upgrades, and tutorial spotlight contrast adjusted to medium dimming.
+- 2026-04-15: Audio integration pass completed: ambient loop + manifest-driven UI/event/stinger cues wired in React, with channel mixer settings persisted and cue routing cleaned to avoid duplicate warning beeps.
+- 2026-04-15: Lore cinematic P0 implementation started: manual 5-scene overlay flow, FR narrative rewrite, cinematic CSS staging, dedicated BotNet discovery stinger cue, and canonical blueprint created in `docs/LORE_AND_CINEMATIC_BLUEPRINT.md`.
+- 2026-04-15: Lore cinematic P0 v2 pass shipped: transition state machine, per-scene 2s read gate, lore-only keyboard controls, animated multi-layer blur backdrop, and lore-to-tutorial bridge overlay.
 
 ## Latest Balance Snapshot (Harness)
 - Command: `npm run balance:sim`
 - Seeds: 10 deterministic runs
 - Result: 10/10 completed, median 8.22h, average 8.21h
-- Target coverage: 10/10 runs in 8h-12h band
+- Target coverage: 10/10 runs in 8h-12h baseline band (pre-depth recalibration)
 - Stability: no matrix collapses and no detection events in selected strategy profile
-- Next action: expand narrative/visual depth while preserving calibrated pacing envelope
+- Next action: expand systems depth then retune to the 12h-20h deep target envelope
 
 ## Definition of Done (v1 reboot)
 - Simulation isolated in worker modules with strict TypeScript types.
@@ -67,41 +84,3 @@
 - FR-first narrative content externalized from engine code.
 - Desktop QA complete with no critical progression blockers.
 - Run pacing validated in target range (8h to 12h) with balancing notes recorded.
-
-Dernier reponse :
-Je vais faire un micro-tuning de la phase Matrix (seuil d’entrée) puis relancer le harness pour viser la médiane à 8h+ sans casser la stabilité.
-
-Le test montre que 130B rend la run instable; je reviens sur le seuil stable et je ralentis légèrement la progression Matrix pour gratter du temps sans retomber dans les stalls.
-
-Je vais toucher le vrai goulot d’étranglement (génération de Computronium) pour rallonger la fin de run d’environ 10-20 minutes sans casser les phases précédentes.
-
-Le tuning est maintenant dans la cible; je mets à jour le tracker/README avec le nouveau snapshot (8.22h médiane) puis je fais un passage final build/lint.
-
-Calibration atteint et docs mises à jour; je fais le check final qualité (build/lint/erreurs IDE) puis je te rends un état clair pour la suite.
-
-Je clôture le suivi de ce lot en marquant le tuning pacing comme terminé dans la todo active.
-
-Created 5 todos
-
-La suite est faite, et la calibration pacing est maintenant dans la cible.
-
-Pacing long-run atteint via tuning late-game sur la génération Computronium dans economy.ts.
-Ajustements de stabilité conservés sur War/Heat dans war.ts.
-Réglages Matrix gardés cohérents dans matrix.ts et seuil de phase stable dans phases.ts.
-Tracker et doc mis à jour avec les nouveaux résultats dans REFONTE_TRACKER.md et README.md.
-Résultat harness actuel (npm run balance:sim):
-
-10/10 runs terminées
-moyenne 8.21h
-médiane 8.22h
-10/10 dans la bande 8h-12h
-pas de collapses matrix ni événements detection sur ce profil
-Validation:
-
-build OK
-lint OK
-erreurs IDE: aucune
-Le preview reboot est toujours disponible sur http://127.0.0.1:4173/
-
-Je peux maintenant enchaîner sur M3/M4 (lisibilité War + Matrix côté UI).
-Ou passer sur M5 (messages narratifs à conséquences) pendant que la base pacing reste figée.

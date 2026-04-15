@@ -14,12 +14,14 @@ export type EngineActionType =
   | 'MATRIX_INJECT'
   | 'MATRIX_STABILIZE'
   | 'MESSAGE_PROCESS'
-  | 'MESSAGE_QUARANTINE';
+  | 'MESSAGE_QUARANTINE'
+  | 'PURCHASE_UPGRADE';
 
 export interface EngineActionCommand {
   type: EngineActionType;
   payload?: {
     commandText?: string;
+    chainId?: string;
   };
 }
 

@@ -1,4 +1,5 @@
 import type { EngineState } from '../state';
+import { computeUpgradeEffects } from './upgrades';
 
 export type WarAttackResult = 'blocked' | 'win' | 'loss';
 
@@ -18,7 +19,11 @@ function coolDown(valueMs: number, deltaMs: number): number {
   return Math.max(0, valueMs - deltaMs);
 }
 
-function computeHeatPerSecond(state: EngineState, phasePressure: number): number {
+function computeHeatPerSecond(
+  state: EngineState,
+  phasePressure: number,
+  heatPerSecDelta: number,
+): number {
   const cappedBotsForHeat =
     state.resources.bots > 9_000_000_000_000_000n
       ? 9_000_000_000_000_000n
@@ -32,7 +37,15 @@ function computeHeatPerSecond(state: EngineState, phasePressure: number): number
   const passiveCooling = phasePressure <= 2 ? 1 : 0;
   const defenseCooling = state.war.defenseRemainingMs > 0 ? 3 : 0;
 
-  return baselineHeat + automationHeat + monetizeHeat + investHeat - defenseCooling - passiveCooling;
+  return (
+    baselineHeat +
+    automationHeat +
+    monetizeHeat +
+    investHeat -
+    defenseCooling -
+    passiveCooling +
+    heatPerSecDelta
+  );
 }
 
 function applyDetectionPulse(state: EngineState, phasePressure: number): bigint {
@@ -78,6 +91,7 @@ function applyDetectionTick(state: EngineState, phasePressure: number, deltaMs: 
 }
 
 export function refreshWarDerived(state: EngineState): void {
+  const effects = computeUpgradeEffects(state);
   const bots = state.resources.bots;
   const heat = state.war.heat;
 
@@ -90,7 +104,11 @@ export function refreshWarDerived(state: EngineState): void {
   const streakBoost = Math.min(1400, state.war.streak * 150);
   const heatPenalty = Math.floor(heat * 0.33);
 
-  state.war.projectedSuccessBps = clamp(4600 + defenseBoost + streakBoost - heatPenalty, 900, 9300);
+  state.war.projectedSuccessBps = clamp(
+    4600 + defenseBoost + streakBoost - heatPenalty + effects.warSuccessBps,
+    900,
+    9500,
+  );
 }
 
 export function applyWarTick(state: EngineState, deltaMs: number): WarTickOutcome {
@@ -99,7 +117,8 @@ export function applyWarTick(state: EngineState, deltaMs: number): WarTickOutcom
   state.war.defenseRemainingMs = coolDown(state.war.defenseRemainingMs, deltaMs);
 
   const phasePressure = state.phase.index;
-  const heatPerSec = computeHeatPerSecond(state, phasePressure);
+  const effects = computeUpgradeEffects(state);
+  const heatPerSec = computeHeatPerSecond(state, phasePressure, effects.heatPerSecDelta);
   const heatDelta = Math.floor((heatPerSec * deltaMs) / 1000);
   state.war.heat = clamp(state.war.heat + heatDelta, 0, 10000);
 
@@ -110,6 +129,10 @@ export function applyWarTick(state: EngineState, deltaMs: number): WarTickOutcom
 }
 
 export function commandWarAttack(state: EngineState): WarAttackResult {
+  if (state.phase.index < 3) {
+    return 'blocked';
+  }
+
   refreshWarDerived(state);
 
   if (state.war.attackCooldownMs > 0 || state.resources.bots < state.war.attackCostBots) {
@@ -117,6 +140,7 @@ export function commandWarAttack(state: EngineState): WarAttackResult {
   }
 
   state.resources.bots -= state.war.attackCostBots;
+  state.milestones.warAttacks += 1;
 
   const roll = Math.floor(Math.random() * 10_000);
   if (roll < state.war.projectedSuccessBps) {
@@ -130,6 +154,7 @@ export function commandWarAttack(state: EngineState): WarAttackResult {
     state.resources.warIntel += rewardIntel;
 
     state.war.wins += 1;
+    state.milestones.warWins += 1;
     state.war.streak += 1;
     state.war.heat = clamp(state.war.heat + 220, 0, 10000);
     state.war.attackCooldownMs = state.war.defenseRemainingMs > 0 ? 12_000 : 14_000;
@@ -148,14 +173,20 @@ export function commandWarAttack(state: EngineState): WarAttackResult {
 }
 
 export function commandWarScrub(state: EngineState): boolean {
+  if (state.phase.index < 3) {
+    return false;
+  }
+
   refreshWarDerived(state);
+  const effects = computeUpgradeEffects(state);
 
   if (state.resources.darkMoney < state.war.scrubCostMoney) {
     return false;
   }
 
   state.resources.darkMoney -= state.war.scrubCostMoney;
-  const relief = 900 + Math.floor(state.war.heat / 9);
+  const baseRelief = 900 + Math.floor(state.war.heat / 9);
+  const relief = Math.floor((baseRelief * (10_000 + effects.scrubReliefBps)) / 10_000);
   state.war.heat = clamp(state.war.heat - relief, 0, 10000);
 
   refreshWarDerived(state);
@@ -163,6 +194,10 @@ export function commandWarScrub(state: EngineState): boolean {
 }
 
 export function commandWarFortify(state: EngineState): boolean {
+  if (state.phase.index < 3) {
+    return false;
+  }
+
   refreshWarDerived(state);
 
   if (state.war.fortifyCooldownMs > 0) {

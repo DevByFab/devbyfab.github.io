@@ -30,10 +30,10 @@ export const FR_NARRATIVE_CATALOG: Record<NarrativeBucket, FrNarrativeTemplate[]
       bucket: 'economy',
       source: 'Canal Ferraille IoT',
       tone: 'neutral',
-      rewardType: 'bots',
+      rewardType: 'targets',
       subject: 'Lot IoT compromis disponible',
       body: 'Un lot de firmwares faibles est en vente. Tu peux absorber du volume sans bruit excessif.',
-      rewardHint: 'Renfort bots brut',
+      rewardHint: 'Cibles supplementaires',
     },
     {
       id: 'eco-fund-mirror',

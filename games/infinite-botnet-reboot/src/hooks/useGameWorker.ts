@@ -7,6 +7,13 @@ import type {
 import type { GameSnapshot, LogLine } from '../game/types';
 
 const MAX_LOG_LINES = 160;
+const WORKER_BOOT_TIMEOUT_MS = 8000;
+
+function formatRuntimeError(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string' && error.trim().length > 0) return error;
+  return 'Unknown worker error';
+}
 
 export interface GameWorkerController {
   snapshot: GameSnapshot | null;
@@ -29,16 +36,45 @@ export function useGameWorker(): GameWorkerController {
   const [turbo, setTurboState] = useState(1);
 
   useEffect(() => {
-    const worker = new Worker(new URL('../worker/engine.worker.ts', import.meta.url), {
-      type: 'module',
-    });
+    let disposed = false;
+    let workerBooted = false;
+    let bootTimer: ReturnType<typeof window.setTimeout> | null = null;
+
+    setError(null);
+    setReady(false);
+
+    const clearBootTimer = () => {
+      if (bootTimer === null) return;
+      window.clearTimeout(bootTimer);
+      bootTimer = null;
+    };
+
+    let worker: Worker;
+    try {
+      worker = new Worker(new URL('../worker/engine.worker.ts', import.meta.url), {
+        type: 'module',
+      });
+    } catch (creationError) {
+      setError(
+        `Worker bootstrap failed. Start with Vite (npm run dev or npm run preview). ${formatRuntimeError(creationError)}`,
+      );
+      return;
+    }
 
     workerRef.current = worker;
+    bootTimer = window.setTimeout(() => {
+      if (disposed || workerBooted) return;
+      setReady(false);
+      setError('Worker boot timeout. Start with Vite (npm run dev or npm run preview).');
+    }, WORKER_BOOT_TIMEOUT_MS);
 
     worker.onmessage = (event: MessageEvent<WorkerToUiMessage>) => {
       const message = event.data;
 
       if (message.type === 'READY') {
+        workerBooted = true;
+        clearBootTimer();
+        setError(null);
         setSnapshot(message.snapshot);
         setReady(true);
         return;
@@ -59,17 +95,40 @@ export function useGameWorker(): GameWorkerController {
       }
 
       if (message.type === 'ERROR') {
+        setReady(false);
         setError(message.error);
         return;
       }
     };
 
+    worker.onerror = (event: ErrorEvent) => {
+      clearBootTimer();
+      setReady(false);
+      setError(`Worker runtime error: ${event.message || 'unknown error'}`);
+    };
+
+    worker.onmessageerror = () => {
+      clearBootTimer();
+      setReady(false);
+      setError('Worker message channel error. Please reload the page.');
+    };
+
     const bootMessage: UiToWorkerMessage = { type: 'BOOT' };
-    worker.postMessage(bootMessage);
+    try {
+      worker.postMessage(bootMessage);
+    } catch (postError) {
+      clearBootTimer();
+      setReady(false);
+      setError(`Worker BOOT dispatch failed: ${formatRuntimeError(postError)}`);
+    }
 
     return () => {
+      disposed = true;
+      clearBootTimer();
       worker.terminate();
-      workerRef.current = null;
+      if (workerRef.current === worker) {
+        workerRef.current = null;
+      }
     };
   }, []);
 
