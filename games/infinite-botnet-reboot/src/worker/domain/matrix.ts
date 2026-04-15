@@ -1,4 +1,5 @@
 import type { EngineState } from '../state';
+import { computeUpgradeEffects } from './upgrades';
 
 export interface MatrixTickOutcome {
   collapsed: boolean;
@@ -16,6 +17,13 @@ function clamp(value: number, min: number, max: number): number {
 
 function maxBigInt(left: bigint, right: bigint): bigint {
   return left > right ? left : right;
+}
+
+function applyCostReduction(value: bigint, reductionBps: number, floor: bigint): bigint {
+  if (value <= floor || reductionBps <= 0) return value;
+  const clampedReduction = clamp(reductionBps, 0, 8500);
+  const next = (value * BigInt(10_000 - clampedReduction)) / 10_000n;
+  return maxBigInt(floor, next);
 }
 
 function makeExpectedCommand(): string {
@@ -39,6 +47,8 @@ export function refreshMatrixDerived(state: EngineState): void {
     return;
   }
 
+  const effects = computeUpgradeEffects(state);
+
   const deficit = BigInt(Math.max(0, 10_000 - state.matrix.stability));
 
   state.matrix.armCostHz = 1200n + BigInt(state.phase.index * 220);
@@ -46,6 +56,17 @@ export function refreshMatrixDerived(state: EngineState): void {
   state.matrix.injectCostHz = 1800n + BigInt(state.phase.index * 180);
   state.matrix.injectCostComputronium = 6n;
   state.matrix.stabilizeCostMoney = maxBigInt(2200n, 2200n + deficit * 2n);
+
+  state.matrix.armCostHz = applyCostReduction(
+    state.matrix.armCostHz,
+    effects.matrixArmCostReductionBps,
+    400n,
+  );
+  state.matrix.injectCostHz = applyCostReduction(
+    state.matrix.injectCostHz,
+    effects.matrixInjectCostReductionBps,
+    600n,
+  );
 }
 
 export function applyMatrixTick(state: EngineState, deltaMs: number): MatrixTickOutcome {
@@ -57,9 +78,14 @@ export function applyMatrixTick(state: EngineState, deltaMs: number): MatrixTick
 
   state.matrix.bypassRemainingMs = Math.max(0, state.matrix.bypassRemainingMs - deltaMs);
 
+  const effects = computeUpgradeEffects(state);
   const decayPerSec =
-    2 + Math.floor(state.war.heat / 900) + (state.systems.monetizeActive ? 1 : 0);
-  const decay = Math.floor((decayPerSec * deltaMs) / 1000);
+    2 +
+    Math.floor(state.war.heat / 900) +
+    (state.systems.monetizeActive ? 1 : 0) +
+    effects.matrixDecayPerSecDelta;
+  const adjustedDecayPerSec = Math.max(0, decayPerSec);
+  const decay = Math.floor((adjustedDecayPerSec * deltaMs) / 1000);
   state.matrix.stability = clamp(state.matrix.stability - decay, 0, 10000);
 
   if (state.matrix.stability > 0) {
@@ -147,13 +173,18 @@ export function commandMatrixInject(
 
 export function commandMatrixStabilize(state: EngineState): boolean {
   refreshMatrixDerived(state);
+  const effects = computeUpgradeEffects(state);
 
   if (!state.matrix.unlocked || state.resources.darkMoney < state.matrix.stabilizeCostMoney) {
     return false;
   }
 
   state.resources.darkMoney -= state.matrix.stabilizeCostMoney;
-  state.matrix.stability = clamp(state.matrix.stability + 980, 0, 10000);
+  state.matrix.stability = clamp(
+    state.matrix.stability + 980 + effects.matrixStabilizeGain,
+    0,
+    10000,
+  );
   state.war.heat = clamp(state.war.heat - 220, 0, 10000);
 
   refreshMatrixDerived(state);

@@ -5,6 +5,7 @@ import type {
   MessageTone,
   NarrativeMessage,
   PhaseSnapshot,
+  UpgradeOfferSnapshot,
 } from '../game/types';
 import { resolvePhaseProgress } from './domain/phases';
 
@@ -21,7 +22,9 @@ export interface EngineResources {
 
 export interface EngineRates {
   manualScanGain: bigint;
+  manualScanCommandCooldownBaseMs: number;
   exploitChanceBps: number;
+  manualExploitCooldownBaseMs: number;
   autoScanPerSec: bigint;
   autoExploitPerSec: bigint;
   monetizeBotsPerSec: bigint;
@@ -38,6 +41,8 @@ export interface EngineRates {
 export interface EngineSystems {
   monetizeActive: boolean;
   investMode: InvestMode;
+  manualScanCooldownMs: number;
+  manualExploitCooldownMs: number;
 }
 
 export interface EngineWar {
@@ -83,6 +88,23 @@ export interface EngineMessages {
   nextAtMs: number;
 }
 
+export interface EngineUpgrades {
+  levels: Record<string, number>;
+  offers: UpgradeOfferSnapshot[];
+  totalOwnedLevels: number;
+  totalMaxLevels: number;
+}
+
+export interface EngineMilestones {
+  scans: number;
+  exploitAttempts: number;
+  exploitSuccesses: number;
+  investments: number;
+  warAttacks: number;
+  warWins: number;
+  messagesHandled: number;
+}
+
 export interface EngineTelemetry {
   botsPerSec: bigint;
   moneyPerSec: bigint;
@@ -101,12 +123,22 @@ export interface EngineState {
   war: EngineWar;
   matrix: EngineMatrix;
   messages: EngineMessages;
+  upgrades: EngineUpgrades;
+  milestones: EngineMilestones;
   telemetry: EngineTelemetry;
   logSequence: number;
 }
 
 export function createInitialEngineState(nowMs: number): EngineState {
-  const phase = resolvePhaseProgress(0n);
+  const phase = resolvePhaseProgress({
+    bots: 0n,
+    scans: 0,
+    darkMoney: 0n,
+    portfolio: 0n,
+    warWins: 0,
+    messagesProcessed: 0,
+    exploitSuccesses: 0,
+  });
 
   return {
     version: 1,
@@ -126,7 +158,9 @@ export function createInitialEngineState(nowMs: number): EngineState {
     },
     rates: {
       manualScanGain: 1n,
+      manualScanCommandCooldownBaseMs: 140,
       exploitChanceBps: 6200,
+      manualExploitCooldownBaseMs: 2000,
       autoScanPerSec: 0n,
       autoExploitPerSec: 0n,
       monetizeBotsPerSec: 2n,
@@ -142,6 +176,8 @@ export function createInitialEngineState(nowMs: number): EngineState {
     systems: {
       monetizeActive: false,
       investMode: 'stable',
+      manualScanCooldownMs: 0,
+      manualExploitCooldownMs: 0,
     },
     war: {
       heat: 0,
@@ -178,6 +214,21 @@ export function createInitialEngineState(nowMs: number): EngineState {
       sequence: 0,
       nextAtMs: nowMs + 25_000,
     },
+    upgrades: {
+      levels: {},
+      offers: [],
+      totalOwnedLevels: 0,
+      totalMaxLevels: 0,
+    },
+    milestones: {
+      scans: 0,
+      exploitAttempts: 0,
+      exploitSuccesses: 0,
+      investments: 0,
+      warAttacks: 0,
+      warWins: 0,
+      messagesHandled: 0,
+    },
     telemetry: {
       botsPerSec: 0n,
       moneyPerSec: 0n,
@@ -210,6 +261,8 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       monetizeActive: state.systems.monetizeActive,
       monetizeBotsPerSec: state.rates.monetizeBotsPerSec.toString(),
       moneyYieldBps: state.rates.moneyYieldBps,
+      exploitCooldownMs: state.systems.manualExploitCooldownMs,
+      exploitCooldownBaseMs: state.rates.manualExploitCooldownBaseMs,
       investMode: state.systems.investMode,
       stableInvestBps: state.rates.investStableBps,
       aggressiveInvestMinBps: state.rates.investAggressiveMinBps,
@@ -249,6 +302,20 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       processed: state.messages.processed,
       pending: state.messages.pending,
       nextInMs: Math.max(0, state.messages.nextAtMs - state.nowMs),
+    },
+    upgrades: {
+      totalOwnedLevels: state.upgrades.totalOwnedLevels,
+      totalMaxLevels: state.upgrades.totalMaxLevels,
+      offers: state.upgrades.offers,
+    },
+    progression: {
+      scans: state.milestones.scans,
+      exploitAttempts: state.milestones.exploitAttempts,
+      exploitSuccesses: state.milestones.exploitSuccesses,
+      investments: state.milestones.investments,
+      warAttacks: state.milestones.warAttacks,
+      warWins: state.milestones.warWins,
+      messagesHandled: state.milestones.messagesHandled,
     },
     telemetry: {
       botsPerSec: state.telemetry.botsPerSec.toString(),

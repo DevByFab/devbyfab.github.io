@@ -3,12 +3,8 @@ export type PhaseId =
   | 'automation'
   | 'monetization'
   | 'botnet-war'
-  | 'cloud-dominion'
-  | 'opinion-forge'
-  | 'grid-overmind'
-  | 'neural-breach'
-  | 'singularity-core'
-  | 'matrix-breach';
+  | 'matrix-breach'
+  | 'singularity-core';
 
 export type InvestMode = 'stable' | 'aggressive';
 
@@ -16,10 +12,28 @@ export type MessageTone = 'positive' | 'neutral' | 'negative';
 
 export type MessageRewardType =
   | 'bots'
+  | 'targets'
   | 'money'
   | 'portfolio'
   | 'intel'
   | 'heat-relief';
+
+export type PhaseRequirementId =
+  | 'bots'
+  | 'scans'
+  | 'money'
+  | 'portfolio'
+  | 'war-wins'
+  | 'messages-processed'
+  | 'exploit-successes';
+
+export interface PhaseRequirementSnapshot {
+  id: PhaseRequirementId;
+  label: string;
+  current: string;
+  target: string;
+  met: boolean;
+}
 
 export interface PhaseSnapshot {
   id: PhaseId;
@@ -27,6 +41,43 @@ export interface PhaseSnapshot {
   nextLabel: string;
   progressBps: number;
   index: number;
+  requirements: PhaseRequirementSnapshot[];
+}
+
+export type UpgradeCategory = 'economy' | 'war' | 'matrix' | 'lore';
+
+export interface UpgradeOfferSnapshot {
+  chainId: string;
+  category: UpgradeCategory;
+  label: string;
+  summary: string;
+  currentLevel: number;
+  nextLevel: number;
+  maxLevel: number;
+  unlocked: boolean;
+  affordable: boolean;
+  statusText: string;
+  costBots: string;
+  costMoney: string;
+  costIntel: string;
+  costHz: string;
+  costComputronium: string;
+}
+
+export interface UpgradesSnapshot {
+  totalOwnedLevels: number;
+  totalMaxLevels: number;
+  offers: UpgradeOfferSnapshot[];
+}
+
+export interface ProgressionSnapshot {
+  scans: number;
+  exploitAttempts: number;
+  exploitSuccesses: number;
+  investments: number;
+  warAttacks: number;
+  warWins: number;
+  messagesHandled: number;
 }
 
 export interface ResourceSnapshot {
@@ -44,6 +95,8 @@ export interface EconomySnapshot {
   monetizeActive: boolean;
   monetizeBotsPerSec: string;
   moneyYieldBps: number;
+  exploitCooldownMs: number;
+  exploitCooldownBaseMs: number;
   investMode: InvestMode;
   stableInvestBps: number;
   aggressiveInvestMinBps: number;
@@ -117,6 +170,8 @@ export interface GameSnapshot {
   war: WarSnapshot;
   matrix: MatrixSnapshot;
   messages: MessageSnapshot;
+  upgrades: UpgradesSnapshot;
+  progression: ProgressionSnapshot;
   telemetry: TelemetrySnapshot;
 }
 

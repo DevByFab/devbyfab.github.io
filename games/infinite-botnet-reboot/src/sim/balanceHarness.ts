@@ -16,9 +16,9 @@ import { applyWarTick, commandWarAttack, commandWarFortify, commandWarScrub, ref
 import { createInitialEngineState, type EngineState } from '../worker/state';
 
 const STEP_MS = 1000;
-const TARGET_MIN_HOURS = 8;
-const TARGET_MAX_HOURS = 12;
-const MAX_HOURS = 14;
+const TARGET_MIN_HOURS = 12;
+const TARGET_MAX_HOURS = 20;
+const MAX_HOURS = 22;
 const RUN_SEEDS = [101, 203, 307, 409, 503, 601, 709, 809, 907, 1009];
 const MATRIX_OPERATOR_ACCURACY = 0.82;
 
@@ -27,12 +27,8 @@ const PHASE_ORDER: PhaseId[] = [
   'automation',
   'monetization',
   'botnet-war',
-  'cloud-dominion',
-  'opinion-forge',
-  'grid-overmind',
-  'neural-breach',
-  'singularity-core',
   'matrix-breach',
+  'singularity-core',
 ];
 
 interface OperatorStats {
@@ -75,7 +71,15 @@ function createSeededRandom(seed: number): () => number {
 }
 
 function syncDerivedState(state: EngineState): void {
-  state.phase = resolvePhaseProgress(state.resources.bots);
+  state.phase = resolvePhaseProgress({
+    bots: state.resources.bots,
+    scans: state.milestones.scans,
+    darkMoney: state.resources.darkMoney,
+    portfolio: state.resources.portfolio,
+    warWins: state.war.wins,
+    messagesProcessed: state.messages.processed,
+    exploitSuccesses: state.milestones.exploitSuccesses,
+  });
   refreshEconomyDerivedRates(state);
   refreshWarDerived(state);
   refreshMatrixDerived(state);
@@ -150,7 +154,7 @@ function handleMonetizationMode(state: EngineState, operator: OperatorStats): vo
 }
 
 function handleInvestments(state: EngineState, second: number, operator: OperatorStats): void {
-  if (state.phase.index >= 4 && state.resources.darkMoney >= 200000n && second % 30 === 0) {
+  if (state.phase.index >= 2 && state.resources.darkMoney >= 200000n && second % 30 === 0) {
     if (commandInvestTranche(state)) {
       operator.invests += 1;
     }
@@ -164,7 +168,7 @@ function handleInvestments(state: EngineState, second: number, operator: Operato
 }
 
 function canOperateWar(state: EngineState): boolean {
-  return state.phase.index >= 4;
+  return state.phase.index >= 3;
 }
 
 function handleWar(state: EngineState, second: number, operator: OperatorStats): void {
@@ -317,7 +321,7 @@ function runSimulation(seed: number): RunSummary {
         peakHeat = state.war.heat;
       }
 
-      if (state.phase.id === 'matrix-breach' && state.matrix.breachProgress >= 100) {
+      if (state.phase.id === 'singularity-core' && state.matrix.breachProgress >= 100) {
         completedAtHours = state.nowMs / 3600000;
         break;
       }
