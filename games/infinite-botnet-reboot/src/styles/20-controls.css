@@ -1,0 +1,142 @@
+.meter {
+  height: 9px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(100, 128, 135, 0.26);
+  overflow: hidden;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-cold), #9ff5ff);
+  box-shadow: 0 0 14px rgba(98, 210, 217, 0.45);
+  transition: width 0.25s ease;
+}
+
+.meter.heat span {
+  background: linear-gradient(90deg, var(--accent-warn), var(--accent-hot));
+  box-shadow: 0 0 16px rgba(255, 141, 77, 0.48);
+}
+
+.meter.exploit-cooldown-meter {
+  height: 6px;
+}
+
+.meter.exploit-cooldown-meter span {
+  background: linear-gradient(90deg, #6fa8ff, var(--accent-cold));
+  box-shadow: 0 0 12px rgba(111, 168, 255, 0.35);
+}
+
+.meter.exploit-cooldown-meter.is-ready span {
+  background: linear-gradient(90deg, #61efb5, #9df8d0);
+  box-shadow: 0 0 12px rgba(120, 247, 191, 0.4);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.button-row.compact {
+  margin-top: -2px;
+}
+
+.btn {
+  border: 1px solid rgba(98, 210, 217, 0.35);
+  background: rgba(13, 35, 42, 0.82);
+  color: var(--text);
+  font: 600 12px/1 var(--mono);
+  padding: 9px 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(98, 210, 217, 0.72);
+  background: rgba(21, 52, 61, 0.9);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn.ghost {
+  border-color: rgba(255, 206, 119, 0.4);
+}
+
+.btn.tiny {
+  padding: 6px 8px;
+  font-size: 11px;
+}
+
+.btn.is-active {
+  border-color: rgba(255, 141, 77, 0.74);
+  color: #ffddc6;
+  background: rgba(95, 43, 14, 0.5);
+}
+
+.metrics {
+  margin: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.metrics div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed rgba(130, 171, 178, 0.2);
+}
+
+.metrics dt {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.metrics dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.war-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.input-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.command-input {
+  width: 100%;
+  border: 1px solid rgba(98, 210, 217, 0.32);
+  background: rgba(4, 15, 19, 0.9);
+  border-radius: 10px;
+  color: var(--text);
+  font: 500 12px/1.4 var(--mono);
+  padding: 10px;
+}
+
+.cooldown-hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.cooldown-hint strong {
+  color: #d4f8fc;
+}

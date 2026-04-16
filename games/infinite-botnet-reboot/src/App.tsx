@@ -1,33 +1,34 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatBigValue } from './game/format';
+import { AUDIO_SETTINGS_STORAGE_KEY } from './app/constants';
 import {
-  AUDIO_SETTINGS_STORAGE_KEY,
-  INTRO_LORE_STORAGE_KEY,
-  INTRO_TUTORIAL_STORAGE_KEY,
-  LORE_BRIDGE_MS,
-  LORE_MIN_READ_MS,
-  LORE_TRANSITION_MS,
-  UNLOCK_HINT_STORAGE_KEY,
-} from './app/constants';
+  GUIDE_STEPS,
+  type DashboardTab,
+} from './app/navigationConfig';
+import { useAudioLogCues } from './app/useAudioLogCues';
+import { useGameActionHandlers } from './app/useGameActionHandlers';
+import { useGuideSpotlight } from './app/useGuideSpotlight';
+import { useGameplayHotkeys } from './app/useGameplayHotkeys';
+import { useOnboardingActions } from './app/useOnboardingActions';
+import { useOnboardingKeyboardShortcuts } from './app/useOnboardingKeyboardShortcuts';
+import { useOnboardingLoreReadGate } from './app/useOnboardingLoreReadGate';
+import { useOnboardingState } from './app/useOnboardingState';
+import { useDashboardTabPhaseGate } from './app/useDashboardTabState';
+import { usePhaseUnlockHints } from './app/usePhaseUnlockHints';
 import { type GuideRect } from './app/guideLayout';
 import {
   clampAudio,
   readAudioSettings,
-  readBooleanFlag,
-  readUnlockHints,
   writeAudioSettings,
-  writeBooleanFlag,
-  writeUnlockHints,
 } from './app/storage';
-import { hasOwnedUpgrade } from './app/upgrades';
 import { ResourceCard } from './components/ResourceCard';
 import { GuideOverlay } from './components/overlays/GuideOverlay';
-import { LoreBridgeOverlay } from './components/overlays/LoreBridgeOverlay';
 import { LoreOverlay } from './components/overlays/LoreOverlay';
 import { SettingsOverlay } from './components/overlays/SettingsOverlay';
 import { UnlockHintOverlay } from './components/overlays/UnlockHintOverlay';
 import { CashflowTabPanel } from './components/tabs/CashflowTabPanel';
 import { DashboardTabPanel } from './components/tabs/DashboardTabPanel';
+import { DashboardTabsNav } from './components/tabs/DashboardTabsNav';
 import { MatrixTabPanel } from './components/tabs/MatrixTabPanel';
 import { MessagesTabPanel } from './components/tabs/MessagesTabPanel';
 import { WarTabPanel } from './components/tabs/WarTabPanel';
@@ -35,155 +36,21 @@ import { type AudioSettings, useAudioManager } from './hooks/useAudioManager';
 import { useGameWorker } from './hooks/useGameWorker';
 import { useRebootI18n } from './hooks/useRebootI18n';
 
-type AudioChannel = keyof AudioSettings;
-type DashboardTab = 'dashboard' | 'cashflow' | 'messages' | 'war' | 'matrix';
-type IntroStep = 'lore' | 'bridge' | null;
-type LoreTransitionDirection = 'next' | 'prev';
-type LoreTransitionPhase = 'idle' | 'out' | 'in';
+const LORE_SCENE_KEYS = [
+  'reboot.overlay.lore.scene1',
+  'reboot.overlay.lore.scene2',
+  'reboot.overlay.lore.scene3',
+  'reboot.overlay.lore.scene4',
+  'reboot.overlay.lore.scene5',
+] as const;
 
-interface DashboardTabDefinition {
-  id: DashboardTab;
-  labelKey: string;
-  minPhase: number;
-}
-
-const DASHBOARD_TABS: ReadonlyArray<DashboardTabDefinition> = [
-  { id: 'dashboard', labelKey: 'reboot.tabs.dashboard', minPhase: 0 },
-  { id: 'cashflow', labelKey: 'reboot.tabs.cashflow', minPhase: 2 },
-  { id: 'messages', labelKey: 'reboot.tabs.messages', minPhase: 2 },
-  { id: 'war', labelKey: 'reboot.tabs.war', minPhase: 3 },
-  { id: 'matrix', labelKey: 'reboot.tabs.matrix', minPhase: 4 },
-];
-
-interface UnlockHintDefinition {
-  id: string;
-  phase: number;
-  titleKey: string;
-  descriptionKey: string;
-}
-
-const UNLOCK_HINTS: ReadonlyArray<UnlockHintDefinition> = [
-  {
-    id: 'phase-p2-cashflow',
-    phase: 2,
-    titleKey: 'reboot.unlock.phaseP2.title',
-    descriptionKey: 'reboot.unlock.phaseP2.description',
-  },
-  {
-    id: 'phase-p3-war',
-    phase: 3,
-    titleKey: 'reboot.unlock.phaseP3.title',
-    descriptionKey: 'reboot.unlock.phaseP3.description',
-  },
-  {
-    id: 'phase-p4-matrix',
-    phase: 4,
-    titleKey: 'reboot.unlock.phaseP4.title',
-    descriptionKey: 'reboot.unlock.phaseP4.description',
-  },
-  {
-    id: 'phase-p5-singularity',
-    phase: 5,
-    titleKey: 'reboot.unlock.phaseP5.title',
-    descriptionKey: 'reboot.unlock.phaseP5.description',
-  },
-];
-
-interface GuideStepDefinition {
-  id: string;
-  tab: DashboardTab;
-  selector: string;
-  focusKey: string;
-  titleKey: string;
-  bodyKey: string;
-}
-
-interface LoreSceneDefinition {
-  id: string;
-  bodyKey: string;
-  toneClass: string;
-  stingerCue?: 'loreBotnetDiscovery';
-}
-
-const GUIDE_STEPS: ReadonlyArray<GuideStepDefinition> = [
-  {
-    id: 'top-actions',
-    tab: 'dashboard',
-    selector: '[data-guide="top-actions"]',
-    focusKey: 'reboot.guide.focus.topActions',
-    titleKey: 'reboot.guide.step.topActions.title',
-    bodyKey: 'reboot.guide.step.topActions.body',
-  },
-  {
-    id: 'resources',
-    tab: 'dashboard',
-    selector: '[data-guide="resource-grid"]',
-    focusKey: 'reboot.guide.focus.resourceGrid',
-    titleKey: 'reboot.guide.step.resourceGrid.title',
-    bodyKey: 'reboot.guide.step.resourceGrid.body',
-  },
-  {
-    id: 'tabs',
-    tab: 'dashboard',
-    selector: '[data-guide="view-nav"]',
-    focusKey: 'reboot.guide.focus.tabs',
-    titleKey: 'reboot.guide.step.tabs.title',
-    bodyKey: 'reboot.guide.step.tabs.body',
-  },
-  {
-    id: 'core-ops',
-    tab: 'dashboard',
-    selector: '[data-guide="core-ops"]',
-    focusKey: 'reboot.guide.focus.coreOps',
-    titleKey: 'reboot.guide.step.coreOps.title',
-    bodyKey: 'reboot.guide.step.coreOps.body',
-  },
-  {
-    id: 'upgrades',
-    tab: 'dashboard',
-    selector: '[data-guide="upgrades"]',
-    focusKey: 'reboot.guide.focus.upgrades',
-    titleKey: 'reboot.guide.step.upgrades.title',
-    bodyKey: 'reboot.guide.step.upgrades.body',
-  },
-  {
-    id: 'console',
-    tab: 'dashboard',
-    selector: '[data-guide="console"]',
-    focusKey: 'reboot.guide.focus.console',
-    titleKey: 'reboot.guide.step.console.title',
-    bodyKey: 'reboot.guide.step.console.body',
-  },
-];
-
-const LORE_SCENES: ReadonlyArray<LoreSceneDefinition> = [
-  {
-    id: 'fall-start',
-    bodyKey: 'reboot.overlay.lore.scene1',
-    toneClass: 'lore-scene-fall-start',
-  },
-  {
-    id: 'fall-pressure',
-    bodyKey: 'reboot.overlay.lore.scene2',
-    toneClass: 'lore-scene-fall-pressure',
-  },
-  {
-    id: 'eviction-hit',
-    bodyKey: 'reboot.overlay.lore.scene3',
-    toneClass: 'lore-scene-eviction-hit',
-  },
-  {
-    id: 'botnet-discovery',
-    bodyKey: 'reboot.overlay.lore.scene4',
-    toneClass: 'lore-scene-botnet-discovery',
-    stingerCue: 'loreBotnetDiscovery',
-  },
-  {
-    id: 'tutorial-bridge',
-    bodyKey: 'reboot.overlay.lore.scene5',
-    toneClass: 'lore-scene-tutorial-bridge',
-  },
-];
+const LORE_SCENE_TONE_CLASSES = [
+  'lore-scene-fall-start',
+  'lore-scene-fall-pressure',
+  'lore-scene-eviction-hit',
+  'lore-scene-botnet-discovery',
+  'lore-scene-tutorial-bridge',
+] as const;
 
 function App() {
   const { t } = useRebootI18n();
@@ -192,52 +59,54 @@ function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [consoleCollapsed, setConsoleCollapsed] = useState(false);
   const [matrixCommand, setMatrixCommand] = useState('');
-  const [introStep, setIntroStep] = useState<IntroStep>(null);
-  const [loreSceneIndex, setLoreSceneIndex] = useState(0);
-  const [loreTransitionDirection, setLoreTransitionDirection] =
-    useState<LoreTransitionDirection>('next');
-  const [loreTransitionPhase, setLoreTransitionPhase] = useState<LoreTransitionPhase>('idle');
-  const [loreReadReady, setLoreReadReady] = useState(false);
-  const [loreReadRemainingMs, setLoreReadRemainingMs] = useState(0);
-  const [introBootstrapped, setIntroBootstrapped] = useState(false);
-  const [lastPhaseIndex, setLastPhaseIndex] = useState<number | null>(null);
-  const [seenUnlockHints, setSeenUnlockHints] = useState<string[]>(() =>
-    readUnlockHints(UNLOCK_HINT_STORAGE_KEY),
-  );
-  const [unlockHintId, setUnlockHintId] = useState<string | null>(null);
   const [audioSettings, setAudioSettings] = useState<AudioSettings>(() =>
     readAudioSettings(AUDIO_SETTINGS_STORAGE_KEY),
   );
   const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
-  const [guideActive, setGuideActive] = useState(false);
-  const [guideStepIndex, setGuideStepIndex] = useState(0);
-  const [guideMarkSeenOnClose, setGuideMarkSeenOnClose] = useState(false);
   const [guideRect, setGuideRect] = useState<GuideRect | null>(null);
+  const [loreSceneIndex, setLoreSceneIndex] = useState(0);
+  const loreDiscoveryStingerPlayedRef = useRef(false);
+  const resetLoreScene = useCallback(() => {
+    setLoreSceneIndex(0);
+  }, []);
 
-  const snapshotRef = useRef(snapshot);
-  const lastAudioLogIdRef = useRef<string | null>(null);
-  const loreTransitionTimerRef = useRef<number | null>(null);
-  const loreTransitionSettleTimerRef = useRef<number | null>(null);
-  const loreReadGateTimerRef = useRef<number | null>(null);
-  const loreBridgeTimerRef = useRef<number | null>(null);
+  const {
+    introStep,
+    setIntroStep,
+    guideActive,
+    setGuideActive,
+    guideStepIndex,
+    setGuideMarkSeenOnClose,
+    startGuideCore,
+    closeGuideCore,
+    goGuidePrevCore,
+    goGuideNextCore,
+  } = useOnboardingState({
+    snapshot,
+    setActiveTab,
+    resetLoreScene,
+  });
+
+  useDashboardTabPhaseGate({
+    activeTab,
+    setActiveTab,
+    snapshot,
+    guideActive,
+  });
 
   const { playUiCue, playEventCue, playStingerCue, playErrorCue } = useAudioManager(audioSettings);
+  const { setUnlockHintId, currentUnlockHint } = usePhaseUnlockHints({
+    snapshot,
+    playEventCue,
+    playStingerCue,
+  });
 
   const latestLogs = useMemo(() => logs.slice(Math.max(0, logs.length - 18)).reverse(), [logs]);
   const currentGuideStep = GUIDE_STEPS[Math.min(guideStepIndex, GUIDE_STEPS.length - 1)];
-  const currentUnlockHint =
-    unlockHintId === null ? null : UNLOCK_HINTS.find((hint) => hint.id === unlockHintId) ?? null;
-  const currentLoreScene = LORE_SCENES[Math.min(loreSceneIndex, LORE_SCENES.length - 1)];
-  const loreTransitionClass =
-    loreTransitionPhase === 'out'
-      ? loreTransitionDirection === 'next'
-        ? 'lore-transition-out-next'
-        : 'lore-transition-out-prev'
-      : loreTransitionPhase === 'in'
-        ? loreTransitionDirection === 'next'
-          ? 'lore-transition-in-next'
-          : 'lore-transition-in-prev'
-        : 'lore-transition-idle';
+  const { loreReadReady, loreReadRemainingMs } = useOnboardingLoreReadGate({
+    introStep,
+    loreSceneIndex,
+  });
   const loreReadSecondsLabel = Math.max(0, loreReadRemainingMs / 1000).toLocaleString('fr-FR', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
@@ -247,292 +116,118 @@ function App() {
     : t('reboot.overlay.lore.readDelay', {
         seconds: loreReadSecondsLabel,
       });
-  const loreProgressLabel = t('reboot.overlay.lore.progress', {
-    current: loreSceneIndex + 1,
-    total: LORE_SCENES.length,
+
+  useGuideSpotlight({
+    guideActive,
+    guideSelector: currentGuideStep.selector,
+    activeTab,
+    guideStepIndex,
+    consoleCollapsed,
+    settingsOpen,
+    phaseIndex: snapshot?.phase.index,
+    setGuideRect,
   });
 
-  useEffect(() => {
-    return () => {
-      if (loreTransitionTimerRef.current !== null) {
-        window.clearTimeout(loreTransitionTimerRef.current);
-        loreTransitionTimerRef.current = null;
-      }
-      if (loreTransitionSettleTimerRef.current !== null) {
-        window.clearTimeout(loreTransitionSettleTimerRef.current);
-        loreTransitionSettleTimerRef.current = null;
-      }
-      if (loreReadGateTimerRef.current !== null) {
-        window.clearInterval(loreReadGateTimerRef.current);
-        loreReadGateTimerRef.current = null;
-      }
-      if (loreBridgeTimerRef.current !== null) {
-        window.clearTimeout(loreBridgeTimerRef.current);
-        loreBridgeTimerRef.current = null;
-      }
-    };
+  const loreSteps = useMemo(() => LORE_SCENE_KEYS.map((key) => t(key)), [t]);
+  const loreIsLastScene = loreSceneIndex >= loreSteps.length - 1;
+  const loreCanGoNext = loreReadReady;
+  const boundedLoreSceneIndex = Math.max(0, Math.min(loreSceneIndex, loreSteps.length - 1));
+  const loreSceneBody = loreSteps[boundedLoreSceneIndex] ?? '';
+  const loreToneClass = LORE_SCENE_TONE_CLASSES[boundedLoreSceneIndex] ?? LORE_SCENE_TONE_CLASSES[0];
+  const loreProgressLabel = t('reboot.overlay.lore.progress', {
+    current: boundedLoreSceneIndex + 1,
+    total: loreSteps.length,
+  });
+
+  const goLorePrev = useCallback(() => {
+    setLoreSceneIndex((current) => Math.max(0, current - 1));
   }, []);
 
   useEffect(() => {
     writeAudioSettings(AUDIO_SETTINGS_STORAGE_KEY, audioSettings);
   }, [audioSettings]);
 
-  useEffect(() => {
-    snapshotRef.current = snapshot;
-  }, [snapshot]);
+  useAudioLogCues({
+    logs,
+    playUiCue,
+    playEventCue,
+    playStingerCue,
+    playErrorCue,
+  });
 
-  useEffect(() => {
-    const line = logs.at(-1);
-    if (!line) return;
+  useGameplayHotkeys({
+    snapshot,
+    playUiCue,
+    sendCommand,
+  });
 
-    if (lastAudioLogIdRef.current === line.id) return;
-    lastAudioLogIdRef.current = line.id;
+  const gameActions = useGameActionHandlers({
+    playUiCue,
+    sendCommand,
+    matrixCommand,
+    setMatrixCommand,
+  });
 
-    let hasDedicatedFailureCue = false;
+  const onboardingActions = useOnboardingActions({
+    playUiCue,
+    playErrorCue,
+    loreReadReady,
+    resetLoreScene,
+    setSettingsOpen,
+    setUnlockHintId,
+    setGuideRect,
+    setGuideActive,
+    setGuideMarkSeenOnClose,
+    setActiveTab,
+    setIntroStep,
+    startGuideCore,
+    closeGuideCore,
+    goGuidePrevCore,
+    goGuideNextCore,
+  });
 
-    if (line.text.includes('Upgrade achetee')) {
-      playUiCue('upgradeBuy');
-      playStingerCue('upgradeTier2');
-    }
-
-    if (line.text.includes('Scan manuel: cible ajoutee')) {
-      playEventCue('targetFound');
-    }
-
-    if (line.text.includes('Phase atteinte')) {
-      playEventCue('phaseShift');
-    }
-
-    if (line.text.includes('Nouveau message intercepte')) {
-      playEventCue('incomingMessage');
-    }
-
-    if (line.text.includes('Exploit reussi')) {
-      playEventCue('exploitSuccess');
-    }
-
-    if (line.text.includes('Exploit rate') || line.text.includes('Exploit bloque')) {
-      hasDedicatedFailureCue = true;
-      playEventCue('exploitFail');
-    }
-
-    if ((line.severity === 'warn' || line.severity === 'error') && !hasDedicatedFailureCue) {
+  const goLoreNext = useCallback(() => {
+    if (!loreReadReady) {
       playErrorCue();
+      return;
     }
-  }, [logs, playErrorCue, playEventCue, playStingerCue, playUiCue]);
+
+    if (!loreIsLastScene) {
+      setLoreSceneIndex((current) => Math.min(loreSteps.length - 1, current + 1));
+      return;
+    }
+
+    onboardingActions.continueFromLore();
+  }, [loreIsLastScene, loreReadReady, loreSteps.length, onboardingActions, playErrorCue]);
+
+  useOnboardingKeyboardShortcuts({
+    introStep,
+    guideActive,
+    settingsOpen,
+    onLorePrev: goLorePrev,
+    onLoreNext: goLoreNext,
+    onSkipIntro: onboardingActions.skipIntro,
+    onGuidePrev: onboardingActions.goGuidePrev,
+    onGuideNext: onboardingActions.goGuideNext,
+    onCloseGuide: onboardingActions.closeGuide,
+  });
 
   useEffect(() => {
-    if (!snapshot || introBootstrapped) return;
-
-    const loreSeen = readBooleanFlag(INTRO_LORE_STORAGE_KEY);
-    const tutorialSeen = readBooleanFlag(INTRO_TUTORIAL_STORAGE_KEY);
-
-    if (!loreSeen) {
-      setIntroStep('lore');
-      setLoreSceneIndex(0);
-      setLoreTransitionDirection('next');
-      setLoreTransitionPhase('idle');
-    } else if (!tutorialSeen) {
-      setActiveTab(GUIDE_STEPS[0].tab);
-      setGuideStepIndex(0);
-      setGuideMarkSeenOnClose(true);
-      setGuideActive(true);
-    }
-
-    setLastPhaseIndex(snapshot.phase.index);
-    setIntroBootstrapped(true);
-  }, [snapshot, introBootstrapped]);
-
-  useEffect(() => {
-    if (loreReadGateTimerRef.current !== null) {
-      window.clearInterval(loreReadGateTimerRef.current);
-      loreReadGateTimerRef.current = null;
-    }
-
     if (introStep !== 'lore') {
-      setLoreReadReady(false);
-      setLoreReadRemainingMs(0);
-      return;
+      loreDiscoveryStingerPlayedRef.current = false;
     }
-
-    if (loreTransitionPhase !== 'idle') {
-      setLoreReadReady(false);
-      setLoreReadRemainingMs(LORE_MIN_READ_MS);
-      return;
-    }
-
-    const gateEndsAt = Date.now() + LORE_MIN_READ_MS;
-
-    const updateReadGate = () => {
-      const remaining = Math.max(0, gateEndsAt - Date.now());
-      setLoreReadRemainingMs(remaining);
-
-      if (remaining <= 0) {
-        setLoreReadReady(true);
-        if (loreReadGateTimerRef.current !== null) {
-          window.clearInterval(loreReadGateTimerRef.current);
-          loreReadGateTimerRef.current = null;
-        }
-      }
-    };
-
-    setLoreReadReady(false);
-    updateReadGate();
-    loreReadGateTimerRef.current = window.setInterval(updateReadGate, 80);
-
-    return () => {
-      if (loreReadGateTimerRef.current !== null) {
-        window.clearInterval(loreReadGateTimerRef.current);
-        loreReadGateTimerRef.current = null;
-      }
-    };
-  }, [introStep, loreSceneIndex, loreTransitionPhase]);
+  }, [introStep]);
 
   useEffect(() => {
-    if (!snapshot || lastPhaseIndex === null) {
-      return;
-    }
+    if (introStep !== 'lore') return;
+    if (boundedLoreSceneIndex !== 3) return;
+    if (loreDiscoveryStingerPlayedRef.current) return;
 
-    if (snapshot.phase.index <= lastPhaseIndex) {
-      return;
-    }
+    loreDiscoveryStingerPlayedRef.current = true;
+    playStingerCue('loreBotnetDiscovery');
+  }, [boundedLoreSceneIndex, introStep, playStingerCue]);
 
-    if (lastPhaseIndex < 2 && snapshot.phase.index >= 2) {
-      playEventCue('marketUnlock');
-      playStingerCue('marketTier2');
-    }
-
-    setLastPhaseIndex(snapshot.phase.index);
-
-    const nextUnlockHint = UNLOCK_HINTS.find(
-      (candidate) =>
-        candidate.phase === snapshot.phase.index && !seenUnlockHints.includes(candidate.id),
-    );
-
-    if (!nextUnlockHint) {
-      return;
-    }
-
-    const nextSeenUnlockHints = [...seenUnlockHints, nextUnlockHint.id];
-    setSeenUnlockHints(nextSeenUnlockHints);
-    writeUnlockHints(UNLOCK_HINT_STORAGE_KEY, nextSeenUnlockHints);
-    setUnlockHintId(nextUnlockHint.id);
-  }, [lastPhaseIndex, playEventCue, playStingerCue, seenUnlockHints, snapshot]);
-
-  useEffect(() => {
-    if (!snapshot || guideActive) return;
-
-    const currentTab = DASHBOARD_TABS.find((tab) => tab.id === activeTab);
-    if (!currentTab) {
-      setActiveTab('dashboard');
-      return;
-    }
-
-    if (snapshot.phase.index < currentTab.minPhase) {
-      setActiveTab('dashboard');
-    }
-  }, [activeTab, guideActive, snapshot]);
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (introStep !== null || settingsOpen || guideActive || unlockHintId !== null) {
-        return;
-      }
-
-      const currentSnapshot = snapshotRef.current;
-      if (!currentSnapshot) {
-        return;
-      }
-
-      const key = event.key.toLowerCase();
-      if (key !== 'enter' && key !== 'x') {
-        return;
-      }
-
-      const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (key === 'enter') {
-        event.preventDefault();
-        playUiCue('scanClick');
-        sendCommand({ type: 'SCAN' });
-        return;
-      }
-
-      const exploitHotkeyUnlocked = hasOwnedUpgrade(
-        currentSnapshot.upgrades.offers,
-        'qol-operator-macros',
-      );
-      if (!exploitHotkeyUnlocked) {
-        return;
-      }
-
-      if (
-        BigInt(currentSnapshot.resources.queuedTargets) <= 0n ||
-        currentSnapshot.economy.exploitCooldownMs > 0
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-      playUiCue('exploitClick');
-      sendCommand({ type: 'EXPLOIT' });
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [guideActive, introStep, playUiCue, sendCommand, settingsOpen, unlockHintId]);
-
-  useEffect(() => {
-    if (!guideActive) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      const target = document.querySelector(currentGuideStep.selector);
-      if (target instanceof HTMLElement) {
-        target.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-      }
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [activeTab, currentGuideStep.selector, guideActive, guideStepIndex]);
-
-  useEffect(() => {
-    if (!guideActive) {
-      setGuideRect(null);
-      return;
-    }
-
-    const computeRect = () => {
-      const target = document.querySelector(currentGuideStep.selector);
-      if (!(target instanceof HTMLElement)) {
-        setGuideRect(null);
-        return;
-      }
-
-      const rect = target.getBoundingClientRect();
-      const padding = 8;
-      setGuideRect({
-        top: Math.max(8, rect.top - padding),
-        left: Math.max(8, rect.left - padding),
-        width: Math.min(window.innerWidth - 16, rect.width + padding * 2),
-        height: Math.min(window.innerHeight - 16, rect.height + padding * 2),
-      });
-    };
-
-    computeRect();
-    window.addEventListener('resize', computeRect);
-
-    return () => {
-      window.removeEventListener('resize', computeRect);
-    };
-  }, [activeTab, consoleCollapsed, currentGuideStep.selector, guideActive, settingsOpen, snapshot?.phase.index]);
-
-  const updateAudioChannel = (channel: AudioChannel, value: number) => {
+  const updateAudioChannel = (channel: keyof AudioSettings, value: number) => {
     const clamped = clampAudio(value);
     setAudioSettings((current) => ({
       ...current,
@@ -540,228 +235,9 @@ function App() {
     }));
   };
 
-  const activateGuideStep = (index: number) => {
-    const bounded = Math.max(0, Math.min(GUIDE_STEPS.length - 1, index));
-    const step = GUIDE_STEPS[bounded];
-    setActiveTab(step.tab);
-    setGuideStepIndex(bounded);
-  };
-
-  const startGuide = (markSeenOnClose: boolean) => {
-    setIntroStep(null);
-    setSettingsOpen(false);
-    setUnlockHintId(null);
-    activateGuideStep(0);
-    setGuideMarkSeenOnClose(markSeenOnClose);
-    setGuideActive(true);
-  };
-
-  const closeGuide = (forceMarkAsSeen: boolean) => {
-    if (forceMarkAsSeen || guideMarkSeenOnClose) {
-      writeBooleanFlag(INTRO_TUTORIAL_STORAGE_KEY);
-    }
-
-    setGuideActive(false);
-    setGuideStepIndex(0);
-    setGuideMarkSeenOnClose(false);
-    setGuideRect(null);
-    setActiveTab('dashboard');
-  };
-
-  const clearLoreTransitionTimers = () => {
-    if (loreTransitionTimerRef.current !== null) {
-      window.clearTimeout(loreTransitionTimerRef.current);
-      loreTransitionTimerRef.current = null;
-    }
-
-    if (loreTransitionSettleTimerRef.current !== null) {
-      window.clearTimeout(loreTransitionSettleTimerRef.current);
-      loreTransitionSettleTimerRef.current = null;
-    }
-  };
-
-  const clearLoreBridgeTimer = () => {
-    if (loreBridgeTimerRef.current !== null) {
-      window.clearTimeout(loreBridgeTimerRef.current);
-      loreBridgeTimerRef.current = null;
-    }
-  };
-
-  const transitionLoreScene = (targetIndex: number, direction: LoreTransitionDirection) => {
-    if (loreTransitionPhase !== 'idle') {
-      return;
-    }
-
-    if (targetIndex < 0 || targetIndex >= LORE_SCENES.length) {
-      return;
-    }
-
-    clearLoreTransitionTimers();
-    setLoreTransitionDirection(direction);
-    setLoreTransitionPhase('out');
-
-    loreTransitionTimerRef.current = window.setTimeout(() => {
-      loreTransitionTimerRef.current = null;
-
-      const targetScene = LORE_SCENES[targetIndex];
-      setLoreSceneIndex(targetIndex);
-
-      if (targetScene.stingerCue) {
-        playStingerCue(targetScene.stingerCue);
-      }
-
-      setLoreTransitionPhase('in');
-      loreTransitionSettleTimerRef.current = window.setTimeout(() => {
-        loreTransitionSettleTimerRef.current = null;
-        setLoreTransitionPhase('idle');
-      }, LORE_TRANSITION_MS);
-    }, LORE_TRANSITION_MS);
-  };
-
-  const continueFromLore = () => {
-    clearLoreTransitionTimers();
-    clearLoreBridgeTimer();
-    writeBooleanFlag(INTRO_LORE_STORAGE_KEY);
-    setLoreSceneIndex(0);
-    setLoreTransitionDirection('next');
-    setLoreTransitionPhase('idle');
-
-    if (readBooleanFlag(INTRO_TUTORIAL_STORAGE_KEY)) {
-      setIntroStep(null);
-      return;
-    }
-
-    setIntroStep('bridge');
-    loreBridgeTimerRef.current = window.setTimeout(() => {
-      loreBridgeTimerRef.current = null;
-      startGuide(true);
-    }, LORE_BRIDGE_MS);
-  };
-
-  const skipIntro = () => {
-    clearLoreTransitionTimers();
-    clearLoreBridgeTimer();
-    writeBooleanFlag(INTRO_LORE_STORAGE_KEY);
-    writeBooleanFlag(INTRO_TUTORIAL_STORAGE_KEY);
-    setLoreSceneIndex(0);
-    setLoreTransitionDirection('next');
-    setLoreTransitionPhase('idle');
-    setLoreReadReady(false);
-    setLoreReadRemainingMs(0);
-    setIntroStep(null);
-    setGuideActive(false);
-    setGuideMarkSeenOnClose(false);
-    setActiveTab('dashboard');
-  };
-
-  const goLorePrev = () => {
-    if (loreSceneIndex <= 0 || loreTransitionPhase !== 'idle') {
-      return;
-    }
-
+  const handleSelectTab = (tab: DashboardTab) => {
     playUiCue('scanClick');
-    transitionLoreScene(loreSceneIndex - 1, 'prev');
-  };
-
-  const goLoreNext = () => {
-    if (loreTransitionPhase !== 'idle') {
-      return;
-    }
-
-    if (!loreReadReady) {
-      playErrorCue();
-      return;
-    }
-
-    if (loreSceneIndex >= LORE_SCENES.length - 1) {
-      playUiCue('scanClick');
-      continueFromLore();
-      return;
-    }
-
-    playUiCue('scanClick');
-    transitionLoreScene(loreSceneIndex + 1, 'next');
-  };
-
-  useEffect(() => {
-    if (introStep !== 'lore') {
-      return;
-    }
-
-    const onLoreKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        goLoreNext();
-        return;
-      }
-
-      if (event.key === 'ArrowLeft' || event.key === 'Backspace') {
-        event.preventDefault();
-        goLorePrev();
-        return;
-      }
-
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        skipIntro();
-      }
-    };
-
-    window.addEventListener('keydown', onLoreKeyDown);
-    return () => {
-      window.removeEventListener('keydown', onLoreKeyDown);
-    };
-  }, [goLoreNext, goLorePrev, introStep, skipIntro]);
-
-  const goGuidePrev = () => {
-    activateGuideStep(guideStepIndex - 1);
-  };
-
-  const goGuideNext = () => {
-    if (guideStepIndex >= GUIDE_STEPS.length - 1) {
-      closeGuide(true);
-      return;
-    }
-
-    activateGuideStep(guideStepIndex + 1);
-  };
-
-  const openSettings = () => {
-    playUiCue('settingsOpen');
-    setSettingsOpen(true);
-  };
-
-  const closeSettings = () => {
-    playUiCue('settingsClose');
-    setSettingsOpen(false);
-  };
-
-  const replayLoreFromSettings = () => {
-    closeSettings();
-    clearLoreBridgeTimer();
-    clearLoreTransitionTimers();
-    setGuideActive(false);
-    setGuideMarkSeenOnClose(false);
-    setActiveTab('dashboard');
-    setLoreSceneIndex(0);
-    setLoreTransitionDirection('next');
-    setLoreTransitionPhase('idle');
-    setLoreReadReady(false);
-    setLoreReadRemainingMs(LORE_MIN_READ_MS);
-    setIntroStep('lore');
-  };
-
-  const replayTutorialFromSettings = () => {
-    closeSettings();
-    startGuide(false);
+    setActiveTab(tab);
   };
 
   if (!snapshot) {
@@ -791,11 +267,10 @@ function App() {
     );
   }
 
-  const economyUnlocked = snapshot.phase.index >= 2;
+  const economyUnlocked = snapshot.phase.index >= 1;
   const messagesUnlocked = snapshot.phase.index >= 2;
   const warUnlocked = snapshot.phase.index >= 3;
   const matrixUnlocked = snapshot.phase.index >= 4;
-
   const phaseGateBlocked = snapshot.phase.requirements.some((requirement) => !requirement.met);
 
   return (
@@ -820,13 +295,13 @@ function App() {
             className="btn tiny ghost"
             onClick={() => {
               playUiCue('scanClick');
-              startGuide(false);
+              onboardingActions.startGuide(false);
             }}
             data-guide="top-tutorial"
           >
             {t('reboot.header.tutorialButton')}
           </button>
-          <button className="btn tiny ghost" onClick={openSettings} data-guide="settings-open">
+          <button className="btn tiny ghost" onClick={onboardingActions.openSettings} data-guide="settings-open">
             {t('reboot.header.settingsButton')}
           </button>
           <p className={ready ? 'status-chip is-online' : 'status-chip'}>
@@ -895,48 +370,13 @@ function App() {
         ) : null}
       </section>
 
-      <nav
-        className="view-nav"
-        role="tablist"
-        aria-label={t('reboot.tabs.navLabel')}
-        data-guide="view-nav"
-      >
-        {DASHBOARD_TABS.map((tab) => {
-          const unlocked = snapshot.phase.index >= tab.minPhase;
-          const isActive = activeTab === tab.id;
-
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              id={`tab-${tab.id}`}
-              aria-controls={`panel-${tab.id}`}
-              aria-selected={isActive}
-              className={
-                unlocked
-                  ? isActive
-                    ? 'view-nav-btn is-active'
-                    : 'view-nav-btn'
-                  : isActive
-                    ? 'view-nav-btn is-active is-locked'
-                    : 'view-nav-btn is-locked'
-              }
-              disabled={!unlocked && !guideActive}
-              onClick={() => {
-                if (!unlocked) return;
-                playUiCue('scanClick');
-                setActiveTab(tab.id);
-              }}
-            >
-              <span>{t(tab.labelKey)}</span>
-              {!unlocked ? (
-                <small>{t('reboot.tabs.lockedUntil', { phase: `P${tab.minPhase}` })}</small>
-              ) : null}
-            </button>
-          );
-        })}
-      </nav>
+      <DashboardTabsNav
+        phaseIndex={snapshot.phase.index}
+        activeTab={activeTab}
+        guideActive={guideActive}
+        onSelectTab={handleSelectTab}
+        t={t}
+      />
 
       <section className="tab-stage">
         {activeTab === 'dashboard' ? (
@@ -948,21 +388,9 @@ function App() {
               playUiCue('scanClick');
               setConsoleCollapsed((current) => !current);
             }}
-            onSendScan={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'SCAN' });
-            }}
-            onSendExploit={() => {
-              playUiCue('exploitClick');
-              sendCommand({ type: 'EXPLOIT' });
-            }}
-            onPurchaseUpgrade={(chainId) => {
-              playUiCue('scanClick');
-              sendCommand({
-                type: 'PURCHASE_UPGRADE',
-                payload: { chainId },
-              });
-            }}
+            onSendScan={gameActions.sendScan}
+            onSendExploit={gameActions.sendExploit}
+            onPurchaseUpgrade={gameActions.purchaseUpgrade}
             t={t}
           />
         ) : null}
@@ -971,22 +399,10 @@ function App() {
           <CashflowTabPanel
             snapshot={snapshot}
             unlocked={economyUnlocked}
-            onToggleMonetize={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'TOGGLE_MONETIZE' });
-            }}
-            onInvestTranche={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'INVEST_TRANCHE' });
-            }}
-            onCashout={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'CASHOUT_PORTFOLIO' });
-            }}
-            onToggleInvestMode={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'TOGGLE_INVEST_MODE' });
-            }}
+            onToggleMonetize={gameActions.toggleMonetize}
+            onInvestTranche={gameActions.investTranche}
+            onCashout={gameActions.cashoutPortfolio}
+            onToggleInvestMode={gameActions.toggleInvestMode}
             t={t}
           />
         ) : null}
@@ -995,14 +411,8 @@ function App() {
           <MessagesTabPanel
             snapshot={snapshot}
             unlocked={messagesUnlocked}
-            onProcessMessage={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'MESSAGE_PROCESS' });
-            }}
-            onQuarantineMessage={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'MESSAGE_QUARANTINE' });
-            }}
+            onProcessMessage={gameActions.processMessage}
+            onQuarantineMessage={gameActions.quarantineMessage}
             t={t}
           />
         ) : null}
@@ -1011,18 +421,9 @@ function App() {
           <WarTabPanel
             snapshot={snapshot}
             unlocked={warUnlocked}
-            onAttack={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'WAR_ATTACK' });
-            }}
-            onScrub={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'WAR_SCRUB' });
-            }}
-            onFortify={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'WAR_FORTIFY' });
-            }}
+            onAttack={gameActions.warAttack}
+            onScrub={gameActions.warScrub}
+            onFortify={gameActions.warFortify}
             t={t}
           />
         ) : null}
@@ -1033,19 +434,9 @@ function App() {
             unlocked={matrixUnlocked}
             matrixCommand={matrixCommand}
             onMatrixCommandChange={setMatrixCommand}
-            onArm={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'MATRIX_ARM' });
-            }}
-            onInject={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'MATRIX_INJECT', payload: { commandText: matrixCommand } });
-              setMatrixCommand('');
-            }}
-            onStabilize={() => {
-              playUiCue('scanClick');
-              sendCommand({ type: 'MATRIX_STABILIZE' });
-            }}
+            onArm={gameActions.matrixArm}
+            onInject={gameActions.matrixInject}
+            onStabilize={gameActions.matrixStabilize}
             t={t}
           />
         ) : null}
@@ -1062,31 +453,29 @@ function App() {
             playUiCue('scanClick');
             setTurbo(value);
           }}
-          onReplayLore={replayLoreFromSettings}
-          onReplayTutorial={replayTutorialFromSettings}
-          onClose={closeSettings}
+          onReplayLore={onboardingActions.replayLoreFromSettings}
+          onReplayTutorial={onboardingActions.replayTutorialFromSettings}
+          onClose={onboardingActions.closeSettings}
         />
       ) : null}
 
       {introStep === 'lore' ? (
         <LoreOverlay
           t={t}
-          toneClass={currentLoreScene.toneClass}
-          transitionClass={loreTransitionClass}
-          sceneBody={t(currentLoreScene.bodyKey)}
+          toneClass={loreToneClass}
+          transitionClass=""
+          sceneBody={loreSceneBody}
           progressLabel={loreProgressLabel}
           readReady={loreReadReady}
           readinessLabel={loreReadinessLabel}
-          canGoPrev={loreSceneIndex > 0 && loreTransitionPhase === 'idle'}
-          canGoNext={loreTransitionPhase === 'idle' && loreReadReady}
-          isLastScene={loreSceneIndex >= LORE_SCENES.length - 1}
+          canGoPrev={boundedLoreSceneIndex > 0}
+          canGoNext={loreCanGoNext}
+          isLastScene={loreIsLastScene}
           onPrev={goLorePrev}
           onNext={goLoreNext}
-          onSkip={skipIntro}
+          onSkip={onboardingActions.skipIntro}
         />
       ) : null}
-
-      {introStep === 'bridge' ? <LoreBridgeOverlay t={t} /> : null}
 
       {currentUnlockHint && introStep === null && !guideActive ? (
         <UnlockHintOverlay
@@ -1108,9 +497,9 @@ function App() {
           totalSteps={GUIDE_STEPS.length}
           canGoPrev={guideStepIndex > 0}
           isLastStep={guideStepIndex >= GUIDE_STEPS.length - 1}
-          onPrev={goGuidePrev}
-          onSkip={() => closeGuide(true)}
-          onNext={goGuideNext}
+          onPrev={onboardingActions.goGuidePrev}
+          onSkip={() => onboardingActions.closeGuide(true)}
+          onNext={onboardingActions.goGuideNext}
         />
       ) : null}
     </main>

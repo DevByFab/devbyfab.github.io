@@ -20,8 +20,8 @@ applyTo:
   - UI dispatch call sites in src/hooks and src/App.tsx
 - Keep resources as bigint in worker state and domain logic. Convert to string only at snapshot serialization boundaries.
 - Preserve progression gates and prerequisites:
-  - phase unlock logic in src/worker/domain/phases.ts
-  - upgrade prerequisite chains in src/worker/domain/upgrades.ts
+  - phase unlock logic in src/worker/domain/phases/
+  - upgrade prerequisite chains in src/worker/domain/upgrades/
   - message reward phase gating in src/worker/domain/narrative.ts
 - For pacing-sensitive changes (economy, phases, upgrades, message rewards, war, matrix, cooldowns, or timers), run from games/infinite-botnet-reboot:
   - npm run lint

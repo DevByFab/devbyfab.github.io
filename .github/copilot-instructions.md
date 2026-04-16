@@ -31,13 +31,13 @@
 - Production base path defaults to `/games/infinite-botnet-reboot/`; set `VITE_PUBLIC_BASE` when targeting a different deploy path.
 
 ## Conventions
-- Progression is phase-gated (`src/worker/domain/phases.ts`) and upgrades use strict prerequisite chains (`src/worker/domain/upgrades.ts`).
+- Progression is phase-gated (`src/worker/domain/phases/`) and upgrades use strict prerequisite chains (`src/worker/domain/upgrades/`).
 - Message rewards are phase-gated in `src/worker/domain/narrative.ts`.
 - Keep pacing-sensitive changes validated with both `npm run lint` and `npm run balance:sim`.
-- Use `games/infinite-botnet-reboot/REFONTE_TRACKER.md` as roadmap source of truth.
+- Use `games/infinite-botnet-reboot/docs/tracker/REFONTE_TRACKER.md` as roadmap source of truth.
 
 ## References
-- Reboot runtime and structure: `games/infinite-botnet-reboot/README.md`
-- Balance tuning: `games/infinite-botnet-reboot/BALANCE_REFERENCE.md`
-- Lore/cinematic blueprint: `games/infinite-botnet-reboot/docs/LORE_AND_CINEMATIC_BLUEPRINT.md`
+- Reboot runtime and structure: `games/infinite-botnet-reboot/docs/project/README.md`
+- Balance tuning: `games/infinite-botnet-reboot/docs/balance/BALANCE_REFERENCE.md`
+- Lore/cinematic blueprint: `games/infinite-botnet-reboot/docs/lore/LORE_AND_CINEMATIC_BLUEPRINT.md`
 - Legacy progression docs: `games/infinite-botnet/PHASES_AND_PREREQUISITES.md`, `games/infinite-botnet/project.md`

@@ -495,7 +495,7 @@
 
   "reboot.panel.cashflow.title": "Cashflow",
   "reboot.panel.cashflow.copyUnlocked": "Monetize, Invest et Cashout (déverrouillé en P2).",
-  "reboot.panel.cashflow.locked": "Verrouillé jusqu'à P2.",
+  "reboot.panel.cashflow.locked": "Verrouillé jusqu'à P1.",
   "reboot.panel.cashflow.startMonetize": "Start Monetize",
   "reboot.panel.cashflow.pauseMonetize": "Pause Monetize",
   "reboot.panel.cashflow.investTranche": "Invest Tranche",
