@@ -1,3 +1,15 @@
+# Infinite BotNet Reboot - Balance Reference
+
+Balance reference moved to:
+- `docs/balance/BALANCE_REFERENCE.md`
+
+This root file is kept as a compatibility entrypoint.
+# Infinite BotNet Reboot - Balance Reference
+
+Balance reference moved to:
+- `docs/balance/BALANCE_REFERENCE.md`
+
+This root file is kept as a compatibility entrypoint.
 # Infinite Botnet Reboot - Reference progression (upgrades + phases)
 
 Ce document sert a jauger la vitesse de progression sans lancer une partie.

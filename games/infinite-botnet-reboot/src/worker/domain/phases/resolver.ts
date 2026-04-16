@@ -2,80 +2,9 @@ import type {
   PhaseId,
   PhaseRequirementId,
   PhaseRequirementSnapshot,
-} from '../../game/types';
-
-export interface PhaseDefinition {
-  id: PhaseId;
-  label: string;
-  requirements: PhaseRequirements;
-}
-
-export interface PhaseRequirements {
-  minBots: bigint;
-  minScans?: number;
-  minMoney?: bigint;
-  minPortfolio?: bigint;
-  minWarWins?: number;
-  minMessagesProcessed?: number;
-  minExploitSuccesses?: number;
-}
-
-const PHASE_DEFINITIONS: PhaseDefinition[] = [
-  {
-    id: 'garage',
-    label: 'P0 Garage',
-    requirements: { minBots: 0n },
-  },
-  {
-    id: 'automation',
-    label: 'P1 Recon Automation',
-    requirements: {
-      minBots: 180n,
-      minScans: 80,
-      minExploitSuccesses: 30,
-    },
-  },
-  {
-    id: 'monetization',
-    label: 'P2 Cashflow Hijack',
-    requirements: {
-      minBots: 6_500n,
-      minScans: 650,
-      minMoney: 1_700n,
-      minExploitSuccesses: 240,
-    },
-  },
-  {
-    id: 'botnet-war',
-    label: 'P3 Botnet War',
-    requirements: {
-      minBots: 420_000n,
-      minScans: 2_000,
-      minMoney: 26_000n,
-      minMessagesProcessed: 8,
-    },
-  },
-  {
-    id: 'matrix-breach',
-    label: 'P4 Matrix Edge',
-    requirements: {
-      minBots: 18_000_000n,
-      minPortfolio: 190_000n,
-      minWarWins: 18,
-      minMessagesProcessed: 28,
-    },
-  },
-  {
-    id: 'singularity-core',
-    label: 'P5 Singularity Core',
-    requirements: {
-      minBots: 480_000_000n,
-      minMoney: 11_000_000n,
-      minWarWins: 65,
-      minMessagesProcessed: 65,
-    },
-  },
-];
+} from '../../../game/types';
+import { PHASE_DEFINITIONS } from './definitions';
+import type { PhaseDefinition } from './types';
 
 export interface PhaseProgress {
   id: PhaseId;

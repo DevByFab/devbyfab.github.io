@@ -1,0 +1,269 @@
+.overlay-backdrop.lore-overlay {
+  --lore-backdrop-a: rgba(88, 216, 228, 0.2);
+  --lore-backdrop-b: rgba(255, 167, 96, 0.16);
+  --lore-vignette: rgba(3, 10, 13, 0.9);
+  --lore-noise-opacity: 0.14;
+  background:
+    radial-gradient(circle at 14% 18%, var(--lore-backdrop-a), transparent 46%),
+    radial-gradient(circle at 86% 86%, var(--lore-backdrop-b), transparent 52%),
+    linear-gradient(150deg, rgba(3, 12, 15, 0.9), rgba(4, 14, 18, 0.96));
+  backdrop-filter: blur(10px) saturate(118%);
+  overflow: hidden;
+}
+
+.overlay-backdrop.lore-overlay::before,
+.overlay-backdrop.lore-overlay::after {
+  content: '';
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+}
+
+.overlay-backdrop.lore-overlay::before {
+  background:
+    radial-gradient(circle at 72% 30%, rgba(255, 183, 118, 0.22), transparent 42%),
+    radial-gradient(circle at 28% 76%, rgba(93, 229, 239, 0.2), transparent 48%);
+  filter: blur(42px);
+  opacity: 0.66;
+  animation: loreBackdropSweep 18s ease-in-out infinite alternate;
+}
+
+.overlay-backdrop.lore-overlay::after {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(198, 244, 248, var(--lore-noise-opacity)) 0,
+      rgba(198, 244, 248, var(--lore-noise-opacity)) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.3;
+  animation: loreNoiseShift 3.8s steps(14) infinite;
+}
+
+.lore-cinematic-card {
+  --lore-tone-a: rgba(106, 223, 233, 0.24);
+  --lore-tone-b: rgba(255, 192, 126, 0.22);
+  --lore-copy-border: rgba(126, 209, 219, 0.76);
+  --lore-copy-bg: rgba(5, 18, 23, 0.78);
+  --lore-read-bg: rgba(7, 20, 25, 0.75);
+  --lore-read-border: rgba(126, 209, 219, 0.38);
+  --lore-read-color: #c8eaed;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: rgba(130, 220, 229, 0.34);
+  background: linear-gradient(138deg, rgba(4, 18, 22, 0.95), rgba(9, 31, 37, 0.94));
+  backdrop-filter: blur(14px) saturate(124%);
+}
+
+.lore-cinematic-card::before {
+  content: '';
+  position: absolute;
+  inset: -32%;
+  background:
+    radial-gradient(circle at 16% 18%, var(--lore-tone-a), transparent 50%),
+    radial-gradient(circle at 86% 80%, var(--lore-tone-b), transparent 58%);
+  filter: blur(12px);
+  opacity: 0.78;
+  animation: loreBackdropSweep 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.lore-cinematic-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lore-layer-grid {
+  background:
+    repeating-linear-gradient(0deg, rgba(86, 157, 165, 0.09) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(86, 157, 165, 0.06) 0 1px, transparent 1px 28px);
+  opacity: 0.34;
+  mix-blend-mode: screen;
+}
+
+.lore-layer-glow {
+  background:
+    radial-gradient(circle at 80% 16%, var(--lore-tone-b), transparent 42%),
+    radial-gradient(circle at 14% 84%, var(--lore-tone-a), transparent 38%);
+  opacity: 0.52;
+  filter: blur(20px);
+  animation: loreLayerPulse 6.4s ease-in-out infinite;
+}
+
+.lore-layer-vignette {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 38%, var(--lore-vignette) 100%);
+  opacity: 0.84;
+}
+
+.lore-cinematic-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.lore-cinematic-card h2 {
+  margin: 0;
+  font-size: clamp(25px, 3vw, 34px);
+  letter-spacing: 0.02em;
+  text-shadow: 0 8px 24px rgba(0, 7, 9, 0.66);
+}
+
+.lore-copy {
+  margin: 0;
+  color: #d8ecef;
+  line-height: 1.5;
+  font-size: 13px;
+}
+
+.lore-progress {
+  margin: 0;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: #d4f1f4;
+  text-transform: uppercase;
+}
+
+.lore-read-gate {
+  margin: 0;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--lore-read-border);
+  background: var(--lore-read-bg);
+  color: var(--lore-read-color);
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: border-color 220ms ease, color 220ms ease, background-color 220ms ease;
+}
+
+.lore-read-gate.is-ready {
+  border-color: rgba(122, 246, 198, 0.64);
+  background: rgba(9, 34, 25, 0.74);
+  color: #bff8df;
+}
+
+.lore-scene-copy {
+  min-height: 96px;
+  border: 1px solid rgba(120, 194, 201, 0.32);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--lore-copy-bg);
+  border-left-color: var(--lore-copy-border);
+  box-shadow: 0 14px 34px rgba(0, 7, 10, 0.5);
+  transition:
+    border-color 260ms ease,
+    background-color 260ms ease,
+    box-shadow 260ms ease,
+    transform 260ms ease;
+}
+
+.lore-keyboard-hint {
+  margin: -2px 0 0;
+  color: #9ec7cb;
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.lore-cinematic-card.lore-transition-out-next .lore-progress,
+.lore-cinematic-card.lore-transition-out-next .lore-read-gate,
+.lore-cinematic-card.lore-transition-out-next .lore-keyboard-hint,
+.lore-cinematic-card.lore-transition-out-next .lore-scene-copy {
+  animation: loreCopyOutNext 340ms ease-in forwards;
+}
+
+.lore-cinematic-card.lore-transition-in-next .lore-progress,
+.lore-cinematic-card.lore-transition-in-next .lore-read-gate,
+.lore-cinematic-card.lore-transition-in-next .lore-keyboard-hint,
+.lore-cinematic-card.lore-transition-in-next .lore-scene-copy {
+  animation: loreCopyInNext 340ms ease-out forwards;
+}
+
+.lore-cinematic-card.lore-transition-out-prev .lore-progress,
+.lore-cinematic-card.lore-transition-out-prev .lore-read-gate,
+.lore-cinematic-card.lore-transition-out-prev .lore-keyboard-hint,
+.lore-cinematic-card.lore-transition-out-prev .lore-scene-copy {
+  animation: loreCopyOutPrev 340ms ease-in forwards;
+}
+
+.lore-cinematic-card.lore-transition-in-prev .lore-progress,
+.lore-cinematic-card.lore-transition-in-prev .lore-read-gate,
+.lore-cinematic-card.lore-transition-in-prev .lore-keyboard-hint,
+.lore-cinematic-card.lore-transition-in-prev .lore-scene-copy {
+  animation: loreCopyInPrev 340ms ease-out forwards;
+}
+
+.lore-scene-fall-start {
+  --lore-backdrop-a: rgba(108, 225, 235, 0.18);
+  --lore-backdrop-b: rgba(125, 178, 226, 0.14);
+  --lore-vignette: rgba(3, 11, 14, 0.9);
+  --lore-tone-a: rgba(108, 225, 235, 0.24);
+  --lore-tone-b: rgba(149, 182, 233, 0.2);
+  --lore-copy-border: rgba(104, 216, 227, 0.8);
+  --lore-copy-bg: rgba(5, 18, 22, 0.8);
+}
+
+.lore-scene-fall-pressure {
+  --lore-backdrop-a: rgba(118, 212, 224, 0.16);
+  --lore-backdrop-b: rgba(255, 189, 110, 0.22);
+  --lore-vignette: rgba(16, 11, 7, 0.9);
+  --lore-tone-a: rgba(109, 210, 221, 0.22);
+  --lore-tone-b: rgba(255, 195, 116, 0.28);
+  --lore-copy-border: rgba(255, 201, 119, 0.82);
+  --lore-copy-bg: rgba(28, 21, 9, 0.64);
+}
+
+.lore-scene-eviction-hit {
+  --lore-backdrop-a: rgba(253, 131, 131, 0.2);
+  --lore-backdrop-b: rgba(255, 181, 101, 0.16);
+  --lore-vignette: rgba(17, 6, 6, 0.92);
+  --lore-tone-a: rgba(255, 126, 126, 0.24);
+  --lore-tone-b: rgba(255, 176, 110, 0.2);
+  --lore-copy-border: rgba(255, 137, 137, 0.84);
+  --lore-copy-bg: rgba(32, 12, 12, 0.66);
+  --lore-read-bg: rgba(42, 11, 11, 0.55);
+  --lore-read-border: rgba(255, 137, 137, 0.44);
+  --lore-read-color: #ffdede;
+}
+
+.lore-scene-botnet-discovery {
+  --lore-backdrop-a: rgba(255, 146, 82, 0.24);
+  --lore-backdrop-b: rgba(255, 216, 120, 0.18);
+  --lore-vignette: rgba(16, 8, 5, 0.9);
+  --lore-tone-a: rgba(255, 145, 81, 0.28);
+  --lore-tone-b: rgba(255, 203, 112, 0.24);
+  --lore-copy-border: rgba(255, 174, 76, 0.88);
+  --lore-copy-bg: rgba(34, 18, 8, 0.68);
+  --lore-read-bg: rgba(43, 24, 9, 0.58);
+  --lore-read-border: rgba(255, 193, 112, 0.48);
+  --lore-read-color: #ffe5bf;
+}
+
+.lore-scene-tutorial-bridge {
+  --lore-backdrop-a: rgba(117, 243, 203, 0.2);
+  --lore-backdrop-b: rgba(114, 210, 255, 0.16);
+  --lore-vignette: rgba(5, 12, 9, 0.9);
+  --lore-tone-a: rgba(104, 238, 196, 0.26);
+  --lore-tone-b: rgba(113, 201, 247, 0.18);
+  --lore-copy-border: rgba(112, 238, 199, 0.84);
+  --lore-copy-bg: rgba(8, 29, 21, 0.64);
+  --lore-read-bg: rgba(8, 34, 23, 0.58);
+  --lore-read-border: rgba(112, 238, 199, 0.48);
+  --lore-read-color: #cbf8e7;
+}
+
+.lore-scene-eviction-hit .lore-scene-copy {
+  animation: heatPulse 1.9s ease-in-out infinite;
+}
+
+.lore-scene-botnet-discovery .lore-scene-copy {
+  box-shadow: 0 0 30px rgba(255, 164, 72, 0.26);
+}
+

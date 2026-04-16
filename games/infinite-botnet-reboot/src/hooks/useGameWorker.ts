@@ -40,9 +40,6 @@ export function useGameWorker(): GameWorkerController {
     let workerBooted = false;
     let bootTimer: ReturnType<typeof window.setTimeout> | null = null;
 
-    setError(null);
-    setReady(false);
-
     const clearBootTimer = () => {
       if (bootTimer === null) return;
       window.clearTimeout(bootTimer);
@@ -55,9 +52,11 @@ export function useGameWorker(): GameWorkerController {
         type: 'module',
       });
     } catch (creationError) {
-      setError(
-        `Worker bootstrap failed. Start with Vite (npm run dev or npm run preview). ${formatRuntimeError(creationError)}`,
-      );
+      window.setTimeout(() => {
+        setError(
+          `Worker bootstrap failed. Start with Vite (npm run dev or npm run preview). ${formatRuntimeError(creationError)}`,
+        );
+      }, 0);
       return;
     }
 
@@ -118,8 +117,10 @@ export function useGameWorker(): GameWorkerController {
       worker.postMessage(bootMessage);
     } catch (postError) {
       clearBootTimer();
-      setReady(false);
-      setError(`Worker BOOT dispatch failed: ${formatRuntimeError(postError)}`);
+      window.setTimeout(() => {
+        setReady(false);
+        setError(`Worker BOOT dispatch failed: ${formatRuntimeError(postError)}`);
+      }, 0);
     }
 
     return () => {

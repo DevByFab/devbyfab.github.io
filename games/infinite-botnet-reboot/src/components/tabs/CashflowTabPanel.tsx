@@ -15,6 +15,7 @@ interface CashflowTabPanelProps {
 
 export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
   const money = BigInt(props.snapshot.resources.darkMoney);
+  const investmentsUnlocked = props.snapshot.phase.index >= 2;
 
   return (
     <section className="system-grid" role="tabpanel" id="panel-cashflow" aria-labelledby="tab-cashflow">
@@ -28,19 +29,23 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                 ? props.t('reboot.panel.cashflow.pauseMonetize')
                 : props.t('reboot.panel.cashflow.startMonetize')}
             </button>
-            <button className="btn" disabled={money < 80n} onClick={props.onInvestTranche}>
+            <button
+              className="btn"
+              disabled={!investmentsUnlocked || money < 80n}
+              onClick={props.onInvestTranche}
+            >
               {props.t('reboot.panel.cashflow.investTranche')}
             </button>
             <button
               className="btn ghost"
-              disabled={BigInt(props.snapshot.resources.portfolio) <= 0n}
+              disabled={!investmentsUnlocked || BigInt(props.snapshot.resources.portfolio) <= 0n}
               onClick={props.onCashout}
             >
               {props.t('reboot.panel.cashflow.cashout')}
             </button>
           </div>
           <div className="button-row compact">
-            <button className="btn ghost" onClick={props.onToggleInvestMode}>
+            <button className="btn ghost" disabled={!investmentsUnlocked} onClick={props.onToggleInvestMode}>
               {props.t('reboot.panel.cashflow.modeLabel')}: {props.snapshot.economy.investMode}
             </button>
           </div>

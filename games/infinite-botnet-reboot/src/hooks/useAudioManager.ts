@@ -159,6 +159,8 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
   }, []);
 
   useEffect(() => {
+    const oneShotCache = oneShotCacheRef.current;
+
     return () => {
       const ambience = ambienceRef.current;
       if (ambience) {
@@ -166,7 +168,7 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
         ambienceRef.current = null;
       }
 
-      oneShotCacheRef.current.clear();
+      oneShotCache.clear();
     };
   }, []);
 
