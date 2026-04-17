@@ -35,6 +35,13 @@ jobs:
       - name: Build reboot
         run: VITE_PUBLIC_BASE=/games/infinite-botnet-reboot/ npm run build --prefix games/infinite-botnet-reboot
 
+      - name: Debug built index scripts
+        run: |
+          set -euo pipefail
+          echo '--- dist/index.html script tags ---'
+          grep -n '<script' games/infinite-botnet-reboot/dist/index.html || true
+          echo '--- end ---'
+
       - name: Assemble Pages artifact
         run: |
           set -euo pipefail
