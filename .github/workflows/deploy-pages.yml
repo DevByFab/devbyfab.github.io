@@ -35,6 +35,15 @@ jobs:
       - name: Build reboot
         run: VITE_PUBLIC_BASE=/games/infinite-botnet-reboot/ npm run build --prefix games/infinite-botnet-reboot
 
+      - name: Verify reboot build entrypoint
+        run: |
+          set -euo pipefail
+          test -f games/infinite-botnet-reboot/dist/index.html
+          if grep -q '/src/main.tsx' games/infinite-botnet-reboot/dist/index.html; then
+            echo 'ERROR: dist/index.html still references /src/main.tsx (unbuilt entrypoint).'
+            exit 1
+          fi
+
       - name: Assemble Pages artifact
         run: |
           set -euo pipefail
