@@ -57,6 +57,7 @@
     <script>
       window.__IBR_BOOT_OK__ = false;
       window.__IBR_BOOT_ERROR__ = '';
+      window.__IBR_RAW_SOURCE_MODE__ = false;
 
       window.addEventListener('error', (event) => {
         const message = typeof event.message === 'string' && event.message.length > 0
@@ -65,7 +66,12 @@
         const file = typeof event.filename === 'string' && event.filename.length > 0
           ? event.filename
           : 'unknown file';
-        window.__IBR_BOOT_ERROR__ = `${message} (${file})`;
+        const composed = `${message} (${file})`;
+        window.__IBR_BOOT_ERROR__ = composed;
+
+        if (file.includes('/src/main.tsx') || composed.includes('/src/main.tsx')) {
+          window.__IBR_RAW_SOURCE_MODE__ = true;
+        }
       });
 
       window.addEventListener('unhandledrejection', (event) => {
@@ -93,18 +99,34 @@
           ? `<p style="margin-top: 8px;"><strong>Detected error:</strong> ${window.__IBR_BOOT_ERROR__.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`
           : '';
 
+        const rawSourceHint = window.__IBR_RAW_SOURCE_MODE__
+          ? '<p style="margin-top: 8px;"><strong>Diagnosis:</strong> GitHub Pages is serving source files instead of the built Vite artifact.</p>'
+          : '';
+
         root.innerHTML = `
           <main class="boot-shell">
             <section class="boot-card">
               <h1>Infinite BotNet Reboot</h1>
               <p>The app bundle did not boot.</p>
               <p style="margin-top: 8px;">If this persists: check GitHub Pages settings and set Source to <strong>GitHub Actions</strong> (not Deploy from branch), then push again.</p>
+              ${rawSourceHint}
               ${bootError}
             </section>
           </main>
         `;
       }, 4000);
     </script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script id="ibr-entry-script" type="module" src="/src/main.tsx"></script>
+    <script>
+      const entryScript = document.getElementById('ibr-entry-script');
+      if (entryScript) {
+        entryScript.addEventListener('error', () => {
+          window.__IBR_RAW_SOURCE_MODE__ = true;
+          if (!window.__IBR_BOOT_ERROR__) {
+            window.__IBR_BOOT_ERROR__ = 'Failed to load /src/main.tsx (404)';
+          }
+        });
+      }
+    </script>
   </body>
 </html>
