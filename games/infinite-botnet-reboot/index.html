@@ -56,6 +56,32 @@
     </div>
     <script>
       window.__IBR_BOOT_OK__ = false;
+      window.__IBR_BOOT_ERROR__ = '';
+
+      window.addEventListener('error', (event) => {
+        const message = typeof event.message === 'string' && event.message.length > 0
+          ? event.message
+          : 'Unknown script error';
+        const file = typeof event.filename === 'string' && event.filename.length > 0
+          ? event.filename
+          : 'unknown file';
+        window.__IBR_BOOT_ERROR__ = `${message} (${file})`;
+      });
+
+      window.addEventListener('unhandledrejection', (event) => {
+        const reason = event.reason;
+        if (typeof reason === 'string') {
+          window.__IBR_BOOT_ERROR__ = reason;
+          return;
+        }
+
+        if (reason && typeof reason.message === 'string' && reason.message.length > 0) {
+          window.__IBR_BOOT_ERROR__ = reason.message;
+          return;
+        }
+
+        window.__IBR_BOOT_ERROR__ = 'Unhandled promise rejection during bootstrap';
+      });
 
       window.setTimeout(() => {
         if (window.__IBR_BOOT_OK__) return;
@@ -63,11 +89,17 @@
         const root = document.getElementById('root');
         if (!root) return;
 
+        const bootError = window.__IBR_BOOT_ERROR__
+          ? `<p style="margin-top: 8px;"><strong>Detected error:</strong> ${window.__IBR_BOOT_ERROR__.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`
+          : '';
+
         root.innerHTML = `
           <main class="boot-shell">
             <section class="boot-card">
               <h1>Infinite BotNet Reboot</h1>
-              <p>The app did not boot. Please hard refresh (Ctrl+Shift+R).</p>
+              <p>The app bundle did not boot.</p>
+              <p style="margin-top: 8px;">If this persists: check GitHub Pages settings and set Source to <strong>GitHub Actions</strong> (not Deploy from branch), then push again.</p>
+              ${bootError}
             </section>
           </main>
         `;
