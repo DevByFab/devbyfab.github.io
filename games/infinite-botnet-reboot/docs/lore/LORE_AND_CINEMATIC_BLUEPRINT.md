@@ -6,9 +6,9 @@ Scope is strict: opening story from first launch to the tutorial bridge.
 
 ## Locked Product Decisions
 - Navigation mode: manual scene navigation (Previous / Next).
-- Visual scope for this sprint: text + CSS staging + audio cues.
+- Visual scope for this sprint: text + CSS staging + audio cues, with a modular Canvas scene-layer pass across P0 scenes.
 - Audio direction: ambience loop + one stinger on BotNet discovery beat.
-- Pacing gate: minimum 2s read delay before Next/Continue unlocks.
+- Pacing gate: no forced read delay; Next/Continue stay available when transition lock is free.
 - Accessibility controls: lore keyboard controls enabled (Enter/Space/ArrowRight next, ArrowLeft/Backspace previous, Escape skip).
 - Legacy lore replacement: complete replacement of the previous 3-paragraph intro.
 - Runtime intent: short opening (about 60 to 90 seconds when read normally).
@@ -80,6 +80,8 @@ Keys used by runtime overlay:
 
 ## Technical Mapping
 - Scene state and navigation: src/App.tsx
+- Lore scene registry and per-scene modules: src/cinematics/lore/
+- Shared Canvas runtime helpers: src/cinematics/lore/shared/
 - Cinematic style classes and motion layers: src/index.css
 - Audio cue trigger and channel mix: src/hooks/useAudioManager.ts
 - Cue mapping template: audio/manifest.example.json
@@ -89,7 +91,7 @@ Keys used by runtime overlay:
 1. First launch check opens lore overlay.
 2. Each scene enters with animated transition and scene-specific visual tone.
 3. Player navigates scenes manually with Previous / Next.
-4. Next/Continue unlock only after a minimum 2s read gate per scene.
+4. Next/Continue are available immediately; animation/bridge locks prevent double-trigger during transitions.
 5. Scene 4 transition triggers discovery stinger.
 6. Last scene Continue opens a short bridge overlay, then starts tutorial flow.
 7. Skip marks lore/tutorial as seen and returns to dashboard.
@@ -102,7 +104,7 @@ Keys used by runtime overlay:
 - Previous button disabled on first scene.
 - Continue appears only on final scene.
 - Scene transitions are animated (out/in) rather than instant text swaps.
-- Next/Continue stay disabled until read gate is complete.
+- Next/Continue are immediately available when no transition lock is active.
 - Stinger triggers on BotNet discovery beat.
 - Lore keyboard controls are active and isolated to the overlay.
 - Lore exit to tutorial uses a short bridge transition (no hard cut).

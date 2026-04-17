@@ -2,6 +2,34 @@ import type { UpgradeChainDefinition } from './types';
 
 export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
   {
+    chainId: 'econ-exploit-seed',
+    category: 'economy',
+    discoverPhaseIndex: 0,
+    label: 'Exploit Seed',
+    summary: 'Micro-boost de precision exploit pour fluidifier les toutes premieres actions.',
+    levels: [
+      {
+        cost: { bots: 10n },
+        requirements: { minScans: 2 },
+        effects: { exploitChanceBps: 25 },
+      },
+    ],
+  },
+  {
+    chainId: 'econ-cooldown-primer',
+    category: 'economy',
+    discoverPhaseIndex: 0,
+    label: 'Cooldown Primer',
+    summary: 'Legere optimisation du cycle exploit pour accelerer le tout debut de P0.',
+    levels: [
+      {
+        cost: { bots: 25n },
+        requirements: { minExploitSuccesses: 3 },
+        effects: { manualExploitCooldownReductionBps: 500 },
+      },
+    ],
+  },
+  {
     chainId: 'econ-scan-burst',
     category: 'economy',
     discoverPhaseIndex: 0,

@@ -9,11 +9,11 @@ export interface AudioSettings {
 }
 
 export const DEFAULT_AUDIO_SETTINGS: AudioSettings = {
-  master: 80,
-  ui: 70,
-  sfx: 78,
-  music: 58,
-  ambience: 62,
+  master: 76,
+  ui: 74,
+  sfx: 84,
+  music: 52,
+  ambience: 48,
 };
 
 type UiCue =
@@ -45,6 +45,46 @@ interface AudioManifest {
   stingers: Record<string, string>;
 }
 
+const BUILTIN_AUDIO_URLS: Record<string, string> = {
+  'achievement-unlocked.mp3': new URL('../../audio/achievement-unlocked.mp3', import.meta.url).toString(),
+  'error-message.mp3': new URL('../../audio/error-message.mp3', import.meta.url).toString(),
+  'level-up.mp3': new URL('../../audio/level-up.mp3', import.meta.url).toString(),
+  'server-drone.mp3': new URL('../../audio/server-drone.mp3', import.meta.url).toString(),
+  'ui-click.mp3': new URL('../../audio/ui-click.mp3', import.meta.url).toString(),
+  'universfield-message-incoming.mp3': new URL(
+    '../../audio/universfield-message-incoming.mp3',
+    import.meta.url,
+  ).toString(),
+};
+
+const BUILTIN_AUDIO_MANIFEST: AudioManifest = {
+  ui: {
+    scanClick: 'ui-click.mp3',
+    exploitClick: 'ui-click.mp3',
+    upgradeBuy: 'achievement-unlocked.mp3',
+    settingsOpen: 'ui-click.mp3',
+    settingsClose: 'ui-click.mp3',
+    error: 'error-message.mp3',
+  },
+  events: {
+    targetFound: 'ui-click.mp3',
+    exploitSuccess: 'ui-click.mp3',
+    exploitFail: 'error-message.mp3',
+    marketUnlock: 'achievement-unlocked.mp3',
+    phaseShift: 'level-up.mp3',
+    incomingMessage: 'universfield-message-incoming.mp3',
+  },
+  ambience: {
+    main: 'server-drone.mp3',
+  },
+  stingers: {
+    upgradeTier2: 'achievement-unlocked.mp3',
+    upgradeTier3: 'level-up.mp3',
+    marketTier2: 'level-up.mp3',
+    loreBotnetDiscovery: 'level-up.mp3',
+  },
+};
+
 export interface AudioManager {
   playUiCue: (cue: UiCue) => void;
   playEventCue: (cue: EventCue) => void;
@@ -68,6 +108,43 @@ function makeVolume(settings: AudioSettings, channel: keyof AudioSettings): numb
   return volume;
 }
 
+function createAudioBasePath(basePath: string): string {
+  if (basePath.length === 0) return '/audio/';
+  const normalized = basePath.endsWith('/') ? basePath : `${basePath}/`;
+  return `${normalized}audio/`;
+}
+
+function resolveAudioUrl(audioBasePath: string, fileName: string): string {
+  const bundledAssetUrl = BUILTIN_AUDIO_URLS[fileName];
+  if (bundledAssetUrl) return bundledAssetUrl;
+
+  if (/^https?:\/\//i.test(fileName) || fileName.startsWith('/')) {
+    return fileName;
+  }
+
+  return `${audioBasePath}${fileName}`;
+}
+
+function resolveManifestCandidates(audioBasePath: string): string[] {
+  return [
+    `${audioBasePath}manifest.json`,
+    `${audioBasePath}manifest.example.json`,
+    new URL('../../audio/manifest.example.json', import.meta.url).toString(),
+  ];
+}
+
+function warnAudioIssue(cache: Set<string>, code: string, details?: unknown): void {
+  if (cache.has(code)) return;
+  cache.add(code);
+
+  if (details === undefined) {
+    console.warn(`[audio] ${code}`);
+    return;
+  }
+
+  console.warn(`[audio] ${code}`, details);
+}
+
 export function useAudioManager(settings: AudioSettings): AudioManager {
   const [manifestReady, setManifestReady] = useState(false);
   const settingsRef = useRef(settings);
@@ -75,7 +152,8 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
   const oneShotCacheRef = useRef<Map<string, HTMLAudioElement>>(new Map());
   const ambienceRef = useRef<HTMLAudioElement | null>(null);
   const unlockedRef = useRef(false);
-  const baseUrlRef = useRef(new URL('../../audio/', import.meta.url).toString());
+  const diagnosticsRef = useRef<Set<string>>(new Set());
+  const audioBasePathRef = useRef(createAudioBasePath(import.meta.env.BASE_URL));
 
   useEffect(() => {
     settingsRef.current = settings;
@@ -90,18 +168,30 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     let cancelled = false;
 
     const loadManifest = async () => {
-      try {
-        const manifestUrl = new URL('../../audio/manifest.example.json', import.meta.url).toString();
-        const response = await fetch(manifestUrl);
-        if (!response.ok) return;
+      const candidates = resolveManifestCandidates(audioBasePathRef.current);
 
-        const data = (await response.json()) as AudioManifest;
-        if (cancelled) return;
-        manifestRef.current = data;
-        setManifestReady(true);
-      } catch {
-        // Silent fallback: audio is optional and must never break gameplay.
+      for (const manifestUrl of candidates) {
+        try {
+          const response = await fetch(manifestUrl);
+          if (!response.ok) {
+            warnAudioIssue(diagnosticsRef.current, `manifest-http-${response.status}-${manifestUrl}`);
+            continue;
+          }
+
+          const data = (await response.json()) as AudioManifest;
+          if (cancelled) return;
+          manifestRef.current = data;
+          setManifestReady(true);
+          return;
+        } catch (error) {
+          warnAudioIssue(diagnosticsRef.current, `manifest-fetch-${manifestUrl}`, error);
+        }
       }
+
+      if (cancelled) return;
+      manifestRef.current = BUILTIN_AUDIO_MANIFEST;
+      setManifestReady(true);
+      warnAudioIssue(diagnosticsRef.current, 'manifest-fallback-built-in');
     };
 
     loadManifest();
@@ -119,14 +209,14 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     const ambienceFile = manifest?.ambience.main;
     if (!ambienceFile) return;
 
-    const ambienceUrl = baseUrlRef.current + ambienceFile;
+    const ambienceUrl = resolveAudioUrl(audioBasePathRef.current, ambienceFile);
     const ambience = new Audio(ambienceUrl);
     ambience.loop = true;
     ambience.preload = 'auto';
     ambience.volume = makeVolume(settingsRef.current, 'ambience');
     ambienceRef.current = ambience;
-    ambience.play().catch(() => {
-      // Browser can still block; next interaction can retry implicitly via future commands.
+    ambience.play().catch((error) => {
+      warnAudioIssue(diagnosticsRef.current, 'ambience-autoplay-blocked', error);
     });
   }, [manifestReady]);
 
@@ -134,18 +224,27 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     const unlockAudio = () => {
       if (unlockedRef.current) return;
       unlockedRef.current = true;
+
+      const existingAmbience = ambienceRef.current;
+      if (existingAmbience) {
+        existingAmbience.play().catch((error) => {
+          warnAudioIssue(diagnosticsRef.current, 'ambience-resume-failed', error);
+        });
+        return;
+      }
+
       const manifest = manifestRef.current;
       const ambienceFile = manifest?.ambience.main;
       if (!ambienceFile) return;
 
-      const ambienceUrl = baseUrlRef.current + ambienceFile;
+      const ambienceUrl = resolveAudioUrl(audioBasePathRef.current, ambienceFile);
       const ambience = new Audio(ambienceUrl);
       ambience.loop = true;
       ambience.preload = 'auto';
       ambience.volume = makeVolume(settingsRef.current, 'ambience');
       ambienceRef.current = ambience;
-      ambience.play().catch(() => {
-        // Browser can still block; next interaction can retry implicitly via future commands.
+      ambience.play().catch((error) => {
+        warnAudioIssue(diagnosticsRef.current, 'ambience-unlock-play-failed', error);
       });
     };
 
@@ -185,7 +284,7 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     const fileName = manifest[bucket]?.[cue];
     if (!fileName) return;
 
-    const url = baseUrlRef.current + fileName;
+    const url = resolveAudioUrl(audioBasePathRef.current, fileName);
 
     let cached = oneShotCacheRef.current.get(url);
     if (!cached) {
@@ -196,8 +295,8 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
 
     const instance = cached.cloneNode(true) as HTMLAudioElement;
     instance.volume = makeVolume(settingsRef.current, channel);
-    instance.play().catch(() => {
-      // Ignore runtime play failures to avoid breaking command flow.
+    instance.play().catch((error) => {
+      warnAudioIssue(diagnosticsRef.current, `oneshot-play-failed-${bucket}-${cue}`, error);
     });
   };
 

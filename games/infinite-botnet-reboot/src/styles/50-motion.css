@@ -97,12 +97,49 @@
   }
 }
 
+@keyframes loreBridgeReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+    filter: blur(1.4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lore-overlay::before,
   .lore-overlay::after,
   .lore-cinematic-card::before,
   .lore-layer-glow,
-  .lore-scene-copy {
+  .lore-scene-copy,
+  .lore-cinematic-card.lore-transition-out-next .lore-progress,
+  .lore-cinematic-card.lore-transition-out-next .lore-read-gate,
+  .lore-cinematic-card.lore-transition-out-next .lore-keyboard-hint,
+  .lore-cinematic-card.lore-transition-out-next .lore-scene-copy,
+  .lore-cinematic-card.lore-transition-in-next .lore-progress,
+  .lore-cinematic-card.lore-transition-in-next .lore-read-gate,
+  .lore-cinematic-card.lore-transition-in-next .lore-keyboard-hint,
+  .lore-cinematic-card.lore-transition-in-next .lore-scene-copy,
+  .lore-cinematic-card.lore-transition-out-prev .lore-progress,
+  .lore-cinematic-card.lore-transition-out-prev .lore-read-gate,
+  .lore-cinematic-card.lore-transition-out-prev .lore-keyboard-hint,
+  .lore-cinematic-card.lore-transition-out-prev .lore-scene-copy,
+  .lore-cinematic-card.lore-transition-in-prev .lore-progress,
+  .lore-cinematic-card.lore-transition-in-prev .lore-read-gate,
+  .lore-cinematic-card.lore-transition-in-prev .lore-keyboard-hint,
+  .lore-cinematic-card.lore-transition-in-prev .lore-scene-copy,
+  .lore-bridge-card {
     animation: none !important;
+  }
+
+  .overlay-backdrop.lore-overlay,
+  .lore-cinematic-card,
+  .lore-scene-copy,
+  .lore-read-gate {
+    transition: none !important;
   }
 }

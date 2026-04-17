@@ -9,6 +9,7 @@
     linear-gradient(150deg, rgba(3, 12, 15, 0.9), rgba(4, 14, 18, 0.96));
   backdrop-filter: blur(10px) saturate(118%);
   overflow: hidden;
+  transition: background 220ms ease, backdrop-filter 220ms ease;
 }
 
 .overlay-backdrop.lore-overlay::before,
@@ -56,6 +57,7 @@
   border-color: rgba(130, 220, 229, 0.34);
   background: linear-gradient(138deg, rgba(4, 18, 22, 0.95), rgba(9, 31, 37, 0.94));
   backdrop-filter: blur(14px) saturate(124%);
+  transition: border-color 220ms ease, background 220ms ease;
 }
 
 .lore-cinematic-card::before {
@@ -69,12 +71,53 @@
   opacity: 0.78;
   animation: loreBackdropSweep 14s ease-in-out infinite alternate;
   pointer-events: none;
+  transition: opacity 220ms ease;
 }
 
 .lore-cinematic-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+.lore-scene-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.44;
+  transition: opacity 220ms ease;
+}
+
+.lore-scene-canvas-fall-start {
+  mix-blend-mode: normal;
+  opacity: 0.62;
+  filter: saturate(108%) contrast(104%);
+}
+
+.lore-scene-canvas-fall-pressure {
+  mix-blend-mode: normal;
+  opacity: 0.6;
+  filter: saturate(114%) contrast(106%);
+}
+
+.lore-scene-canvas-eviction-hit {
+  mix-blend-mode: hard-light;
+  opacity: 0.46;
+  filter: saturate(128%) contrast(109%);
+}
+
+.lore-scene-canvas-botnet-discovery {
+  mix-blend-mode: color-dodge;
+  opacity: 0.5;
+  filter: saturate(134%) contrast(110%);
+}
+
+.lore-scene-canvas-tutorial-bridge {
+  mix-blend-mode: screen;
+  opacity: 0.44;
+  filter: saturate(118%) contrast(103%);
 }
 
 .lore-layer-grid {
@@ -103,6 +146,10 @@
 .lore-cinematic-card > * {
   position: relative;
   z-index: 2;
+}
+
+.lore-cinematic-card > .lore-scene-canvas {
+  z-index: 1;
 }
 
 .lore-cinematic-card h2 {
@@ -170,6 +217,20 @@
   color: #9ec7cb;
   font: 500 11px/1.4 var(--mono);
   letter-spacing: 0.02em;
+}
+
+.lore-bridge-overlay {
+  z-index: 21;
+}
+
+.lore-bridge-card {
+  width: min(620px, 100%);
+  gap: 12px;
+  animation: loreBridgeReveal 260ms ease-out forwards;
+}
+
+.lore-bridge-card .lore-scene-copy {
+  min-height: 0;
 }
 
 .lore-cinematic-card.lore-transition-out-next .lore-progress,
@@ -266,4 +327,3 @@
 .lore-scene-botnet-discovery .lore-scene-copy {
   box-shadow: 0 0 30px rgba(255, 164, 72, 0.26);
 }
-

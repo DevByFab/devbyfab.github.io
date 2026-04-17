@@ -5,6 +5,15 @@ Drop your royalty-free audio files here using the names below.
 For curated sound source ideas and license-safe workflow, see:
 - `ROYALTY_FREE_SFX_GUIDE.md`
 
+## Runtime Loading Order
+- Runtime manifest (primary): `public/audio/manifest.json`
+- Runtime manifest (fallback): `audio/manifest.example.json`
+- Code fallback (last resort): built-in manifest map in `src/hooks/useAudioManager.ts`
+
+## Runtime Asset Location
+- Runtime playback targets `public/audio/` first.
+- The source folder `audio/` stays as the editable source/reference for mapping and documentation.
+
 ## Current in-game mapping (runtime)
 - Ambience loop: `server-drone.mp3`
 - UI click: `ui-click.mp3`
@@ -39,4 +48,5 @@ For curated sound source ideas and license-safe workflow, see:
 - `loreBotnetDiscovery`: `level-up.mp3`
 
 If you switch to another naming or extension scheme (for example `.ogg`), update
-`audio/manifest.example.json` to keep runtime and docs aligned.
+both `public/audio/manifest.json` and `audio/manifest.example.json` to keep runtime
+and docs aligned.

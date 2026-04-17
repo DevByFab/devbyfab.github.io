@@ -7,6 +7,15 @@ Toutes les valeurs ci-dessous viennent directement du code courant.
 - games/infinite-botnet-reboot/src/worker/domain/upgrades/chains.ts
 - games/infinite-botnet-reboot/src/worker/domain/phases/definitions/
 
+## Notes d iteration
+
+### 2026-04-17 - P0 micro-boost early game (10 bots / 25 bots)
+- Ajout de `econ-exploit-seed` (P0): cout 10 bots, prerequis `minScans: 2`, effet `exploitChanceBps +25`.
+- Ajout de `econ-cooldown-primer` (P0): cout 25 bots, prerequis `minExploitSuccesses: 3`, effet `manualExploitCooldownReductionBps +500`.
+- Le palier existant `econ-scan-burst` a 45 bots est conserve sans deplacement.
+- Scope: micro-ajustement P0 uniquement, sans modification des gates de phase ni du protocole UI/worker.
+- Validation lot moyen attendue pour cette iteration: `npm run lint` + `npm run balance:sim` + test manuel P0 (achats 10 -> 25 -> 45).
+
 ## Regles de disponibilite des upgrades
 - Une chaine apparait si phase.index >= discoverPhaseIndex (ou si deja achetee auparavant).
 - Un niveau est achetable seulement si:
