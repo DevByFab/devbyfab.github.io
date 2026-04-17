@@ -43,17 +43,27 @@ export function writeUnlockHints(storageKey: string, hints: string[]): void {
 }
 
 export function readAudioSettings(storageKey: string): AudioSettings {
+  const readChannel = (value: unknown, fallback: number): number => {
+    if (value === undefined || value === null) return fallback;
+    return clampAudio(value);
+  };
+
   try {
     const raw = window.localStorage.getItem(storageKey);
     if (!raw) return DEFAULT_AUDIO_SETTINGS;
-    const parsed = JSON.parse(raw) as Partial<AudioSettings>;
+
+    const parsedValue = JSON.parse(raw) as unknown;
+    const parsed =
+      parsedValue && typeof parsedValue === 'object'
+        ? (parsedValue as Partial<AudioSettings>)
+        : ({} as Partial<AudioSettings>);
 
     return {
-      master: clampAudio(parsed.master),
-      ui: clampAudio(parsed.ui),
-      sfx: clampAudio(parsed.sfx),
-      music: clampAudio(parsed.music),
-      ambience: clampAudio(parsed.ambience),
+      master: readChannel(parsed.master, DEFAULT_AUDIO_SETTINGS.master),
+      ui: readChannel(parsed.ui, DEFAULT_AUDIO_SETTINGS.ui),
+      sfx: readChannel(parsed.sfx, DEFAULT_AUDIO_SETTINGS.sfx),
+      music: readChannel(parsed.music, DEFAULT_AUDIO_SETTINGS.music),
+      ambience: readChannel(parsed.ambience, DEFAULT_AUDIO_SETTINGS.ambience),
     };
   } catch {
     return DEFAULT_AUDIO_SETTINGS;

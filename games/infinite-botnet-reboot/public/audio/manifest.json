@@ -1,0 +1,27 @@
+{
+  "ui": {
+    "scanClick": "ui-click.mp3",
+    "exploitClick": "ui-click.mp3",
+    "upgradeBuy": "achievement-unlocked.mp3",
+    "settingsOpen": "ui-click.mp3",
+    "settingsClose": "ui-click.mp3",
+    "error": "error-message.mp3"
+  },
+  "events": {
+    "targetFound": "ui-click.mp3",
+    "exploitSuccess": "ui-click.mp3",
+    "exploitFail": "error-message.mp3",
+    "marketUnlock": "achievement-unlocked.mp3",
+    "phaseShift": "level-up.mp3",
+    "incomingMessage": "universfield-message-incoming.mp3"
+  },
+  "ambience": {
+    "main": "server-drone.mp3"
+  },
+  "stingers": {
+    "upgradeTier2": "achievement-unlocked.mp3",
+    "upgradeTier3": "level-up.mp3",
+    "marketTier2": "level-up.mp3",
+    "loreBotnetDiscovery": "level-up.mp3"
+  }
+}

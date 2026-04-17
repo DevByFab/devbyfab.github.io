@@ -1,9 +1,12 @@
+import type { ReactNode } from 'react';
+
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 
 interface LoreOverlayProps {
   t: TranslateFn;
   toneClass: string;
   transitionClass: string;
+  visualLayer?: ReactNode;
   sceneBody: string;
   progressLabel: string;
   readReady: boolean;
@@ -28,6 +31,7 @@ export function LoreOverlay(props: Readonly<LoreOverlayProps>) {
         <div className="lore-cinematic-layer lore-layer-grid" aria-hidden="true"></div>
         <div className="lore-cinematic-layer lore-layer-glow" aria-hidden="true"></div>
         <div className="lore-cinematic-layer lore-layer-vignette" aria-hidden="true"></div>
+        {props.visualLayer}
         <p className="eyebrow">{props.t('reboot.overlay.lore.eyebrow')}</p>
         <h2>{props.t('reboot.overlay.lore.title')}</h2>
         <p className="lore-progress">{props.progressLabel}</p>

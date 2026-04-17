@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatBigValue } from './game/format';
-import { AUDIO_SETTINGS_STORAGE_KEY } from './app/constants';
+import { LORE_SCENES, LoreCinematicCanvas } from './cinematics/lore';
+import {
+  AUDIO_SETTINGS_STORAGE_KEY,
+  LORE_BRIDGE_MS,
+  LORE_TRANSITION_MS,
+} from './app/constants';
 import {
   GUIDE_STEPS,
   type DashboardTab,
@@ -23,6 +28,7 @@ import {
 } from './app/storage';
 import { ResourceCard } from './components/ResourceCard';
 import { GuideOverlay } from './components/overlays/GuideOverlay';
+import { LoreBridgeOverlay } from './components/overlays/LoreBridgeOverlay.tsx';
 import { LoreOverlay } from './components/overlays/LoreOverlay';
 import { SettingsOverlay } from './components/overlays/SettingsOverlay';
 import { UnlockHintOverlay } from './components/overlays/UnlockHintOverlay';
@@ -36,21 +42,12 @@ import { type AudioSettings, useAudioManager } from './hooks/useAudioManager';
 import { useGameWorker } from './hooks/useGameWorker';
 import { useRebootI18n } from './hooks/useRebootI18n';
 
-const LORE_SCENE_KEYS = [
-  'reboot.overlay.lore.scene1',
-  'reboot.overlay.lore.scene2',
-  'reboot.overlay.lore.scene3',
-  'reboot.overlay.lore.scene4',
-  'reboot.overlay.lore.scene5',
-] as const;
-
-const LORE_SCENE_TONE_CLASSES = [
-  'lore-scene-fall-start',
-  'lore-scene-fall-pressure',
-  'lore-scene-eviction-hit',
-  'lore-scene-botnet-discovery',
-  'lore-scene-tutorial-bridge',
-] as const;
+type LoreTransitionClass =
+  | ''
+  | 'lore-transition-out-next'
+  | 'lore-transition-in-next'
+  | 'lore-transition-out-prev'
+  | 'lore-transition-in-prev';
 
 function App() {
   const { t } = useRebootI18n();
@@ -65,10 +62,38 @@ function App() {
   const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
   const [guideRect, setGuideRect] = useState<GuideRect | null>(null);
   const [loreSceneIndex, setLoreSceneIndex] = useState(0);
+  const [loreTransitionClass, setLoreTransitionClass] = useState<LoreTransitionClass>('');
+  const [loreBridgeActive, setLoreBridgeActive] = useState(false);
   const loreDiscoveryStingerPlayedRef = useRef(false);
-  const resetLoreScene = useCallback(() => {
-    setLoreSceneIndex(0);
+  const loreTransitionOutTimerRef = useRef<number | null>(null);
+  const loreTransitionInTimerRef = useRef<number | null>(null);
+  const loreBridgeTimerRef = useRef<number | null>(null);
+
+  const clearLoreTransitionTimers = useCallback(() => {
+    if (loreTransitionOutTimerRef.current !== null) {
+      window.clearTimeout(loreTransitionOutTimerRef.current);
+      loreTransitionOutTimerRef.current = null;
+    }
+
+    if (loreTransitionInTimerRef.current !== null) {
+      window.clearTimeout(loreTransitionInTimerRef.current);
+      loreTransitionInTimerRef.current = null;
+    }
   }, []);
+
+  const clearLoreBridgeTimer = useCallback(() => {
+    if (loreBridgeTimerRef.current === null) return;
+    window.clearTimeout(loreBridgeTimerRef.current);
+    loreBridgeTimerRef.current = null;
+  }, []);
+
+  const resetLoreScene = useCallback(() => {
+    clearLoreTransitionTimers();
+    clearLoreBridgeTimer();
+    setLoreTransitionClass('');
+    setLoreBridgeActive(false);
+    setLoreSceneIndex(0);
+  }, [clearLoreBridgeTimer, clearLoreTransitionTimers]);
 
   const {
     introStep,
@@ -128,20 +153,53 @@ function App() {
     setGuideRect,
   });
 
-  const loreSteps = useMemo(() => LORE_SCENE_KEYS.map((key) => t(key)), [t]);
-  const loreIsLastScene = loreSceneIndex >= loreSteps.length - 1;
-  const loreCanGoNext = loreReadReady;
-  const boundedLoreSceneIndex = Math.max(0, Math.min(loreSceneIndex, loreSteps.length - 1));
-  const loreSceneBody = loreSteps[boundedLoreSceneIndex] ?? '';
-  const loreToneClass = LORE_SCENE_TONE_CLASSES[boundedLoreSceneIndex] ?? LORE_SCENE_TONE_CLASSES[0];
+  const loreSceneCount = LORE_SCENES.length;
+  const boundedLoreSceneIndex = Math.max(0, Math.min(loreSceneIndex, loreSceneCount - 1));
+  const currentLoreScene = LORE_SCENES[boundedLoreSceneIndex] ?? LORE_SCENES[0];
+  const loreIsLastScene = boundedLoreSceneIndex >= loreSceneCount - 1;
+  const loreTransitionBusy = introStep === 'lore' && (loreTransitionClass.length > 0 || loreBridgeActive);
+  const loreCanGoPrev = boundedLoreSceneIndex > 0 && !loreTransitionBusy;
+  const loreCanGoNext = loreReadReady && !loreTransitionBusy;
+  const loreSceneBody = t(currentLoreScene.i18nKey);
+  const loreToneClass = currentLoreScene.toneClass;
   const loreProgressLabel = t('reboot.overlay.lore.progress', {
     current: boundedLoreSceneIndex + 1,
-    total: loreSteps.length,
+    total: loreSceneCount,
   });
 
+  const runLoreSceneTransition = useCallback(
+    (direction: 'next' | 'prev', updateSceneIndex: () => void) => {
+      clearLoreTransitionTimers();
+
+      const outClass: LoreTransitionClass =
+        direction === 'next' ? 'lore-transition-out-next' : 'lore-transition-out-prev';
+      const inClass: LoreTransitionClass =
+        direction === 'next' ? 'lore-transition-in-next' : 'lore-transition-in-prev';
+
+      setLoreTransitionClass(outClass);
+
+      loreTransitionOutTimerRef.current = window.setTimeout(() => {
+        loreTransitionOutTimerRef.current = null;
+        updateSceneIndex();
+        setLoreTransitionClass(inClass);
+
+        loreTransitionInTimerRef.current = window.setTimeout(() => {
+          loreTransitionInTimerRef.current = null;
+          setLoreTransitionClass('');
+        }, LORE_TRANSITION_MS);
+      }, LORE_TRANSITION_MS);
+    },
+    [clearLoreTransitionTimers],
+  );
+
   const goLorePrev = useCallback(() => {
-    setLoreSceneIndex((current) => Math.max(0, current - 1));
-  }, []);
+    if (loreTransitionBusy) return;
+    if (boundedLoreSceneIndex <= 0) return;
+
+    runLoreSceneTransition('prev', () => {
+      setLoreSceneIndex((current) => Math.max(0, current - 1));
+    });
+  }, [boundedLoreSceneIndex, loreTransitionBusy, runLoreSceneTransition]);
 
   useEffect(() => {
     writeAudioSettings(AUDIO_SETTINGS_STORAGE_KEY, audioSettings);
@@ -187,23 +245,44 @@ function App() {
   });
 
   const goLoreNext = useCallback(() => {
+    if (loreTransitionBusy) {
+      return;
+    }
+
     if (!loreReadReady) {
       playErrorCue();
       return;
     }
 
     if (!loreIsLastScene) {
-      setLoreSceneIndex((current) => Math.min(loreSteps.length - 1, current + 1));
+      runLoreSceneTransition('next', () => {
+        setLoreSceneIndex((current) => Math.min(loreSceneCount - 1, current + 1));
+      });
       return;
     }
 
-    onboardingActions.continueFromLore();
-  }, [loreIsLastScene, loreReadReady, loreSteps.length, onboardingActions, playErrorCue]);
+    clearLoreBridgeTimer();
+    setLoreBridgeActive(true);
+    loreBridgeTimerRef.current = window.setTimeout(() => {
+      loreBridgeTimerRef.current = null;
+      setLoreBridgeActive(false);
+      onboardingActions.continueFromLore();
+    }, LORE_BRIDGE_MS);
+  }, [
+    clearLoreBridgeTimer,
+    loreIsLastScene,
+    loreReadReady,
+    loreSceneCount,
+    loreTransitionBusy,
+    onboardingActions,
+    playErrorCue,
+    runLoreSceneTransition,
+  ]);
 
   useOnboardingKeyboardShortcuts({
     introStep,
     guideActive,
-    settingsOpen,
+    settingsOpen: settingsOpen || (introStep === 'lore' && loreBridgeActive),
     onLorePrev: goLorePrev,
     onLoreNext: goLoreNext,
     onSkipIntro: onboardingActions.skipIntro,
@@ -219,13 +298,27 @@ function App() {
   }, [introStep]);
 
   useEffect(() => {
+    if (introStep === 'lore') return;
+
+    clearLoreTransitionTimers();
+    clearLoreBridgeTimer();
+  }, [clearLoreBridgeTimer, clearLoreTransitionTimers, introStep]);
+
+  useEffect(() => {
+    return () => {
+      clearLoreTransitionTimers();
+      clearLoreBridgeTimer();
+    };
+  }, [clearLoreBridgeTimer, clearLoreTransitionTimers]);
+
+  useEffect(() => {
     if (introStep !== 'lore') return;
-    if (boundedLoreSceneIndex !== 3) return;
+    if (currentLoreScene.id !== 'botnet-discovery') return;
     if (loreDiscoveryStingerPlayedRef.current) return;
 
     loreDiscoveryStingerPlayedRef.current = true;
     playStingerCue('loreBotnetDiscovery');
-  }, [boundedLoreSceneIndex, introStep, playStingerCue]);
+  }, [currentLoreScene.id, introStep, playStingerCue]);
 
   const updateAudioChannel = (channel: keyof AudioSettings, value: number) => {
     const clamped = clampAudio(value);
@@ -459,16 +552,21 @@ function App() {
         />
       ) : null}
 
-      {introStep === 'lore' ? (
+      {introStep === 'lore' && !loreBridgeActive ? (
         <LoreOverlay
           t={t}
           toneClass={loreToneClass}
-          transitionClass=""
+          transitionClass={loreTransitionClass}
+          visualLayer={
+            currentLoreScene.hasCanvasLayer ? (
+              <LoreCinematicCanvas sceneId={currentLoreScene.id} active={true} />
+            ) : null
+          }
           sceneBody={loreSceneBody}
           progressLabel={loreProgressLabel}
           readReady={loreReadReady}
           readinessLabel={loreReadinessLabel}
-          canGoPrev={boundedLoreSceneIndex > 0}
+          canGoPrev={loreCanGoPrev}
           canGoNext={loreCanGoNext}
           isLastScene={loreIsLastScene}
           onPrev={goLorePrev}
@@ -476,6 +574,8 @@ function App() {
           onSkip={onboardingActions.skipIntro}
         />
       ) : null}
+
+      {introStep === 'lore' && loreBridgeActive ? <LoreBridgeOverlay t={t} /> : null}
 
       {currentUnlockHint && introStep === null && !guideActive ? (
         <UnlockHintOverlay
