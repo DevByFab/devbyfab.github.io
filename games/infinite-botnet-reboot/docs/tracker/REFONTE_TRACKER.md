@@ -78,6 +78,7 @@
 - 2026-04-17: Storyboard figurative pass applied to lore scenes 1-2 with reusable canvas primitives (panels, stick figures, props) to improve narrative readability while preserving existing lore transition flow.
 - 2026-04-17: P0 micro-boost pass started: added two early upgrades (`econ-exploit-seed` at 10 bots and `econ-cooldown-primer` at 25 bots) while keeping the 45-bot gate unchanged to smooth the first minutes without large architecture changes.
 - 2026-04-17: P0 micro-boost validation pack defined for completion (`npm run lint`, `npm run balance:sim`, and manual P0 path check 10 -> 25 -> 45) before locking pacing conclusions.
+- 2026-04-17: Local persistence pass shipped: complete run state now autosaves every 2s to localStorage, BOOT restores from local save when compatible, Settings adds Base64 export/import tools, and Reset Session now supports confirmed destructive flow that also clears local save.
 
 ## Latest Balance Snapshot (Harness)
 - Command: `npm run balance:sim`

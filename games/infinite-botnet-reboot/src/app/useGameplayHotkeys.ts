@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { EngineActionCommand } from '../game/protocol';
 import type { GameSnapshot } from '../game/types';
 import { hasOwnedUpgrade } from './upgrades';
+
+const HOTKEY_MIN_INTERVAL_MS = 90;
 
 interface UseGameplayHotkeysParams {
   snapshot: GameSnapshot | null;
@@ -10,10 +12,16 @@ interface UseGameplayHotkeysParams {
 }
 
 export function useGameplayHotkeys(params: Readonly<UseGameplayHotkeysParams>): void {
+  const lastHotkeyAtRef = useRef(0);
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const currentSnapshot = params.snapshot;
       if (!currentSnapshot) {
+        return;
+      }
+
+      if (event.repeat) {
         return;
       }
 
@@ -29,6 +37,12 @@ export function useGameplayHotkeys(params: Readonly<UseGameplayHotkeysParams>): 
       ) {
         return;
       }
+
+      const nowMs = performance.now();
+      if (nowMs - lastHotkeyAtRef.current < HOTKEY_MIN_INTERVAL_MS) {
+        return;
+      }
+      lastHotkeyAtRef.current = nowMs;
 
       if (key === 'enter') {
         event.preventDefault();

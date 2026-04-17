@@ -160,6 +160,104 @@ export interface TelemetrySnapshot {
   heatPerSec: number;
 }
 
+export interface PersistedEngineRates {
+  manualScanGain: string;
+  manualScanCommandCooldownBaseMs: number;
+  exploitChanceBps: number;
+  manualExploitCooldownBaseMs: number;
+  autoScanPerSec: string;
+  autoExploitPerSec: string;
+  monetizeBotsPerSec: string;
+  moneyYieldBps: number;
+  investStableBps: number;
+  investAggressiveMinBps: number;
+  investAggressiveMaxBps: number;
+  maintenancePerThousandBots: string;
+  heatPerMonetizePerSec: number;
+  heatPerAggressivePerSec: number;
+  messageIntervalBaseMs: number;
+}
+
+export interface PersistedEngineSystems {
+  monetizeActive: boolean;
+  investMode: InvestMode;
+  manualScanCooldownMs: number;
+  manualExploitCooldownMs: number;
+}
+
+export interface PersistedEngineWar {
+  heat: number;
+  wins: number;
+  losses: number;
+  streak: number;
+  attackCooldownMs: number;
+  fortifyCooldownMs: number;
+  defenseRemainingMs: number;
+  detectionAccumulatorMs: number;
+  projectedSuccessBps: number;
+  attackCostBots: string;
+  scrubCostMoney: string;
+  fortifyCostMoney: string;
+  fortifyCostIntel: string;
+}
+
+export interface PersistedEngineMatrix {
+  unlocked: boolean;
+  stability: number;
+  breachProgress: number;
+  bypassRemainingMs: number;
+  expectedCommand: string;
+  successfulInjections: number;
+  failedInjections: number;
+  armCostHz: string;
+  armCostComputronium: string;
+  injectCostHz: string;
+  injectCostComputronium: string;
+  stabilizeCostMoney: string;
+}
+
+export interface PersistedEngineMessages {
+  pending: NarrativeMessage[];
+  processed: number;
+  sequence: number;
+  nextAtMs: number;
+}
+
+export interface PersistedEngineUpgrades {
+  levels: Record<string, number>;
+  totalOwnedLevels: number;
+  totalMaxLevels: number;
+}
+
+export interface PersistedEngineTelemetry {
+  botsPerSec: string;
+  moneyPerSec: string;
+  heatPerSec: number;
+}
+
+export interface PersistedEngineState {
+  version: number;
+  tick: number;
+  nowMs: number;
+  turbo: number;
+  resources: ResourceSnapshot;
+  rates: PersistedEngineRates;
+  systems: PersistedEngineSystems;
+  war: PersistedEngineWar;
+  matrix: PersistedEngineMatrix;
+  messages: PersistedEngineMessages;
+  upgrades: PersistedEngineUpgrades;
+  milestones: ProgressionSnapshot;
+  telemetry: PersistedEngineTelemetry;
+  logSequence: number;
+}
+
+export interface PersistedGameState {
+  schemaVersion: number;
+  savedAtMs: number;
+  state: PersistedEngineState;
+}
+
 export interface GameSnapshot {
   version: number;
   tick: number;

@@ -20,8 +20,15 @@ interface SettingsOverlayProps {
   snapshot: GameSnapshot;
   turbo: number;
   audioSettings: AudioSettings;
+  saveTransferText: string;
+  saveFeedbackText: string | null;
+  lastAutosaveLabel: string;
   onUpdateAudio: (channel: AudioChannel, value: number) => void;
   onSetTurbo: (value: number) => void;
+  onSaveTransferChange: (value: string) => void;
+  onExportSave: () => void;
+  onImportSave: () => void;
+  onAutosaveNow: () => void;
   onReplayLore: () => void;
   onReplayTutorial: () => void;
   onClose: () => void;
@@ -113,6 +120,36 @@ export function SettingsOverlay(props: Readonly<SettingsOverlayProps>) {
               </button>
               <button className="btn ghost" onClick={props.onReplayTutorial}>
                 {props.t('reboot.settings.replay.tutorial')}
+              </button>
+            </div>
+          </article>
+
+          <article className="settings-block settings-save-block">
+            <h3>{props.t('reboot.settings.save.title')}</h3>
+            <p className="queue-hint">{props.t('reboot.settings.save.hint')}</p>
+            <p className="queue-hint">{props.lastAutosaveLabel}</p>
+            {props.saveFeedbackText ? (
+              <p className="queue-hint">{props.saveFeedbackText}</p>
+            ) : null}
+            <label className="save-transfer-label">
+              <span>{props.t('reboot.settings.save.transferLabel')}</span>
+              <textarea
+                className="save-transfer-input"
+                rows={4}
+                value={props.saveTransferText}
+                placeholder={props.t('reboot.settings.save.transferPlaceholder')}
+                onChange={(event) => props.onSaveTransferChange(event.currentTarget.value)}
+              />
+            </label>
+            <div className="button-row">
+              <button className="btn" onClick={props.onExportSave}>
+                {props.t('reboot.settings.save.exportButton')}
+              </button>
+              <button className="btn ghost" onClick={props.onImportSave}>
+                {props.t('reboot.settings.save.importButton')}
+              </button>
+              <button className="btn ghost tiny" onClick={props.onAutosaveNow}>
+                {props.t('reboot.settings.save.autosaveNow')}
               </button>
             </div>
           </article>

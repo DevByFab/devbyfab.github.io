@@ -20,15 +20,14 @@ export function useAudioLogCues(params: Readonly<UseAudioLogCuesParams>): void {
     if (lastAudioLogIdRef.current === line.id) return;
     lastAudioLogIdRef.current = line.id;
 
-    let hasDedicatedFailureCue = false;
+    const isExploitLog =
+      line.text.includes('Exploit reussi') ||
+      line.text.includes('Exploit rate') ||
+      line.text.includes('Exploit bloque');
 
     if (line.text.includes('Upgrade achetee')) {
       params.playUiCue('upgradeBuy');
       params.playStingerCue('upgradeTier2');
-    }
-
-    if (line.text.includes('Scan manuel: cible ajoutee')) {
-      params.playEventCue('targetFound');
     }
 
     if (line.text.includes('Phase atteinte')) {
@@ -39,16 +38,7 @@ export function useAudioLogCues(params: Readonly<UseAudioLogCuesParams>): void {
       params.playEventCue('incomingMessage');
     }
 
-    if (line.text.includes('Exploit reussi')) {
-      params.playEventCue('exploitSuccess');
-    }
-
-    if (line.text.includes('Exploit rate') || line.text.includes('Exploit bloque')) {
-      hasDedicatedFailureCue = true;
-      params.playEventCue('exploitFail');
-    }
-
-    if ((line.severity === 'warn' || line.severity === 'error') && !hasDedicatedFailureCue) {
+    if ((line.severity === 'warn' || line.severity === 'error') && !isExploitLog) {
       params.playErrorCue();
     }
   }, [params]);
