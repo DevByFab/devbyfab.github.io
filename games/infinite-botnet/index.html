@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="description" content="Playable prototype of The Infinite BotNet, a fictional incremental cybersecurity-themed game.">
   <meta name="i18n-base" content="../../i18n">
+  <script>
+    // Legacy entrypoint now forwards to the reboot build by default.
+    if (!new URLSearchParams(window.location.search).has('legacy')) {
+      window.location.replace('../infinite-botnet-reboot/');
+    }
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=../infinite-botnet-reboot/">
+  </noscript>
   <title data-i18n="botnet.pageTitle">The Infinite BotNet - Playable Prototype - DevByFab</title>
   <link rel="icon" type="image/png" href="../../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
