@@ -90,8 +90,12 @@ export function isPersistedGameState(value: unknown): value is PersistedGameStat
   const savedAtMs = value.savedAtMs;
   const state = value.state;
 
-  if (!Number.isInteger(schemaVersion) || schemaVersion <= 0) return false;
-  if (!Number.isFinite(savedAtMs) || savedAtMs <= 0) return false;
+  if (typeof schemaVersion !== 'number' || !Number.isInteger(schemaVersion) || schemaVersion <= 0) {
+    return false;
+  }
+  if (typeof savedAtMs !== 'number' || !Number.isFinite(savedAtMs) || savedAtMs <= 0) {
+    return false;
+  }
   if (!isObjectRecord(state)) return false;
 
   return (
