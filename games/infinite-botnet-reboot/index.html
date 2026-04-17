@@ -5,9 +5,74 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>infinite-botnet-reboot</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        background: #0b1220;
+        color: #e9edf8;
+        font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .boot-shell {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .boot-card {
+        width: min(780px, 100%);
+        background: #141f33;
+        border: 1px solid #2a3f67;
+        border-radius: 14px;
+        padding: 20px 22px;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+      }
+
+      .boot-card h1 {
+        margin: 0 0 10px;
+        font-size: 1.35rem;
+      }
+
+      .boot-card p {
+        margin: 0;
+        line-height: 1.55;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="boot-shell">
+        <section class="boot-card">
+          <h1>Infinite BotNet Reboot</h1>
+          <p>Loading session...</p>
+        </section>
+      </main>
+    </div>
+    <script>
+      window.__IBR_BOOT_OK__ = false;
+
+      window.setTimeout(() => {
+        if (window.__IBR_BOOT_OK__) return;
+
+        const root = document.getElementById('root');
+        if (!root) return;
+
+        root.innerHTML = `
+          <main class="boot-shell">
+            <section class="boot-card">
+              <h1>Infinite BotNet Reboot</h1>
+              <p>The app did not boot. Please hard refresh (Ctrl+Shift+R).</p>
+            </section>
+          </main>
+        `;
+      }, 4000);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
