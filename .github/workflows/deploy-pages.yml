@@ -42,6 +42,9 @@ jobs:
           grep -n '<script' games/infinite-botnet-reboot/dist/index.html || true
           echo '--- end ---'
 
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Assemble Pages artifact
         run: |
           set -euo pipefail

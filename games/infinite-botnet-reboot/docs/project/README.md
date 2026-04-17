@@ -12,6 +12,8 @@ Ce dossier contient la nouvelle base technique React + TypeScript + Web Worker p
 - New compact dashboard-first control-room UI connected to the worker.
 - Staged discovery enforced: systems stay hidden until phase unlock, with exploit cooldown pacing and phase-gated message rewards.
 - FR-first narrative catalog externalized from engine code.
+- Run persistence enabled: full state autosaved locally every 2s with restore on reload.
+- Settings now includes Base64 save export/import transfer tools.
 - P0 lore cinematic runtime upgraded (manual 5-scene flow, animated transitions, per-scene read pacing gate, keyboard controls, dynamic blur backdrop, discovery stinger, and tutorial bridge overlay).
 - Canonical lore reference: `../lore/LORE_AND_CINEMATIC_BLUEPRINT.md`.
 - Agent onboarding and handoff reference: `../handoff/AGENT_HANDOFF.md`.
@@ -95,6 +97,7 @@ src/
 - War and matrix now expose readable costs/cooldowns/probabilities in UI.
 - Message system is now event-driven and FR-first by default.
 - Balancing harness currently reports median completion around 8.2h (8h-12h baseline band before deep-target retune to 12h-20h).
+- Reset Session can clear both the runtime state and local save when confirmed in UI.
 
 ## Next Work Items
 

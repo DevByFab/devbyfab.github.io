@@ -51,11 +51,27 @@ type LoreTransitionClass =
 
 function App() {
   const { t } = useRebootI18n();
-  const { snapshot, logs, ready, error, turbo, sendCommand, setTurbo, resetSession } = useGameWorker();
+  const {
+    snapshot,
+    logs,
+    ready,
+    error,
+    turbo,
+    lastAutosaveAtMs,
+    sendCommand,
+    setTurbo,
+    resetSession,
+    clearLocalSave,
+    triggerAutosave,
+    exportSaveAsBase64,
+    importSaveFromBase64,
+  } = useGameWorker();
 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [consoleCollapsed, setConsoleCollapsed] = useState(false);
   const [matrixCommand, setMatrixCommand] = useState('');
+  const [saveTransferText, setSaveTransferText] = useState('');
+  const [saveFeedbackText, setSaveFeedbackText] = useState<string | null>(null);
   const [audioSettings, setAudioSettings] = useState<AudioSettings>(() =>
     readAudioSettings(AUDIO_SETTINGS_STORAGE_KEY),
   );
@@ -127,6 +143,15 @@ function App() {
   });
 
   const latestLogs = useMemo(() => logs.slice(Math.max(0, logs.length - 18)).reverse(), [logs]);
+  const lastAutosaveLabel = useMemo(() => {
+    if (!lastAutosaveAtMs) {
+      return t('reboot.settings.save.lastAutosaveNever');
+    }
+
+    return t('reboot.settings.save.lastAutosaveAt', {
+      datetime: new Date(lastAutosaveAtMs).toLocaleString('fr-FR'),
+    });
+  }, [lastAutosaveAtMs, t]);
   const currentGuideStep = GUIDE_STEPS[Math.min(guideStepIndex, GUIDE_STEPS.length - 1)];
   const { loreReadReady, loreReadRemainingMs } = useOnboardingLoreReadGate({
     introStep,
@@ -333,6 +358,74 @@ function App() {
     setActiveTab(tab);
   };
 
+  const handleSaveExport = useCallback(async () => {
+    playUiCue('scanClick');
+    const exported = await exportSaveAsBase64();
+
+    if (!exported) {
+      setSaveFeedbackText(t('reboot.settings.save.feedback.exportFailed'));
+      playErrorCue();
+      return;
+    }
+
+    setSaveTransferText(exported);
+    setSaveFeedbackText(t('reboot.settings.save.feedback.exportReady'));
+  }, [exportSaveAsBase64, playErrorCue, playUiCue, t]);
+
+  const handleSaveImport = useCallback(async () => {
+    if (!saveTransferText.trim()) {
+      setSaveFeedbackText(t('reboot.settings.save.feedback.importEmpty'));
+      playErrorCue();
+      return;
+    }
+
+    const confirmImport = window.confirm(t('reboot.confirm.importOverwrite'));
+    if (!confirmImport) {
+      return;
+    }
+
+    playUiCue('scanClick');
+
+    const result = await importSaveFromBase64(saveTransferText);
+    if (!result.ok) {
+      setSaveFeedbackText(
+        t('reboot.settings.save.feedback.importFailed', {
+          reason: result.reason ?? t('reboot.settings.save.unknownReason'),
+        }),
+      );
+      playErrorCue();
+      return;
+    }
+
+    setSaveFeedbackText(t('reboot.settings.save.feedback.importSuccess'));
+  }, [importSaveFromBase64, playErrorCue, playUiCue, saveTransferText, t]);
+
+  const handleAutosaveNow = useCallback(async () => {
+    playUiCue('scanClick');
+
+    const saved = await triggerAutosave();
+    if (!saved) {
+      setSaveFeedbackText(t('reboot.settings.save.feedback.autosaveFailed'));
+      playErrorCue();
+      return;
+    }
+
+    setSaveFeedbackText(t('reboot.settings.save.feedback.autosaveSuccess'));
+  }, [playErrorCue, playUiCue, t, triggerAutosave]);
+
+  const handleResetSession = useCallback(() => {
+    const confirmReset = window.confirm(t('reboot.confirm.resetRunAndSave'));
+    if (!confirmReset) {
+      return;
+    }
+
+    playUiCue('scanClick');
+    clearLocalSave();
+    setSaveTransferText('');
+    setSaveFeedbackText(t('reboot.settings.save.feedback.resetCleared'));
+    resetSession();
+  }, [clearLocalSave, playUiCue, resetSession, t]);
+
   if (!snapshot) {
     return (
       <main className="loading-shell">
@@ -402,10 +495,7 @@ function App() {
           </p>
           <button
             className="btn ghost tiny"
-            onClick={() => {
-              playUiCue('scanClick');
-              resetSession();
-            }}
+            onClick={handleResetSession}
           >
             {t('reboot.header.resetButton')}
           </button>
@@ -541,10 +631,28 @@ function App() {
           snapshot={snapshot}
           turbo={turbo}
           audioSettings={audioSettings}
+          saveTransferText={saveTransferText}
+          saveFeedbackText={saveFeedbackText}
+          lastAutosaveLabel={lastAutosaveLabel}
           onUpdateAudio={updateAudioChannel}
           onSetTurbo={(value) => {
             playUiCue('scanClick');
             setTurbo(value);
+          }}
+          onSaveTransferChange={(value) => {
+            setSaveTransferText(value);
+            if (saveFeedbackText) {
+              setSaveFeedbackText(null);
+            }
+          }}
+          onExportSave={() => {
+            void handleSaveExport();
+          }}
+          onImportSave={() => {
+            void handleSaveImport();
+          }}
+          onAutosaveNow={() => {
+            void handleAutosaveNow();
           }}
           onReplayLore={onboardingActions.replayLoreFromSettings}
           onReplayTutorial={onboardingActions.replayTutorialFromSettings}

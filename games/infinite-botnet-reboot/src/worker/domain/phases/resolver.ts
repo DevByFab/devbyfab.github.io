@@ -6,6 +6,10 @@ import type {
 import { PHASE_DEFINITIONS } from './definitions';
 import type { PhaseDefinition } from './types';
 
+const AUTOMATION_PHASE_INDEX = PHASE_DEFINITIONS.findIndex(
+  (phase) => phase.id === 'automation',
+);
+
 export interface PhaseProgress {
   id: PhaseId;
   label: string;
@@ -131,6 +135,10 @@ export function resolvePhaseProgress(input: PhaseProgressInput): PhaseProgress {
       index = i;
       break;
     }
+  }
+
+  if (AUTOMATION_PHASE_INDEX > index && input.bots >= 1000n) {
+    index = AUTOMATION_PHASE_INDEX;
   }
 
   const current = PHASE_DEFINITIONS[index];

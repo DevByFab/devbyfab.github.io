@@ -45,6 +45,11 @@ interface AudioManifest {
   stingers: Record<string, string>;
 }
 
+interface OneShotPool {
+  players: HTMLAudioElement[];
+  cursor: number;
+}
+
 const BUILTIN_AUDIO_URLS: Record<string, string> = {
   'achievement-unlocked.mp3': new URL('../../audio/achievement-unlocked.mp3', import.meta.url).toString(),
   'error-message.mp3': new URL('../../audio/error-message.mp3', import.meta.url).toString(),
@@ -84,6 +89,9 @@ const BUILTIN_AUDIO_MANIFEST: AudioManifest = {
     loreBotnetDiscovery: 'level-up.mp3',
   },
 };
+
+const ONE_SHOT_POOL_SIZE = 4;
+const ONE_SHOT_MIN_INTERVAL_MS = 45;
 
 export interface AudioManager {
   playUiCue: (cue: UiCue) => void;
@@ -145,11 +153,28 @@ function warnAudioIssue(cache: Set<string>, code: string, details?: unknown): vo
   console.warn(`[audio] ${code}`, details);
 }
 
+function createOneShotPool(url: string): OneShotPool {
+  const players: HTMLAudioElement[] = [];
+
+  for (let index = 0; index < ONE_SHOT_POOL_SIZE; index += 1) {
+    const player = new Audio(url);
+    player.preload = 'auto';
+    player.load();
+    players.push(player);
+  }
+
+  return {
+    players,
+    cursor: 0,
+  };
+}
+
 export function useAudioManager(settings: AudioSettings): AudioManager {
   const [manifestReady, setManifestReady] = useState(false);
   const settingsRef = useRef(settings);
   const manifestRef = useRef<AudioManifest | null>(null);
-  const oneShotCacheRef = useRef<Map<string, HTMLAudioElement>>(new Map());
+  const oneShotPoolRef = useRef<Map<string, OneShotPool>>(new Map());
+  const lastCuePlayAtMsRef = useRef<Map<string, number>>(new Map());
   const ambienceRef = useRef<HTMLAudioElement | null>(null);
   const unlockedRef = useRef(false);
   const diagnosticsRef = useRef<Set<string>>(new Set());
@@ -258,7 +283,30 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
   }, []);
 
   useEffect(() => {
-    const oneShotCache = oneShotCacheRef.current;
+    if (!manifestReady) return;
+
+    const manifest = manifestRef.current;
+    if (!manifest) return;
+
+    const poolCache = oneShotPoolRef.current;
+    const resolvedUrls = new Set<string>();
+
+    (['ui', 'events', 'stingers'] as const).forEach((bucket) => {
+      Object.values(manifest[bucket]).forEach((fileName) => {
+        const resolved = resolveAudioUrl(audioBasePathRef.current, fileName);
+        resolvedUrls.add(resolved);
+      });
+    });
+
+    resolvedUrls.forEach((url) => {
+      if (poolCache.has(url)) return;
+      poolCache.set(url, createOneShotPool(url));
+    });
+  }, [manifestReady]);
+
+  useEffect(() => {
+    const oneShotPoolCache = oneShotPoolRef.current;
+    const cuePlayAtCache = lastCuePlayAtMsRef.current;
 
     return () => {
       const ambience = ambienceRef.current;
@@ -267,7 +315,8 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
         ambienceRef.current = null;
       }
 
-      oneShotCache.clear();
+      oneShotPoolCache.clear();
+      cuePlayAtCache.clear();
     };
   }, []);
 
@@ -285,17 +334,35 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     if (!fileName) return;
 
     const url = resolveAudioUrl(audioBasePathRef.current, fileName);
+    const volume = makeVolume(settingsRef.current, channel);
+    if (volume <= 0) return;
 
-    let cached = oneShotCacheRef.current.get(url);
-    if (!cached) {
-      cached = new Audio(url);
-      cached.preload = 'auto';
-      oneShotCacheRef.current.set(url, cached);
+    const cueId = `${bucket}:${cue}`;
+    const nowMs = performance.now();
+    const previousPlayAtMs = lastCuePlayAtMsRef.current.get(cueId) ?? -Infinity;
+    if (nowMs - previousPlayAtMs < ONE_SHOT_MIN_INTERVAL_MS) {
+      return;
+    }
+    lastCuePlayAtMsRef.current.set(cueId, nowMs);
+
+    let pool = oneShotPoolRef.current.get(url);
+    if (!pool) {
+      pool = createOneShotPool(url);
+      oneShotPoolRef.current.set(url, pool);
     }
 
-    const instance = cached.cloneNode(true) as HTMLAudioElement;
-    instance.volume = makeVolume(settingsRef.current, channel);
-    instance.play().catch((error) => {
+    const player = pool.players[pool.cursor];
+    pool.cursor = (pool.cursor + 1) % pool.players.length;
+
+    player.volume = volume;
+
+    try {
+      player.currentTime = 0;
+    } catch {
+      // Some browsers can throw if metadata isn't ready yet.
+    }
+
+    player.play().catch((error) => {
       warnAudioIssue(diagnosticsRef.current, `oneshot-play-failed-${bucket}-${cue}`, error);
     });
   };

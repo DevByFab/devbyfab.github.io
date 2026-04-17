@@ -74,6 +74,8 @@ function checkRequirements(
 ): string | null {
   if (!requirements) return null;
 
+  const emergencyProgressionByBots = state.resources.bots >= 1000n && state.phase.index <= 1;
+
   if (
     requirements.minPhaseIndex !== undefined &&
     state.phase.index < requirements.minPhaseIndex
@@ -81,7 +83,11 @@ function checkRequirements(
     return 'Phase insuffisante';
   }
 
-  if (requirements.minScans !== undefined && state.milestones.scans < requirements.minScans) {
+  if (
+    !emergencyProgressionByBots &&
+    requirements.minScans !== undefined &&
+    state.milestones.scans < requirements.minScans
+  ) {
     return 'Scans insuffisants';
   }
 
@@ -105,6 +111,7 @@ function checkRequirements(
   }
 
   if (
+    !emergencyProgressionByBots &&
     requirements.minExploitSuccesses !== undefined &&
     state.milestones.exploitSuccesses < requirements.minExploitSuccesses
   ) {
@@ -229,14 +236,50 @@ function toOffer(
   };
 }
 
+function totalOfferCost(offer: UpgradeOfferSnapshot): bigint {
+  return (
+    BigInt(offer.costBots) +
+    BigInt(offer.costMoney) +
+    BigInt(offer.costIntel) +
+    BigInt(offer.costHz) +
+    BigInt(offer.costComputronium)
+  );
+}
+
+function offerSortPriority(offer: UpgradeOfferSnapshot): number {
+  if (offer.currentLevel >= offer.maxLevel) return 3;
+  if (offer.unlocked && offer.affordable) return 0;
+  if (offer.unlocked) return 1;
+  return 2;
+}
+
 export function refreshUpgradeOffers(state: EngineState): void {
   const offers = UPGRADE_CHAINS.map((chain) =>
     toOffer(state, chain, getCurrentLevel(state, chain.chainId)),
   ).filter((offer): offer is UpgradeOfferSnapshot => offer !== null);
 
   offers.sort((left, right) => {
+    const leftPriority = offerSortPriority(left);
+    const rightPriority = offerSortPriority(right);
+
+    if (leftPriority !== rightPriority) {
+      return leftPriority - rightPriority;
+    }
+
+    if (leftPriority <= 1) {
+      const leftCost = totalOfferCost(left);
+      const rightCost = totalOfferCost(right);
+      if (leftCost !== rightCost) {
+        return leftCost < rightCost ? -1 : 1;
+      }
+    }
+
     if (left.category !== right.category) {
       return left.category.localeCompare(right.category);
+    }
+
+    if (left.nextLevel !== right.nextLevel) {
+      return left.nextLevel - right.nextLevel;
     }
 
     return left.label.localeCompare(right.label);

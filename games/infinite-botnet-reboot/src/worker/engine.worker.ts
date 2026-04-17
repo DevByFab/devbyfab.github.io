@@ -1,13 +1,20 @@
 /// <reference lib="webworker" />
 
+import { GAME_SAVE_SCHEMA_VERSION } from '../app/constants';
 import type {
   UiToWorkerMessage,
   WorkerToUiMessage,
 } from '../game/protocol';
+import type { PersistedGameState } from '../game/types';
 import { dispatchCommand } from './engine/commandDispatcher';
 import { runSimulationStep } from './engine/simulationStep';
 import { syncDerivedState } from './engine/syncDerivedState';
-import { createInitialEngineState, toSnapshot } from './state';
+import {
+  createInitialEngineState,
+  fromPersistedState,
+  toPersistedState,
+  toSnapshot,
+} from './state';
 
 const workerScope = self as DedicatedWorkerGlobalScope;
 
@@ -86,13 +93,43 @@ function resetEngine(): void {
   dispatchSnapshot('SNAPSHOT');
 }
 
+function restoreFromSave(save: PersistedGameState): { ok: true } | { ok: false; reason: string } {
+  if (save.schemaVersion !== GAME_SAVE_SCHEMA_VERSION) {
+    return { ok: false, reason: 'Version de sauvegarde incompatible.' };
+  }
+
+  try {
+    state = fromPersistedState(save, Date.now());
+    syncDerivedState(state, emitLog);
+    return { ok: true };
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : 'Sauvegarde invalide.';
+    return { ok: false, reason };
+  }
+}
+
+function exportSavePayload(): PersistedGameState {
+  return toPersistedState(state, GAME_SAVE_SCHEMA_VERSION, Date.now());
+}
+
 workerScope.onmessage = (event: MessageEvent<UiToWorkerMessage>) => {
   try {
     const message = event.data;
 
     switch (message.type) {
       case 'BOOT': {
-        syncDerivedState(state, emitLog);
+        if (message.save) {
+          const restoreResult = restoreFromSave(message.save);
+          if (restoreResult.ok) {
+            emitLog('Session restauree depuis la sauvegarde locale.', 'info');
+          } else {
+            state = createInitialEngineState(Date.now());
+            syncDerivedState(state, emitLog);
+            emitLog('Sauvegarde ignoree: ' + restoreResult.reason, 'warn');
+          }
+        } else {
+          syncDerivedState(state, emitLog);
+        }
         ensureLoopStarted();
         emitLog('Worker simulation online.', 'info');
         dispatchSnapshot('READY');
@@ -113,6 +150,33 @@ workerScope.onmessage = (event: MessageEvent<UiToWorkerMessage>) => {
       }
       case 'RESET': {
         resetEngine();
+        break;
+      }
+      case 'REQUEST_SAVE_EXPORT': {
+        postToUi({
+          type: 'SAVE_EXPORT',
+          save: exportSavePayload(),
+        });
+        break;
+      }
+      case 'IMPORT_SAVE': {
+        const restoreResult = restoreFromSave(message.save);
+        if (!restoreResult.ok) {
+          emitLog('Import refuse: ' + restoreResult.reason, 'warn');
+          postToUi({
+            type: 'SAVE_IMPORT_RESULT',
+            ok: false,
+            reason: restoreResult.reason,
+          });
+          break;
+        }
+
+        emitLog('Import applique: progression restauree.', 'info');
+        dispatchSnapshot('SNAPSHOT');
+        postToUi({
+          type: 'SAVE_IMPORT_RESULT',
+          ok: true,
+        });
         break;
       }
       default:

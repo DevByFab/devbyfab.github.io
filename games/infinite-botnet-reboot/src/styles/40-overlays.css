@@ -44,6 +44,10 @@
   font-size: 16px;
 }
 
+.settings-save-block {
+  grid-column: 1 / -1;
+}
+
 .slider-list {
   display: grid;
   gap: 8px;
@@ -59,4 +63,29 @@
 
 .slider-row input {
   width: 100%;
+}
+
+.save-transfer-label {
+  display: grid;
+  gap: 6px;
+  font: 500 11px/1.3 var(--mono);
+  color: var(--text-muted);
+}
+
+.save-transfer-input {
+  width: 100%;
+  min-height: 110px;
+  border: 1px solid rgba(98, 210, 217, 0.3);
+  border-radius: 8px;
+  background: rgba(9, 26, 31, 0.9);
+  color: var(--text);
+  font: 500 11px/1.35 var(--mono);
+  padding: 8px;
+  resize: vertical;
+}
+
+.save-transfer-input:focus {
+  outline: none;
+  border-color: rgba(98, 210, 217, 0.8);
+  box-shadow: 0 0 0 2px rgba(98, 210, 217, 0.2);
 }
