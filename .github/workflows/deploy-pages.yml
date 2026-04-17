@@ -39,8 +39,8 @@ jobs:
         run: |
           set -euo pipefail
           test -f games/infinite-botnet-reboot/dist/index.html
-          if grep -Eq '<script[^>]+src=["'"']/src/main\.tsx["'"']' games/infinite-botnet-reboot/dist/index.html; then
-            echo 'ERROR: dist/index.html still contains script src="/src/main.tsx" (unbuilt entrypoint).'
+          if grep -Fq 'src="/src/main.tsx"' games/infinite-botnet-reboot/dist/index.html; then
+            echo 'ERROR: dist/index.html still contains unbuilt entrypoint src="/src/main.tsx".'
             exit 1
           fi
 
