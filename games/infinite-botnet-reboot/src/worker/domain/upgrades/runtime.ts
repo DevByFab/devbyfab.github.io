@@ -138,6 +138,26 @@ function canAfford(state: EngineState, cost: UpgradeCost): boolean {
   return true;
 }
 
+function hasLockedCostResource(state: EngineState, cost: UpgradeCost): boolean {
+  if (costValue(cost.darkMoney) > 0n && state.phase.index < 2) {
+    return true;
+  }
+
+  if (costValue(cost.warIntel) > 0n && state.phase.index < 3) {
+    return true;
+  }
+
+  if (costValue(cost.hz) > 0n && state.phase.index < 4) {
+    return true;
+  }
+
+  if (costValue(cost.computronium) > 0n && state.phase.index < 4) {
+    return true;
+  }
+
+  return false;
+}
+
 function spendCost(state: EngineState, cost: UpgradeCost): void {
   state.resources.bots -= costValue(cost.bots);
   state.resources.darkMoney -= costValue(cost.darkMoney);
@@ -189,6 +209,7 @@ function toOffer(
       maxLevel,
       unlocked: false,
       affordable: false,
+      resourceLocked: false,
       statusText: 'Niveau max atteint',
       costBots: '0',
       costMoney: '0',
@@ -204,13 +225,16 @@ function toOffer(
   const exclusiveConflictChain = getExclusiveConflictChain(state, chain);
   const exclusiveBlocked = currentLevel === 0 && exclusiveConflictChain !== null;
   const requirementBlock = checkRequirements(state, nextDef.requirements);
-  const unlocked = requirementBlock === null && !exclusiveBlocked;
+  const resourceLocked = hasLockedCostResource(state, cost);
+  const unlocked = requirementBlock === null && !exclusiveBlocked && !resourceLocked;
   const affordable = unlocked && canAfford(state, cost);
 
   let statusText = 'Pret a acheter';
   if (exclusiveBlocked) {
     statusText =
       'Doctrine verrouillee (choix actif: ' + (exclusiveConflictChain?.label ?? 'autre') + ')';
+  } else if (resourceLocked) {
+    statusText = 'Ressource non debloquee';
   } else if (!unlocked) {
     statusText = requirementBlock ?? 'Verrouille';
   } else if (!affordable) {
@@ -227,6 +251,7 @@ function toOffer(
     maxLevel,
     unlocked,
     affordable,
+    resourceLocked,
     statusText,
     costBots: costValue(cost.bots).toString(),
     costMoney: costValue(cost.darkMoney).toString(),
@@ -310,6 +335,10 @@ export function commandPurchaseUpgrade(
   }
 
   const levelDef = chain.levels[currentLevel];
+  if (hasLockedCostResource(state, levelDef.cost)) {
+    return 'locked';
+  }
+
   if (checkRequirements(state, levelDef.requirements) !== null) {
     return 'locked';
   }

@@ -11,10 +11,10 @@ interface UpgradesPanelProps {
 
 export function UpgradesPanel(props: Readonly<UpgradesPanelProps>) {
   const availableUpgradeOffers = props.snapshot.upgrades.offers.filter(
-    (offer) => offer.currentLevel < offer.maxLevel && offer.unlocked,
+    (offer) => offer.currentLevel < offer.maxLevel && offer.unlocked && !offer.resourceLocked,
   );
   const lockedUpgradeOffers = props.snapshot.upgrades.offers.filter(
-    (offer) => offer.currentLevel < offer.maxLevel && !offer.unlocked,
+    (offer) => offer.currentLevel < offer.maxLevel && !offer.unlocked && !offer.resourceLocked,
   );
   const acquiredUpgradeOffers = props.snapshot.upgrades.offers.filter(
     (offer) => offer.currentLevel > 0,
