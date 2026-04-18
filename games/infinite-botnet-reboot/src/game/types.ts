@@ -56,6 +56,7 @@ export interface UpgradeOfferSnapshot {
   maxLevel: number;
   unlocked: boolean;
   affordable: boolean;
+  resourceLocked: boolean;
   statusText: string;
   costBots: string;
   costMoney: string;
