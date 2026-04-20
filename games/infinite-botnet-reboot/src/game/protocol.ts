@@ -28,6 +28,7 @@ export interface EngineActionCommand {
 export type UiToWorkerMessage =
   | { type: 'BOOT'; save: PersistedGameState | null }
   | { type: 'SET_TURBO'; turbo: number }
+  | { type: 'DEBUG_SET_PHASE_ACCESS'; phaseIndex: number }
   | { type: 'COMMAND'; command: EngineActionCommand }
   | { type: 'RESET' }
   | { type: 'REQUEST_SAVE_EXPORT' }

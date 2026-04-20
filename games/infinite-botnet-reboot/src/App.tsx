@@ -7,7 +7,6 @@ import {
   LORE_TRANSITION_MS,
 } from './app/constants';
 import {
-  GUIDE_STEPS,
   type DashboardTab,
 } from './app/navigationConfig';
 import { useAudioLogCues } from './app/useAudioLogCues';
@@ -56,10 +55,9 @@ function App() {
     logs,
     ready,
     error,
-    turbo,
     lastAutosaveAtMs,
     sendCommand,
-    setTurbo,
+    setDebugPhaseAccess,
     resetSession,
     clearLocalSave,
     triggerAutosave,
@@ -116,6 +114,7 @@ function App() {
     setIntroStep,
     guideActive,
     setGuideActive,
+    guideSteps,
     guideStepIndex,
     setGuideMarkSeenOnClose,
     startGuideCore,
@@ -152,7 +151,8 @@ function App() {
       datetime: new Date(lastAutosaveAtMs).toLocaleString('fr-FR'),
     });
   }, [lastAutosaveAtMs, t]);
-  const currentGuideStep = GUIDE_STEPS[Math.min(guideStepIndex, GUIDE_STEPS.length - 1)];
+  const currentGuideStep =
+    guideSteps[Math.min(guideStepIndex, guideSteps.length - 1)] ?? guideSteps[0];
   const { loreReadReady, loreReadRemainingMs } = useOnboardingLoreReadGate({
     introStep,
     loreSceneIndex,
@@ -481,7 +481,7 @@ function App() {
             className="btn tiny ghost"
             onClick={() => {
               playUiCue('scanClick');
-              onboardingActions.startGuide(false);
+              onboardingActions.startGuide(false, snapshot.phase.index);
             }}
             data-guide="top-tutorial"
           >
@@ -629,15 +629,27 @@ function App() {
         <SettingsOverlay
           t={t}
           snapshot={snapshot}
-          turbo={turbo}
           audioSettings={audioSettings}
           saveTransferText={saveTransferText}
           saveFeedbackText={saveFeedbackText}
           lastAutosaveLabel={lastAutosaveLabel}
           onUpdateAudio={updateAudioChannel}
-          onSetTurbo={(value) => {
+          onSetDebugPhaseAccess={(phaseIndex) => {
             playUiCue('scanClick');
-            setTurbo(value);
+            setDebugPhaseAccess(phaseIndex);
+            if (phaseIndex === 0) {
+              clearLocalSave();
+              setSaveTransferText('');
+              setSaveFeedbackText(t('reboot.settings.save.feedback.resetCleared'));
+              setActiveTab('dashboard');
+              return;
+            }
+
+            onboardingActions.startGuide(false, phaseIndex);
+
+            if (phaseIndex >= 2) {
+              setActiveTab('cashflow');
+            }
           }}
           onSaveTransferChange={(value) => {
             setSaveTransferText(value);
@@ -655,7 +667,7 @@ function App() {
             void handleAutosaveNow();
           }}
           onReplayLore={onboardingActions.replayLoreFromSettings}
-          onReplayTutorial={onboardingActions.replayTutorialFromSettings}
+          onReplayTutorial={() => onboardingActions.replayTutorialFromSettings(snapshot.phase.index)}
           onClose={onboardingActions.closeSettings}
         />
       ) : null}
@@ -702,9 +714,9 @@ function App() {
           focus={t(currentGuideStep.focusKey)}
           body={t(currentGuideStep.bodyKey)}
           currentStep={guideStepIndex + 1}
-          totalSteps={GUIDE_STEPS.length}
+          totalSteps={guideSteps.length}
           canGoPrev={guideStepIndex > 0}
-          isLastStep={guideStepIndex >= GUIDE_STEPS.length - 1}
+          isLastStep={guideStepIndex >= guideSteps.length - 1}
           onPrev={onboardingActions.goGuidePrev}
           onSkip={() => onboardingActions.closeGuide(true)}
           onNext={onboardingActions.goGuideNext}

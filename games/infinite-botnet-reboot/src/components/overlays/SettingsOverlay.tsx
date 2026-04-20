@@ -1,4 +1,4 @@
-import { TURBO_OPTIONS } from '../../app/constants';
+import { DEBUG_PHASE_ACCESS_OPTIONS } from '../../app/constants';
 import { formatBigValue } from '../../game/format';
 import type { GameSnapshot } from '../../game/types';
 import type { AudioSettings } from '../../hooks/useAudioManager';
@@ -18,13 +18,12 @@ const AUDIO_CHANNELS: ReadonlyArray<{ key: AudioChannel; labelKey: string }> = [
 interface SettingsOverlayProps {
   t: TranslateFn;
   snapshot: GameSnapshot;
-  turbo: number;
   audioSettings: AudioSettings;
   saveTransferText: string;
   saveFeedbackText: string | null;
   lastAutosaveLabel: string;
   onUpdateAudio: (channel: AudioChannel, value: number) => void;
-  onSetTurbo: (value: number) => void;
+  onSetDebugPhaseAccess: (phaseIndex: number) => void;
   onSaveTransferChange: (value: string) => void;
   onExportSave: () => void;
   onImportSave: () => void;
@@ -95,21 +94,28 @@ export function SettingsOverlay(props: Readonly<SettingsOverlayProps>) {
             </dl>
             <p className="queue-hint">
               {props.t('reboot.settings.stats.telemetry', {
-                turbo: props.turbo,
+                phase: props.snapshot.phase.label,
                 tick: props.snapshot.tick.toLocaleString('fr-FR'),
               })}
             </p>
+            <p className="queue-hint">{props.t('reboot.settings.debugPhase.copy')}</p>
             <div className="turbo-controls">
-              {TURBO_OPTIONS.map((value) => (
+              {DEBUG_PHASE_ACCESS_OPTIONS.map((option) => (
                 <button
-                  key={value}
-                  className={value === props.turbo ? 'btn tiny is-active' : 'btn tiny'}
-                  onClick={() => props.onSetTurbo(value)}
+                  key={option.phaseIndex}
+                  className={option.phaseIndex === props.snapshot.phase.index ? 'btn tiny is-active' : 'btn tiny'}
+                  disabled={!option.enabled}
+                  onClick={() => props.onSetDebugPhaseAccess(option.phaseIndex)}
                 >
-                  x{value}
+                  {props.t(option.labelKey)}
                 </button>
               ))}
             </div>
+            <p className="queue-hint">
+              {props.t('reboot.settings.debugPhase.current', {
+                phase: props.snapshot.phase.label,
+              })}
+            </p>
           </article>
 
           <article className="settings-block">
