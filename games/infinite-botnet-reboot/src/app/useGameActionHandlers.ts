@@ -14,6 +14,9 @@ interface UseGameActionHandlersResult {
   sendExploit: () => void;
   purchaseUpgrade: (chainId: string) => void;
   toggleMonetize: () => void;
+  toggleLaundering: () => void;
+  toggleLaunderProfile: () => void;
+  triggerFbiCountermeasure: () => void;
   investTranche: () => void;
   cashoutPortfolio: () => void;
   toggleInvestMode: () => void;
@@ -56,6 +59,21 @@ export function useGameActionHandlers(
   const toggleMonetize = useCallback(() => {
     playUiCue('scanClick');
     sendCommand({ type: 'TOGGLE_MONETIZE' });
+  }, [playUiCue, sendCommand]);
+
+  const toggleLaundering = useCallback(() => {
+    playUiCue('scanClick');
+    sendCommand({ type: 'TOGGLE_LAUNDERING' });
+  }, [playUiCue, sendCommand]);
+
+  const toggleLaunderProfile = useCallback(() => {
+    playUiCue('scanClick');
+    sendCommand({ type: 'TOGGLE_LAUNDER_PROFILE' });
+  }, [playUiCue, sendCommand]);
+
+  const triggerFbiCountermeasure = useCallback(() => {
+    playUiCue('scanClick');
+    sendCommand({ type: 'FBI_COUNTERMEASURE' });
   }, [playUiCue, sendCommand]);
 
   const investTranche = useCallback(() => {
@@ -119,6 +137,9 @@ export function useGameActionHandlers(
     sendExploit,
     purchaseUpgrade,
     toggleMonetize,
+    toggleLaundering,
+    toggleLaunderProfile,
+    triggerFbiCountermeasure,
     investTranche,
     cashoutPortfolio,
     toggleInvestMode,

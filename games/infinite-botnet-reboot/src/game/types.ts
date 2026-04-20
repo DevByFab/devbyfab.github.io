@@ -8,6 +8,10 @@ export type PhaseId =
 
 export type InvestMode = 'stable' | 'aggressive';
 
+export type LaunderingProfile = 'low-risk' | 'high-yield';
+
+export type FbiRiskState = 'clear' | 'watch' | 'alert';
+
 export type MessageTone = 'positive' | 'neutral' | 'negative';
 
 export type MessageRewardType =
@@ -84,6 +88,7 @@ export interface ProgressionSnapshot {
 export interface ResourceSnapshot {
   bots: string;
   queuedTargets: string;
+  dirtyMoney: string;
   darkMoney: string;
   portfolio: string;
   warIntel: string;
@@ -95,6 +100,17 @@ export interface ResourceSnapshot {
 export interface EconomySnapshot {
   monetizeActive: boolean;
   monetizeBotsPerSec: string;
+  dirtyMoney: string;
+  launderingActive: boolean;
+  launderingProfile: LaunderingProfile;
+  launderingThroughputPerSec: string;
+  launderingEfficiencyBps: number;
+  launderingLockdownMs: number;
+  fbiSuspicion: number;
+  fbiRiskState: FbiRiskState;
+  fbiInterventionChanceBps: number;
+  fbiCountermeasureCost: string;
+  fbiCountermeasureCooldownMs: number;
   moneyYieldBps: number;
   exploitCooldownMs: number;
   exploitCooldownBaseMs: number;
@@ -169,6 +185,9 @@ export interface PersistedEngineRates {
   autoScanPerSec: string;
   autoExploitPerSec: string;
   monetizeBotsPerSec: string;
+  launderingDirtyPerSec: string;
+  launderingEfficiencyBps: number;
+  fbiCountermeasureCostMoney: string;
   moneyYieldBps: number;
   investStableBps: number;
   investAggressiveMinBps: number;
@@ -181,6 +200,11 @@ export interface PersistedEngineRates {
 
 export interface PersistedEngineSystems {
   monetizeActive: boolean;
+  launderingActive: boolean;
+  launderingProfile: LaunderingProfile;
+  launderingLockdownMs: number;
+  fbiSuspicion: number;
+  fbiCountermeasureCooldownMs: number;
   investMode: InvestMode;
   manualScanCooldownMs: number;
   manualExploitCooldownMs: number;

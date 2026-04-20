@@ -26,7 +26,17 @@ export function runSimulationStep(
 
   state.nowMs += scaledDeltaMs;
 
-  applyEconomyTick(state, scaledDeltaMs);
+  const economyTickOutcome = applyEconomyTick(state, scaledDeltaMs);
+  if (economyTickOutcome.fbiIntervention) {
+    emitLog(
+      'Alerte FBI: saisie de ' +
+        economyTickOutcome.seizedDirtyMoney.toString() +
+        ' dirty money et ' +
+        economyTickOutcome.seizedDarkMoney.toString() +
+        ' dark money.',
+      'warn',
+    );
+  }
 
   const warTickOutcome = applyWarTick(state, scaledDeltaMs);
   if (warTickOutcome.detectedPurgeBots > 0n) {

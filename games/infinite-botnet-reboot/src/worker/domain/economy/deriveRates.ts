@@ -13,9 +13,22 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.autoExploitPerSec = 0n;
   state.rates.monetizeBotsPerSec = maxBigInt(2n, bots / 1200n + BigInt(state.phase.index));
 
+  const launderingBase = maxBigInt(3n, bots / 1750n + phaseFactor / 2n);
+  const launderingThroughputBoostBps =
+    state.systems.launderingProfile === 'high-yield' ? 1800 : 0;
+  state.rates.launderingDirtyPerSec = applyBpsMultiplier(
+    launderingBase,
+    launderingThroughputBoostBps,
+  );
+
   if (state.rates.autoScanPerSec > 48_000_000n) state.rates.autoScanPerSec = 48_000_000n;
   const monetizeCap = 950_000n * BigInt((state.phase.index + 1) * (state.phase.index + 1));
   if (state.rates.monetizeBotsPerSec > monetizeCap) state.rates.monetizeBotsPerSec = monetizeCap;
+
+  const launderingCap = 780_000n * BigInt((state.phase.index + 1) * (state.phase.index + 1));
+  if (state.rates.launderingDirtyPerSec > launderingCap) {
+    state.rates.launderingDirtyPerSec = launderingCap;
+  }
 
   state.rates.autoScanPerSec = applyBpsMultiplier(state.rates.autoScanPerSec, effects.autoScanBps);
 
@@ -51,8 +64,27 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     9800,
   );
 
-  const moneyYieldBase = 5800 + state.phase.index * 120;
-  state.rates.moneyYieldBps = clamp(moneyYieldBase + effects.moneyYieldBps, 5200, 8600);
+  const suspicionPenaltyBps =
+    state.systems.fbiSuspicion >= 7800 ? 950 : state.systems.fbiSuspicion >= 4400 ? 420 : 0;
+  const launderingBaseEfficiency =
+    state.systems.launderingProfile === 'high-yield' ? 8850 : 7850;
+  state.rates.launderingEfficiencyBps = clamp(
+    launderingBaseEfficiency - suspicionPenaltyBps,
+    6000,
+    9300,
+  );
+
+  const baseCountermeasureCost =
+    180n + BigInt(Math.floor(clamp(state.systems.fbiSuspicion, 0, 10_000) / 55));
+  const profileCost = state.systems.launderingProfile === 'high-yield' ? 150n : 0n;
+  const dirtyExposureCost = maxBigInt(0n, state.resources.dirtyMoney / 2400n);
+  state.rates.fbiCountermeasureCostMoney = maxBigInt(
+    180n,
+    baseCountermeasureCost + profileCost + dirtyExposureCost,
+  );
+
+  const moneyYieldBase = 5500 + state.phase.index * 120;
+  state.rates.moneyYieldBps = clamp(moneyYieldBase + effects.moneyYieldBps, 5000, 8400);
 
   const maintenanceReductionBps = clamp(effects.maintenanceReductionBps, 0, 8500);
   const maintenanceRate = (2n * BigInt(10_000 - maintenanceReductionBps)) / 10_000n;

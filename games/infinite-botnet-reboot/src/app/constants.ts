@@ -17,6 +17,7 @@ export const DEBUG_PHASE_ACCESS_OPTIONS: ReadonlyArray<DebugPhaseAccessOption> =
 
 export const INTRO_LORE_STORAGE_KEY = 'ibr_intro_lore_v1';
 export const INTRO_TUTORIAL_STORAGE_KEY = 'ibr_intro_tutorial_v1';
+export const PHASE_TUTORIALS_STORAGE_KEY = 'ibr_phase_tutorials_v1';
 export const UNLOCK_HINT_STORAGE_KEY = 'ibr_unlock_hints_v1';
 export const AUDIO_SETTINGS_STORAGE_KEY = 'ibr_audio_settings_v1';
 export const GAME_SAVE_STORAGE_KEY = 'ibr_game_save_v1';
