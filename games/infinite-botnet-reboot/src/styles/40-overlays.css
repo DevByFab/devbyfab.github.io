@@ -22,6 +22,17 @@
 
 .settings-card {
   width: min(900px, 100%);
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.settings-backdrop {
+  place-items: start center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-block: 12px;
 }
 
 .settings-grid {
@@ -37,6 +48,7 @@
   padding: 10px;
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .settings-block h3 {

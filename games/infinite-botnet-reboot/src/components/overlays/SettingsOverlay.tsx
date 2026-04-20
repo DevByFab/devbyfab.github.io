@@ -36,7 +36,7 @@ interface SettingsOverlayProps {
 export function SettingsOverlay(props: Readonly<SettingsOverlayProps>) {
   return (
     <aside
-      className="overlay-backdrop"
+      className="overlay-backdrop settings-backdrop"
       role="dialog"
       aria-modal="true"
       aria-label={props.t('reboot.settings.dialogLabel')}
