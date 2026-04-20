@@ -23,6 +23,53 @@ export function writeBooleanFlag(key: string): void {
   }
 }
 
+function normalizePhaseIndexes(values: number[]): number[] {
+  const unique = new Set<number>();
+
+  for (const value of values) {
+    if (!Number.isFinite(value)) continue;
+    const integer = Math.floor(value);
+    if (integer < 0) continue;
+    unique.add(integer);
+  }
+
+  return [...unique].sort((left, right) => left - right);
+}
+
+export function readSeenPhaseTutorialIndexes(storageKey: string): number[] {
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    const numbers = parsed
+      .filter((item): item is number => typeof item === 'number' && Number.isFinite(item))
+      .map((item) => Math.floor(item));
+
+    return normalizePhaseIndexes(numbers);
+  } catch {
+    return [];
+  }
+}
+
+export function writeSeenPhaseTutorialIndexes(storageKey: string, indexes: number[]): void {
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify(normalizePhaseIndexes(indexes)));
+  } catch {
+    // Ignore storage errors in restrictive browser contexts.
+  }
+}
+
+export function clearSeenPhaseTutorialIndexes(storageKey: string): void {
+  try {
+    window.localStorage.removeItem(storageKey);
+  } catch {
+    // Ignore storage errors in restrictive browser contexts.
+  }
+}
+
 export function readUnlockHints(storageKey: string): string[] {
   try {
     const raw = window.localStorage.getItem(storageKey);

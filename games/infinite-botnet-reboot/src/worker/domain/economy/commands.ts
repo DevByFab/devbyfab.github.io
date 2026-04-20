@@ -1,4 +1,5 @@
 import type { EngineState } from '../../state';
+import { refreshEconomyDerivedRates } from './deriveRates';
 import { maxBigInt } from './helpers';
 
 export type ExploitResult = 'blocked' | 'cooldown' | 'success' | 'fail';
@@ -51,6 +52,62 @@ export function commandToggleMonetize(state: EngineState): boolean {
   }
 
   state.systems.monetizeActive = !state.systems.monetizeActive;
+  return true;
+}
+
+export function commandToggleLaundering(state: EngineState): boolean {
+  if (state.phase.index < 2) {
+    return false;
+  }
+
+  if (!state.systems.launderingActive && state.systems.launderingLockdownMs > 0) {
+    return false;
+  }
+
+  state.systems.launderingActive = !state.systems.launderingActive;
+  return true;
+}
+
+export function commandToggleLaunderProfile(state: EngineState): boolean {
+  if (state.phase.index < 2) {
+    return false;
+  }
+
+  state.systems.launderingProfile =
+    state.systems.launderingProfile === 'low-risk' ? 'high-yield' : 'low-risk';
+  return true;
+}
+
+export function commandFbiCountermeasure(state: EngineState): boolean {
+  if (state.phase.index < 2) {
+    return false;
+  }
+
+  if (state.systems.fbiCountermeasureCooldownMs > 0) {
+    return false;
+  }
+
+  refreshEconomyDerivedRates(state);
+  const cost = state.rates.fbiCountermeasureCostMoney;
+  if (state.resources.darkMoney < cost) {
+    return false;
+  }
+
+  state.resources.darkMoney -= cost;
+
+  const suspicionRelief = state.systems.launderingProfile === 'high-yield' ? 1800 : 1400;
+  state.systems.fbiSuspicion = Math.max(0, state.systems.fbiSuspicion - suspicionRelief);
+
+  if (state.systems.launderingLockdownMs > 0) {
+    state.systems.launderingLockdownMs = Math.max(0, state.systems.launderingLockdownMs - 5000);
+  }
+
+  const evidenceBurn = state.resources.dirtyMoney / 10n;
+  if (evidenceBurn > 0n) {
+    state.resources.dirtyMoney -= evidenceBurn;
+  }
+
+  state.systems.fbiCountermeasureCooldownMs = 18_000;
   return true;
 }
 

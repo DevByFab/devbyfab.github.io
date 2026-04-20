@@ -4,6 +4,7 @@ import { LORE_SCENES, LoreCinematicCanvas } from './cinematics/lore';
 import {
   AUDIO_SETTINGS_STORAGE_KEY,
   LORE_BRIDGE_MS,
+  PHASE_TUTORIALS_STORAGE_KEY,
   LORE_TRANSITION_MS,
 } from './app/constants';
 import {
@@ -17,11 +18,13 @@ import { useOnboardingActions } from './app/useOnboardingActions';
 import { useOnboardingKeyboardShortcuts } from './app/useOnboardingKeyboardShortcuts';
 import { useOnboardingLoreReadGate } from './app/useOnboardingLoreReadGate';
 import { useOnboardingState } from './app/useOnboardingState';
+import { usePhaseTutorialAutoStart } from './app/usePhaseTutorialAutoStart';
 import { useDashboardTabPhaseGate } from './app/useDashboardTabState';
 import { usePhaseUnlockHints } from './app/usePhaseUnlockHints';
 import { type GuideRect } from './app/guideLayout';
 import {
   clampAudio,
+  clearSeenPhaseTutorialIndexes,
   readAudioSettings,
   writeAudioSettings,
 } from './app/storage';
@@ -304,6 +307,13 @@ function App() {
     runLoreSceneTransition,
   ]);
 
+  usePhaseTutorialAutoStart({
+    snapshot,
+    introStep,
+    guideActive,
+    startGuide: onboardingActions.startGuide,
+  });
+
   useOnboardingKeyboardShortcuts({
     introStep,
     guideActive,
@@ -421,6 +431,7 @@ function App() {
 
     playUiCue('scanClick');
     clearLocalSave();
+    clearSeenPhaseTutorialIndexes(PHASE_TUTORIALS_STORAGE_KEY);
     setSaveTransferText('');
     setSaveFeedbackText(t('reboot.settings.save.feedback.resetCleared'));
     resetSession();
@@ -583,6 +594,9 @@ function App() {
             snapshot={snapshot}
             unlocked={economyUnlocked}
             onToggleMonetize={gameActions.toggleMonetize}
+            onToggleLaundering={gameActions.toggleLaundering}
+            onToggleLaunderProfile={gameActions.toggleLaunderProfile}
+            onTriggerFbiCountermeasure={gameActions.triggerFbiCountermeasure}
             onInvestTranche={gameActions.investTranche}
             onCashout={gameActions.cashoutPortfolio}
             onToggleInvestMode={gameActions.toggleInvestMode}
@@ -639,6 +653,7 @@ function App() {
             setDebugPhaseAccess(phaseIndex);
             if (phaseIndex === 0) {
               clearLocalSave();
+              clearSeenPhaseTutorialIndexes(PHASE_TUTORIALS_STORAGE_KEY);
               setSaveTransferText('');
               setSaveFeedbackText(t('reboot.settings.save.feedback.resetCleared'));
               setActiveTab('dashboard');

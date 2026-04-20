@@ -1,9 +1,12 @@
 import type { EngineActionCommand } from '../../game/protocol';
 import {
+  commandFbiCountermeasure,
   commandCashoutPortfolio,
   commandExploit,
   commandInvestTranche,
   commandScan,
+  commandToggleLaunderProfile,
+  commandToggleLaundering,
   commandToggleInvestMode,
   commandToggleMonetize,
 } from '../domain/economy';
@@ -48,6 +51,45 @@ export function dispatchCommand(
         emitLog('Monetisation activee.', 'info');
       } else {
         emitLog('Monetisation mise en pause.', 'info');
+      }
+      break;
+    }
+    case 'TOGGLE_LAUNDERING': {
+      const toggled = commandToggleLaundering(state);
+      if (!toggled) {
+        if (state.phase.index < 2) {
+          emitLog('Blanchiment indisponible avant P2.', 'warn');
+        } else {
+          emitLog('Blanchiment verrouille temporairement par pression FBI.', 'warn');
+        }
+      } else if (state.systems.launderingActive) {
+        emitLog('Blanchiment active: flux dirty -> dark money engage.', 'info');
+      } else {
+        emitLog('Blanchiment en pause: accumulation des fonds sales.', 'warn');
+      }
+      break;
+    }
+    case 'TOGGLE_LAUNDER_PROFILE': {
+      const switched = commandToggleLaunderProfile(state);
+      if (!switched) {
+        emitLog('Profil blanchiment indisponible avant P2.', 'warn');
+      } else {
+        emitLog('Profil blanchiment -> ' + state.systems.launderingProfile + '.', 'info');
+      }
+      break;
+    }
+    case 'FBI_COUNTERMEASURE': {
+      const applied = commandFbiCountermeasure(state);
+      if (!applied) {
+        if (state.phase.index < 2) {
+          emitLog('Contre-mesure FBI indisponible avant P2.', 'warn');
+        } else if (state.systems.fbiCountermeasureCooldownMs > 0) {
+          emitLog('Contre-mesure FBI en cooldown.', 'warn');
+        } else {
+          emitLog('Contre-mesure FBI refusee: budget insuffisant.', 'warn');
+        }
+      } else {
+        emitLog('Couverture activee: suspicion FBI reduite (cout operationnel applique).', 'info');
       }
       break;
     }
