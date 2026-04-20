@@ -1,11 +1,15 @@
 /// <reference lib="webworker" />
 
-import { GAME_SAVE_SCHEMA_VERSION } from '../app/constants';
+import {
+  DEBUG_PHASE_ACCESS_MAX_INDEX,
+  GAME_SAVE_SCHEMA_VERSION,
+} from '../app/constants';
 import type {
   UiToWorkerMessage,
   WorkerToUiMessage,
 } from '../game/protocol';
 import type { PersistedGameState } from '../game/types';
+import { PHASE_DEFINITIONS } from './domain/phases/definitions';
 import { dispatchCommand } from './engine/commandDispatcher';
 import { runSimulationStep } from './engine/simulationStep';
 import { syncDerivedState } from './engine/syncDerivedState';
@@ -25,6 +29,10 @@ const MAX_SIM_DELTA_MS = 2_000;
 let state = createInitialEngineState(Date.now());
 let loopHandle: number | null = null;
 let previousWallTickMs = Date.now();
+
+function maxBigInt(left: bigint, right: bigint): bigint {
+  return left > right ? left : right;
+}
 
 function postToUi(message: WorkerToUiMessage): void {
   workerScope.postMessage(message);
@@ -93,6 +101,84 @@ function resetEngine(): void {
   dispatchSnapshot('SNAPSHOT');
 }
 
+function applyDebugPhaseAccess(phaseIndex: number): void {
+  if (phaseIndex <= 0) {
+    resetEngine();
+    emitLog('Debug phase access: session reset vers P0.', 'warn');
+    return;
+  }
+
+  if (phaseIndex > DEBUG_PHASE_ACCESS_MAX_INDEX) {
+    emitLog('Debug phase access refuse: P' + phaseIndex + ' indisponible.', 'warn');
+    return;
+  }
+
+  const targetPhase = PHASE_DEFINITIONS[phaseIndex];
+  if (!targetPhase) {
+    emitLog('Debug phase access refuse: phase cible introuvable.', 'warn');
+    return;
+  }
+
+  const requirements = targetPhase.requirements;
+
+  state.resources.bots = maxBigInt(state.resources.bots, requirements.minBots);
+
+  if (requirements.minScans !== undefined) {
+    state.milestones.scans = Math.max(state.milestones.scans, requirements.minScans);
+  }
+
+  if (requirements.minMoney !== undefined) {
+    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, requirements.minMoney);
+  }
+
+  if (requirements.minPortfolio !== undefined) {
+    state.resources.portfolio = maxBigInt(state.resources.portfolio, requirements.minPortfolio);
+  }
+
+  if (requirements.minWarWins !== undefined) {
+    state.war.wins = Math.max(state.war.wins, requirements.minWarWins);
+    state.milestones.warWins = Math.max(state.milestones.warWins, state.war.wins);
+  }
+
+  if (requirements.minMessagesProcessed !== undefined) {
+    state.messages.processed = Math.max(
+      state.messages.processed,
+      requirements.minMessagesProcessed,
+    );
+    state.milestones.messagesHandled = Math.max(
+      state.milestones.messagesHandled,
+      state.messages.processed,
+    );
+  }
+
+  if (requirements.minExploitSuccesses !== undefined) {
+    state.milestones.exploitSuccesses = Math.max(
+      state.milestones.exploitSuccesses,
+      requirements.minExploitSuccesses,
+    );
+    state.milestones.exploitAttempts = Math.max(
+      state.milestones.exploitAttempts,
+      state.milestones.exploitSuccesses,
+    );
+  }
+
+  if (phaseIndex >= 1) {
+    state.resources.queuedTargets = maxBigInt(state.resources.queuedTargets, 120n);
+  }
+
+  if (phaseIndex >= 2) {
+    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, 2_000n);
+  }
+
+  state.systems.manualScanCooldownMs = 0;
+  state.systems.manualExploitCooldownMs = 0;
+
+  const previousPhaseId = state.phase.id;
+  syncDerivedState(state, emitLog, previousPhaseId);
+  emitLog('Debug phase access applique: ' + targetPhase.label + '.', 'info');
+  dispatchSnapshot('SNAPSHOT');
+}
+
 function restoreFromSave(save: PersistedGameState): { ok: true } | { ok: false; reason: string } {
   if (save.schemaVersion !== GAME_SAVE_SCHEMA_VERSION) {
     return { ok: false, reason: 'Version de sauvegarde incompatible.' };
@@ -140,6 +226,13 @@ workerScope.onmessage = (event: MessageEvent<UiToWorkerMessage>) => {
         state.turbo = Math.max(1, Math.min(40, turbo));
         emitLog('Simulation speed -> x' + state.turbo + '.', 'info');
         dispatchSnapshot('SNAPSHOT');
+        break;
+      }
+      case 'DEBUG_SET_PHASE_ACCESS': {
+        const phaseIndex = Number.isFinite(message.phaseIndex)
+          ? Math.floor(message.phaseIndex)
+          : -1;
+        applyDebugPhaseAccess(phaseIndex);
         break;
       }
       case 'COMMAND': {

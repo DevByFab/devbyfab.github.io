@@ -17,14 +17,14 @@ interface UseOnboardingActionsArgs {
   setGuideMarkSeenOnClose: Dispatch<SetStateAction<boolean>>;
   setActiveTab: Dispatch<SetStateAction<DashboardTab>>;
   setIntroStep: Dispatch<SetStateAction<'lore' | null>>;
-  startGuideCore: (markSeenOnClose: boolean) => void;
+  startGuideCore: (markSeenOnClose: boolean, phaseIndex: number) => void;
   closeGuideCore: (forceMarkAsSeen: boolean) => void;
   goGuidePrevCore: () => void;
   goGuideNextCore: () => void;
 }
 
 interface UseOnboardingActionsResult {
-  startGuide: (markSeenOnClose: boolean) => void;
+  startGuide: (markSeenOnClose: boolean, phaseIndex: number) => void;
   closeGuide: (forceMarkAsSeen: boolean) => void;
   continueFromLore: () => void;
   skipIntro: () => void;
@@ -33,7 +33,7 @@ interface UseOnboardingActionsResult {
   openSettings: () => void;
   closeSettings: () => void;
   replayLoreFromSettings: () => void;
-  replayTutorialFromSettings: () => void;
+  replayTutorialFromSettings: (phaseIndex: number) => void;
 }
 
 export function useOnboardingActions(
@@ -58,10 +58,10 @@ export function useOnboardingActions(
   } = args;
 
   const startGuide = useCallback(
-    (markSeenOnClose: boolean) => {
+    (markSeenOnClose: boolean, phaseIndex: number) => {
       setSettingsOpen(false);
       setUnlockHintId(null);
-      startGuideCore(markSeenOnClose);
+      startGuideCore(markSeenOnClose, phaseIndex);
     },
     [setSettingsOpen, setUnlockHintId, startGuideCore],
   );
@@ -87,7 +87,7 @@ export function useOnboardingActions(
       return;
     }
 
-    startGuide(true);
+    startGuide(true, 0);
   }, [loreReadReady, playErrorCue, setIntroStep, startGuide]);
 
   const skipIntro = useCallback(() => {
@@ -131,9 +131,9 @@ export function useOnboardingActions(
     setIntroStep,
   ]);
 
-  const replayTutorialFromSettings = useCallback(() => {
+  const replayTutorialFromSettings = useCallback((phaseIndex: number) => {
     closeSettings();
-    startGuide(false);
+    startGuide(false, phaseIndex);
   }, [closeSettings, startGuide]);
 
   return {

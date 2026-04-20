@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  DEBUG_PHASE_ACCESS_MAX_INDEX,
   GAME_AUTOSAVE_INTERVAL_MS,
   GAME_SAVE_SCHEMA_VERSION,
   GAME_SAVE_STORAGE_KEY,
@@ -37,6 +38,7 @@ export interface GameWorkerController {
   lastAutosaveAtMs: number | null;
   sendCommand: (command: EngineActionCommand) => void;
   setTurbo: (turbo: number) => void;
+  setDebugPhaseAccess: (phaseIndex: number) => void;
   resetSession: () => void;
   clearLocalSave: () => void;
   triggerAutosave: () => Promise<boolean>;
@@ -411,6 +413,19 @@ export function useGameWorker(): GameWorkerController {
     worker.postMessage(message);
   }, []);
 
+  const setDebugPhaseAccess = useCallback((nextPhaseIndex: number) => {
+    const worker = workerRef.current;
+    if (!worker) return;
+
+    const normalized = Math.max(0, Math.min(DEBUG_PHASE_ACCESS_MAX_INDEX, Math.floor(nextPhaseIndex)));
+
+    const message: UiToWorkerMessage = {
+      type: 'DEBUG_SET_PHASE_ACCESS',
+      phaseIndex: normalized,
+    };
+    worker.postMessage(message);
+  }, []);
+
   const resetSession = useCallback(() => {
     const worker = workerRef.current;
     if (!worker) return;
@@ -428,6 +443,7 @@ export function useGameWorker(): GameWorkerController {
     lastAutosaveAtMs,
     sendCommand,
     setTurbo,
+    setDebugPhaseAccess,
     resetSession,
     clearLocalSave,
     triggerAutosave,
