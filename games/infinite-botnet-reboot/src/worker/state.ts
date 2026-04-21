@@ -1,4 +1,5 @@
 import type {
+  FrontBusinessMode,
   GameSnapshot,
   InvestMode,
   LaunderingProfile,
@@ -6,9 +7,17 @@ import type {
   MessageTone,
   NarrativeMessage,
   PhaseSnapshot,
+  PersistedFrontBusinessMap,
   PersistedGameState,
   UpgradeOfferSnapshot,
 } from '../game/types';
+import {
+  FRONT_BUSINESS_IDS,
+  buildFrontBusinessSnapshots,
+  clampFrontBusinessLevel,
+  createInitialFrontBusinesses,
+  type FrontBusinessRuntimeMap,
+} from './domain/economy/frontBusinesses';
 import {
   computeFbiInterventionChancePerSecondBps,
   resolveFbiRiskState,
@@ -21,6 +30,7 @@ export interface EngineResources {
   queuedTargets: bigint;
   dirtyMoney: bigint;
   darkMoney: bigint;
+  cleanMoney: bigint;
   portfolio: bigint;
   warIntel: bigint;
   hz: bigint;
@@ -38,6 +48,11 @@ export interface EngineRates {
   monetizeBotsPerSec: bigint;
   launderingDirtyPerSec: bigint;
   launderingEfficiencyBps: number;
+  frontBusinessDarkToCleanPerSec: bigint;
+  frontBusinessCleanYieldPerSec: bigint;
+  frontBusinessMaintenancePerSec: bigint;
+  frontBusinessRiskBps: number;
+  frontBusinessCleanEfficiencyBps: number;
   fbiCountermeasureCostMoney: bigint;
   moneyYieldBps: number;
   investStableBps: number;
@@ -53,6 +68,8 @@ export interface EngineSystems {
   monetizeActive: boolean;
   launderingActive: boolean;
   launderingProfile: LaunderingProfile;
+  frontBusinesses: FrontBusinessRuntimeMap;
+  frontBusinessActionCooldownMs: number;
   launderingLockdownMs: number;
   fbiSuspicion: number;
   fbiCountermeasureCooldownMs: number;
@@ -205,6 +222,49 @@ function parseLaunderingProfile(
   return fallback;
 }
 
+function parseFrontBusinessMode(
+  value: unknown,
+  fallback: FrontBusinessMode,
+): FrontBusinessMode {
+  if (value === 'discreet' || value === 'balanced' || value === 'aggressive') {
+    return value;
+  }
+
+  return fallback;
+}
+
+function sanitizeFrontBusinesses(value: unknown, fallback: FrontBusinessRuntimeMap): FrontBusinessRuntimeMap {
+  if (!value || typeof value !== 'object') {
+    return { ...fallback };
+  }
+
+  const parsed = value as Partial<PersistedFrontBusinessMap>;
+  const sanitized = createInitialFrontBusinesses();
+
+  for (const id of FRONT_BUSINESS_IDS) {
+    const fallbackBusiness = fallback[id];
+    const sourceBusiness = parsed[id];
+    if (!sourceBusiness || typeof sourceBusiness !== 'object') {
+      sanitized[id] = { ...fallbackBusiness };
+      continue;
+    }
+
+    sanitized[id] = {
+      owned: Boolean(sourceBusiness.owned),
+      level: clampFrontBusinessLevel(id, Number(sourceBusiness.level ?? fallbackBusiness.level)),
+      mode: parseFrontBusinessMode(sourceBusiness.mode, fallbackBusiness.mode),
+    };
+
+    if (!sanitized[id].owned) {
+      sanitized[id].level = 0;
+    } else if (sanitized[id].level <= 0) {
+      sanitized[id].level = 1;
+    }
+  }
+
+  return sanitized;
+}
+
 function parseMessageTone(value: unknown, fallback: MessageTone): MessageTone {
   if (typeof value === 'string' && MESSAGE_TONES.includes(value as MessageTone)) {
     return value as MessageTone;
@@ -326,6 +386,7 @@ export function createInitialEngineState(nowMs: number): EngineState {
       queuedTargets: 0n,
       dirtyMoney: 0n,
       darkMoney: 0n,
+      cleanMoney: 0n,
       portfolio: 0n,
       warIntel: 0n,
       hz: 0n,
@@ -342,6 +403,11 @@ export function createInitialEngineState(nowMs: number): EngineState {
       monetizeBotsPerSec: 2n,
       launderingDirtyPerSec: 3n,
       launderingEfficiencyBps: 8200,
+      frontBusinessDarkToCleanPerSec: 0n,
+      frontBusinessCleanYieldPerSec: 0n,
+      frontBusinessMaintenancePerSec: 0n,
+      frontBusinessRiskBps: 0,
+      frontBusinessCleanEfficiencyBps: 0,
       fbiCountermeasureCostMoney: 260n,
       moneyYieldBps: 6200,
       investStableBps: 8,
@@ -356,6 +422,8 @@ export function createInitialEngineState(nowMs: number): EngineState {
       monetizeActive: false,
       launderingActive: true,
       launderingProfile: 'low-risk',
+      frontBusinesses: createInitialFrontBusinesses(),
+      frontBusinessActionCooldownMs: 0,
       launderingLockdownMs: 0,
       fbiSuspicion: 0,
       fbiCountermeasureCooldownMs: 0,
@@ -440,6 +508,7 @@ export function toPersistedState(
         queuedTargets: state.resources.queuedTargets.toString(),
         dirtyMoney: state.resources.dirtyMoney.toString(),
         darkMoney: state.resources.darkMoney.toString(),
+        cleanMoney: state.resources.cleanMoney.toString(),
         portfolio: state.resources.portfolio.toString(),
         warIntel: state.resources.warIntel.toString(),
         hz: state.resources.hz.toString(),
@@ -456,6 +525,11 @@ export function toPersistedState(
         monetizeBotsPerSec: state.rates.monetizeBotsPerSec.toString(),
         launderingDirtyPerSec: state.rates.launderingDirtyPerSec.toString(),
         launderingEfficiencyBps: state.rates.launderingEfficiencyBps,
+        frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec.toString(),
+        frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec.toString(),
+        frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec.toString(),
+        frontBusinessRiskBps: state.rates.frontBusinessRiskBps,
+        frontBusinessCleanEfficiencyBps: state.rates.frontBusinessCleanEfficiencyBps,
         fbiCountermeasureCostMoney: state.rates.fbiCountermeasureCostMoney.toString(),
         moneyYieldBps: state.rates.moneyYieldBps,
         investStableBps: state.rates.investStableBps,
@@ -470,6 +544,8 @@ export function toPersistedState(
         monetizeActive: state.systems.monetizeActive,
         launderingActive: state.systems.launderingActive,
         launderingProfile: state.systems.launderingProfile,
+        frontBusinesses: { ...state.systems.frontBusinesses },
+        frontBusinessActionCooldownMs: state.systems.frontBusinessActionCooldownMs,
         launderingLockdownMs: state.systems.launderingLockdownMs,
         fbiSuspicion: state.systems.fbiSuspicion,
         fbiCountermeasureCooldownMs: state.systems.fbiCountermeasureCooldownMs,
@@ -561,6 +637,7 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
       ),
       dirtyMoney: parseBigIntValue(persistedState.resources.dirtyMoney, fallback.resources.dirtyMoney),
       darkMoney: parseBigIntValue(persistedState.resources.darkMoney, fallback.resources.darkMoney),
+      cleanMoney: parseBigIntValue(persistedState.resources.cleanMoney, fallback.resources.cleanMoney),
       portfolio: parseBigIntValue(persistedState.resources.portfolio, fallback.resources.portfolio),
       warIntel: parseBigIntValue(persistedState.resources.warIntel, fallback.resources.warIntel),
       hz: parseBigIntValue(persistedState.resources.hz, fallback.resources.hz),
@@ -610,6 +687,30 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         persistedState.rates.launderingEfficiencyBps,
         fallback.rates.launderingEfficiencyBps,
         1000,
+        10_000,
+      ),
+      frontBusinessDarkToCleanPerSec: parseBigIntValue(
+        persistedState.rates.frontBusinessDarkToCleanPerSec,
+        fallback.rates.frontBusinessDarkToCleanPerSec,
+      ),
+      frontBusinessCleanYieldPerSec: parseBigIntValue(
+        persistedState.rates.frontBusinessCleanYieldPerSec,
+        fallback.rates.frontBusinessCleanYieldPerSec,
+      ),
+      frontBusinessMaintenancePerSec: parseBigIntValue(
+        persistedState.rates.frontBusinessMaintenancePerSec,
+        fallback.rates.frontBusinessMaintenancePerSec,
+      ),
+      frontBusinessRiskBps: clampInteger(
+        persistedState.rates.frontBusinessRiskBps,
+        fallback.rates.frontBusinessRiskBps,
+        0,
+        10_000,
+      ),
+      frontBusinessCleanEfficiencyBps: clampInteger(
+        persistedState.rates.frontBusinessCleanEfficiencyBps,
+        fallback.rates.frontBusinessCleanEfficiencyBps,
+        0,
         10_000,
       ),
       fbiCountermeasureCostMoney: parseBigIntValue(
@@ -669,6 +770,16 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
       launderingProfile: parseLaunderingProfile(
         persistedState.systems.launderingProfile,
         fallback.systems.launderingProfile,
+      ),
+      frontBusinesses: sanitizeFrontBusinesses(
+        persistedState.systems.frontBusinesses,
+        fallback.systems.frontBusinesses,
+      ),
+      frontBusinessActionCooldownMs: clampInteger(
+        persistedState.systems.frontBusinessActionCooldownMs,
+        fallback.systems.frontBusinessActionCooldownMs,
+        0,
+        180_000,
       ),
       launderingLockdownMs: clampInteger(
         persistedState.systems.launderingLockdownMs,
@@ -915,9 +1026,10 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
     ),
   };
 
-  if (restoredState.messages.sequence < restoredState.messages.pending.length) {
-    restoredState.messages.sequence = restoredState.messages.pending.length;
-  }
+  restoredState.messages.sequence = Math.max(
+    restoredState.messages.sequence,
+    restoredState.messages.pending.length,
+  );
 
   return restoredState;
 }
@@ -936,6 +1048,7 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       queuedTargets: state.resources.queuedTargets.toString(),
       dirtyMoney: state.resources.dirtyMoney.toString(),
       darkMoney: state.resources.darkMoney.toString(),
+      cleanMoney: state.resources.cleanMoney.toString(),
       portfolio: state.resources.portfolio.toString(),
       warIntel: state.resources.warIntel.toString(),
       hz: state.resources.hz.toString(),
@@ -946,10 +1059,20 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       monetizeActive: state.systems.monetizeActive,
       monetizeBotsPerSec: state.rates.monetizeBotsPerSec.toString(),
       dirtyMoney: state.resources.dirtyMoney.toString(),
+      cleanMoney: state.resources.cleanMoney.toString(),
       launderingActive: state.systems.launderingActive,
       launderingProfile: state.systems.launderingProfile,
       launderingThroughputPerSec: state.rates.launderingDirtyPerSec.toString(),
       launderingEfficiencyBps: state.rates.launderingEfficiencyBps,
+      frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec.toString(),
+      frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec.toString(),
+      frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec.toString(),
+      frontBusinessRiskBps: state.rates.frontBusinessRiskBps,
+      frontBusinessActionCooldownMs: state.systems.frontBusinessActionCooldownMs,
+      frontBusinesses: buildFrontBusinessSnapshots(
+        state.systems.frontBusinesses,
+        state.phase.index,
+      ),
       launderingLockdownMs: state.systems.launderingLockdownMs,
       fbiSuspicion: state.systems.fbiSuspicion,
       fbiRiskState: resolveFbiRiskState(state.systems.fbiSuspicion),

@@ -18,6 +18,10 @@ export interface EconomyTickOutcome {
   seizedDarkMoney: bigint;
 }
 
+function minBigInt(left: bigint, right: bigint): bigint {
+  return left < right ? left : right;
+}
+
 function applyAutoScan(state: EngineState, deltaMs: number): void {
   const autoScanned = scalePerSecond(state.rates.autoScanPerSec, deltaMs);
   if (autoScanned <= 0n) {
@@ -51,9 +55,7 @@ function tickManualScanCooldown(state: EngineState, deltaMs: number): void {
 
 function applyAutoExploit(state: EngineState, deltaMs: number): void {
   let attempts = scalePerSecond(state.rates.autoExploitPerSec, deltaMs);
-  if (attempts > state.resources.queuedTargets) {
-    attempts = state.resources.queuedTargets;
-  }
+  attempts = minBigInt(attempts, state.resources.queuedTargets);
 
   if (attempts <= 0n) {
     return;
@@ -86,10 +88,7 @@ function applyMonetization(state: EngineState, deltaMs: number): void {
 
   let converted = scalePerSecond(state.rates.monetizeBotsPerSec, deltaMs);
   const maxThroughput = maxBigInt(2n, state.resources.bots / 2n);
-
-  if (converted > maxThroughput) {
-    converted = maxThroughput;
-  }
+  converted = minBigInt(converted, maxThroughput);
 
   if (converted <= 0n) {
     return;
@@ -129,6 +128,17 @@ function tickFbiCountermeasureCooldown(state: EngineState, deltaMs: number): voi
   );
 }
 
+function tickFrontBusinessActionCooldown(state: EngineState, deltaMs: number): void {
+  if (state.systems.frontBusinessActionCooldownMs <= 0) {
+    return;
+  }
+
+  state.systems.frontBusinessActionCooldownMs = Math.max(
+    0,
+    state.systems.frontBusinessActionCooldownMs - deltaMs,
+  );
+}
+
 function applyLaundering(state: EngineState, deltaMs: number): void {
   if (state.phase.index < 2) {
     if (state.resources.dirtyMoney > 0n) {
@@ -147,9 +157,7 @@ function applyLaundering(state: EngineState, deltaMs: number): void {
   }
 
   let processed = scalePerSecond(state.rates.launderingDirtyPerSec, deltaMs);
-  if (processed > state.resources.dirtyMoney) {
-    processed = state.resources.dirtyMoney;
-  }
+  processed = minBigInt(processed, state.resources.dirtyMoney);
 
   if (processed <= 0n) {
     return;
@@ -158,6 +166,52 @@ function applyLaundering(state: EngineState, deltaMs: number): void {
   const gainedMoney = (processed * BigInt(state.rates.launderingEfficiencyBps)) / 10_000n;
   state.resources.dirtyMoney -= processed;
   state.resources.darkMoney += gainedMoney;
+}
+
+function applyFrontBusinessOperations(state: EngineState, deltaMs: number): void {
+  if (state.phase.index < 2) {
+    return;
+  }
+
+  let converted = scalePerSecond(state.rates.frontBusinessDarkToCleanPerSec, deltaMs);
+  converted = minBigInt(converted, state.resources.darkMoney);
+
+  if (converted <= 0n) {
+    return;
+  }
+
+  state.resources.darkMoney -= converted;
+
+  const gainedCleanMoney =
+    (converted * BigInt(state.rates.frontBusinessCleanEfficiencyBps)) / 10_000n;
+  state.resources.cleanMoney += gainedCleanMoney;
+}
+
+function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): void {
+  if (state.phase.index < 2) {
+    return;
+  }
+
+  const maintenanceDrain = scalePerSecond(state.rates.frontBusinessMaintenancePerSec, deltaMs);
+  if (maintenanceDrain <= 0n) {
+    return;
+  }
+
+  if (state.resources.darkMoney >= maintenanceDrain) {
+    state.resources.darkMoney -= maintenanceDrain;
+    return;
+  }
+
+  const remainingDrain = maintenanceDrain - state.resources.darkMoney;
+  state.resources.darkMoney = 0n;
+
+  const cleanFallbackDrain = remainingDrain / 2n;
+  if (cleanFallbackDrain > 0n) {
+    state.resources.cleanMoney =
+      state.resources.cleanMoney > cleanFallbackDrain
+        ? state.resources.cleanMoney - cleanFallbackDrain
+        : 0n;
+  }
 }
 
 function applyFbiPressureAndEvents(
@@ -182,6 +236,7 @@ function applyFbiPressureAndEvents(
     launderingLockdownMs: state.systems.launderingLockdownMs,
     launderingProfile: state.systems.launderingProfile,
     investMode: state.systems.investMode,
+    frontBusinessRiskPressurePerSec: Math.floor(state.rates.frontBusinessRiskBps / 100),
   });
 
   state.systems.fbiSuspicion += Math.floor((suspicionDeltaPerSec * deltaMs) / 1000);
@@ -302,13 +357,16 @@ export function applyEconomyTick(state: EngineState, deltaMs: number): EconomyTi
   tickManualExploitCooldown(state, deltaMs);
   tickLaunderingLockdown(state, deltaMs);
   tickFbiCountermeasureCooldown(state, deltaMs);
+  tickFrontBusinessActionCooldown(state, deltaMs);
   applyAutoScan(state, deltaMs);
   applyAutoExploit(state, deltaMs);
   applyMonetization(state, deltaMs);
   applyLaundering(state, deltaMs);
+  applyFrontBusinessOperations(state, deltaMs);
   const economyOutcome = applyFbiPressureAndEvents(state, deltaMs);
   applyPortfolioYield(state, deltaMs);
   applyMaintenanceDrain(state, deltaMs);
+  applyFrontBusinessMaintenance(state, deltaMs);
   applyLateResources(state, deltaMs);
 
   return economyOutcome;

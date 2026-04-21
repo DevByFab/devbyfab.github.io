@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface AudioSettings {
   master: number;
@@ -180,6 +180,24 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
   const diagnosticsRef = useRef<Set<string>>(new Set());
   const audioBasePathRef = useRef(createAudioBasePath(import.meta.env.BASE_URL));
 
+  const spawnAmbienceFromManifest = useCallback((warnCode: string): boolean => {
+    const manifest = manifestRef.current;
+    const ambienceFile = manifest?.ambience.main;
+    if (!ambienceFile) return false;
+
+    const ambienceUrl = resolveAudioUrl(audioBasePathRef.current, ambienceFile);
+    const ambience = new Audio(ambienceUrl);
+    ambience.loop = true;
+    ambience.preload = 'auto';
+    ambience.volume = makeVolume(settingsRef.current, 'ambience');
+    ambienceRef.current = ambience;
+    ambience.play().catch((error) => {
+      warnAudioIssue(diagnosticsRef.current, warnCode, error);
+    });
+
+    return true;
+  }, []);
+
   useEffect(() => {
     settingsRef.current = settings;
 
@@ -230,20 +248,8 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
     if (!manifestReady || !unlockedRef.current) return;
     if (ambienceRef.current !== null) return;
 
-    const manifest = manifestRef.current;
-    const ambienceFile = manifest?.ambience.main;
-    if (!ambienceFile) return;
-
-    const ambienceUrl = resolveAudioUrl(audioBasePathRef.current, ambienceFile);
-    const ambience = new Audio(ambienceUrl);
-    ambience.loop = true;
-    ambience.preload = 'auto';
-    ambience.volume = makeVolume(settingsRef.current, 'ambience');
-    ambienceRef.current = ambience;
-    ambience.play().catch((error) => {
-      warnAudioIssue(diagnosticsRef.current, 'ambience-autoplay-blocked', error);
-    });
-  }, [manifestReady]);
+    spawnAmbienceFromManifest('ambience-autoplay-blocked');
+  }, [manifestReady, spawnAmbienceFromManifest]);
 
   useEffect(() => {
     const unlockAudio = () => {
@@ -258,19 +264,7 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
         return;
       }
 
-      const manifest = manifestRef.current;
-      const ambienceFile = manifest?.ambience.main;
-      if (!ambienceFile) return;
-
-      const ambienceUrl = resolveAudioUrl(audioBasePathRef.current, ambienceFile);
-      const ambience = new Audio(ambienceUrl);
-      ambience.loop = true;
-      ambience.preload = 'auto';
-      ambience.volume = makeVolume(settingsRef.current, 'ambience');
-      ambienceRef.current = ambience;
-      ambience.play().catch((error) => {
-        warnAudioIssue(diagnosticsRef.current, 'ambience-unlock-play-failed', error);
-      });
+      spawnAmbienceFromManifest('ambience-unlock-play-failed');
     };
 
     window.addEventListener('pointerdown', unlockAudio, { once: true });
@@ -280,7 +274,7 @@ export function useAudioManager(settings: AudioSettings): AudioManager {
       window.removeEventListener('pointerdown', unlockAudio);
       window.removeEventListener('keydown', unlockAudio);
     };
-  }, []);
+  }, [spawnAmbienceFromManifest]);
 
   useEffect(() => {
     if (!manifestReady) return;

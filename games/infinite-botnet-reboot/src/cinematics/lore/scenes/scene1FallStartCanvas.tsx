@@ -3,10 +3,16 @@ import {
   drawAttentionMarks,
   drawDoor,
   drawStickFigure,
-  drawStoryboardPanel,
   drawSuitcase,
 } from '../shared/storyboardPrimitives';
+import {
+  beginDualStoryboardFrame,
+  createStoryboardPanelMetrics,
+  drawDualStoryboardPanels,
+} from '../shared/storyboardLayout';
 import { useLoreCanvasFrame } from '../shared/useLoreCanvasFrame';
+
+type Scene1PanelKind = 'left' | 'right';
 
 function drawScene1Background(
   ctx: CanvasRenderingContext2D,
@@ -34,92 +40,90 @@ function drawScene1Background(
   ctx.fillRect(0, 0, width, height);
 }
 
-function drawScene1LeftPanel(
+function drawScene1Panel(
   ctx: CanvasRenderingContext2D,
   panelX: number,
   panelY: number,
   panelWidth: number,
   panelHeight: number,
   t: number,
+  kind: Scene1PanelKind,
 ): void {
-  const floorY = panelY + panelHeight * 0.82;
-  const figureScale = Math.max(1.15, panelWidth * 0.0052);
-  const bob = Math.sin(t * 2.1) * panelHeight * 0.008;
-  const doorOpen = 0.34 + Math.sin(t * 1.4) * 0.1;
-  const departureOffset = Math.sin(t * 1.7) * panelWidth * 0.012;
+  const { floorY, figureScale } = createStoryboardPanelMetrics(
+    panelY,
+    panelHeight,
+    panelWidth,
+    1.15,
+    0.0052,
+  );
+  if (kind === 'left') {
+    const bob = Math.sin(t * 2.1) * panelHeight * 0.008;
+    const doorOpen = 0.34 + Math.sin(t * 1.4) * 0.1;
+    const departureOffset = Math.sin(t * 1.7) * panelWidth * 0.012;
 
-  ctx.fillStyle = 'rgba(102, 140, 151, 0.18)';
-  ctx.fillRect(panelX + panelWidth * 0.08, floorY, panelWidth * 0.84, panelHeight * 0.012);
+    ctx.fillStyle = 'rgba(102, 140, 151, 0.18)';
+    ctx.fillRect(panelX + panelWidth * 0.08, floorY, panelWidth * 0.84, panelHeight * 0.012);
 
-  drawDoor(ctx, {
-    x: panelX + panelWidth * 0.72,
-    y: panelY + panelHeight * 0.2,
-    width: panelWidth * 0.2,
-    height: panelHeight * 0.58,
-    openRatio: doorOpen,
-    strokeColor: 'rgba(236, 224, 194, 0.78)',
-    fillColor: 'rgba(34, 51, 56, 0.44)',
-    hinge: 'right',
-  });
+    drawDoor(ctx, {
+      x: panelX + panelWidth * 0.72,
+      y: panelY + panelHeight * 0.2,
+      width: panelWidth * 0.2,
+      height: panelHeight * 0.58,
+      openRatio: doorOpen,
+      strokeColor: 'rgba(236, 224, 194, 0.78)',
+      fillColor: 'rgba(34, 51, 56, 0.44)',
+      hinge: 'right',
+    });
 
-  drawStickFigure(ctx, {
-    x: panelX + panelWidth * 0.34,
-    y: floorY + bob,
-    scale: figureScale,
-    facing: 'right',
-    strokeColor: 'rgba(236, 241, 246, 0.92)',
-    torsoLean: 0.14,
-    leftArmAngle: -0.3,
-    rightArmAngle: 1.25,
-    leftLegAngle: -0.34,
-    rightLegAngle: 0.3,
-  });
+    drawStickFigure(ctx, {
+      x: panelX + panelWidth * 0.34,
+      y: floorY + bob,
+      scale: figureScale,
+      facing: 'right',
+      strokeColor: 'rgba(236, 241, 246, 0.92)',
+      torsoLean: 0.14,
+      leftArmAngle: -0.3,
+      rightArmAngle: 1.25,
+      leftLegAngle: -0.34,
+      rightLegAngle: 0.3,
+    });
 
-  drawAttentionMarks(ctx, {
-    x: panelX + panelWidth * 0.37,
-    y: panelY + panelHeight * 0.31 + bob,
-    radius: panelWidth * 0.048,
-    color: 'rgba(255, 178, 124, 0.92)',
-    intensity: 1.2,
-  });
+    drawAttentionMarks(ctx, {
+      x: panelX + panelWidth * 0.37,
+      y: panelY + panelHeight * 0.31 + bob,
+      radius: panelWidth * 0.048,
+      color: 'rgba(255, 178, 124, 0.92)',
+      intensity: 1.2,
+    });
 
-  drawStickFigure(ctx, {
-    x: panelX + panelWidth * 0.61 + departureOffset,
-    y: floorY,
-    scale: figureScale * 0.98,
-    facing: 'right',
-    strokeColor: 'rgba(215, 226, 234, 0.82)',
-    torsoLean: 0.06,
-    leftArmAngle: -0.4,
-    rightArmAngle: 0.7,
-    leftLegAngle: -0.52,
-    rightLegAngle: 0.56,
-  });
+    drawStickFigure(ctx, {
+      x: panelX + panelWidth * 0.61 + departureOffset,
+      y: floorY,
+      scale: figureScale * 0.98,
+      facing: 'right',
+      strokeColor: 'rgba(215, 226, 234, 0.82)',
+      torsoLean: 0.06,
+      leftArmAngle: -0.4,
+      rightArmAngle: 0.7,
+      leftLegAngle: -0.52,
+      rightLegAngle: 0.56,
+    });
 
-  drawStickFigure(ctx, {
-    x: panelX + panelWidth * 0.68 + departureOffset,
-    y: floorY + panelHeight * 0.01,
-    scale: figureScale * 0.74,
-    facing: 'right',
-    strokeColor: 'rgba(198, 214, 224, 0.8)',
-    torsoLean: 0.08,
-    leftArmAngle: -0.26,
-    rightArmAngle: 0.48,
-    leftLegAngle: -0.48,
-    rightLegAngle: 0.44,
-  });
-}
+    drawStickFigure(ctx, {
+      x: panelX + panelWidth * 0.68 + departureOffset,
+      y: floorY + panelHeight * 0.01,
+      scale: figureScale * 0.74,
+      facing: 'right',
+      strokeColor: 'rgba(198, 214, 224, 0.8)',
+      torsoLean: 0.08,
+      leftArmAngle: -0.26,
+      rightArmAngle: 0.48,
+      leftLegAngle: -0.48,
+      rightLegAngle: 0.44,
+    });
+    return;
+  }
 
-function drawScene1RightPanel(
-  ctx: CanvasRenderingContext2D,
-  panelX: number,
-  panelY: number,
-  panelWidth: number,
-  panelHeight: number,
-  t: number,
-): void {
-  const floorY = panelY + panelHeight * 0.82;
-  const figureScale = Math.max(1.15, panelWidth * 0.0052);
   const walkOffset = Math.sin(t * 1.6) * panelWidth * 0.018;
   const slump = Math.sin(t * 1.2 + 0.6) * panelHeight * 0.006;
 
@@ -188,45 +192,37 @@ function drawFallStartFrame(
   height: number,
   timestampMs: number,
 ): void {
-  const t = timestampMs / 1000;
-  const gutter = width * 0.06;
-  const panelGap = width * 0.035;
-  const panelWidth = (width - gutter * 2 - panelGap) * 0.5;
-  const panelHeight = height * 0.62;
-  const panelY = height * 0.2;
-  const leftPanelX = gutter;
-  const rightPanelX = gutter + panelWidth + panelGap;
-
-  ctx.clearRect(0, 0, width, height);
-  drawScene1Background(ctx, width, height, t);
-
-  drawStoryboardPanel(
+  const { t, layout } = beginDualStoryboardFrame(
     ctx,
-    leftPanelX,
-    panelY,
-    panelWidth,
-    panelHeight,
-    'rgba(170, 217, 228, 0.72)',
-    'rgba(16, 34, 42, 0.56)',
+    width,
+    height,
+    timestampMs,
+    drawScene1Background,
   );
-  drawStoryboardPanel(
+  const { panelWidth, panelHeight, panelY, leftPanelX, rightPanelX } = layout;
+
+  drawDualStoryboardPanels(
     ctx,
-    rightPanelX,
-    panelY,
-    panelWidth,
-    panelHeight,
-    'rgba(198, 224, 233, 0.72)',
-    'rgba(18, 36, 45, 0.56)',
+    layout,
+    {
+      borderColor: 'rgba(170, 217, 228, 0.72)',
+      fillColor: 'rgba(16, 34, 42, 0.56)',
+    },
+    {
+      borderColor: 'rgba(198, 224, 233, 0.72)',
+      fillColor: 'rgba(18, 36, 45, 0.56)',
+    },
   );
 
-  drawScene1LeftPanel(ctx, leftPanelX, panelY, panelWidth, panelHeight, t);
-  drawScene1RightPanel(ctx, rightPanelX, panelY, panelWidth, panelHeight, t);
+  drawScene1Panel(ctx, leftPanelX, panelY, panelWidth, panelHeight, t, 'left');
+  drawScene1Panel(ctx, rightPanelX, panelY, panelWidth, panelHeight, t, 'right');
 
   ctx.strokeStyle = 'rgba(170, 218, 231, 0.28)';
   ctx.lineWidth = Math.max(1.2, width * 0.002);
+  const dividerX = (leftPanelX + panelWidth + rightPanelX) * 0.5;
   ctx.beginPath();
-  ctx.moveTo(leftPanelX + panelWidth + panelGap * 0.5, panelY + panelHeight * 0.05);
-  ctx.lineTo(leftPanelX + panelWidth + panelGap * 0.5, panelY + panelHeight * 0.95);
+  ctx.moveTo(dividerX, panelY + panelHeight * 0.05);
+  ctx.lineTo(dividerX, panelY + panelHeight * 0.95);
   ctx.stroke();
 
   drawScanlines(ctx, width, height, timestampMs, 13, 30, 'rgba(140, 204, 215, 0.04)');

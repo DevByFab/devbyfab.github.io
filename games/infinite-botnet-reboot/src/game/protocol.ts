@@ -1,4 +1,9 @@
-import type { GameSnapshot, LogLine, PersistedGameState } from './types';
+import type {
+  FrontBusinessId,
+  GameSnapshot,
+  LogLine,
+  PersistedGameState,
+} from './types';
 
 export type EngineActionType =
   | 'SCAN'
@@ -6,6 +11,9 @@ export type EngineActionType =
   | 'TOGGLE_MONETIZE'
   | 'TOGGLE_LAUNDERING'
   | 'TOGGLE_LAUNDER_PROFILE'
+  | 'PURCHASE_FRONT_BUSINESS'
+  | 'UPGRADE_FRONT_BUSINESS'
+  | 'TOGGLE_FRONT_BUSINESS_MODE'
   | 'FBI_COUNTERMEASURE'
   | 'INVEST_TRANCHE'
   | 'CASHOUT_PORTFOLIO'
@@ -25,6 +33,7 @@ export interface EngineActionCommand {
   payload?: {
     commandText?: string;
     chainId?: string;
+    frontBusinessId?: FrontBusinessId;
   };
 }
 

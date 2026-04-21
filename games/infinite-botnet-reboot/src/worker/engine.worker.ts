@@ -119,7 +119,7 @@ function applyDebugPhaseAccess(phaseIndex: number): void {
     return;
   }
 
-  const requirements = targetPhase.requirements;
+  const { requirements } = targetPhase;
 
   state.resources.bots = maxBigInt(state.resources.bots, requirements.minBots);
 

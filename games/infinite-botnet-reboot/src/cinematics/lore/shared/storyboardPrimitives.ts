@@ -193,10 +193,17 @@ export interface DoorOptions {
 }
 
 export function drawDoor(ctx: CanvasRenderingContext2D, options: Readonly<DoorOptions>): void {
-  const x = options.x;
-  const y = options.y;
-  const width = options.width;
-  const height = options.height;
+  const {
+    x,
+    y,
+    width,
+    height,
+    strokeColor,
+    fillColor,
+    knobColor,
+    openRatio: openRatioOption,
+    hinge: hingeOption,
+  } = options;
 
   const frameWidth = Math.max(1.2, Math.min(width, height) * 0.05);
   const leafInset = frameWidth * 0.7;
@@ -206,12 +213,12 @@ export function drawDoor(ctx: CanvasRenderingContext2D, options: Readonly<DoorOp
   const leafHeight = Math.max(1, height - leafInset * 2);
   const leafRadius = Math.max(2, Math.min(leafWidth, leafHeight) * 0.08);
 
-  const hinge = options.hinge ?? 'left';
-  const openRatio = clamp(options.openRatio ?? 0, 0, 1);
+  const hinge = hingeOption ?? 'left';
+  const openRatio = clamp(openRatioOption ?? 0, 0, 1);
 
   ctx.save();
-  ctx.strokeStyle = options.strokeColor ?? 'rgba(230, 242, 246, 0.8)';
-  ctx.fillStyle = options.fillColor ?? 'rgba(31, 47, 53, 0.38)';
+  ctx.strokeStyle = strokeColor ?? 'rgba(230, 242, 246, 0.8)';
+  ctx.fillStyle = fillColor ?? 'rgba(31, 47, 53, 0.38)';
   ctx.lineWidth = frameWidth;
 
   ctx.strokeRect(x, y, width, height);
@@ -226,7 +233,7 @@ export function drawDoor(ctx: CanvasRenderingContext2D, options: Readonly<DoorOp
     const closedKnobX = hinge === 'left' ? leafX + leafWidth * 0.82 : leafX + leafWidth * 0.18;
     const knobY = leafY + leafHeight * 0.52;
     ctx.beginPath();
-    ctx.fillStyle = options.knobColor ?? options.strokeColor ?? 'rgba(246, 220, 182, 0.9)';
+    ctx.fillStyle = knobColor ?? strokeColor ?? 'rgba(246, 220, 182, 0.9)';
     ctx.arc(closedKnobX, knobY, Math.max(1.3, frameWidth * 0.4), 0, Math.PI * 2);
     ctx.fill();
   } else {
@@ -251,7 +258,7 @@ export function drawDoor(ctx: CanvasRenderingContext2D, options: Readonly<DoorOp
     const knobY = leafY + leafHeight * 0.52;
     const openKnobX = hinge === 'left' ? sweptX - leafWidth * 0.08 : sweptX + leafWidth * 0.08;
     ctx.beginPath();
-    ctx.fillStyle = options.knobColor ?? options.strokeColor ?? 'rgba(246, 220, 182, 0.9)';
+    ctx.fillStyle = knobColor ?? strokeColor ?? 'rgba(246, 220, 182, 0.9)';
     ctx.arc(openKnobX, knobY, Math.max(1.2, frameWidth * 0.36), 0, Math.PI * 2);
     ctx.fill();
   }
@@ -269,16 +276,13 @@ export interface SuitcaseOptions {
 }
 
 export function drawSuitcase(ctx: CanvasRenderingContext2D, options: Readonly<SuitcaseOptions>): void {
-  const x = options.x;
-  const y = options.y;
-  const width = options.width;
-  const height = options.height;
+  const { x, y, width, height, bodyColor, strokeColor } = options;
   const radius = Math.max(2, Math.min(width, height) * 0.16);
 
   ctx.save();
   ctx.lineWidth = Math.max(1.1, Math.min(width, height) * 0.08);
-  ctx.strokeStyle = options.strokeColor ?? 'rgba(240, 229, 196, 0.84)';
-  ctx.fillStyle = options.bodyColor ?? 'rgba(72, 92, 102, 0.48)';
+  ctx.strokeStyle = strokeColor ?? 'rgba(240, 229, 196, 0.84)';
+  ctx.fillStyle = bodyColor ?? 'rgba(72, 92, 102, 0.48)';
 
   traceRoundedRect(ctx, x, y, width, height, radius);
   ctx.fill();
@@ -345,15 +349,23 @@ export interface EnvelopeOptions {
 }
 
 export function drawEnvelope(ctx: CanvasRenderingContext2D, options: Readonly<EnvelopeOptions>): void {
-  const width = options.width;
-  const height = options.height;
+  const {
+    x,
+    y,
+    width,
+    height,
+    rotation,
+    strokeColor,
+    fillColor,
+    rejected,
+  } = options;
 
   ctx.save();
-  ctx.translate(options.x, options.y);
-  ctx.rotate(options.rotation ?? 0);
+  ctx.translate(x, y);
+  ctx.rotate(rotation ?? 0);
   ctx.lineWidth = Math.max(1.1, Math.min(width, height) * 0.08);
-  ctx.strokeStyle = options.strokeColor ?? 'rgba(224, 238, 245, 0.82)';
-  ctx.fillStyle = options.fillColor ?? 'rgba(34, 52, 62, 0.54)';
+  ctx.strokeStyle = strokeColor ?? 'rgba(224, 238, 245, 0.82)';
+  ctx.fillStyle = fillColor ?? 'rgba(34, 52, 62, 0.54)';
 
   ctx.fillRect(-width * 0.5, -height * 0.5, width, height);
   ctx.strokeRect(-width * 0.5, -height * 0.5, width, height);
@@ -364,7 +376,7 @@ export function drawEnvelope(ctx: CanvasRenderingContext2D, options: Readonly<En
   ctx.lineTo(width * 0.5, -height * 0.5);
   ctx.stroke();
 
-  if (options.rejected) {
+  if (rejected) {
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(255, 118, 118, 0.92)';
     ctx.moveTo(-width * 0.32, -height * 0.32);
@@ -420,11 +432,8 @@ export interface FridgeOptions {
 }
 
 export function drawFridge(ctx: CanvasRenderingContext2D, options: Readonly<FridgeOptions>): void {
-  const x = options.x;
-  const y = options.y;
-  const width = options.width;
-  const height = options.height;
-  const doorOpenRatio = clamp(options.doorOpenRatio ?? 0, 0, 1);
+  const { x, y, width, height, doorOpenRatio: doorOpenRatioOption } = options;
+  const doorOpenRatio = clamp(doorOpenRatioOption ?? 0, 0, 1);
   const radius = Math.max(3, Math.min(width, height) * 0.1);
 
   ctx.save();

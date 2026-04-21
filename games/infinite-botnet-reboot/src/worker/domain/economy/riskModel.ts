@@ -26,6 +26,7 @@ interface SuspicionDeltaInput {
   launderingLockdownMs: number;
   launderingProfile: LaunderingProfile;
   investMode: InvestMode;
+  frontBusinessRiskPressurePerSec: number;
 }
 
 interface InterventionChanceInput {
@@ -60,10 +61,10 @@ export function computeFbiSuspicionDeltaPerSec(input: Readonly<SuspicionDeltaInp
     const baseGain = input.launderingProfile === 'high-yield' ? SUSPICION_GAIN_HIGH_YIELD : SUSPICION_GAIN_LOW_RISK;
     const dirtyPressure = computeDirtyPressure(input.dirtyMoney);
     const investPressure = input.investMode === 'aggressive' ? AGGRESSIVE_INVEST_PRESSURE : 0;
-    return baseGain + dirtyPressure + investPressure;
+    return baseGain + dirtyPressure + investPressure + input.frontBusinessRiskPressurePerSec;
   }
 
-  return -SUSPICION_DECAY_IDLE;
+  return -SUSPICION_DECAY_IDLE + input.frontBusinessRiskPressurePerSec;
 }
 
 export function computeFbiInterventionChancePerSecondBps(

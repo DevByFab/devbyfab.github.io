@@ -12,6 +12,13 @@ export type LaunderingProfile = 'low-risk' | 'high-yield';
 
 export type FbiRiskState = 'clear' | 'watch' | 'alert';
 
+export type FrontBusinessId =
+  | 'laundromat'
+  | 'car-dealership'
+  | 'freight-forwarder';
+
+export type FrontBusinessMode = 'discreet' | 'balanced' | 'aggressive';
+
 export type MessageTone = 'positive' | 'neutral' | 'negative';
 
 export type MessageRewardType =
@@ -90,6 +97,7 @@ export interface ResourceSnapshot {
   queuedTargets: string;
   dirtyMoney: string;
   darkMoney: string;
+  cleanMoney: string;
   portfolio: string;
   warIntel: string;
   hz: string;
@@ -97,14 +105,34 @@ export interface ResourceSnapshot {
   computronium: string;
 }
 
+export interface FrontBusinessSnapshot {
+  id: FrontBusinessId;
+  owned: boolean;
+  level: number;
+  mode: FrontBusinessMode;
+  darkToCleanPerSec: string;
+  cleanYieldPerSec: string;
+  maintenancePerSec: string;
+  riskBps: number;
+  buyCostDarkMoney: string;
+  upgradeCostDarkMoney: string;
+}
+
 export interface EconomySnapshot {
   monetizeActive: boolean;
   monetizeBotsPerSec: string;
   dirtyMoney: string;
+  cleanMoney: string;
   launderingActive: boolean;
   launderingProfile: LaunderingProfile;
   launderingThroughputPerSec: string;
   launderingEfficiencyBps: number;
+  frontBusinessDarkToCleanPerSec: string;
+  frontBusinessCleanYieldPerSec: string;
+  frontBusinessMaintenancePerSec: string;
+  frontBusinessRiskBps: number;
+  frontBusinessActionCooldownMs: number;
+  frontBusinesses: FrontBusinessSnapshot[];
   launderingLockdownMs: number;
   fbiSuspicion: number;
   fbiRiskState: FbiRiskState;
@@ -187,6 +215,11 @@ export interface PersistedEngineRates {
   monetizeBotsPerSec: string;
   launderingDirtyPerSec: string;
   launderingEfficiencyBps: number;
+  frontBusinessDarkToCleanPerSec: string;
+  frontBusinessCleanYieldPerSec: string;
+  frontBusinessMaintenancePerSec: string;
+  frontBusinessRiskBps: number;
+  frontBusinessCleanEfficiencyBps: number;
   fbiCountermeasureCostMoney: string;
   moneyYieldBps: number;
   investStableBps: number;
@@ -198,10 +231,20 @@ export interface PersistedEngineRates {
   messageIntervalBaseMs: number;
 }
 
+export interface PersistedFrontBusinessState {
+  owned: boolean;
+  level: number;
+  mode: FrontBusinessMode;
+}
+
+export type PersistedFrontBusinessMap = Record<FrontBusinessId, PersistedFrontBusinessState>;
+
 export interface PersistedEngineSystems {
   monetizeActive: boolean;
   launderingActive: boolean;
   launderingProfile: LaunderingProfile;
+  frontBusinesses: PersistedFrontBusinessMap;
+  frontBusinessActionCooldownMs: number;
   launderingLockdownMs: number;
   fbiSuspicion: number;
   fbiCountermeasureCooldownMs: number;
@@ -210,36 +253,11 @@ export interface PersistedEngineSystems {
   manualExploitCooldownMs: number;
 }
 
-export interface PersistedEngineWar {
-  heat: number;
-  wins: number;
-  losses: number;
-  streak: number;
-  attackCooldownMs: number;
-  fortifyCooldownMs: number;
-  defenseRemainingMs: number;
+export type PersistedEngineWar = WarSnapshot & {
   detectionAccumulatorMs: number;
-  projectedSuccessBps: number;
-  attackCostBots: string;
-  scrubCostMoney: string;
-  fortifyCostMoney: string;
-  fortifyCostIntel: string;
-}
+};
 
-export interface PersistedEngineMatrix {
-  unlocked: boolean;
-  stability: number;
-  breachProgress: number;
-  bypassRemainingMs: number;
-  expectedCommand: string;
-  successfulInjections: number;
-  failedInjections: number;
-  armCostHz: string;
-  armCostComputronium: string;
-  injectCostHz: string;
-  injectCostComputronium: string;
-  stabilizeCostMoney: string;
-}
+export type PersistedEngineMatrix = MatrixSnapshot;
 
 export interface PersistedEngineMessages {
   pending: NarrativeMessage[];

@@ -1,5 +1,8 @@
 import type { EngineActionCommand } from '../../game/protocol';
 import {
+  commandPurchaseFrontBusiness,
+  commandUpgradeFrontBusiness,
+  commandToggleFrontBusinessMode,
   commandFbiCountermeasure,
   commandCashoutPortfolio,
   commandExploit,
@@ -9,6 +12,7 @@ import {
   commandToggleLaundering,
   commandToggleInvestMode,
   commandToggleMonetize,
+  type FrontBusinessCommandResult,
 } from '../domain/economy';
 import { commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../domain/matrix';
 import { commandProcessMessage, commandQuarantineMessage } from '../domain/narrative';
@@ -16,6 +20,38 @@ import { commandWarAttack, commandWarFortify, commandWarScrub } from '../domain/
 import { commandPurchaseUpgrade } from '../domain/upgrades';
 import type { EngineState } from '../state';
 import type { EmitLog } from './types';
+
+interface FrontBusinessResultMessages {
+  phaseLocked: string;
+  missing: string;
+  cooldown: string;
+  locked: string;
+  insufficient: string;
+  maxed?: string;
+  success: string;
+}
+
+function emitFrontBusinessResult(
+  emitLog: EmitLog,
+  result: FrontBusinessCommandResult,
+  messages: Readonly<FrontBusinessResultMessages>,
+): void {
+  if (result === 'phase-locked') {
+    emitLog(messages.phaseLocked, 'warn');
+  } else if (result === 'missing') {
+    emitLog(messages.missing, 'warn');
+  } else if (result === 'cooldown') {
+    emitLog(messages.cooldown, 'warn');
+  } else if (result === 'locked') {
+    emitLog(messages.locked, 'warn');
+  } else if (result === 'insufficient') {
+    emitLog(messages.insufficient, 'warn');
+  } else if (result === 'maxed') {
+    emitLog(messages.maxed ?? messages.locked, 'warn');
+  } else {
+    emitLog(messages.success, 'info');
+  }
+}
 
 export function dispatchCommand(
   state: EngineState,
@@ -76,6 +112,49 @@ export function dispatchCommand(
       } else {
         emitLog('Profil blanchiment -> ' + state.systems.launderingProfile + '.', 'info');
       }
+      break;
+    }
+    case 'PURCHASE_FRONT_BUSINESS': {
+      const frontBusinessId = command.payload?.frontBusinessId;
+      const result = commandPurchaseFrontBusiness(state, frontBusinessId);
+      emitFrontBusinessResult(emitLog, result, {
+        phaseLocked: 'Commerce de facade indisponible avant P2.',
+        missing: 'Commerce de facade introuvable.',
+        cooldown: 'Operation commerce en cooldown.',
+        locked: 'Commerce deja acquis.',
+        insufficient: 'Acquisition refusee: dark money insuffisant.',
+        success: 'Commerce de facade acquis: ' + (frontBusinessId ?? 'unknown') + '.',
+      });
+      break;
+    }
+    case 'UPGRADE_FRONT_BUSINESS': {
+      const frontBusinessId = command.payload?.frontBusinessId;
+      const result = commandUpgradeFrontBusiness(state, frontBusinessId);
+      emitFrontBusinessResult(emitLog, result, {
+        phaseLocked: 'Upgrade commerce indisponible avant P2.',
+        missing: 'Commerce de facade introuvable.',
+        cooldown: 'Upgrade commerce en cooldown.',
+        locked: 'Upgrade refusee: commerce non acquis.',
+        maxed: 'Commerce deja au niveau maximal.',
+        insufficient: 'Upgrade refusee: budget dark money insuffisant.',
+        success: 'Commerce upgrade: ' + (frontBusinessId ?? 'unknown') + '.',
+      });
+      break;
+    }
+    case 'TOGGLE_FRONT_BUSINESS_MODE': {
+      const frontBusinessId = command.payload?.frontBusinessId;
+      const result = commandToggleFrontBusinessMode(state, frontBusinessId);
+      const currentMode = frontBusinessId
+        ? state.systems.frontBusinesses[frontBusinessId].mode
+        : 'balanced';
+      emitFrontBusinessResult(emitLog, result, {
+        phaseLocked: 'Mode commerce indisponible avant P2.',
+        missing: 'Commerce de facade introuvable.',
+        cooldown: 'Changement de mode en cooldown.',
+        locked: 'Mode refuse: commerce non acquis.',
+        insufficient: 'Mode refuse: operation invalide.',
+        success: 'Mode commerce -> ' + currentMode + ' (' + (frontBusinessId ?? 'unknown') + ').',
+      });
       break;
     }
     case 'FBI_COUNTERMEASURE': {

@@ -1,4 +1,5 @@
 import type { EngineState } from '../state';
+import { clamp, maxBigInt } from './economy/helpers';
 import { computeUpgradeEffects } from './upgrades';
 
 export interface MatrixTickOutcome {
@@ -10,14 +11,6 @@ export type MatrixInjectResult = 'blocked' | 'success' | 'failure';
 
 const MATRIX_TOKENS = ['fractal.root', 'lattice.echo', 'ghost.thread', 'dyson.seed'];
 const MATRIX_FLAGS = ['--f12', '--ghost', '--route', '--cold'];
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function maxBigInt(left: bigint, right: bigint): bigint {
-  return left > right ? left : right;
-}
 
 function applyCostReduction(value: bigint, reductionBps: number, floor: bigint): bigint {
   if (value <= floor || reductionBps <= 0) return value;

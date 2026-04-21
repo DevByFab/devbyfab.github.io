@@ -83,6 +83,7 @@
 - 2026-04-20: P2 Cashflow micro-lot 2 shipped: active FBI countermeasure command added (dynamic cost + cooldown + suspicion relief), UI now exposes cover operation controls and anticipation hints, and suspicious aggressive play now increases detection pressure.
 - 2026-04-20: P2 Cashflow micro-lot 3 tuned pacing: adjusted FBI suspicion/intervention curves, softened low-risk penalties while increasing high-yield pressure, rebalanced countermeasure cost/relief/cooldown, slightly reduced baseline money yield, and added explicit UI hints for countermeasure phase/budget locks.
 - 2026-04-20: P2 Cashflow micro-lot 4 shipped: FBI risk model centralized for tick/snapshot consistency, intervention chance now exposed in UI metrics, and context-aware operational advice added to improve minute-by-minute decision clarity.
+- 2026-04-20: P2 Cashflow micro-lot 5 implementation started: front-business simulation added (purchase, upgrade, mode switching with cooldown), new clean-money resource introduced, dark->clean conversion now flows through facade businesses with maintenance/risk trade-offs, and Cashflow UI upgraded with business management controls.
 
 ## Latest Balance Snapshot (Harness)
 - Command: `npm run balance:sim`

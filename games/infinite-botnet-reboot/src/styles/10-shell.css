@@ -170,7 +170,8 @@
 
 .tab-stage {
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .dashboard-grid {
