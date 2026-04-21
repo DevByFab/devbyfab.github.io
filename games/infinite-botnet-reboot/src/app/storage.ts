@@ -36,22 +36,24 @@ function normalizePhaseIndexes(values: number[]): number[] {
   return [...unique].sort((left, right) => left - right);
 }
 
-export function readSeenPhaseTutorialIndexes(storageKey: string): number[] {
+function readJsonArray(storageKey: string): unknown[] {
   try {
     const raw = window.localStorage.getItem(storageKey);
     if (!raw) return [];
 
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-
-    const numbers = parsed
-      .filter((item): item is number => typeof item === 'number' && Number.isFinite(item))
-      .map((item) => Math.floor(item));
-
-    return normalizePhaseIndexes(numbers);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
+}
+
+export function readSeenPhaseTutorialIndexes(storageKey: string): number[] {
+  const numbers = readJsonArray(storageKey)
+    .filter((item): item is number => typeof item === 'number' && Number.isFinite(item))
+    .map((item) => Math.floor(item));
+
+  return normalizePhaseIndexes(numbers);
 }
 
 export function writeSeenPhaseTutorialIndexes(storageKey: string, indexes: number[]): void {
@@ -71,15 +73,7 @@ export function clearSeenPhaseTutorialIndexes(storageKey: string): void {
 }
 
 export function readUnlockHints(storageKey: string): string[] {
-  try {
-    const raw = window.localStorage.getItem(storageKey);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is string => typeof item === 'string');
-  } catch {
-    return [];
-  }
+  return readJsonArray(storageKey).filter((item): item is string => typeof item === 'string');
 }
 
 export function writeUnlockHints(storageKey: string, hints: string[]): void {
@@ -133,9 +127,7 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
 export function isPersistedGameState(value: unknown): value is PersistedGameState {
   if (!isObjectRecord(value)) return false;
 
-  const schemaVersion = value.schemaVersion;
-  const savedAtMs = value.savedAtMs;
-  const state = value.state;
+  const { schemaVersion, savedAtMs, state } = value;
 
   if (typeof schemaVersion !== 'number' || !Number.isInteger(schemaVersion) || schemaVersion <= 0) {
     return false;

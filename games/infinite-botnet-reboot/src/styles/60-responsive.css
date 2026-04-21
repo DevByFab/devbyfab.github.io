@@ -66,6 +66,18 @@
     max-height: 200px;
   }
 
+  .cashflow-pipeline,
+  .cashflow-actions-grid,
+  .cashflow-front-grid,
+  .cashflow-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cashflow-risk-inline {
+    flex-direction: column;
+    gap: 4px;
+  }
+
   .settings-grid {
     grid-template-columns: 1fr;
   }

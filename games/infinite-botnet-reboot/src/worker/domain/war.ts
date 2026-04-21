@@ -1,18 +1,11 @@
 import type { EngineState } from '../state';
+import { clamp, maxBigInt } from './economy/helpers';
 import { computeUpgradeEffects } from './upgrades';
 
 export type WarAttackResult = 'blocked' | 'win' | 'loss';
 
 export interface WarTickOutcome {
   detectedPurgeBots: bigint;
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function maxBigInt(left: bigint, right: bigint): bigint {
-  return left > right ? left : right;
 }
 
 function coolDown(valueMs: number, deltaMs: number): number {
@@ -92,8 +85,8 @@ function applyDetectionTick(state: EngineState, phasePressure: number, deltaMs: 
 
 export function refreshWarDerived(state: EngineState): void {
   const effects = computeUpgradeEffects(state);
-  const bots = state.resources.bots;
-  const heat = state.war.heat;
+  const { bots } = state.resources;
+  const { heat } = state.war;
 
   state.war.attackCostBots = maxBigInt(120n, bots / 220n + 120n);
   state.war.scrubCostMoney = maxBigInt(140n, BigInt(180 + Math.floor(heat * 3.4)));

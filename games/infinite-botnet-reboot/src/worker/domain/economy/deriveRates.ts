@@ -1,9 +1,13 @@
 import type { EngineState } from '../../state';
 import { computeUpgradeEffects } from '../upgrades';
+import {
+  FRONT_BUSINESS_IDS,
+  computeFrontBusinessMetrics,
+} from './frontBusinesses';
 import { applyBpsMultiplier, clamp, maxBigInt } from './helpers';
 
 export function refreshEconomyDerivedRates(state: EngineState): void {
-  const bots = state.resources.bots;
+  const { bots } = state.resources;
   const phaseFactor = BigInt(state.phase.index + 1);
   const effects = computeUpgradeEffects(state);
   const hasOperatorMacros = (state.upgrades.levels['qol-operator-macros'] ?? 0) > 0;
@@ -26,9 +30,10 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   if (state.rates.monetizeBotsPerSec > monetizeCap) state.rates.monetizeBotsPerSec = monetizeCap;
 
   const launderingCap = 780_000n * BigInt((state.phase.index + 1) * (state.phase.index + 1));
-  if (state.rates.launderingDirtyPerSec > launderingCap) {
-    state.rates.launderingDirtyPerSec = launderingCap;
-  }
+  state.rates.launderingDirtyPerSec =
+    state.rates.launderingDirtyPerSec > launderingCap
+      ? launderingCap
+      : state.rates.launderingDirtyPerSec;
 
   state.rates.autoScanPerSec = applyBpsMultiplier(state.rates.autoScanPerSec, effects.autoScanBps);
 
@@ -73,6 +78,39 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     6000,
     9300,
   );
+
+  let totalFrontDarkToCleanPerSec = 0n;
+  let totalFrontCleanYieldPerSec = 0n;
+  let totalFrontMaintenancePerSec = 0n;
+  let totalFrontRiskBps = 0;
+  let weightedFrontCleanEfficiency = 0n;
+
+  for (const frontBusinessId of FRONT_BUSINESS_IDS) {
+    const runtime = state.systems.frontBusinesses[frontBusinessId];
+    const metrics = computeFrontBusinessMetrics(frontBusinessId, runtime, state.phase.index);
+
+    totalFrontDarkToCleanPerSec += metrics.darkToCleanPerSec;
+    totalFrontCleanYieldPerSec += metrics.cleanYieldPerSec;
+    totalFrontMaintenancePerSec += metrics.maintenancePerSec;
+    totalFrontRiskBps += metrics.riskBps;
+    weightedFrontCleanEfficiency +=
+      metrics.darkToCleanPerSec * BigInt(metrics.cleanEfficiencyBps);
+  }
+
+  state.rates.frontBusinessDarkToCleanPerSec = totalFrontDarkToCleanPerSec;
+  state.rates.frontBusinessCleanYieldPerSec = totalFrontCleanYieldPerSec;
+  state.rates.frontBusinessMaintenancePerSec = totalFrontMaintenancePerSec;
+  state.rates.frontBusinessRiskBps = clamp(totalFrontRiskBps, 0, 5400);
+
+  if (totalFrontDarkToCleanPerSec > 0n) {
+    state.rates.frontBusinessCleanEfficiencyBps = clamp(
+      Number(weightedFrontCleanEfficiency / totalFrontDarkToCleanPerSec),
+      7000,
+      9900,
+    );
+  } else {
+    state.rates.frontBusinessCleanEfficiencyBps = 0;
+  }
 
   const baseCountermeasureCost =
     180n + BigInt(Math.floor(clamp(state.systems.fbiSuspicion, 0, 10_000) / 55));

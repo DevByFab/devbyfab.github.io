@@ -550,6 +550,9 @@ function App() {
         <ResourceCard label={t('reboot.resources.targets')} value={snapshot.resources.queuedTargets} />
         <ResourceCard label={t('reboot.resources.darkMoney')} value={snapshot.resources.darkMoney} />
         {economyUnlocked ? (
+          <ResourceCard label={t('reboot.resources.cleanMoney')} value={snapshot.resources.cleanMoney} />
+        ) : null}
+        {economyUnlocked ? (
           <ResourceCard label={t('reboot.resources.portfolio')} value={snapshot.resources.portfolio} />
         ) : null}
         {warUnlocked ? (
@@ -596,6 +599,9 @@ function App() {
             onToggleMonetize={gameActions.toggleMonetize}
             onToggleLaundering={gameActions.toggleLaundering}
             onToggleLaunderProfile={gameActions.toggleLaunderProfile}
+            onPurchaseFrontBusiness={gameActions.purchaseFrontBusiness}
+            onUpgradeFrontBusiness={gameActions.upgradeFrontBusiness}
+            onToggleFrontBusinessMode={gameActions.toggleFrontBusinessMode}
             onTriggerFbiCountermeasure={gameActions.triggerFbiCountermeasure}
             onInvestTranche={gameActions.investTranche}
             onCashout={gameActions.cashoutPortfolio}

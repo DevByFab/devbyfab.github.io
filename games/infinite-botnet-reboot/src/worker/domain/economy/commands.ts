@@ -1,8 +1,74 @@
+import type { FrontBusinessId } from '../../../game/types';
 import type { EngineState } from '../../state';
 import { refreshEconomyDerivedRates } from './deriveRates';
+import {
+  type FrontBusinessRuntimeState,
+  getFrontBusinessBuyCostDarkMoney,
+  getFrontBusinessUpgradeCostDarkMoney,
+  getNextFrontBusinessMode,
+  isFrontBusinessMaxed,
+} from './frontBusinesses';
 import { maxBigInt } from './helpers';
 
 export type ExploitResult = 'blocked' | 'cooldown' | 'success' | 'fail';
+export type FrontBusinessCommandResult =
+  | 'phase-locked'
+  | 'missing'
+  | 'cooldown'
+  | 'locked'
+  | 'insufficient'
+  | 'maxed'
+  | 'success';
+
+const FRONT_BUSINESS_ACTION_COOLDOWN_MS = 6500;
+
+interface FrontBusinessCommandContext {
+  frontBusinessId: FrontBusinessId;
+  runtime: FrontBusinessRuntimeState;
+}
+
+function resolveFrontBusinessCommandContext(
+  state: EngineState,
+  frontBusinessId: FrontBusinessId | undefined,
+): FrontBusinessCommandContext | FrontBusinessCommandResult {
+  if (state.phase.index < 2) {
+    return 'phase-locked';
+  }
+
+  if (!frontBusinessId) {
+    return 'missing';
+  }
+
+  if (state.systems.frontBusinessActionCooldownMs > 0) {
+    return 'cooldown';
+  }
+
+  return {
+    frontBusinessId,
+    runtime: state.systems.frontBusinesses[frontBusinessId],
+  };
+}
+
+function resolveOwnedFrontBusinessCommandContext(
+  state: EngineState,
+  frontBusinessId: FrontBusinessId | undefined,
+): FrontBusinessCommandContext | FrontBusinessCommandResult {
+  const context = resolveFrontBusinessCommandContext(state, frontBusinessId);
+  if (typeof context === 'string') {
+    return context;
+  }
+
+  if (!context.runtime.owned) {
+    return 'locked';
+  }
+
+  return context;
+}
+
+function finalizeFrontBusinessCommand(state: EngineState): void {
+  state.systems.frontBusinessActionCooldownMs = FRONT_BUSINESS_ACTION_COOLDOWN_MS;
+  refreshEconomyDerivedRates(state);
+}
 
 export function commandScan(state: EngineState): boolean {
   if (state.systems.manualScanCooldownMs > 0) {
@@ -76,6 +142,75 @@ export function commandToggleLaunderProfile(state: EngineState): boolean {
   state.systems.launderingProfile =
     state.systems.launderingProfile === 'low-risk' ? 'high-yield' : 'low-risk';
   return true;
+}
+
+export function commandPurchaseFrontBusiness(
+  state: EngineState,
+  frontBusinessId: FrontBusinessId | undefined,
+): FrontBusinessCommandResult {
+  const context = resolveFrontBusinessCommandContext(state, frontBusinessId);
+  if (typeof context === 'string') {
+    return context;
+  }
+
+  if (context.runtime.owned) {
+    return 'locked';
+  }
+
+  const cost = getFrontBusinessBuyCostDarkMoney(context.frontBusinessId);
+  if (state.resources.darkMoney < cost) {
+    return 'insufficient';
+  }
+
+  state.resources.darkMoney -= cost;
+  state.systems.frontBusinesses[context.frontBusinessId] = {
+    owned: true,
+    level: 1,
+    mode: 'balanced',
+  };
+  finalizeFrontBusinessCommand(state);
+  return 'success';
+}
+
+export function commandUpgradeFrontBusiness(
+  state: EngineState,
+  frontBusinessId: FrontBusinessId | undefined,
+): FrontBusinessCommandResult {
+  const context = resolveOwnedFrontBusinessCommandContext(state, frontBusinessId);
+  if (typeof context === 'string') {
+    return context;
+  }
+
+  if (isFrontBusinessMaxed(context.frontBusinessId, context.runtime.level)) {
+    return 'maxed';
+  }
+
+  const upgradeCost = getFrontBusinessUpgradeCostDarkMoney(
+    context.frontBusinessId,
+    context.runtime.level,
+  );
+  if (upgradeCost <= 0n || state.resources.darkMoney < upgradeCost) {
+    return 'insufficient';
+  }
+
+  state.resources.darkMoney -= upgradeCost;
+  context.runtime.level += 1;
+  finalizeFrontBusinessCommand(state);
+  return 'success';
+}
+
+export function commandToggleFrontBusinessMode(
+  state: EngineState,
+  frontBusinessId: FrontBusinessId | undefined,
+): FrontBusinessCommandResult {
+  const context = resolveOwnedFrontBusinessCommandContext(state, frontBusinessId);
+  if (typeof context === 'string') {
+    return context;
+  }
+
+  context.runtime.mode = getNextFrontBusinessMode(context.runtime.mode);
+  finalizeFrontBusinessCommand(state);
+  return 'success';
 }
 
 export function commandFbiCountermeasure(state: EngineState): boolean {

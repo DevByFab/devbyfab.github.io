@@ -1,4 +1,5 @@
 import type { EngineMessage, EngineState } from '../../state';
+import { clamp, maxBigInt } from '../economy/helpers';
 import { computeUpgradeEffects } from '../upgrades';
 import { computeRewardValue, describeReward } from './rewards';
 import {
@@ -6,14 +7,6 @@ import {
   pickBucket,
   pickTemplateForPhase,
 } from './templates';
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function maxBigInt(left: bigint, right: bigint): bigint {
-  return left > right ? left : right;
-}
 
 function makeMessage(state: EngineState): EngineMessage {
   const bucket = pickBucket(state);

@@ -7,12 +7,11 @@ import {
   commandScan,
   commandToggleInvestMode,
   commandToggleMonetize,
-  refreshEconomyDerivedRates,
 } from '../worker/domain/economy';
-import { applyMatrixTick, commandMatrixArm, commandMatrixInject, commandMatrixStabilize, refreshMatrixDerived } from '../worker/domain/matrix';
+import { applyMatrixTick, commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../worker/domain/matrix';
 import { applyNarrativeTick, commandProcessMessage, commandQuarantineMessage } from '../worker/domain/narrative';
-import { resolvePhaseProgress } from '../worker/domain/phases';
-import { applyWarTick, commandWarAttack, commandWarFortify, commandWarScrub, refreshWarDerived } from '../worker/domain/war';
+import { applyWarTick, commandWarAttack, commandWarFortify, commandWarScrub } from '../worker/domain/war';
+import { syncCoreDerivedState } from '../worker/engine/syncDerivedState';
 import { createInitialEngineState, type EngineState } from '../worker/state';
 
 const STEP_MS = 1000;
@@ -71,18 +70,7 @@ function createSeededRandom(seed: number): () => number {
 }
 
 function syncDerivedState(state: EngineState): void {
-  state.phase = resolvePhaseProgress({
-    bots: state.resources.bots,
-    scans: state.milestones.scans,
-    darkMoney: state.resources.darkMoney,
-    portfolio: state.resources.portfolio,
-    warWins: state.war.wins,
-    messagesProcessed: state.messages.processed,
-    exploitSuccesses: state.milestones.exploitSuccesses,
-  });
-  refreshEconomyDerivedRates(state);
-  refreshWarDerived(state);
-  refreshMatrixDerived(state);
+  syncCoreDerivedState(state);
 }
 
 function recordPhaseArrival(
@@ -129,16 +117,21 @@ function handleCoreGrowth(state: EngineState, operator: OperatorStats): void {
 }
 
 function handleMonetizationMode(state: EngineState, operator: OperatorStats): void {
-  if (!state.systems.monetizeActive && state.resources.bots >= 70n) {
-    if (commandToggleMonetize(state)) {
-      operator.monetizeToggles += 1;
-    }
+  if (
+    !state.systems.monetizeActive &&
+    state.resources.bots >= 70n &&
+    commandToggleMonetize(state)
+  ) {
+    operator.monetizeToggles += 1;
   }
 
-  if (state.systems.monetizeActive && state.resources.darkMoney < 30n && state.resources.bots < 120n) {
-    if (commandToggleMonetize(state)) {
-      operator.monetizeToggles += 1;
-    }
+  if (
+    state.systems.monetizeActive &&
+    state.resources.darkMoney < 30n &&
+    state.resources.bots < 120n &&
+    commandToggleMonetize(state)
+  ) {
+    operator.monetizeToggles += 1;
   }
 
   const shouldUseAggressive = state.war.heat < 4500 && state.resources.darkMoney > 750n;
@@ -154,16 +147,21 @@ function handleMonetizationMode(state: EngineState, operator: OperatorStats): vo
 }
 
 function handleInvestments(state: EngineState, second: number, operator: OperatorStats): void {
-  if (state.phase.index >= 2 && state.resources.darkMoney >= 200000n && second % 30 === 0) {
-    if (commandInvestTranche(state)) {
-      operator.invests += 1;
-    }
+  if (
+    state.phase.index >= 2 &&
+    state.resources.darkMoney >= 200000n &&
+    second % 30 === 0 &&
+    commandInvestTranche(state)
+  ) {
+    operator.invests += 1;
   }
 
-  if (state.resources.darkMoney < 120n && state.resources.portfolio > 0n) {
-    if (commandCashoutPortfolio(state)) {
-      operator.cashouts += 1;
-    }
+  if (
+    state.resources.darkMoney < 120n &&
+    state.resources.portfolio > 0n &&
+    commandCashoutPortfolio(state)
+  ) {
+    operator.cashouts += 1;
   }
 }
 
@@ -176,10 +174,13 @@ function handleWar(state: EngineState, second: number, operator: OperatorStats):
     return;
   }
 
-  if (state.war.heat > 8800 && state.resources.darkMoney >= 200000n && second % 45 === 0) {
-    if (commandWarScrub(state)) {
-      operator.scrubs += 1;
-    }
+  if (
+    state.war.heat > 8800 &&
+    state.resources.darkMoney >= 200000n &&
+    second % 45 === 0 &&
+    commandWarScrub(state)
+  ) {
+    operator.scrubs += 1;
   }
 
   const canFortify =
@@ -209,10 +210,12 @@ function handleMatrix(state: EngineState, second: number, operator: OperatorStat
     return;
   }
 
-  if (state.matrix.stability < 3600 && state.resources.darkMoney >= state.matrix.stabilizeCostMoney) {
-    if (commandMatrixStabilize(state)) {
-      operator.matrixStabilizes += 1;
-    }
+  if (
+    state.matrix.stability < 3600 &&
+    state.resources.darkMoney >= state.matrix.stabilizeCostMoney &&
+    commandMatrixStabilize(state)
+  ) {
+    operator.matrixStabilizes += 1;
   }
 
   const canArmBypass =

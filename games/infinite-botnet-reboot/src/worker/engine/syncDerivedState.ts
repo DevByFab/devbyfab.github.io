@@ -6,12 +6,8 @@ import { refreshUpgradeOffers } from '../domain/upgrades';
 import type { EngineState } from '../state';
 import type { EmitLog } from './types';
 
-export function syncDerivedState(
-  state: EngineState,
-  emitLog: EmitLog,
-  previousPhaseId?: string,
-): void {
-  const phase = resolvePhaseProgress({
+export function syncCoreDerivedState(state: EngineState): void {
+  state.phase = resolvePhaseProgress({
     bots: state.resources.bots,
     scans: state.milestones.scans,
     darkMoney: state.resources.darkMoney,
@@ -20,11 +16,19 @@ export function syncDerivedState(
     messagesProcessed: state.messages.processed,
     exploitSuccesses: state.milestones.exploitSuccesses,
   });
-  state.phase = phase;
 
   refreshEconomyDerivedRates(state);
   refreshWarDerived(state);
   refreshMatrixDerived(state);
+}
+
+export function syncDerivedState(
+  state: EngineState,
+  emitLog: EmitLog,
+  previousPhaseId?: string,
+): void {
+  syncCoreDerivedState(state);
+  const { phase } = state;
   refreshUpgradeOffers(state);
 
   if (previousPhaseId && previousPhaseId !== phase.id) {
