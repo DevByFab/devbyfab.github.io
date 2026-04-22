@@ -16,14 +16,10 @@ export function UpgradesPanel(props: Readonly<UpgradesPanelProps>) {
   const lockedUpgradeOffers = props.snapshot.upgrades.offers.filter(
     (offer) => offer.currentLevel < offer.maxLevel && !offer.unlocked && !offer.resourceLocked,
   );
-  const acquiredUpgradeOffers = props.snapshot.upgrades.offers.filter(
-    (offer) => offer.currentLevel > 0,
-  );
 
   return (
     <article className="panel upgrades-panel" data-guide="upgrades">
       <h2>{props.t('reboot.panel.upgrades.title')}</h2>
-      <p className="panel-copy">{props.t('reboot.panel.upgrades.copy')}</p>
       <div className="stack-scroll">
         {availableUpgradeOffers.length === 0 ? (
           <p className="empty-text">{props.t('reboot.panel.upgrades.emptyAvailable')}</p>
@@ -44,7 +40,7 @@ export function UpgradesPanel(props: Readonly<UpgradesPanelProps>) {
                   ))}
                 </div>
                 <button
-                  className="btn"
+                  className="btn tiny"
                   disabled={!offer.affordable}
                   onClick={() => props.onPurchaseUpgrade(offer.chainId)}
                 >
@@ -55,18 +51,6 @@ export function UpgradesPanel(props: Readonly<UpgradesPanelProps>) {
           </div>
         )}
       </div>
-      {acquiredUpgradeOffers.length > 0 ? (
-        <div>
-          <p className="queue-hint">{props.t('reboot.panel.upgrades.acquired')}</p>
-          <ul className="acquired-list">
-            {acquiredUpgradeOffers.map((offer) => (
-              <li key={'acquired-' + offer.chainId}>
-                {offer.label} · Lv {offer.currentLevel}/{offer.maxLevel}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
       {lockedUpgradeOffers.length > 0 ? (
         <p className="queue-hint">
           {props.t('reboot.panel.upgrades.researchQueue', { count: lockedUpgradeOffers.length })}

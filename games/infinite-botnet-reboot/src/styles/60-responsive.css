@@ -66,6 +66,12 @@
     max-height: 200px;
   }
 
+  .upgrades-panel .stack-scroll {
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+  }
+
   .cashflow-pipeline,
   .cashflow-actions-grid,
   .cashflow-front-grid,
@@ -159,5 +165,11 @@
     height: 248px;
     min-height: 248px;
     max-height: 248px;
+  }
+
+  .upgrades-panel .stack-scroll {
+    height: 340px;
+    min-height: 340px;
+    max-height: 340px;
   }
 }

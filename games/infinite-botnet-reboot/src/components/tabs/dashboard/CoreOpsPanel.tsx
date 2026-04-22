@@ -1,6 +1,5 @@
 import { formatBigValue, formatCountdownMs } from '../../../game/format';
 import type { GameSnapshot } from '../../../game/types';
-import { hasOwnedUpgrade } from '../../../app/upgrades';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 
@@ -30,15 +29,9 @@ export function CoreOpsPanel(props: Readonly<CoreOpsPanelProps>) {
     ? formatCountdownMs(props.snapshot.economy.exploitCooldownMs)
     : props.t('reboot.panel.coreOps.exploitReady');
 
-  const exploitHotkeyUnlocked = hasOwnedUpgrade(
-    props.snapshot.upgrades.offers,
-    'qol-operator-macros',
-  );
-
   return (
-    <article className="panel" data-guide="core-ops">
+    <article className="panel core-ops-panel" data-guide="core-ops">
       <h2>{props.t('reboot.panel.coreOps.title')}</h2>
-      <p className="panel-copy">{props.t('reboot.panel.coreOps.copy')}</p>
       <div className="button-row">
         <button className="btn" onClick={props.onSendScan}>
           {props.t('reboot.panel.coreOps.scanButton')}
@@ -48,11 +41,6 @@ export function CoreOpsPanel(props: Readonly<CoreOpsPanelProps>) {
         </button>
       </div>
       <p className="queue-hint">{props.t('reboot.panel.coreOps.enterHint')}</p>
-      <p className="queue-hint">
-        {exploitHotkeyUnlocked
-          ? props.t('reboot.panel.coreOps.exploitHotkeyReadyHint')
-          : props.t('reboot.panel.coreOps.exploitHotkeyLockedHint')}
-      </p>
       <div className={exploitLocked ? 'meter exploit-cooldown-meter' : 'meter exploit-cooldown-meter is-ready'}>
         <span style={{ width: `${exploitCooldownFillPercent}%` }}></span>
       </div>
