@@ -125,7 +125,46 @@
 }
 
 .upgrades-panel {
+  gap: 4px;
+}
+
+.core-ops-panel {
+  gap: 4px;
+}
+
+.core-ops-panel h2,
+.upgrades-panel h2 {
+  font-size: 15px;
+}
+
+.core-ops-panel .button-row {
   gap: 6px;
+}
+
+.core-ops-panel .btn {
+  font-size: 11px;
+  padding: 7px 9px;
+}
+
+.core-ops-panel .queue-hint,
+.core-ops-panel .cooldown-hint,
+.core-ops-panel .metrics dt,
+.core-ops-panel .metrics dd {
+  font-size: 10px;
+}
+
+.core-ops-panel .metrics {
+  gap: 4px;
+}
+
+.core-ops-panel .metrics div {
+  padding-bottom: 4px;
+}
+
+.upgrades-panel .stack-scroll {
+  height: 320px;
+  min-height: 320px;
+  max-height: 320px;
 }
 
 .stack-scroll {
@@ -150,15 +189,15 @@
   border: 1px solid rgba(98, 210, 217, 0.26);
   border-radius: 12px;
   background: rgba(7, 21, 26, 0.82);
-  padding: 7px;
+  padding: 5px;
   display: grid;
-  gap: 5px;
+  gap: 4px;
 }
 
 .upgrade-card p {
   margin: 0;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .upgrade-head,
@@ -167,8 +206,8 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 6px;
-  font: 500 10px/1.3 var(--mono);
+  gap: 4px;
+  font: 500 9px/1.25 var(--mono);
 }
 
 .upgrade-costs {

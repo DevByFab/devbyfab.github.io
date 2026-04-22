@@ -7,15 +7,20 @@ import type { EngineState } from '../state';
 import type { EmitLog } from './types';
 
 export function syncCoreDerivedState(state: EngineState): void {
-  state.phase = resolvePhaseProgress({
-    bots: state.resources.bots,
-    scans: state.milestones.scans,
-    darkMoney: state.resources.darkMoney,
-    portfolio: state.resources.portfolio,
-    warWins: state.war.wins,
-    messagesProcessed: state.messages.processed,
-    exploitSuccesses: state.milestones.exploitSuccesses,
-  });
+  state.phase = resolvePhaseProgress(
+    {
+      bots: state.resources.bots,
+      scans: state.milestones.scans,
+      darkMoney: state.resources.darkMoney,
+      portfolio: state.resources.portfolio,
+      warWins: state.war.wins,
+      messagesProcessed: state.messages.processed,
+      exploitSuccesses: state.milestones.exploitSuccesses,
+    },
+    {
+      minUnlockedPhaseIndex: state.phase.index,
+    },
+  );
 
   refreshEconomyDerivedRates(state);
   refreshWarDerived(state);

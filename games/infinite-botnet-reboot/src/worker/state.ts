@@ -503,6 +503,7 @@ export function toPersistedState(
       tick: state.tick,
       nowMs: state.nowMs,
       turbo: state.turbo,
+      phase: { ...state.phase },
       resources: {
         bots: state.resources.bots.toString(),
         queuedTargets: state.resources.queuedTargets.toString(),
@@ -618,6 +619,12 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
   const restoredNowMs = clampInteger(
     persistedState.nowMs,
     fallback.nowMs,
+    0,
+    Number.MAX_SAFE_INTEGER,
+  );
+  const persistedPhaseIndex = clampInteger(
+    persistedState.phase?.index,
+    fallback.phase.index,
     0,
     Number.MAX_SAFE_INTEGER,
   );
@@ -1029,6 +1036,21 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
   restoredState.messages.sequence = Math.max(
     restoredState.messages.sequence,
     restoredState.messages.pending.length,
+  );
+
+  restoredState.phase = resolvePhaseProgress(
+    {
+      bots: restoredState.resources.bots,
+      scans: restoredState.milestones.scans,
+      darkMoney: restoredState.resources.darkMoney,
+      portfolio: restoredState.resources.portfolio,
+      warWins: restoredState.war.wins,
+      messagesProcessed: restoredState.messages.processed,
+      exploitSuccesses: restoredState.milestones.exploitSuccesses,
+    },
+    {
+      minUnlockedPhaseIndex: persistedPhaseIndex,
+    },
   );
 
   return restoredState;

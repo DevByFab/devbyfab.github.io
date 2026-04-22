@@ -29,6 +29,10 @@ export interface PhaseProgressInput {
   exploitSuccesses: number;
 }
 
+export interface ResolvePhaseProgressOptions {
+  minUnlockedPhaseIndex?: number;
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
@@ -127,7 +131,10 @@ function buildNextRequirements(
   return list;
 }
 
-export function resolvePhaseProgress(input: PhaseProgressInput): PhaseProgress {
+export function resolvePhaseProgress(
+  input: PhaseProgressInput,
+  options: ResolvePhaseProgressOptions = {},
+): PhaseProgress {
   let index = 0;
 
   for (let i = PHASE_DEFINITIONS.length - 1; i >= 0; i -= 1) {
@@ -139,6 +146,17 @@ export function resolvePhaseProgress(input: PhaseProgressInput): PhaseProgress {
 
   if (AUTOMATION_PHASE_INDEX > index && input.bots >= 1000n) {
     index = AUTOMATION_PHASE_INDEX;
+  }
+
+  const minUnlockedPhaseIndex = clamp(
+    Number.isFinite(options.minUnlockedPhaseIndex)
+      ? Math.floor(options.minUnlockedPhaseIndex ?? 0)
+      : 0,
+    0,
+    PHASE_DEFINITIONS.length - 1,
+  );
+  if (minUnlockedPhaseIndex > index) {
+    index = minUnlockedPhaseIndex;
   }
 
   const current = PHASE_DEFINITIONS[index];

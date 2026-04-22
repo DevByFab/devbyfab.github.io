@@ -283,6 +283,7 @@ export interface PersistedEngineState {
   tick: number;
   nowMs: number;
   turbo: number;
+  phase?: PhaseSnapshot;
   resources: ResourceSnapshot;
   rates: PersistedEngineRates;
   systems: PersistedEngineSystems;
