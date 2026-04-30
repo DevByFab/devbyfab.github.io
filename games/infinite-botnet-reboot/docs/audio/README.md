@@ -8,7 +8,7 @@ For curated sound source ideas and license-safe workflow, see:
 ## Runtime Loading Order
 - Runtime manifest (primary): `public/audio/manifest.json`
 - Runtime manifest (fallback): `audio/manifest.example.json`
-- Code fallback (last resort): built-in manifest map in `src/hooks/useAudioManager.ts`
+- Code fallback (last resort): built-in manifest map in `src/app/hooks/useAudioManager.ts`
 
 ## Runtime Asset Location
 - Runtime playback targets `public/audio/` first.

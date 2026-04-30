@@ -1,10 +1,10 @@
-import { formatBigValue, formatPercentFromBps } from '../../game/format';
+import { formatBigValue, formatPercentFromBps } from '../../../game/format';
 import type {
   FrontBusinessId,
   FrontBusinessMode,
   GameSnapshot,
   InvestMode,
-} from '../../game/types';
+} from '../../../game/types';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 

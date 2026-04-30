@@ -57,12 +57,19 @@ Production builds default to `/games/infinite-botnet-reboot/` as base path. Over
 
 ```text
 src/
+  app/
+    components/        # UI panels, overlays, tabs
+    hooks/             # UI runtime hooks (worker bridge, audio, i18n)
+    cinematics/        # Lore runtime + scene registry
+    constants.ts       # App constants (storage keys, lore timing, turbo)
+    guideLayout.ts     # Tutorial spotlight geometry helpers
+    navigationConfig.ts # Tabs, unlock hints, guide steps
+    storage.ts         # localStorage read/write helpers
+    upgrades.ts        # UI-side upgrade formatting helpers
   game/
     types.ts            # Shared snapshots and domain contracts
     protocol.ts         # UI <-> Worker message protocol
     format.ts           # Big number and timing format helpers
-  hooks/
-    useGameWorker.ts    # React bridge for worker lifecycle + commands
   styles/
     00-foundation.css   # Tokens, base globals, scrollbars
     10-shell.css        # App shell, top bar, structural grids

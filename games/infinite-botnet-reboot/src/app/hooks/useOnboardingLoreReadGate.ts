@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LORE_MIN_READ_MS } from './constants';
+import { LORE_MIN_READ_MS } from '../constants';
 
 interface UseOnboardingLoreReadGateArgs {
   introStep: 'lore' | null;

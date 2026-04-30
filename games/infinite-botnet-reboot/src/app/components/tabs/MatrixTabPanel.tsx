@@ -1,4 +1,4 @@
-import type { GameSnapshot } from '../../game/types';
+import type { GameSnapshot } from '../../../game/types';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 

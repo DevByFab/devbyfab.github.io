@@ -1,4 +1,4 @@
-import { formatBigValue } from '../game/format';
+import { formatBigValue } from '../../game/format';
 
 interface ResourceCardProps {
   label: string;

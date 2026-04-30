@@ -29,8 +29,3 @@ Point d'entree unique pour la documentation du reboot.
 - Audio placeholder workflow: `audio/README.md`
 - Royalty-free sourcing guide: `audio/ROYALTY_FREE_SFX_GUIDE.md`
 
-## Legacy Entrypoints
-Root-level stubs remain for compatibility:
-- `../README.md`
-- `../REFONTE_TRACKER.md`
-- `../BALANCE_REFERENCE.md`

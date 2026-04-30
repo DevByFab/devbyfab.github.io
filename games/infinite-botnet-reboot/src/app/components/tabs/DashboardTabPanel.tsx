@@ -1,4 +1,4 @@
-import type { GameSnapshot, LogLine } from '../../game/types';
+import type { GameSnapshot, LogLine } from '../../../game/types';
 import { ConsolePanel } from './dashboard/ConsolePanel';
 import { CoreOpsPanel } from './dashboard/CoreOpsPanel';
 import { UpgradesPanel } from './dashboard/UpgradesPanel';

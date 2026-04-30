@@ -1,4 +1,4 @@
-import frCatalog from '../../../../i18n/fr.json';
+import frCatalog from '../../../../../i18n/fr.json';
 
 type TranslationVars = Record<string, string | number>;
 type TranslationCatalog = Record<string, string>;

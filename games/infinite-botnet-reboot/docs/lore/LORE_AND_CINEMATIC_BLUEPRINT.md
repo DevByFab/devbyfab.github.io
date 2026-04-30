@@ -80,10 +80,10 @@ Keys used by runtime overlay:
 
 ## Technical Mapping
 - Scene state and navigation: src/App.tsx
-- Lore scene registry and per-scene modules: src/cinematics/lore/
-- Shared Canvas runtime helpers: src/cinematics/lore/shared/
+- Lore scene registry and per-scene modules: src/app/cinematics/lore/
+- Shared Canvas runtime helpers: src/app/cinematics/lore/shared/
 - Cinematic style classes and motion layers: src/index.css
-- Audio cue trigger and channel mix: src/hooks/useAudioManager.ts
+- Audio cue trigger and channel mix: src/app/hooks/useAudioManager.ts
 - Cue mapping template: audio/manifest.example.json
 - Translation source: i18n/fr.json
 

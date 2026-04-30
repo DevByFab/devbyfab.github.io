@@ -37,7 +37,7 @@ Scope: This is the single onboarding document for any coding agent working in `g
 - Worker composes domain logic modules (economy, war, matrix, narrative, phases, upgrades).
 
 Runtime flow:
-1. `src/hooks/useGameWorker.ts` boots `src/worker/engine.worker.ts`.
+1. `src/app/hooks/useGameWorker.ts` boots `src/worker/engine.worker.ts`.
 2. UI sends typed commands from `src/game/protocol.ts`.
 3. Worker dispatches command, runs simulation tick, syncs derived state.
 4. Worker sends `READY`, `SNAPSHOT`, `LOG`, `ERROR` messages.
@@ -60,21 +60,21 @@ Runtime flow:
 
 ### Reusable UI components
 
-- `src/components/ResourceCard.tsx`: resource stat card.
+- `src/app/components/ResourceCard.tsx`: resource stat card.
 
 Tabs:
-- `src/components/tabs/DashboardTabPanel.tsx`
-- `src/components/tabs/CashflowTabPanel.tsx`
-- `src/components/tabs/MessagesTabPanel.tsx`
-- `src/components/tabs/WarTabPanel.tsx`
-- `src/components/tabs/MatrixTabPanel.tsx`
+- `src/app/components/tabs/DashboardTabPanel.tsx`
+- `src/app/components/tabs/CashflowTabPanel.tsx`
+- `src/app/components/tabs/MessagesTabPanel.tsx`
+- `src/app/components/tabs/WarTabPanel.tsx`
+- `src/app/components/tabs/MatrixTabPanel.tsx`
 
 Overlays:
-- `src/components/overlays/SettingsOverlay.tsx`
-- `src/components/overlays/LoreOverlay.tsx`
-- `src/components/overlays/LoreBridgeOverlay.tsx`
-- `src/components/overlays/UnlockHintOverlay.tsx`
-- `src/components/overlays/GuideOverlay.tsx`
+- `src/app/components/overlays/SettingsOverlay.tsx`
+- `src/app/components/overlays/LoreOverlay.tsx`
+- `src/app/components/overlays/LoreBridgeOverlay.tsx`
+- `src/app/components/overlays/UnlockHintOverlay.tsx`
+- `src/app/components/overlays/GuideOverlay.tsx`
 
 ### Shared game contracts
 
@@ -84,9 +84,9 @@ Overlays:
 
 ### Hooks
 
-- `src/hooks/useGameWorker.ts`: worker lifecycle, command dispatch, turbo, reset.
-- `src/hooks/useAudioManager.ts`: audio manifest-driven cue system and channel mix.
-- `src/hooks/useRebootI18n.ts`: FR-first translation helper.
+- `src/app/hooks/useGameWorker.ts`: worker lifecycle, command dispatch, turbo, reset.
+- `src/app/hooks/useAudioManager.ts`: audio manifest-driven cue system and channel mix.
+- `src/app/hooks/useRebootI18n.ts`: FR-first translation helper.
 
 ### Content
 
@@ -146,8 +146,8 @@ Domain modules:
 Completed:
 - App support utilities extracted to `src/app/*`.
 - Worker engine split into orchestrator + engine modules.
-- Large tab sections extracted to `src/components/tabs/*`.
-- Overlay sections extracted to `src/components/overlays/*`.
+- Large tab sections extracted to `src/app/components/tabs/*`.
+- Overlay sections extracted to `src/app/components/overlays/*`.
 - App now mostly orchestrates state, handlers, and component composition.
 
 Still in progress at roadmap level:
@@ -173,7 +173,7 @@ If you need to...
 - wire UI dispatch in `src/App.tsx` or tab component.
 
 - Change lore/tutorial UX:
-- overlay components in `src/components/overlays/*`.
+- overlay components in `src/app/components/overlays/*`.
 - orchestration logic in `src/App.tsx`.
 - text in i18n and/or narrative catalog.
 

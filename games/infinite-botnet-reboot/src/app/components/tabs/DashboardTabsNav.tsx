@@ -1,5 +1,5 @@
-import { DASHBOARD_TABS, type DashboardTab } from '../../app/navigationConfig';
-import { isDashboardTabUnlocked } from '../../app/useDashboardTabState';
+import { DASHBOARD_TABS, type DashboardTab } from '../../navigationConfig';
+import { isDashboardTabUnlocked } from '../../hooks/useDashboardTabState';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 

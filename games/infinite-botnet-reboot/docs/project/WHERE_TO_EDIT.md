@@ -15,23 +15,23 @@ Guide rapide pour savoir ou modifier chaque systeme sans casser les frontieres U
 
 - Resolver de phase: `src/worker/domain/phases/`
 - Refresh derive + synchronisation tick/command: `src/worker/engine/syncDerivedState.ts`
-- Gating UI des onglets: `src/app/useDashboardTabState.ts`, `src/components/tabs/DashboardTabsNav.tsx`
+- Gating UI des onglets: `src/app/useDashboardTabState.ts`, `src/app/components/tabs/DashboardTabsNav.tsx`
 
 ## Investissement / Cashflow
 
 - Tick economie et derive rates: `src/worker/domain/economy/deriveRates.ts`, `src/worker/domain/economy/tick.ts`
 - Commandes invest/monetize/cashout: `src/worker/domain/economy/commands.ts`
-- UI Cashflow tab: `src/components/tabs/CashflowTabPanel.tsx`
+- UI Cashflow tab: `src/app/components/tabs/CashflowTabPanel.tsx`
 
 ## War / Heat
 
 - Tick et commandes war: `src/worker/domain/war.ts`
-- UI War tab: `src/components/tabs/WarTabPanel.tsx`
+- UI War tab: `src/app/components/tabs/WarTabPanel.tsx`
 
 ## Matrix
 
 - Tick et commandes matrix: `src/worker/domain/matrix.ts`
-- UI Matrix tab: `src/components/tabs/MatrixTabPanel.tsx`
+- UI Matrix tab: `src/app/components/tabs/MatrixTabPanel.tsx`
 
 ## Messages / Narrative
 
@@ -40,27 +40,27 @@ Guide rapide pour savoir ou modifier chaque systeme sans casser les frontieres U
 - Application des rewards positifs/negatifs: `src/worker/domain/narrative/rewards.ts`
 - Commandes process/quarantine: `src/worker/domain/narrative/commands.ts`
 - Templates FR: `src/content/fr/narrativeCatalog.ts`
-- UI Messages tab: `src/components/tabs/MessagesTabPanel.tsx`
+- UI Messages tab: `src/app/components/tabs/MessagesTabPanel.tsx`
 
 ## Upgrades et prerequis
 
 - Definition des chains et prerequis: `src/worker/domain/upgrades/chains.ts`
 - Effets gameplay et derivation: `src/worker/domain/upgrades/effects.ts`
 - Achat + validation: `src/worker/domain/upgrades/purchase.ts`
-- Affichage et formatting UI: `src/app/upgrades.ts`, `src/components/tabs/dashboard/UpgradesPanel.tsx`
+- Affichage et formatting UI: `src/app/upgrades.ts`, `src/app/components/tabs/dashboard/UpgradesPanel.tsx`
 
 ## Onboarding / Tutorial
 
 - State onboarding: `src/app/useOnboardingState.ts`
 - Actions lore/tutorial/settings: `src/app/useOnboardingActions.ts`
 - Spotlight guide: `src/app/useGuideSpotlight.ts`
-- Overlays: `src/components/overlays/GuideOverlay.tsx`, `src/components/overlays/SettingsOverlay.tsx`
+- Overlays: `src/app/components/overlays/GuideOverlay.tsx`, `src/app/components/overlays/SettingsOverlay.tsx`
 
 ## Protocol UI <-> Worker
 
 - Types de commandes et messages: `src/game/protocol.ts`
 - Dispatch des commandes worker: `src/worker/engine/commandDispatcher.ts`
-- Bridge React -> worker: `src/hooks/useGameWorker.ts`
+- Bridge React -> worker: `src/app/hooks/useGameWorker.ts`
 
 ## Styles / CSS
 

@@ -1,5 +1,5 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
-import type { AudioManager } from '../hooks/useAudioManager';
+import type { AudioManager } from './hooks/useAudioManager';
 import { INTRO_LORE_STORAGE_KEY, INTRO_TUTORIAL_STORAGE_KEY } from './constants';
 import type { GuideRect } from './guideLayout';
 import type { DashboardTab } from './navigationConfig';
