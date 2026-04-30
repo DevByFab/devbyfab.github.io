@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatBigValue } from './game/format';
-import { LORE_SCENES, LoreCinematicCanvas } from './cinematics/lore';
+import { LORE_SCENES, LoreCinematicCanvas } from './app/cinematics/lore';
 import {
   AUDIO_SETTINGS_STORAGE_KEY,
   LORE_BRIDGE_MS,
@@ -10,17 +10,17 @@ import {
 import {
   type DashboardTab,
 } from './app/navigationConfig';
-import { useAudioLogCues } from './app/useAudioLogCues';
-import { useGameActionHandlers } from './app/useGameActionHandlers';
-import { useGuideSpotlight } from './app/useGuideSpotlight';
-import { useGameplayHotkeys } from './app/useGameplayHotkeys';
-import { useOnboardingActions } from './app/useOnboardingActions';
-import { useOnboardingKeyboardShortcuts } from './app/useOnboardingKeyboardShortcuts';
-import { useOnboardingLoreReadGate } from './app/useOnboardingLoreReadGate';
-import { useOnboardingState } from './app/useOnboardingState';
-import { usePhaseTutorialAutoStart } from './app/usePhaseTutorialAutoStart';
-import { useDashboardTabPhaseGate } from './app/useDashboardTabState';
-import { usePhaseUnlockHints } from './app/usePhaseUnlockHints';
+import { useAudioLogCues } from './app/hooks/useAudioLogCues';
+import { useGameActionHandlers } from './app/hooks/useGameActionHandlers';
+import { useGuideSpotlight } from './app/hooks/useGuideSpotlight';
+import { useGameplayHotkeys } from './app/hooks/useGameplayHotkeys';
+import { useOnboardingActions } from './app/hooks/useOnboardingActions';
+import { useOnboardingKeyboardShortcuts } from './app/hooks/useOnboardingKeyboardShortcuts';
+import { useOnboardingLoreReadGate } from './app/hooks/useOnboardingLoreReadGate';
+import { useOnboardingState } from './app/hooks/useOnboardingState';
+import { usePhaseTutorialAutoStart } from './app/hooks/usePhaseTutorialAutoStart';
+import { useDashboardTabPhaseGate } from './app/hooks/useDashboardTabState';
+import { usePhaseUnlockHints } from './app/hooks/usePhaseUnlockHints';
 import { type GuideRect } from './app/guideLayout';
 import {
   clampAudio,
@@ -28,21 +28,21 @@ import {
   readAudioSettings,
   writeAudioSettings,
 } from './app/storage';
-import { ResourceCard } from './components/ResourceCard';
-import { GuideOverlay } from './components/overlays/GuideOverlay';
-import { LoreBridgeOverlay } from './components/overlays/LoreBridgeOverlay.tsx';
-import { LoreOverlay } from './components/overlays/LoreOverlay';
-import { SettingsOverlay } from './components/overlays/SettingsOverlay';
-import { UnlockHintOverlay } from './components/overlays/UnlockHintOverlay';
-import { CashflowTabPanel } from './components/tabs/CashflowTabPanel';
-import { DashboardTabPanel } from './components/tabs/DashboardTabPanel';
-import { DashboardTabsNav } from './components/tabs/DashboardTabsNav';
-import { MatrixTabPanel } from './components/tabs/MatrixTabPanel';
-import { MessagesTabPanel } from './components/tabs/MessagesTabPanel';
-import { WarTabPanel } from './components/tabs/WarTabPanel';
-import { type AudioSettings, useAudioManager } from './hooks/useAudioManager';
-import { useGameWorker } from './hooks/useGameWorker';
-import { useRebootI18n } from './hooks/useRebootI18n';
+import { ResourceCard } from './app/components/ResourceCard';
+import { GuideOverlay } from './app/components/overlays/GuideOverlay';
+import { LoreBridgeOverlay } from './app/components/overlays/LoreBridgeOverlay.tsx';
+import { LoreOverlay } from './app/components/overlays/LoreOverlay';
+import { SettingsOverlay } from './app/components/overlays/SettingsOverlay';
+import { UnlockHintOverlay } from './app/components/overlays/UnlockHintOverlay';
+import { CashflowTabPanel } from './app/components/tabs/CashflowTabPanel';
+import { DashboardTabPanel } from './app/components/tabs/DashboardTabPanel';
+import { DashboardTabsNav } from './app/components/tabs/DashboardTabsNav';
+import { MatrixTabPanel } from './app/components/tabs/MatrixTabPanel';
+import { MessagesTabPanel } from './app/components/tabs/MessagesTabPanel';
+import { WarTabPanel } from './app/components/tabs/WarTabPanel';
+import { type AudioSettings, useAudioManager } from './app/hooks/useAudioManager';
+import { useGameWorker } from './app/hooks/useGameWorker';
+import { useRebootI18n } from './app/hooks/useRebootI18n';
 
 type LoreTransitionClass =
   | ''

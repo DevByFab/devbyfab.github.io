@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   INTRO_LORE_STORAGE_KEY,
   INTRO_TUTORIAL_STORAGE_KEY,
-} from './constants';
+} from '../constants';
 import {
   getGuideStepsForPhase,
   type DashboardTab,
   type GuideStepDefinition,
-} from './navigationConfig';
-import { readBooleanFlag, writeBooleanFlag } from './storage';
-import type { GameSnapshot } from '../game/types';
+} from '../navigationConfig';
+import { readBooleanFlag, writeBooleanFlag } from '../storage';
+import type { GameSnapshot } from '../../game/types';
 
 interface UseOnboardingStateParams {
   snapshot: GameSnapshot | null;

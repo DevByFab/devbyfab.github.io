@@ -1,4 +1,4 @@
-import { DEFAULT_AUDIO_SETTINGS, type AudioSettings } from '../hooks/useAudioManager';
+import { DEFAULT_AUDIO_SETTINGS, type AudioSettings } from './hooks/useAudioManager';
 import type { PersistedGameState } from '../game/types';
 
 export function clampAudio(value: unknown): number {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import type { LogLine } from '../game/types';
-import type { AudioManager } from './hooks/useAudioManager';
+import type { LogLine } from '../../game/types';
+import type { AudioManager } from './useAudioManager';
 
 interface UseAudioLogCuesParams {
   logs: LogLine[];

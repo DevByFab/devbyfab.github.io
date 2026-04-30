@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { computeGuideCardStyle, computeGuideMaskStyles, type GuideRect } from '../../app/guideLayout';
+import { computeGuideCardStyle, computeGuideMaskStyles, type GuideRect } from '../../guideLayout';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;
 

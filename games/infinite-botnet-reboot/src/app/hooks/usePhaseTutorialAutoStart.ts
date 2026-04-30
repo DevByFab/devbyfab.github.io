@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import type { GameSnapshot } from '../game/types';
-import { PHASE_TUTORIALS_STORAGE_KEY } from './constants';
+import type { GameSnapshot } from '../../game/types';
+import { PHASE_TUTORIALS_STORAGE_KEY } from '../constants';
 import {
   readSeenPhaseTutorialIndexes,
   writeSeenPhaseTutorialIndexes,
-} from './storage';
+} from '../storage';
 
 interface UsePhaseTutorialAutoStartArgs {
   snapshot: GameSnapshot | null;

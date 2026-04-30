@@ -1,6 +1,6 @@
-import { DEBUG_PHASE_ACCESS_OPTIONS } from '../../app/constants';
-import { formatBigValue } from '../../game/format';
-import type { GameSnapshot } from '../../game/types';
+import { DEBUG_PHASE_ACCESS_OPTIONS } from '../../constants';
+import { formatBigValue } from '../../../game/format';
+import type { GameSnapshot } from '../../../game/types';
 import type { AudioSettings } from '../../hooks/useAudioManager';
 
 type TranslateFn = (key: string, vars?: Record<string, string | number>) => string;

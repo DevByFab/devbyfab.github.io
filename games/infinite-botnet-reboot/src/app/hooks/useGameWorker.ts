@@ -4,20 +4,20 @@ import {
   GAME_AUTOSAVE_INTERVAL_MS,
   GAME_SAVE_SCHEMA_VERSION,
   GAME_SAVE_STORAGE_KEY,
-} from '../app/constants';
+} from '../constants';
 import {
   clearPersistedGameState,
   decodePersistedGameStateBase64,
   encodePersistedGameStateBase64,
   readPersistedGameState,
   writePersistedGameState,
-} from '../app/storage';
+} from '../storage';
 import type {
   EngineActionCommand,
   UiToWorkerMessage,
   WorkerToUiMessage,
-} from '../game/protocol';
-import type { GameSnapshot, LogLine, PersistedGameState } from '../game/types';
+} from '../../game/protocol';
+import type { GameSnapshot, LogLine, PersistedGameState } from '../../game/types';
 
 const MAX_LOG_LINES = 160;
 const WORKER_BOOT_TIMEOUT_MS = 8000;
@@ -257,7 +257,7 @@ export function useGameWorker(): GameWorkerController {
 
     let worker: Worker;
     try {
-      worker = new Worker(new URL('../worker/engine.worker.ts', import.meta.url), {
+      worker = new Worker(new URL('../../worker/engine.worker.ts', import.meta.url), {
         type: 'module',
       });
     } catch (creationError) {

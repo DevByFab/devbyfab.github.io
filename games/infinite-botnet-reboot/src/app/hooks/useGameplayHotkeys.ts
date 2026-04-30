@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import type { EngineActionCommand } from '../game/protocol';
-import type { GameSnapshot } from '../game/types';
-import { hasOwnedUpgrade } from './upgrades';
+import type { EngineActionCommand } from '../../game/protocol';
+import type { GameSnapshot } from '../../game/types';
+import { hasOwnedUpgrade } from '../upgrades';
 
 const HOTKEY_MIN_INTERVAL_MS = 90;
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import type { GameSnapshot } from '../game/types';
-import { DASHBOARD_TABS, type DashboardTab } from './navigationConfig';
+import type { GameSnapshot } from '../../game/types';
+import { DASHBOARD_TABS, type DashboardTab } from '../navigationConfig';
 
 function findDashboardTab(tabId: DashboardTab) {
   return DASHBOARD_TABS.find((tab) => tab.id === tabId) ?? null;

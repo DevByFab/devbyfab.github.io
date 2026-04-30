@@ -1,7 +1,7 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
-import type { EngineActionCommand } from '../game/protocol';
-import type { FrontBusinessId } from '../game/types';
-import type { AudioManager } from './hooks/useAudioManager';
+import type { EngineActionCommand } from '../../game/protocol';
+import type { FrontBusinessId } from '../../game/types';
+import type { AudioManager } from './useAudioManager';
 
 type UiCue = Parameters<AudioManager['playUiCue']>[0];
 

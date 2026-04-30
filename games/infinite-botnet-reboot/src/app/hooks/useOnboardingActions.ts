@@ -1,9 +1,9 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
-import type { AudioManager } from './hooks/useAudioManager';
-import { INTRO_LORE_STORAGE_KEY, INTRO_TUTORIAL_STORAGE_KEY } from './constants';
-import type { GuideRect } from './guideLayout';
-import type { DashboardTab } from './navigationConfig';
-import { readBooleanFlag, writeBooleanFlag } from './storage';
+import type { AudioManager } from './useAudioManager';
+import { INTRO_LORE_STORAGE_KEY, INTRO_TUTORIAL_STORAGE_KEY } from '../constants';
+import type { GuideRect } from '../guideLayout';
+import type { DashboardTab } from '../navigationConfig';
+import { readBooleanFlag, writeBooleanFlag } from '../storage';
 
 interface UseOnboardingActionsArgs {
   playUiCue: AudioManager['playUiCue'];

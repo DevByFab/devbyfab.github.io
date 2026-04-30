@@ -1,5 +1,5 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
-import type { GuideRect } from './guideLayout';
+import type { GuideRect } from '../guideLayout';
 
 interface UseGuideSpotlightParams {
   guideActive: boolean;

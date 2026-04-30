@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react';
-import type { GameSnapshot } from '../game/types';
-import type { AudioManager } from './hooks/useAudioManager';
-import { UNLOCK_HINT_STORAGE_KEY } from './constants';
-import { UNLOCK_HINTS, type UnlockHintDefinition } from './navigationConfig';
-import { readUnlockHints, writeUnlockHints } from './storage';
+import type { GameSnapshot } from '../../game/types';
+import type { AudioManager } from './useAudioManager';
+import { UNLOCK_HINT_STORAGE_KEY } from '../constants';
+import { UNLOCK_HINTS, type UnlockHintDefinition } from '../navigationConfig';
+import { readUnlockHints, writeUnlockHints } from '../storage';
 
 interface UsePhaseUnlockHintsArgs {
   snapshot: GameSnapshot | null;

@@ -73,7 +73,7 @@
 - 2026-04-17: Audio settings fallback fixed: partial/corrupted localStorage payloads now preserve default channel mix instead of muting missing channels to 0.
 - 2026-04-17: P0 lore flow patched with active transition classes and timed lore-to-tutorial bridge overlay rendering in runtime.
 - 2026-04-17: P0 lore pacing updated: removed forced 2s read gate so Next/Continue is immediately clickable while transition/bridge locks remain active.
-- 2026-04-17: Cinematic transition architecture started under `src/cinematics/lore/` with per-scene files, a shared Canvas runtime helper layer, and a Scene 1 Canvas visual prototype.
+- 2026-04-17: Cinematic transition architecture started under `src/app/cinematics/lore/` with per-scene files, a shared Canvas runtime helper layer, and a Scene 1 Canvas visual prototype.
 - 2026-04-17: Canvas lore pass expanded to scenes 2-5 using shared drawing helpers and per-scene render files, keeping one-scene-one-file modularity.
 - 2026-04-17: Storyboard figurative pass applied to lore scenes 1-2 with reusable canvas primitives (panels, stick figures, props) to improve narrative readability while preserving existing lore transition flow.
 - 2026-04-17: P0 micro-boost pass started: added two early upgrades (`econ-exploit-seed` at 10 bots and `econ-cooldown-primer` at 25 bots) while keeping the 45-bot gate unchanged to smooth the first minutes without large architecture changes.
