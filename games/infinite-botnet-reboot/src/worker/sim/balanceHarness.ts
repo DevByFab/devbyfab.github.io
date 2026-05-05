@@ -21,15 +21,6 @@ const MAX_HOURS = 22;
 const RUN_SEEDS = [101, 203, 307, 409, 503, 601, 709, 809, 907, 1009];
 const MATRIX_OPERATOR_ACCURACY = 0.82;
 
-const PHASE_ORDER: PhaseId[] = [
-  'garage',
-  'automation',
-  'monetization',
-  'botnet-war',
-  'matrix-breach',
-  'singularity-core',
-];
-
 interface OperatorStats {
   scans: number;
   exploits: number;
@@ -209,28 +200,32 @@ function handleMatrix(state: EngineState, second: number, operator: OperatorStat
   }
 
   if (
-    state.matrix.progressBps <= 0 &&
-    state.matrix.armCooldownMs <= 0 &&
-    state.resources.darkMoney >= state.matrix.armCostMoney &&
-    state.resources.warIntel >= state.matrix.armCostIntel
+    state.matrix.bypassRemainingMs <= 0 &&
+    state.resources.hz >= state.matrix.armCostHz &&
+    state.resources.computronium >= state.matrix.armCostComputronium &&
+    commandMatrixArm(state)
   ) {
-    commandMatrixArm(state);
     operator.matrixArms += 1;
   }
 
-  if (state.matrix.progressBps > 0 && state.matrix.bypassWindowMs > 0) {
+  if (state.matrix.bypassRemainingMs > 0) {
     const shouldInject = roll() <= MATRIX_OPERATOR_ACCURACY;
     if (shouldInject) {
-      commandMatrixInject(state, 'inject fractal.root --f12');
-      operator.matrixInjects += 1;
-    } else if (second % 4 === 0) {
-      commandMatrixStabilize(state);
+      const injectResult = commandMatrixInject(state, state.matrix.expectedCommand);
+      if (injectResult !== 'blocked') {
+        operator.matrixInjects += 1;
+      }
+    } else if (second % 4 === 0 && commandMatrixStabilize(state)) {
       operator.matrixStabilizes += 1;
     }
   }
 
-  if (state.matrix.progressBps > 0 && state.matrix.stabilityBps < 4800 && second % 6 === 0) {
-    commandMatrixStabilize(state);
+  if (
+    state.matrix.breachProgress > 0 &&
+    state.matrix.stability < 4800 &&
+    second % 6 === 0 &&
+    commandMatrixStabilize(state)
+  ) {
     operator.matrixStabilizes += 1;
   }
 }
@@ -240,7 +235,7 @@ function handleMessages(state: EngineState, second: number, operator: OperatorSt
     return;
   }
 
-  if (state.messages.queue.length === 0) {
+  if (state.messages.pending.length === 0) {
     return;
   }
 
@@ -248,15 +243,18 @@ function handleMessages(state: EngineState, second: number, operator: OperatorSt
     return;
   }
 
-  const message = state.messages.queue[0];
+  const message = state.messages.pending[0];
   if (!message) return;
 
-  if (message.rewardTier === 'negative') {
-    commandQuarantineMessage(state);
-    operator.messagesQuarantined += 1;
+  if (message.tone === 'negative') {
+    if (commandQuarantineMessage(state)) {
+      operator.messagesQuarantined += 1;
+    }
   } else {
-    commandProcessMessage(state);
-    operator.messagesProcessed += 1;
+    const result = commandProcessMessage(state);
+    if (result !== 'none') {
+      operator.messagesProcessed += 1;
+    }
   }
 }
 
@@ -266,7 +264,7 @@ function formatHour(value: number): number {
 
 function runSimulation(seed: number): RunSummary {
   const random = createSeededRandom(seed);
-  const state = createInitialEngineState();
+  const state = createInitialEngineState(0);
   const operator = createOperatorStats();
   const phaseReachedAtMin: Partial<Record<PhaseId, number>> = {};
   let elapsedMs = 0;
@@ -276,7 +274,8 @@ function runSimulation(seed: number): RunSummary {
   let detectionEvents = 0;
 
   while (elapsedMs < MAX_HOURS * 3600 * 1000) {
-    const second = Math.floor(elapsedMs / STEP_MS);
+    state.nowMs = elapsedMs;
+    const second = Math.floor(state.nowMs / STEP_MS);
 
     handleCoreGrowth(state, operator);
     handleMonetizationMode(state, operator);
@@ -286,28 +285,29 @@ function runSimulation(seed: number): RunSummary {
     handleMessages(state, second, operator);
 
     applyEconomyTick(state, STEP_MS);
-    applyWarTick(state, STEP_MS);
-    applyMatrixTick(state, STEP_MS);
-    applyNarrativeTick(state, STEP_MS);
+    const warOutcome = applyWarTick(state, STEP_MS);
+    const matrixOutcome = applyMatrixTick(state, STEP_MS);
+    applyNarrativeTick(state);
     syncDerivedState(state);
+    state.tick += 1;
 
     if (state.war.heat > peakHeat) {
       peakHeat = state.war.heat;
     }
 
-    if (state.matrix.collapses > matrixCollapses) {
-      matrixCollapses = state.matrix.collapses;
+    if (matrixOutcome.collapsed) {
+      matrixCollapses += 1;
     }
 
-    if (state.systems.detectionEvents > detectionEvents) {
-      detectionEvents = state.systems.detectionEvents;
+    if (warOutcome.detectedPurgeBots > 0n) {
+      detectionEvents += 1;
     }
 
     const phaseId = state.phase.id;
-    recordPhaseArrival(phaseReachedAtMin, phaseId, elapsedMs);
+    recordPhaseArrival(phaseReachedAtMin, phaseId, state.nowMs);
 
     if (phaseId === 'singularity-core') {
-      completedAtHours = completedAtHours ?? formatHour(elapsedMs / 3600000);
+      completedAtHours = completedAtHours ?? formatHour(state.nowMs / 3600000);
     }
 
     elapsedMs += STEP_MS;
