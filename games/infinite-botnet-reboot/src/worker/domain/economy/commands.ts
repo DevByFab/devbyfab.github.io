@@ -31,7 +31,7 @@ function resolveFrontBusinessCommandContext(
   state: EngineState,
   frontBusinessId: FrontBusinessId | undefined,
 ): FrontBusinessCommandContext | FrontBusinessCommandResult {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return 'phase-locked';
   }
 
@@ -135,7 +135,7 @@ export function commandToggleLaundering(state: EngineState): boolean {
 }
 
 export function commandToggleLaunderProfile(state: EngineState): boolean {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return false;
   }
 
@@ -247,7 +247,7 @@ export function commandFbiCountermeasure(state: EngineState): boolean {
 }
 
 export function commandInvestTranche(state: EngineState): boolean {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return false;
   }
 
@@ -265,7 +265,7 @@ export function commandInvestTranche(state: EngineState): boolean {
 }
 
 export function commandCashoutPortfolio(state: EngineState): boolean {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return false;
   }
 
@@ -280,6 +280,9 @@ export function commandCashoutPortfolio(state: EngineState): boolean {
 }
 
 export function commandToggleInvestMode(state: EngineState): void {
+  if (state.phase.index < 3) {
+    return;
+  }
   state.systems.investMode =
     state.systems.investMode === 'stable' ? 'aggressive' : 'stable';
 }

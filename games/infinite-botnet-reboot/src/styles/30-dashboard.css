@@ -382,6 +382,54 @@
   gap: 8px;
 }
 
+.cashflow-flow {
+  gap: 10px;
+}
+
+.cashflow-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cashflow-flow-step {
+  border: 1px solid rgba(98, 210, 217, 0.22);
+  border-radius: 12px;
+  background: rgba(4, 13, 17, 0.72);
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.cashflow-flow-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cashflow-step-index {
+  border: 1px solid rgba(120, 247, 191, 0.32);
+  border-radius: 999px;
+  padding: 2px 7px;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: #c9fff0;
+  background: rgba(9, 26, 24, 0.64);
+}
+
+.cashflow-flow-meta {
+  display: grid;
+  gap: 4px;
+  font: 500 11px/1.35 var(--mono);
+  color: var(--text-muted);
+}
+
+.cashflow-locked-advance {
+  border-style: dashed;
+  background: rgba(5, 12, 16, 0.5);
+}
+
 .cashflow-action-card {
   border: 1px solid rgba(98, 210, 217, 0.22);
   border-radius: 10px;

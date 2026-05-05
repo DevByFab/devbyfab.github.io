@@ -42,7 +42,7 @@ export function ConsolePanel(props: Readonly<ConsolePanelProps>) {
             ) : null}
             {props.latestLogs.map((line) => (
               <li key={line.id} className={`log-line ${line.severity}`}>
-                <span>{new Date(line.atMs).toLocaleTimeString('fr-FR')}</span>
+                <span>{new Date(line.atMs).toLocaleTimeString('en-US')}</span>
                 <p>{line.text}</p>
               </li>
             ))}

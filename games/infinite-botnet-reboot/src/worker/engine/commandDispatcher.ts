@@ -108,7 +108,7 @@ export function dispatchCommand(
     case 'TOGGLE_LAUNDER_PROFILE': {
       const switched = commandToggleLaunderProfile(state);
       if (!switched) {
-        emitLog('Profil blanchiment indisponible avant P2.', 'warn');
+        emitLog('Profil blanchiment indisponible avant P3.', 'warn');
       } else {
         emitLog('Profil blanchiment -> ' + state.systems.launderingProfile + '.', 'info');
       }
@@ -118,7 +118,7 @@ export function dispatchCommand(
       const frontBusinessId = command.payload?.frontBusinessId;
       const result = commandPurchaseFrontBusiness(state, frontBusinessId);
       emitFrontBusinessResult(emitLog, result, {
-        phaseLocked: 'Commerce de facade indisponible avant P2.',
+        phaseLocked: 'Commerce de facade indisponible avant P3.',
         missing: 'Commerce de facade introuvable.',
         cooldown: 'Operation commerce en cooldown.',
         locked: 'Commerce deja acquis.',
@@ -131,7 +131,7 @@ export function dispatchCommand(
       const frontBusinessId = command.payload?.frontBusinessId;
       const result = commandUpgradeFrontBusiness(state, frontBusinessId);
       emitFrontBusinessResult(emitLog, result, {
-        phaseLocked: 'Upgrade commerce indisponible avant P2.',
+        phaseLocked: 'Upgrade commerce indisponible avant P3.',
         missing: 'Commerce de facade introuvable.',
         cooldown: 'Upgrade commerce en cooldown.',
         locked: 'Upgrade refusee: commerce non acquis.',
@@ -148,7 +148,7 @@ export function dispatchCommand(
         ? state.systems.frontBusinesses[frontBusinessId].mode
         : 'balanced';
       emitFrontBusinessResult(emitLog, result, {
-        phaseLocked: 'Mode commerce indisponible avant P2.',
+        phaseLocked: 'Mode commerce indisponible avant P3.',
         missing: 'Commerce de facade introuvable.',
         cooldown: 'Changement de mode en cooldown.',
         locked: 'Mode refuse: commerce non acquis.',
@@ -175,7 +175,11 @@ export function dispatchCommand(
     case 'INVEST_TRANCHE': {
       const invested = commandInvestTranche(state);
       if (!invested) {
-        emitLog('Tranche refusee: dark money insuffisant.', 'warn');
+        if (state.phase.index < 3) {
+          emitLog('Investissement indisponible avant P3.', 'warn');
+        } else {
+          emitLog('Tranche refusee: dark money insuffisant.', 'warn');
+        }
       } else {
         emitLog('Tranche investie sur le desk.', 'info');
       }
@@ -184,15 +188,23 @@ export function dispatchCommand(
     case 'CASHOUT_PORTFOLIO': {
       const cashedOut = commandCashoutPortfolio(state);
       if (!cashedOut) {
-        emitLog('Aucun portefeuille a sortir.', 'warn');
+        if (state.phase.index < 3) {
+          emitLog('Portefeuille indisponible avant P3.', 'warn');
+        } else {
+          emitLog('Aucun portefeuille a sortir.', 'warn');
+        }
       } else {
         emitLog('Portefeuille converti vers dark money (frais appliques).', 'info');
       }
       break;
     }
     case 'TOGGLE_INVEST_MODE': {
-      commandToggleInvestMode(state);
-      emitLog('Mode investissement -> ' + state.systems.investMode + '.', 'info');
+      if (state.phase.index < 3) {
+        emitLog('Mode investissement indisponible avant P3.', 'warn');
+      } else {
+        commandToggleInvestMode(state);
+        emitLog('Mode investissement -> ' + state.systems.investMode + '.', 'info');
+      }
       break;
     }
     case 'WAR_ATTACK': {

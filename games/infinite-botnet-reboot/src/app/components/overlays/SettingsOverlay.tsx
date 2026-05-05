@@ -95,7 +95,7 @@ export function SettingsOverlay(props: Readonly<SettingsOverlayProps>) {
             <p className="queue-hint">
               {props.t('reboot.settings.stats.telemetry', {
                 phase: props.snapshot.phase.label,
-                tick: props.snapshot.tick.toLocaleString('fr-FR'),
+                tick: props.snapshot.tick.toLocaleString('en-US'),
               })}
             </p>
             <p className="queue-hint">{props.t('reboot.settings.debugPhase.copy')}</p>
