@@ -50,20 +50,21 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
   const dirtyMoney = BigInt(props.snapshot.economy.dirtyMoney);
   const cleanMoney = BigInt(props.snapshot.economy.cleanMoney);
   const portfolio = BigInt(props.snapshot.resources.portfolio);
+  const phaseIndex = props.snapshot.phase.index;
   const fbiCountermeasureCost = BigInt(props.snapshot.economy.fbiCountermeasureCost);
   const frontBusinessCooldownMs = props.snapshot.economy.frontBusinessActionCooldownMs;
   const frontBusinessCooldownSeconds = Math.ceil(frontBusinessCooldownMs / 1000);
   const frontBusinessActionLocked = frontBusinessCooldownMs > 0;
   const { frontBusinesses } = props.snapshot.economy;
   const hasOwnedFrontBusiness = frontBusinesses.some((frontBusiness) => frontBusiness.owned);
-  const investmentsUnlocked = props.snapshot.phase.index >= 2;
+  const advancedUnlocked = phaseIndex >= 3;
   const launderingLocked = props.snapshot.economy.launderingLockdownMs > 0;
   const fbiCountermeasureLocked = props.snapshot.economy.fbiCountermeasureCooldownMs > 0;
   const hasCountermeasureBudget = money >= fbiCountermeasureCost;
   const missingCountermeasureBudget =
     hasCountermeasureBudget ? 0n : fbiCountermeasureCost - money;
   const fbiInterventionChance = formatPercentFromBps(props.snapshot.economy.fbiInterventionChanceBps);
-  const fbiSuspicionPercent = (props.snapshot.economy.fbiSuspicion / 100).toLocaleString('fr-FR', {
+  const fbiSuspicionPercent = (props.snapshot.economy.fbiSuspicion / 100).toLocaleString('en-US', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   });
@@ -100,35 +101,24 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
 
   let advisoryKey = 'reboot.panel.cashflow.adviceDefault';
 
-  if (!investmentsUnlocked) {
-    advisoryKey = 'reboot.panel.cashflow.advicePhaseLocked';
+  if (!props.snapshot.economy.monetizeActive) {
+    advisoryKey = 'reboot.panel.cashflow.adviceStartMonetize';
+  } else if (props.snapshot.economy.monetizeActive && !props.snapshot.economy.launderingActive) {
+    advisoryKey = 'reboot.panel.cashflow.adviceStartLaunder';
   } else if (launderingLocked) {
     advisoryKey = 'reboot.panel.cashflow.adviceLockdown';
   } else if (props.snapshot.economy.fbiRiskState === 'alert') {
     if (!fbiCountermeasureLocked && hasCountermeasureBudget) {
       advisoryKey = 'reboot.panel.cashflow.adviceTriggerCover';
-    } else if (props.snapshot.economy.launderingProfile === 'high-yield') {
-      advisoryKey = 'reboot.panel.cashflow.adviceSwitchLowRisk';
-    } else if (props.snapshot.economy.investMode === 'aggressive') {
-      advisoryKey = 'reboot.panel.cashflow.adviceStabilizeMode';
     } else {
-      advisoryKey = 'reboot.panel.cashflow.adviceAlertHold';
+      advisoryKey = 'reboot.panel.cashflow.adviceReduceRisk';
     }
   } else if (props.snapshot.economy.fbiRiskState === 'watch') {
-    if (props.snapshot.economy.launderingProfile === 'high-yield') {
-      advisoryKey = 'reboot.panel.cashflow.adviceSwitchLowRisk';
-    } else if (props.snapshot.economy.investMode === 'aggressive') {
-      advisoryKey = 'reboot.panel.cashflow.adviceStabilizeMode';
-    } else {
-      advisoryKey = 'reboot.panel.cashflow.adviceWatchBalance';
-    }
+    advisoryKey = 'reboot.panel.cashflow.adviceWatchBalance';
   } else if (dirtyMoney <= 0n) {
     advisoryKey = 'reboot.panel.cashflow.adviceFeedPipeline';
-  } else if (
-    props.snapshot.economy.launderingProfile === 'low-risk' &&
-    props.snapshot.economy.fbiInterventionChanceBps <= 250
-  ) {
-    advisoryKey = 'reboot.panel.cashflow.advicePushWindow';
+  } else {
+    advisoryKey = 'reboot.panel.cashflow.adviceMaintainFlow';
   }
 
   const contextualHints = new Set<string>();
@@ -140,10 +130,6 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
     );
   }
 
-  if (!investmentsUnlocked) {
-    contextualHints.add(props.t('reboot.panel.cashflow.fbiCountermeasurePhaseHint'));
-  }
-
   if (fbiCountermeasureLocked) {
     contextualHints.add(
       props.t('reboot.panel.cashflow.fbiCountermeasureCooldown', {
@@ -152,7 +138,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
     );
   }
 
-  if (investmentsUnlocked && !fbiCountermeasureLocked && !hasCountermeasureBudget) {
+  if (!fbiCountermeasureLocked && !hasCountermeasureBudget) {
     contextualHints.add(
       props.t('reboot.panel.cashflow.fbiCountermeasureInsufficient', {
         missing: formatBigValue(missingCountermeasureBudget),
@@ -160,7 +146,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
     );
   }
 
-  if (frontBusinessActionLocked) {
+  if (advancedUnlocked && frontBusinessActionLocked) {
     contextualHints.add(
       props.t('reboot.panel.cashflow.frontBusinessCooldown', {
         seconds: frontBusinessCooldownSeconds,
@@ -205,110 +191,115 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
             </article>
           </div>
 
-          <section className="cashflow-section">
+          <section className="cashflow-section cashflow-flow">
             <div className="cashflow-section-head">
-              <h3>{props.t('reboot.panel.cashflow.riskTitle')}</h3>
-              <span className={fbiRiskBadgeClass}>{props.t(fbiRiskLabelKey)}</span>
-            </div>
-            <div className="cashflow-risk-inline">
-              <p className="queue-hint">
-                {props.t('reboot.panel.cashflow.fbiSuspicion')}: <strong>{fbiSuspicionPercent}%</strong>
-              </p>
-              <p className="queue-hint">
-                {props.t('reboot.panel.cashflow.fbiStrikeChance')}: <strong>{fbiInterventionChance}</strong>
-              </p>
-            </div>
-            <div className="meter heat cashflow-risk-meter">
-              <span style={{ width: `${fbiSuspicionMeter}%` }}></span>
-            </div>
-            <div className="war-meta">
-              <span>
-                {props.t('reboot.panel.cashflow.frontBusiness.risk')}: {formatPercentFromBps(props.snapshot.economy.frontBusinessRiskBps)}
-              </span>
-              <span>
-                {props.t('reboot.panel.cashflow.fbiCountermeasureCostShort')}: {formatBigValue(props.snapshot.economy.fbiCountermeasureCost)}
+              <h3>{props.t('reboot.panel.cashflow.flowTitle')}</h3>
+              <span className={pipelineBadgeClass}>
+                {props.t('reboot.panel.cashflow.flowStatusLabel')}: {props.snapshot.economy.monetizeActive || props.snapshot.economy.launderingActive
+                  ? props.t('reboot.panel.cashflow.statusActive')
+                  : props.t('reboot.panel.cashflow.statusPaused')}
               </span>
             </div>
-          </section>
-
-          <section className="cashflow-section">
-            <h3>{props.t('reboot.panel.cashflow.controlsTitle')}</h3>
-            <div className="cashflow-actions-grid">
-              <article className="cashflow-action-card">
-                <div className="cashflow-section-head">
-                  <h4>{props.t('reboot.panel.cashflow.pipelineControlsTitle')}</h4>
-                  <span className={pipelineBadgeClass}>
-                    {props.t('reboot.panel.cashflow.statusMonetize')}{' '}
+            <div className="cashflow-flow-grid">
+              <article className="cashflow-flow-step">
+                <div className="cashflow-flow-head">
+                  <span className="cashflow-step-index">01</span>
+                  <h4>{props.t('reboot.panel.cashflow.stepMonetizeTitle')}</h4>
+                  <span
+                    className={props.snapshot.economy.monetizeActive ? 'cashflow-badge is-positive' : 'cashflow-badge is-muted'}
+                  >
                     {props.snapshot.economy.monetizeActive
-                      ? props.t('reboot.panel.cashflow.statusActive')
-                      : props.t('reboot.panel.cashflow.statusPaused')}
-                    {' · '}
-                    {props.t('reboot.panel.cashflow.statusLaundering')}{' '}
-                    {props.snapshot.economy.launderingActive
                       ? props.t('reboot.panel.cashflow.statusActive')
                       : props.t('reboot.panel.cashflow.statusPaused')}
                   </span>
                 </div>
+                <p className="queue-hint">{props.t('reboot.panel.cashflow.stepMonetizeCopy')}</p>
+                <p className="queue-hint">
+                  {props.t('reboot.panel.cashflow.pipelineRateMonetize')}: {formatBigValue(props.snapshot.economy.monetizeBotsPerSec)}/s
+                </p>
                 <div className="button-row">
                   <button className="btn" onClick={props.onToggleMonetize}>
                     {props.snapshot.economy.monetizeActive
                       ? props.t('reboot.panel.cashflow.pauseMonetize')
                       : props.t('reboot.panel.cashflow.startMonetize')}
                   </button>
+                </div>
+              </article>
+
+              <article className="cashflow-flow-step">
+                <div className="cashflow-flow-head">
+                  <span className="cashflow-step-index">02</span>
+                  <h4>{props.t('reboot.panel.cashflow.stepLaunderTitle')}</h4>
+                  <span
+                    className={props.snapshot.economy.launderingActive ? 'cashflow-badge is-positive' : 'cashflow-badge is-muted'}
+                  >
+                    {props.snapshot.economy.launderingActive
+                      ? props.t('reboot.panel.cashflow.statusActive')
+                      : props.t('reboot.panel.cashflow.statusPaused')}
+                  </span>
+                  {launderingLocked ? (
+                    <span className="cashflow-badge is-danger">
+                      {props.t('reboot.panel.cashflow.lockdownBadge')}
+                    </span>
+                  ) : null}
+                </div>
+                <p className="queue-hint">{props.t('reboot.panel.cashflow.stepLaunderCopy')}</p>
+                <div className="cashflow-flow-meta">
+                  <span>
+                    {props.t('reboot.panel.cashflow.pipelineRateLaunder')}: {formatBigValue(props.snapshot.economy.launderingThroughputPerSec)}/s
+                  </span>
+                  <span>
+                    {props.t('reboot.panel.cashflow.launderEfficiency')}: {formatPercentFromBps(props.snapshot.economy.launderingEfficiencyBps)}
+                  </span>
+                </div>
+                <div className="button-row">
                   <button
                     className={props.snapshot.economy.launderingActive ? 'btn' : 'btn ghost'}
-                    disabled={!investmentsUnlocked || launderingLocked}
+                    disabled={launderingLocked}
                     onClick={props.onToggleLaundering}
                   >
                     {props.snapshot.economy.launderingActive
                       ? props.t('reboot.panel.cashflow.pauseLaundering')
                       : props.t('reboot.panel.cashflow.startLaundering')}
                   </button>
-                  <button
-                    className="btn ghost"
-                    disabled={!investmentsUnlocked}
-                    onClick={props.onToggleLaunderProfile}
-                  >
-                    {props.t('reboot.panel.cashflow.profileLabel')}: {props.t(launderingProfileLabelKey)}
-                  </button>
+                  {advancedUnlocked ? (
+                    <button className="btn ghost" onClick={props.onToggleLaunderProfile}>
+                      {props.t('reboot.panel.cashflow.profileLabel')}: {props.t(launderingProfileLabelKey)}
+                    </button>
+                  ) : null}
                 </div>
               </article>
 
-              <article className="cashflow-action-card">
-                <div className="cashflow-section-head">
-                  <h4>{props.t('reboot.panel.cashflow.capitalControlsTitle')}</h4>
-                  <span className={investModeBadgeClass}>
-                    {props.t('reboot.panel.cashflow.modeLabel')}: {investModeLabel}
-                  </span>
+              <article className="cashflow-flow-step">
+                <div className="cashflow-flow-head">
+                  <span className="cashflow-step-index">03</span>
+                  <h4>{props.t('reboot.panel.cashflow.stepCoverTitle')}</h4>
+                  <span className={fbiRiskBadgeClass}>{props.t(fbiRiskLabelKey)}</span>
+                  {fbiCountermeasureLocked ? (
+                    <span className="cashflow-badge is-warn">
+                      {props.t('reboot.panel.cashflow.cooldownBadge')}
+                    </span>
+                  ) : null}
+                </div>
+                <p className="queue-hint">{props.t('reboot.panel.cashflow.stepCoverCopy')}</p>
+                <div className="cashflow-risk-inline">
+                  <p className="queue-hint">
+                    {props.t('reboot.panel.cashflow.fbiSuspicion')}: <strong>{fbiSuspicionPercent}%</strong>
+                  </p>
+                  <p className="queue-hint">
+                    {props.t('reboot.panel.cashflow.fbiStrikeChance')}: <strong>{fbiInterventionChance}</strong>
+                  </p>
+                </div>
+                <div className="meter heat cashflow-risk-meter">
+                  <span style={{ width: `${fbiSuspicionMeter}%` }}></span>
                 </div>
                 <div className="button-row">
                   <button
                     className="btn ghost"
-                    disabled={!investmentsUnlocked || fbiCountermeasureLocked || !hasCountermeasureBudget}
+                    disabled={fbiCountermeasureLocked || !hasCountermeasureBudget}
                     onClick={props.onTriggerFbiCountermeasure}
                   >
                     {props.t('reboot.panel.cashflow.fbiCountermeasure')}
-                  </button>
-                  <button
-                    className="btn"
-                    disabled={!investmentsUnlocked || money < 80n}
-                    onClick={props.onInvestTranche}
-                  >
-                    {props.t('reboot.panel.cashflow.investTranche')}
-                  </button>
-                  <button
-                    className="btn ghost"
-                    disabled={!investmentsUnlocked || portfolio <= 0n}
-                    onClick={props.onCashout}
-                  >
-                    {props.t('reboot.panel.cashflow.cashout')}
-                  </button>
-                  <button
-                    className="btn ghost"
-                    disabled={!investmentsUnlocked}
-                    onClick={props.onToggleInvestMode}
-                  >
-                    {props.t('reboot.panel.cashflow.modeSwitch')} ({investModeLabel})
                   </button>
                 </div>
                 <p className="queue-hint">
@@ -320,11 +311,48 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
             </div>
           </section>
 
-          <section className="cashflow-section">
-            <h3>{props.t('reboot.panel.cashflow.frontBusiness.title')}</h3>
-            <p className="queue-hint">{props.t('reboot.panel.cashflow.frontBusiness.copy')}</p>
-            <div className="cashflow-front-grid">
-              {frontBusinesses.map((frontBusiness) => {
+          {advancedUnlocked ? (
+            <section className="cashflow-section">
+              <div className="cashflow-section-head">
+                <h3>{props.t('reboot.panel.cashflow.investmentTitle')}</h3>
+                <span className={investModeBadgeClass}>
+                  {props.t('reboot.panel.cashflow.modeLabel')}: {investModeLabel}
+                </span>
+              </div>
+              <p className="queue-hint">{props.t('reboot.panel.cashflow.investmentCopy')}</p>
+              <div className="button-row">
+                <button className="btn" disabled={money < 80n} onClick={props.onInvestTranche}>
+                  {props.t('reboot.panel.cashflow.investTranche')}
+                </button>
+                <button className="btn ghost" disabled={portfolio <= 0n} onClick={props.onCashout}>
+                  {props.t('reboot.panel.cashflow.cashout')}
+                </button>
+                <button className="btn ghost" onClick={props.onToggleInvestMode}>
+                  {props.t('reboot.panel.cashflow.modeSwitch')} ({investModeLabel})
+                </button>
+              </div>
+              <p className="queue-hint">
+                {props.t('reboot.panel.cashflow.portfolio')}: {formatBigValue(portfolio)}
+              </p>
+            </section>
+          ) : (
+            <section className="cashflow-section cashflow-locked-advance">
+              <div className="cashflow-section-head">
+                <h3>{props.t('reboot.panel.cashflow.advancedLockedTitle')}</h3>
+                <span className="cashflow-badge is-muted">
+                  {props.t('reboot.panel.cashflow.advancedLockedBadge')}
+                </span>
+              </div>
+              <p className="queue-hint">{props.t('reboot.panel.cashflow.advancedLockedCopy')}</p>
+            </section>
+          )}
+
+          {advancedUnlocked ? (
+            <section className="cashflow-section">
+              <h3>{props.t('reboot.panel.cashflow.frontBusiness.title')}</h3>
+              <p className="queue-hint">{props.t('reboot.panel.cashflow.frontBusiness.copy')}</p>
+              <div className="cashflow-front-grid">
+                {frontBusinesses.map((frontBusiness) => {
             const buyCost = BigInt(frontBusiness.buyCostDarkMoney);
             const upgradeCost = BigInt(frontBusiness.upgradeCostDarkMoney);
             const frontBusinessRiskMeter = clampPercent(frontBusiness.riskBps / 100);
@@ -378,7 +406,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                 <div className="button-row compact">
                   <button
                     className="btn"
-                    disabled={!investmentsUnlocked || buyDisabled}
+                    disabled={!advancedUnlocked || buyDisabled}
                     onClick={() => props.onPurchaseFrontBusiness(frontBusiness.id)}
                   >
                     {props.t('reboot.panel.cashflow.frontBusiness.buy', {
@@ -387,7 +415,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                   </button>
                   <button
                     className="btn ghost"
-                    disabled={!investmentsUnlocked || upgradeDisabled}
+                    disabled={!advancedUnlocked || upgradeDisabled}
                     onClick={() => props.onUpgradeFrontBusiness(frontBusiness.id)}
                   >
                     {props.t('reboot.panel.cashflow.frontBusiness.upgrade', {
@@ -399,7 +427,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                   </button>
                   <button
                     className="btn ghost"
-                    disabled={!investmentsUnlocked || !frontBusiness.owned || frontBusinessActionLocked}
+                    disabled={!advancedUnlocked || !frontBusiness.owned || frontBusinessActionLocked}
                     onClick={() => props.onToggleFrontBusinessMode(frontBusiness.id)}
                   >
                     {props.t('reboot.panel.cashflow.frontBusiness.mode')}: {props.t(FRONT_BUSINESS_MODE_LABEL_KEYS[frontBusiness.mode])}
@@ -407,50 +435,53 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                 </div>
               </article>
             );
-              })}
-            </div>
-          {!hasOwnedFrontBusiness ? (
-            <p className="queue-hint">{props.t('reboot.panel.cashflow.frontBusiness.emptyOwned')}</p>
+                })}
+              </div>
+              {!hasOwnedFrontBusiness ? (
+                <p className="queue-hint">{props.t('reboot.panel.cashflow.frontBusiness.emptyOwned')}</p>
+              ) : null}
+            </section>
           ) : null}
-          </section>
 
-          <section className="cashflow-section">
-            <h3>{props.t('reboot.panel.cashflow.overviewTitle')}</h3>
-            <dl className="metrics cashflow-metrics-grid">
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.launderRate')}</dt>
-              <dd>{formatBigValue(props.snapshot.economy.launderingThroughputPerSec)}/s</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.launderEfficiency')}</dt>
-              <dd>{formatPercentFromBps(props.snapshot.economy.launderingEfficiencyBps)}</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.frontBusiness.darkToClean')}</dt>
-              <dd>{formatBigValue(props.snapshot.economy.frontBusinessDarkToCleanPerSec)}/s</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.frontBusiness.cleanYield')}</dt>
-              <dd>{formatBigValue(props.snapshot.economy.frontBusinessCleanYieldPerSec)}/s</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.frontBusiness.maintenance')}</dt>
-              <dd>{formatBigValue(props.snapshot.economy.frontBusinessMaintenancePerSec)}/s</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.moneyYield')}</dt>
-              <dd>{formatPercentFromBps(props.snapshot.economy.moneyYieldBps)}</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.maintenance')}</dt>
-              <dd>{formatBigValue(props.snapshot.economy.maintenanceMoneyPerSec)}/s</dd>
-            </div>
-            <div>
-              <dt>{props.t('reboot.panel.cashflow.portfolio')}</dt>
-              <dd>{formatBigValue(portfolio)}</dd>
-            </div>
-          </dl>
-          </section>
+          {advancedUnlocked ? (
+            <section className="cashflow-section">
+              <h3>{props.t('reboot.panel.cashflow.overviewTitle')}</h3>
+              <dl className="metrics cashflow-metrics-grid">
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.launderRate')}</dt>
+                  <dd>{formatBigValue(props.snapshot.economy.launderingThroughputPerSec)}/s</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.launderEfficiency')}</dt>
+                  <dd>{formatPercentFromBps(props.snapshot.economy.launderingEfficiencyBps)}</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.frontBusiness.darkToClean')}</dt>
+                  <dd>{formatBigValue(props.snapshot.economy.frontBusinessDarkToCleanPerSec)}/s</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.frontBusiness.cleanYield')}</dt>
+                  <dd>{formatBigValue(props.snapshot.economy.frontBusinessCleanYieldPerSec)}/s</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.frontBusiness.maintenance')}</dt>
+                  <dd>{formatBigValue(props.snapshot.economy.frontBusinessMaintenancePerSec)}/s</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.moneyYield')}</dt>
+                  <dd>{formatPercentFromBps(props.snapshot.economy.moneyYieldBps)}</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.maintenance')}</dt>
+                  <dd>{formatBigValue(props.snapshot.economy.maintenanceMoneyPerSec)}/s</dd>
+                </div>
+                <div>
+                  <dt>{props.t('reboot.panel.cashflow.portfolio')}</dt>
+                  <dd>{formatBigValue(portfolio)}</dd>
+                </div>
+              </dl>
+            </section>
+          ) : null}
 
           <section className="cashflow-section">
             <h3>{props.t('reboot.panel.cashflow.hintsTitle')}</h3>

@@ -151,7 +151,7 @@ function App() {
     }
 
     return t('reboot.settings.save.lastAutosaveAt', {
-      datetime: new Date(lastAutosaveAtMs).toLocaleString('fr-FR'),
+      datetime: new Date(lastAutosaveAtMs).toLocaleString('en-US'),
     });
   }, [lastAutosaveAtMs, t]);
   const currentGuideStep =
@@ -160,7 +160,7 @@ function App() {
     introStep,
     loreSceneIndex,
   });
-  const loreReadSecondsLabel = Math.max(0, loreReadRemainingMs / 1000).toLocaleString('fr-FR', {
+  const loreReadSecondsLabel = Math.max(0, loreReadRemainingMs / 1000).toLocaleString('en-US', {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   });

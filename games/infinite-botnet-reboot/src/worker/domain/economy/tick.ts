@@ -169,7 +169,7 @@ function applyLaundering(state: EngineState, deltaMs: number): void {
 }
 
 function applyFrontBusinessOperations(state: EngineState, deltaMs: number): void {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return;
   }
 
@@ -188,7 +188,7 @@ function applyFrontBusinessOperations(state: EngineState, deltaMs: number): void
 }
 
 function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): void {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return;
   }
 
@@ -286,7 +286,7 @@ function applyFbiPressureAndEvents(
 }
 
 function applyPortfolioYield(state: EngineState, deltaMs: number): void {
-  if (state.phase.index < 2) {
+  if (state.phase.index < 3) {
     return;
   }
 

@@ -1,9 +1,11 @@
+import enCatalog from '../../../../../i18n/en.json';
 import frCatalog from '../../../../../i18n/fr.json';
 
 type TranslationVars = Record<string, string | number>;
 type TranslationCatalog = Record<string, string>;
 
-const catalog = frCatalog as TranslationCatalog;
+const primaryCatalog = enCatalog as TranslationCatalog;
+const fallbackCatalog = frCatalog as TranslationCatalog;
 
 function interpolate(template: string, vars?: TranslationVars): string {
   if (!vars) return template;
@@ -24,7 +26,7 @@ export interface RebootI18n {
 
 export function useRebootI18n(): RebootI18n {
   const t = (key: string, vars?: TranslationVars): string => {
-    const value = catalog[key] ?? key;
+    const value = primaryCatalog[key] ?? fallbackCatalog[key] ?? key;
     return interpolate(value, vars);
   };
 

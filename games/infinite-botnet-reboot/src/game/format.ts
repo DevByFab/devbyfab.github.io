@@ -22,11 +22,11 @@ export function formatBigValue(value: string | bigint | number): string {
     if (absolute >= step.threshold) {
       const scaled = Number((absolute * 100n) / step.divisor) / 100;
       const sign = isNegative ? '-' : '';
-      return sign + scaled.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + step.suffix;
+      return sign + scaled.toLocaleString('en-US', { maximumFractionDigits: 2 }) + step.suffix;
     }
   }
 
-  return raw.toLocaleString('fr-FR');
+  return raw.toLocaleString('en-US');
 }
 
 export function formatPercentFromBps(bps: number): string {
