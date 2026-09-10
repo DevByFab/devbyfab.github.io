@@ -1,116 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Web game concepts by DevByFab: incremental browser games inspired by Cookie Clicker and Universal Paperclips.">
+  <meta name="description" content="The Infinite Botnet (Reboot) : Étude technique d'un moteur de simulation incrémentale complexe développé sous TypeScript, Vite et Web Workers par DevByFab.">
   <meta name="i18n-base" content="../i18n">
-  <title data-i18n="webgames.pageTitle">Web Games — DevByFab</title>
+  <title>The Infinite Botnet — Étude Technique & Moteur | DevByFab</title>
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <script src="../js/performance.js"></script>
 </head>
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
+  
   <header class="site-header scrolled">
     <nav class="nav-container">
-      <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="../index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="../index.html#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="../index.html#webgames" class="nav-link active" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="../index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="../index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projets</a></li>
         <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="../cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
+
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1 data-i18n="webgames.allTitle">All Web Games</h1>
-      <p class="page-hero__subtitle" data-i18n="webgames.allSubtitle">Current game concepts inspired by Cookie Clicker and Universal Paperclips.</p>
+    <section class="tech-hero">
+      <div class="tech-breadcrumb">
+        <a href="../index.html">Accueil</a>
+        <span>/</span>
+        <a href="projects.html">Projets</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">The Infinite Botnet</span>
+      </div>
+
+      <div class="tech-hero-icon" style="font-size: 2rem;">
+        🕸️
+      </div>
+
+      <h1 class="section-title">The Infinite Botnet (Reboot) : Moteur & Architecture</h1>
+      <p class="section-subtitle">
+        Moteur de simulation réactif découplé sur Web Worker, développé en TypeScript sous Vite avec boucle déterministe et synthèse sonore procédurale.
+      </p>
+
+      <div class="tech-spec-bar">
+        <span class="badge badge-accent">Prototype Jouable</span>
+        <span class="badge">TypeScript & Vite</span>
+        <span class="badge">Architecture Web Worker</span>
+        <span class="badge">Boucle 60Hz Déterministe</span>
+      </div>
+
+      <div class="tech-actions-bar">
+        <a href="../games/infinite-botnet-reboot/dist/index.html" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Lancer le Jeu Direct ↗
+        </a>
+        <a href="projects.html" class="btn btn-secondary">
+          ← Tous les projets
+        </a>
+      </div>
     </section>
 
-    <section class="detail-grid" data-anim="stagger">
-      <article id="the-infinite-botnet" class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🕸️</div>
-          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
+    <section class="section-container" style="padding: 0 1.5rem 5rem;">
+      
+      <!-- 1. Le Contexte Sincère -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            1. Pourquoi ce projet ? Un laboratoire de performance dans le navigateur
+          </h2>
+          <span class="badge">Laboratoire Technique</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="webgames.card1.title">The Infinite Botnet</h2>
-          <p class="project-card__desc" data-i18n="webgames.card1.desc">Scale a harmless script into a global botnet economy. Automation grows fast, ethics grows faster.</p>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary);">
+          J'ai toujours aimé les jeux incrémentaux de simulation de systèmes (comme Universal Paperclips ou Cookie Clicker). En apparence, ce sont des interfaces simples avec des chiffres qui montent. Mais sous le capot, dès que le joueur accumule des centaines d'améliorations et des millions d'entités, le navigateur doit exécuter des millions de calculs par seconde.
+        </p>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary); margin-top: 0.8rem;">
+          Si on fait tourner ces calculs sur le thread principal JavaScript (UI Thread), l'écran saccade, les animations ralentissent et la page ne répond plus. J'ai donc développé ce simulateur comme un défi d'architecture : <strong>découpler totalement le moteur mathématique dans un Web Worker indépendant</strong> pour garantir 60 FPS constants sur l'écran quoi qu'il arrive.
+        </p>
+      </article>
+
+      <!-- 2. Schéma d'Architecture & Flux -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            2. Architecture Multi-Thread : UI vs Web Worker
+          </h2>
+          <span class="badge badge-accent">Pattern Producteur-Consommateur</span>
         </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Incremental</span>
-          <span class="badge badge--tech">Automation</span>
-          <span class="badge badge--tech">Ethics</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="../games/infinite-botnet-reboot/" class="btn btn-primary btn--sm" data-i18n="webgames.playPrototype">Play Reboot</a>
+        
+        <p class="about-card-desc" style="color: var(--text-secondary);">
+          Deux threads distincts communiquent via un canal de messages typés asynchrones (PostMessage) :
+        </p>
+
+        <div class="flow-diagram">
+          <div class="flow-node">
+            <div class="flow-node-step">Thread 1 (UI)</div>
+            <div class="flow-node-title">Rendu Réactif (React 18)</div>
+            <div class="flow-node-desc">
+              Gère uniquement l'affichage, les événements souris/clavier et les transitions CSS à 60 FPS. Ne fait aucun calcul d'économie directement.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Pont de Données</div>
+            <div class="flow-node-title">Canal Typé PostMessage</div>
+            <div class="flow-node-desc">
+              Échange de paquets de données sérialisées (actions utilisateur vers le worker, instantanés d'état vers l'UI) avec clonage structuré.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Thread 2 (Worker)</div>
+            <div class="flow-node-title">Boucle Déterministe 60 Hz</div>
+            <div class="flow-node-desc">
+              Accumulateur delta-time : calcule la propagation du botnet, les revenus, la chaleur FBI et la simulation offline sans jamais figer l'écran.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Module Audio</div>
+            <div class="flow-node-title">Synthèse Web Audio</div>
+            <div class="flow-node-desc">
+              Génération d'ondes sonores procédurales en direct (bips, buzzers d'alarme) sans charger le moindre fichier MP3 externe.
+            </div>
+          </div>
         </div>
       </article>
 
-      <article id="saas-pocalypse" class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">📉</div>
-          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
+      <!-- 3. Défis Techniques Rencontrés & Solutions -->
+      <div class="section-header" style="text-align: left; margin: 3rem 0 1.5rem;" data-anim="fade-up">
+        <h2 class="section-title" style="font-size: 1.8rem;">3. Les Défis Techniques Rencontrés & Comment je les ai résolus</h2>
+        <p class="section-subtitle" style="text-align: left;">Les contraintes de calcul haute fréquence dans le moteur JavaScript V8.</p>
+      </div>
+
+      <div class="bento-grid" data-anim="stagger">
+        
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 01 · Isolation des Threads</span>
+          <h3 class="challenge-title">Séparer les calculs mathématiques de l'interface utilisateur</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Dans un jeu incrémental avec des dizaines de modules actifs en parallèle (scanners d'IP, exploits de bots, bourse de dark money), les boucles de calcul consomment trop de temps CPU sur un seul thread. Résultat : les clics sur les boutons ne répondent plus immédiatement.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Déportation de 100% de l'état de jeu dans un Web Worker dédié. Le composant React reçoit uniquement un snapshot de l'état toutes les 16ms et se contente de l'afficher, garantissant une fluidité absolue.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 02 · Temps & Cadence</span>
+          <h3 class="challenge-title">Empêcher la dérive temporelle quand l'onglet est masqué</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Les navigateurs modernes réduisent drastiquement la fréquence de <code>setInterval</code> (jusqu'à 1 seule exécution par seconde) lorsque l'onglet n'est plus visible pour économiser la batterie. Le jeu tournait alors au ralenti.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Pattern de boucle par accumulateur delta-time (<code>performance.now()</code>). À chaque réveil, le moteur calcule le temps réel écoulé depuis la dernière mise à jour et rattrape exactement le nombre d'itérations nécessaires par tranches fixes de 1/60e de seconde.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 03 · Données & Portabilité</span>
+          <h3 class="challenge-title">Sauvegarde robuste et export sans risque de corruption</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Si le joueur recharge la page pendant une sauvegarde ou si la structure des données change lors d'une mise à jour de code, une ancienne sauvegarde peut faire crasher le moteur au démarrage.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Sérialisation de l'état avec numéro de version de schéma explicite (<code>schemaVersion: 2</code>), encodage Base64 pour l'export portatif et pipeline de migration automatique qui applique des patches de transition si un schéma ancien est détecté.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 04 · Son & Légèreté</span>
+          <h3 class="challenge-title">Créer des bruitages immersifs avec zéro mégaoctet d'assets audio</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Télécharger des dizaines de fichiers MP3/WAV alourdit considérablement le chargement du site et pose des problèmes de droits d'auteur ou de latence de lecture audio.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Utilisation directe de l'API Web Audio native : un synthétiseur logiciel autonome crée des oscillateurs (formes d'ondes carrées, en dents de scie) modulés par des nœuds de gain (enveloppes ADSR) pour générer des bips cybernétiques ultra-rapides à coût zéro en bande passante.
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- 4. Extrait de Code Réel -->
+      <article class="code-card" data-anim="fade-up">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="code-dot code-dot--red"></span>
+            <span class="code-dot code-dot--yellow"></span>
+            <span class="code-dot code-dot--green"></span>
+          </div>
+          <span class="code-filename">src/simulation/engine-worker.ts</span>
+          <span class="code-lang-tag">TypeScript</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="webgames.card2.title">SaaS-pocalypse</h2>
-          <p class="project-card__desc" data-i18n="webgames.card2.desc">Build a tiny startup clicker that spirals into platform wars, churn storms, and survival economics.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Clicker</span>
-          <span class="badge badge--tech">SaaS</span>
-          <span class="badge badge--tech">Strategy</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="#saas-pocalypse" class="btn btn-ghost btn--sm" data-i18n="webgames.viewGame">View Concept</a>
-        </div>
+        <pre class="code-content"><code><span class="c-comment">// Boucle déterministe avec accumulateur fixe dans le Web Worker</span>
+<span class="c-kw">const</span> TICK_RATE_MS = <span class="c-num">1000</span> / <span class="c-num">60</span>; <span class="c-comment">// 60 Hz cadence fixe</span>
+<span class="c-kw">let</span> lastTime = performance.now();
+<span class="c-kw">let</span> accumulator = <span class="c-num">0</span>;
+
+<span class="c-kw">function</span> <span class="c-fn">simulationLoop</span>() {
+  <span class="c-kw">const</span> currentTime = performance.now();
+  <span class="c-kw">let</span> delta = currentTime - lastTime;
+  lastTime = currentTime;
+
+  <span class="c-comment">// Plafond de sécurité pour éviter la "spirale de la mort" si le thread s'endort longtemps</span>
+  <span class="c-kw">if</span> (delta &gt; <span class="c-num">2000</span>) delta = <span class="c-num">2000</span>;
+  accumulator += delta;
+
+  <span class="c-comment">// Exécuter autant de pas discrets que nécessaire pour rattraper le temps réel</span>
+  <span class="c-kw">while</span> (accumulator &gt;= TICK_RATE_MS) {
+    <span class="c-fn">stepSimulation</span>(TICK_RATE_MS / <span class="c-num">1000</span>);
+    accumulator -= TICK_RATE_MS;
+  }
+
+  <span class="c-comment">// Émettre un instantané léger vers le thread principal pour mise à jour UI</span>
+  <span class="c-fn">postMessage</span>({ type: <span class="c-str">'TICK_SYNC'</span>, payload: <span class="c-fn">getSerializableState</span>() });
+  <span class="c-fn">requestAnimationFrame</span>(simulationLoop);
+}</code></pre>
       </article>
 
-      <article id="the-cleanest-code" class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🧼</div>
-          <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="webgames.card3.title">The Cleanest Code</h2>
-          <p class="project-card__desc" data-i18n="webgames.card3.desc">Optimize code purity metrics until refactors become ideology. Every improvement has a hidden trade-off.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Optimization</span>
-          <span class="badge badge--tech">Systems</span>
-          <span class="badge badge--tech">Satire</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="#the-cleanest-code" class="btn btn-ghost btn--sm" data-i18n="webgames.viewGame">View Concept</a>
-        </div>
+      <!-- 5. Bilan & Ce que j'ai appris -->
+      <article class="takeaways-box glass-card" data-anim="fade-up">
+        <h3 class="takeaways-title">Ce que ce projet m'a appris en autodidacte</h3>
+        <ul class="takeaways-list">
+          <li>• <strong>L'architecture multi-thread dans le web :</strong> Les Web Workers permettent de transformer le navigateur en véritable environnement de calcul distribué, bien au-delà de simples pages statiques.</li>
+          <li>• <strong>La gestion de la mémoire et du garbage collector :</strong> Créer des milliers d'objets par seconde dans une boucle rapide déclenche le garbage collector et crée des micro-gelures d'écran. Réutiliser les objets (object pooling) résout ce problème.</li>
+          <li>• <strong>La puissance des APIs natives :</strong> L'API Web Audio et l'API Worker permettent de faire des applications complexes et immersives sans avoir besoin de bibliothèques externes lourdes.</li>
+        </ul>
       </article>
+
     </section>
   </main>
 
-  <a class="project-back-cta" href="../index.html#webgames" data-project-back>
+  <a class="project-back-cta" href="projects.html" data-project-back>
     <span class="project-back-cta__icon" aria-hidden="true">←</span>
-    <span class="project-back-cta__label" data-i18n="webgames.backGames">Back to Web Games</span>
+    <span class="project-back-cta__label">Retour aux Projets</span>
   </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="../legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
 

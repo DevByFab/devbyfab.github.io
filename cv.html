@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr" data-perf="turbo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Curriculum Vitae de DevByFab — Développeur autodidacte & Systèmes (CTeSP Niveau 5). Réseaux, cybersécurité, virtualisation et programmation.">
+  <meta name="i18n-base" content="i18n">
+  <title>Curriculum Vitae — DevByFab</title>
+  <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="js/performance.js"></script>
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+
+  <header class="site-header scrolled">
+    <nav class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="index.html#projects" class="nav-link" data-i18n="nav.projects">Projets</a></li>
+        <li><a href="index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-right header-controls">
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Ouvrir le menu" aria-expanded="false">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="cv-page-container">
+    <article class="cv-paper">
+      
+      <!-- Top Action Bar -->
+      <div class="cv-top-bar">
+        <div class="cv-notice">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span data-i18n="contact.cvBannerDesc">Le PDF officiel à télécharger est en portugais pour le moment.</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimer / PDF
+          </button>
+          <a href="assets/CV_Fabio_Pinto.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm" download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span data-i18n="contact.cvBannerBtnPdf">Télécharger le PDF (PT)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- CV Header -->
+      <div class="cv-header-grid">
+        <div>
+          <h1 class="cv-name">DevByFab</h1>
+          <div class="cv-title-role" data-i18n="home.heroRole">Développeur autodidacte & Systèmes</div>
+          <div class="cv-meta-list">
+            <span class="cv-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Amarante / Porto, Portugal
+            </span>
+            <span class="cv-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              contact.fabiocp@gmail.com
+            </span>
+            <span class="cv-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              20 ans · Permis B
+            </span>
+            <span class="badge badge-accent" data-i18n="about.statusIEFP">Éligible au stage IEFP (Niveau 5 / Ativar.pt)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <section class="cv-section">
+        <h2 class="cv-section-title" data-i18n="about.title">À propos</h2>
+        <p class="cv-item-desc" data-i18n="about.bioP1">
+          Né et scolarisé en France jusqu'en seconde puis installé au Portugal, je parle couramment français et portugais, et je lis et écris l'anglais technique sans problème. Passionné par l'informatique depuis des années, j'ai tout appris en programmation tout seul : je ne prétends pas tout savoir, j'apprends en pratiquant, en résolvant des pannes et en créant des outils utiles au quotidien.
+        </p>
+      </section>
+
+      <!-- Education -->
+      <section class="cv-section">
+        <h2 class="cv-section-title">Formation & Diplômes</h2>
+        
+        <div class="cv-item">
+          <div class="cv-item-header">
+            <span class="cv-item-title" data-i18n="exp.item3.title">CTeSP en Cybersécurité, Réseaux et Systèmes</span>
+            <span class="cv-item-date" data-i18n="exp.item3.period">2024 — 2026</span>
+          </div>
+          <div class="cv-item-place" data-i18n="exp.item3.place">Institut Supérieur Polytechnique · Niveau 5 Validé</div>
+          <p class="cv-item-desc" data-i18n="exp.item3.desc">
+            Formation supérieure pratique de 2 ans : architecture réseau d'entreprise, routage et commutation, politiques de sécurité, virtualisation et administration de serveurs.
+          </p>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-item-header">
+            <span class="cv-item-title" data-i18n="exp.item2.title">GEI Niveau 4 (Gestion d'Équipements Informatiques)</span>
+            <span class="cv-item-date" data-i18n="exp.item2.period">2021 — 2024</span>
+          </div>
+          <div class="cv-item-place" data-i18n="exp.item2.place">Amarante · Portugal</div>
+          <p class="cv-item-desc">
+            Formation professionnelle technique de 3 ans : diagnostic et réparation matérielle, assemblage de machines, maintenance réseau et support utilisateur.
+          </p>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-item-header">
+            <span class="cv-item-title" data-i18n="exp.item1.title">Scolarité en France (jusqu'en 2nde)</span>
+            <span class="cv-item-date" data-i18n="exp.item1.period">Jusqu'en 2021</span>
+          </div>
+          <div class="cv-item-place" data-i18n="exp.item1.place">France</div>
+          <p class="cv-item-desc" data-i18n="exp.item1.desc">
+            Scolarité suivie en France de l'enfance jusqu'à la classe de seconde. Socle de formation générale et langue maternelle.
+          </p>
+        </div>
+      </section>
+
+      <!-- Work Experience -->
+      <section class="cv-section">
+        <h2 class="cv-section-title" data-i18n="exp.title">Expériences en Entreprise</h2>
+
+        <div class="cv-item">
+          <div class="cv-item-header">
+            <span class="cv-item-title" data-i18n="exp.item4.title">Stage Réseaux & Infrastructure IT</span>
+            <span class="cv-item-date" data-i18n="exp.item4.period">2026 (Récent)</span>
+          </div>
+          <div class="cv-item-place" data-i18n="exp.item4.place">Proxsys Solutions · Ermesinde (Portugal)</div>
+          <p class="cv-item-desc" data-i18n="exp.item4.desc">
+            Stage pratique en entreprise : configuration et tests de matériel Fortinet (FortiGate, switchs, routeurs), administration de clusters Proxmox VE et gestion à distance de serveurs sous iDRAC.
+          </p>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-item-header">
+            <span class="cv-item-title">3 Stages Techniques de Maintenance & Support</span>
+            <span class="cv-item-date" data-i18n="exp.item2.period">2021 — 2024</span>
+          </div>
+          <div class="cv-item-place" data-i18n="exp.item2.place">ClickTech · Amarante (Portugal)</div>
+          <p class="cv-item-desc" data-i18n="exp.item2.desc">
+            3 stages pratiques en entreprise chez ClickTech : diagnostic de pannes, réparation de composants, assemblage PC et maintenance de réseaux locaux.
+          </p>
+        </div>
+      </section>
+
+      <!-- Technical Skills -->
+      <section class="cv-section">
+        <h2 class="cv-section-title" data-i18n="skills.title">Compétences Techniques</h2>
+        <div class="cv-skills-grid">
+          <div class="cv-skill-box">
+            <h4 data-i18n="skills.networks">Réseaux & Sécurité</h4>
+            <p data-i18n="skills.networksDesc">Matériel Fortinet (FortiGate, switchs), routage basique, VLANs, règles de pare-feu, bases de cryptographie (RSA/AES).</p>
+          </div>
+          <div class="cv-skill-box">
+            <h4 data-i18n="skills.virtualization">Serveurs & Virtualisation</h4>
+            <p data-i18n="skills.virtualizationDesc">Proxmox VE (VMs Linux, conteneurs), gestion à distance iDRAC (Dell/HP), serveurs Debian et Ubuntu.</p>
+          </div>
+          <div class="cv-skill-box">
+            <h4 data-i18n="skills.code">Programmation (Autodidacte)</h4>
+            <p data-i18n="skills.codeDesc">Python, TypeScript, JavaScript, APIs FastAPI, bots Discord (Discord.py), extensions web (Manifest V3), Supabase.</p>
+          </div>
+          <div class="cv-skill-box">
+            <h4 data-i18n="skills.hardware">Maintenance & Hardware</h4>
+            <p data-i18n="skills.hardwareDesc">Diagnostic de pannes matérielles, remplacement de composants, assemblage de tours, maintenance de parcs et câblage.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Languages -->
+      <section class="cv-section" style="margin-bottom: 0;">
+        <h2 class="cv-section-title" data-i18n="skills.languages">Langues</h2>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+          <div>
+            <strong style="color: var(--text-primary);">Français :</strong>
+            <span style="color: var(--text-secondary);" data-i18n="skills.langFR">Langue maternelle / Natif (scolarité en France)</span>
+          </div>
+          <div>
+            <strong style="color: var(--text-primary);">Portugais :</strong>
+            <span style="color: var(--text-secondary);" data-i18n="skills.langPT">Langue maternelle / Bilingue fluide</span>
+          </div>
+          <div>
+            <strong style="color: var(--text-primary);">Anglais :</strong>
+            <span style="color: var(--text-secondary);" data-i18n="skills.langEN">B2 (Technique et conversationnel)</span>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <a class="project-back-cta" href="index.html" data-project-back>
+    <span class="project-back-cta__icon" aria-hidden="true">←</span>
+    <span class="project-back-cta__label">Retour au site</span>
+  </a>
+
+  <footer class="site-footer">
+    <div class="footer-separator"></div>
+    <div class="footer-content">
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

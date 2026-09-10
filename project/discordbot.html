@@ -1,162 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="BoTokard Discord bot portfolio: TCG engine, Gemini AI, moderation audit logs, Twitch operations, and audio streaming.">
+  <meta name="description" content="BoTokard : Étude technique d'un bot Discord Python asynchrone multi-systèmes (Twitch, Gemini AI, MySQL, TCG) hébergé sur VM Proxmox VE par DevByFab.">
   <meta name="i18n-base" content="../i18n">
-  <title data-i18n="discordbot.pageTitle">BoTokard Discord Bot — DevByFab</title>
+  <title>BoTokard — Étude Technique & Infrastructure | DevByFab</title>
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <script src="../js/performance.js"></script>
 </head>
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
+  
   <header class="site-header scrolled">
     <nav class="nav-container">
-      <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="../index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="../index.html#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="../index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="../index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projets</a></li>
         <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="../cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
+
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1 data-i18n="discordbot.title">BoTokard: Functional Capabilities</h1>
-      <p class="page-hero__subtitle" data-i18n="discordbot.subtitle">A Python Discord bot designed as an asynchronous control layer between community interactions, game logic, and external APIs.</p>
+    <section class="tech-hero">
+      <div class="tech-breadcrumb">
+        <a href="../index.html">Accueil</a>
+        <span>/</span>
+        <a href="projects.html">Projets</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">BoTokard</span>
+      </div>
+
+      <div class="tech-hero-icon" style="font-size: 2rem;">
+        🤖
+      </div>
+
+      <h1 class="section-title">BoTokard : Moteur Communautaire Asynchrone</h1>
+      <p class="section-subtitle">
+        Bot Python asynchrone multi-flux connecté à Discord, Twitch, Google Gemini et MySQL, hébergé 24/7 sur une machine virtuelle Proxmox VE dédiée.
+      </p>
+
+      <div class="tech-spec-bar">
+        <span class="badge badge-accent">Production 24/7</span>
+        <span class="badge">Python 3 & Discord.py</span>
+        <span class="badge">AsyncIO & aiomysql</span>
+        <span class="badge">VM Proxmox VE</span>
+      </div>
+
+      <div class="tech-actions-bar">
+        <a href="projects.html" class="btn btn-secondary">
+          ← Tous les projets
+        </a>
+      </div>
     </section>
 
-    <section class="discordbot-overview" data-anim="fade-up">
-      <article class="project-card project-card--discord-overview">
-        <div class="project-card__header">
-          <div class="project-card__icon">🤖</div>
-          <span class="badge badge--status badge--live" data-i18n="discordbot.overviewBadge">PRODUCTION CORE</span>
+    <section class="section-container" style="padding: 0 1.5rem 5rem;">
+      
+      <!-- 1. Le Contexte Sincère -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            1. Pourquoi ce projet ? L'évolution d'un simple script
+          </h2>
+          <span class="badge">Origine du projet</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.overviewTitle">One bot, five synchronized systems</h2>
-          <p class="project-card__desc" data-i18n="discordbot.overviewDesc">BoTokard does more than answer commands. It orchestrates gameplay, moderation, engagement features, and live operations while staying connected to a shared MySQL data model used by the web ecosystem.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Python</span>
-          <span class="badge badge--tech">Discord.py</span>
-          <span class="badge badge--tech">MySQL</span>
-          <span class="badge badge--tech">Gemini API</span>
-          <span class="badge badge--tech">Twitch API</span>
-          <span class="badge badge--tech">AsyncIO</span>
-        </div>
-      </article>
-    </section>
-
-    <section class="discordbot-grid" data-anim="stagger">
-      <article class="project-card project-card--discord-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🃏</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.m1.title">1. TCG Engine & Cross-Platform Economy</h2>
-          <p class="project-card__desc" data-i18n="discordbot.m1.desc">The bot owns the complete game loop and keeps player state consistent between Discord and the web app.</p>
-          <ul class="discordbot-list">
-            <li data-i18n="discordbot.m1.i1">Secure player profile bootstrap with live tracking of XP, levels, cards, and items.</li>
-            <li data-i18n="discordbot.m1.i2">Gacha and RNG pipeline with conditional drops, including special fragment assembly events.</li>
-            <li data-i18n="discordbot.m1.i3">Fraud-resistant trade flow with anti-duplication and transactional consistency checks.</li>
-            <li data-i18n="discordbot.m1.i4">Automated quests, achievements, and battle pass progression to reinforce retention.</li>
-          </ul>
-        </div>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary);">
+          À la base, BoTokard était un petit script codé pour faire rire mes potes sur un serveur Discord et annoncer les lives Twitch de notre groupe. Mais très vite, j'ai voulu en faire un vrai terrain d'expérimentation pour apprendre ce que je n'apprenais pas à l'école : la concurrence asynchrone, la persistance SQL transactionnelle et l'administration système Linux.
+        </p>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary); margin-top: 0.8rem;">
+          Au fil des mois, le bot a grossi : jeu de cartes TCG avec économie virtuelle, intégration de l'IA Google Gemini pour répondre aux membres, système de modération automatique avec logs d'audit. Pour qu'il tourne sans coupure, je l'ai migré de mon PC personnel vers mon propre serveur physique sous Proxmox VE.
+        </p>
       </article>
 
-      <article class="project-card project-card--discord-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🧠</div>
+      <!-- 2. Schéma d'Architecture & Flux -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            2. Architecture du système & Pipelines d'événements
+          </h2>
+          <span class="badge badge-accent">Infrastructure Linux & Async</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.m2.title">2. Gemini AI Integration & Engagement Tools</h2>
-          <p class="project-card__desc" data-i18n="discordbot.m2.desc">BoTokard boosts interaction quality and community retention with adaptive AI and interactive tools.</p>
-          <ul class="discordbot-list">
-            <li data-i18n="discordbot.m2.i1">Context-aware conversational agent using Google Gemini API for adaptive replies.</li>
-            <li data-i18n="discordbot.m2.i2">Dynamic poll interfaces through Discord UI components with live vote tracking.</li>
-            <li data-i18n="discordbot.m2.i3">RNG and hash-based mini-games for text-channel engagement and community rituals.</li>
-            <li data-i18n="discordbot.m2.i4">Feature set designed to keep channels active without flooding moderation teams.</li>
-          </ul>
-        </div>
-      </article>
+        
+        <p class="about-card-desc" style="color: var(--text-secondary);">
+          Le bot orchestre cinq composants critiques au sein d'une boucle d'événements unique (AsyncIO event loop) :
+        </p>
 
-      <article class="project-card project-card--discord-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🛡️</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.m3.title">3. Database Audit Trail & Moderation</h2>
-          <p class="project-card__desc" data-i18n="discordbot.m3.desc">A professional moderation module built for high-traffic servers and full accountability.</p>
-          <ul class="discordbot-list">
-            <li data-i18n="discordbot.m3.i1">Advanced sanction commands for warns, mutes, kicks, bans, and safe bulk purges.</li>
-            <li data-i18n="discordbot.m3.i2">Every moderation action is persisted in MySQL for complete traceability.</li>
-            <li data-i18n="discordbot.m3.i3">On-demand lookup of user disciplinary records directly inside Discord.</li>
-            <li data-i18n="discordbot.m3.i4">Automatic log routing for moderation events, TCG transactions, and system errors.</li>
-          </ul>
+        <div class="flow-diagram">
+          <div class="flow-node">
+            <div class="flow-node-step">Flux A</div>
+            <div class="flow-node-title">Discord Gateway</div>
+            <div class="flow-node-desc">
+              Connexion WebSocket bidirectionnelle avec Discord. Réception des interactions boutons, commandes slash et messages utilisateurs en temps réel.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Flux B</div>
+            <div class="flow-node-title">Webhooks Twitch</div>
+            <div class="flow-node-desc">
+              Serveur HTTP interne recevant les alertes EventSub (lancement de live, stream offline) avec validation de signature HMAC-SHA256.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Flux C</div>
+            <div class="flow-node-title">Buffer IA (Gemini)</div>
+            <div class="flow-node-desc">
+              File d'attente intelligente avec rate-limiting par salon et par utilisateur pour interroger l'API Gemini sans épuiser les quotas ni bloquer les autres commandes.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Flux D</div>
+            <div class="flow-node-title">Pool MySQL (aiomysql)</div>
+            <div class="flow-node-desc">
+              Gestion de l'inventaire TCG et des logs d'audit avec pool de connexions asynchrones et transactions strictes (anti-duplication de monnaie).
+            </div>
+          </div>
         </div>
       </article>
 
-      <article class="project-card project-card--discord-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🎥</div>
+      <!-- 3. Défis Techniques Rencontrés & Solutions -->
+      <div class="section-header" style="text-align: left; margin: 3rem 0 1.5rem;" data-anim="fade-up">
+        <h2 class="section-title" style="font-size: 1.8rem;">3. Les Défis Techniques Rencontrés & Mes Solutions</h2>
+        <p class="section-subtitle" style="text-align: left;">Comment garder un bot rapide, stable et sécurisé avec des centaines d'utilisateurs simultanés.</p>
+      </div>
+
+      <div class="bento-grid" data-anim="stagger">
+        
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 01 · Intégrité SQL</span>
+          <h3 class="challenge-title">Éviter la duplication d'objets lors d'échanges simultanés</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Si deux utilisateurs échangeaient une carte ou si quelqu'un spammait le bouton de confirmation en double-cliquant très vite, deux requêtes asynchrones parallèles lisaient le même inventaire avant que la mise à jour ne soit écrite, créant des doublons gratuits.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Utilisation de vraies transactions MySQL avec verrouillage pessimiste : <code>SELECT ... FOR UPDATE</code> à l'intérieur d'un bloc transactionnel atomique (ACID). Si l'une des vérifications échoue, un <code>ROLLBACK</code> complet annule tout.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 02 · Concurrence Async</span>
+          <h3 class="challenge-title">Ne jamais figer le heartbeat WebSocket de Discord</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              L'API Google Gemini peut mettre 2 à 4 secondes à générer une réponse détaillée. Si cette requête était exécutée de manière synchrone, elle bloquait le thread principal Python et Discord déconnectait le bot pour cause de timeout de battement de cœur (heartbeat).
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Délégation systématique des opérations bloquantes dans des tâches d'arrière-plan avec <code>asyncio.create_task()</code> et <code>asyncio.to_thread()</code> pour les appels HTTP tiers, libérant instantanément la boucle Discord.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 03 · Réseau & Webhooks</span>
+          <h3 class="challenge-title">Recevoir les webhooks Twitch sur une machine virtuelle interne</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Twitch EventSub nécessite une URL HTTPS publique valide pour envoyer ses notifications de live. Mon serveur Proxmox est situé derrière un routeur local privé avec une adresse IP non fixe.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Mise en place d'un reverse proxy sécurisé avec certificat SSL Let's Encrypt et vérification cryptographique rigoureuse de la signature <code>Twitch-Eventsub-Message-Signature</code> (HMAC SHA-256) avant tout traitement de payload.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 04 · Haute Disponibilité</span>
+          <h3 class="challenge-title">Survie aux coupures et redémarrage automatique sous Linux</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              En cas d'exception non gérée ou de redémarrage automatique du serveur pour mise à jour du noyau Linux, le bot ne devait pas rester éteint jusqu'à ce que je m'en rende compte manuellement.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Configuration d'une unité <code>systemd</code> personnalisée sur la VM Debian avec directive <code>Restart=always</code>, temporisation exponentielle, capture des signaux d'arrêt propres et redirection des logs vers <code>journald</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- 4. Extrait de Code Réel -->
+      <article class="code-card" data-anim="fade-up">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="code-dot code-dot--red"></span>
+            <span class="code-dot code-dot--yellow"></span>
+            <span class="code-dot code-dot--green"></span>
+          </div>
+          <span class="code-filename">bot/cogs/economy/trade_service.py</span>
+          <span class="code-lang-tag">Python (AsyncIO)</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.m4.title">4. Twitch Broadcast Control Interface</h2>
-          <p class="project-card__desc" data-i18n="discordbot.m4.desc">The bot acts as a streaming assistant through secure, bidirectional Twitch API integrations.</p>
-          <ul class="discordbot-list">
-            <li data-i18n="discordbot.m4.i1">Secure commands to update live metadata such as stream title and category.</li>
-            <li data-i18n="discordbot.m4.i2">Webhook listeners that announce stream starts with rich-formatted alerts.</li>
-            <li data-i18n="discordbot.m4.i3">Clip generation workflow with manual fallback to guarantee highlight capture.</li>
-            <li data-i18n="discordbot.m4.i4">Runtime monitoring designed for reliable show control from Discord.</li>
-          </ul>
-        </div>
+        <pre class="code-content"><code><span class="c-comment"># Transaction atomique sécurisée pour l'échange de cartes TCG</span>
+<span class="c-kw">async def</span> <span class="c-fn">execute_secure_card_trade</span>(pool, sender_id: <span class="c-num">int</span>, receiver_id: <span class="c-num">int</span>, card_id: <span class="c-num">int</span>):
+    <span class="c-kw">async with</span> pool.acquire() <span class="c-kw">as</span> conn:
+        <span class="c-kw">async with</span> conn.cursor() <span class="c-kw">as</span> cursor:
+            <span class="c-comment"># 1. Début de la transaction avec isolation stricte</span>
+            <span class="c-kw">await</span> conn.begin()
+            <span class="c-kw">try</span>:
+                <span class="c-comment"># 2. Verrouillage de la ligne pour empêcher les attaques par concurrence (Row Locking)</span>
+                <span class="c-kw">await</span> cursor.execute(
+                    <span class="c-str">"SELECT quantity FROM user_inventory WHERE user_id = %s AND card_id = %s FOR UPDATE"</span>,
+                    (sender_id, card_id)
+                )
+                row = <span class="c-kw">await</span> cursor.fetchone()
+                <span class="c-kw">if not</span> row <span class="c-kw">or</span> row[<span class="c-num">0</span>] &lt; <span class="c-num">1</span>:
+                    <span class="c-kw">raise</span> <span class="c-var">ValueError</span>(<span class="c-str">"Quantité de carte insuffisante ou inexistante."</span>)
+
+                <span class="c-comment"># 3. Débit chez l'émetteur</span>
+                <span class="c-kw">await</span> cursor.execute(
+                    <span class="c-str">"UPDATE user_inventory SET quantity = quantity - 1 WHERE user_id = %s AND card_id = %s"</span>,
+                    (sender_id, card_id)
+                )
+
+                <span class="c-comment"># 4. Crédit chez le récepteur (Upsert avec gestion d'existence)</span>
+                <span class="c-kw">await</span> cursor.execute(
+                    <span class="c-str">"INSERT INTO user_inventory (user_id, card_id, quantity) VALUES (%s, %s, 1) "</span>
+                    <span class="c-str">"ON DUPLICATE KEY UPDATE quantity = quantity + 1"</span>,
+                    (receiver_id, card_id)
+                )
+
+                <span class="c-comment"># 5. Validation atomique de l'opération</span>
+                <span class="c-kw">await</span> conn.commit()
+                <span class="c-kw">return True</span>
+            <span class="c-kw">except</span> <span class="c-var">Exception</span> <span class="c-kw">as</span> err:
+                <span class="c-comment"># En cas d'erreur ou d'interruption : rollback total, aucune perte</span>
+                <span class="c-kw">await</span> conn.rollback()
+                logger.error(<span class="c-str">f"Transaction échouée : {err}"</span>)
+                <span class="c-kw">raise</span></code></pre>
       </article>
 
-      <article class="project-card project-card--discord-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🎵</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="discordbot.m5.title">5. High-Fidelity Audio Streaming</h2>
-          <p class="project-card__desc" data-i18n="discordbot.m5.desc">A robust asynchronous media player designed for dependable voice channel playback.</p>
-          <ul class="discordbot-list">
-            <li data-i18n="discordbot.m5.i1">Playback state machine covering play, pause, resume, and hard stop.</li>
-            <li data-i18n="discordbot.m5.i2">Dynamic queue structure for collaborative song stacking in real time.</li>
-            <li data-i18n="discordbot.m5.i3">Advanced queue controls with single-track loop and full playlist loop.</li>
-            <li data-i18n="discordbot.m5.i4">Built for resilient operation under concurrent user commands.</li>
-          </ul>
-        </div>
+      <!-- 5. Bilan & Ce que j'ai appris -->
+      <article class="takeaways-box glass-card" data-anim="fade-up">
+        <h3 class="takeaways-title">Ce que ce projet m'a appris en autodidacte</h3>
+        <ul class="takeaways-list">
+          <li>• <strong>La gestion de la concurrence :</strong> Développer un bot actif apprend très vite que le code synchrone classique ne tient pas la charge dès que plusieurs personnes cliquent en même temps.</li>
+          <li>• <strong>L'administration système pratique :</strong> Configurer une VM Debian sous Proxmox, créer des services systemd fiables et gérer la sécurité des accès m'a donné des compétences serveur bien plus solides que de la simple théorie.</li>
+          <li>• <strong>La rigueur des bases de données :</strong> Comprendre le fonctionnement interne des transactions SQL et des verrous de lignes évite des bugs catastrophiques de corruption de données.</li>
+        </ul>
       </article>
+
     </section>
   </main>
 
-  <a class="project-back-cta" href="../index.html#projects" data-project-back>
+  <a class="project-back-cta" href="projects.html" data-project-back>
     <span class="project-back-cta__icon" aria-hidden="true">←</span>
-    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+    <span class="project-back-cta__label">Retour aux Projets</span>
   </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="../legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>

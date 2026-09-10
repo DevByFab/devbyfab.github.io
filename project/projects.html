@@ -1,120 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="All DevByFab projects in one place: extensions, bots, and command-line tools.">
+  <meta name="description" content="Tous les projets de DevByFab : AeroTabs, BoTokard, CipherVault et The Infinite Botnet. Projets concrets codés en autodidacte axés sur la performance et les systèmes.">
   <meta name="i18n-base" content="../i18n">
-  <title data-i18n="projects.pageTitle">All Projects — DevByFab</title>
+  <title>Tous les Projets — DevByFab</title>
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <script src="../js/performance.js"></script>
 </head>
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
+  
   <header class="site-header scrolled">
     <nav class="nav-container">
-      <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="../index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="../index.html#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="../index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="../index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projets</a></li>
         <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="../cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
+
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1 data-i18n="projects.allTitle">All Projects</h1>
-      <p class="page-hero__subtitle" data-i18n="projects.allSubtitle">A complete view of my current portfolio work.</p>
+    <section class="tech-hero">
+      <div class="tech-breadcrumb">
+        <a href="../index.html">Accueil</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">Projets</span>
+      </div>
+
+      <h1 class="section-title">Mes Projets & Réalisations</h1>
+      <p class="section-subtitle">
+        Des projets réels codés en totale autonomie : extensions de navigateur, bots asynchrones, outils cryptographiques et moteurs de simulation.
+      </p>
+
+      <!-- Category Filter Pills -->
+      <div class="project-filter-nav" style="margin-top: 2rem;">
+        <button type="button" class="filter-btn active" data-filter="all">Tous (4)</button>
+        <button type="button" class="filter-btn" data-filter="web">Web & Extensions (1)</button>
+        <button type="button" class="filter-btn" data-filter="backend">Backend & Automatisation (1)</button>
+        <button type="button" class="filter-btn" data-filter="crypto">Cybersécurité (1)</button>
+        <button type="button" class="filter-btn" data-filter="sim">Simulateurs & Moteurs (1)</button>
+      </div>
     </section>
 
-    <section class="detail-grid" data-anim="stagger">
-      <article class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🧩</div>
-          <span class="badge badge--status badge--wip">WIP</span>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="projects.card1.title">CryoTabs — RAM Optimizer & Workspace Manager</h2>
-          <p class="project-card__desc" data-i18n="projects.card1.desc">Ultra-light Manifest V3 extension (~400 KB) built to optimize RAM usage, organize tab workspaces, and evolve into a freemium cross-browser SaaS.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Manifest V3</span>
-          <span class="badge badge--tech">Vanilla JS</span>
-          <span class="badge badge--tech">chrome.storage</span>
-          <span class="badge badge--tech">SaaS</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="extention.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
-        </div>
-      </article>
+    <section class="section-container" style="padding: 0 1.5rem 5rem;">
+      <div class="projects-grid" data-anim="stagger">
+        
+        <!-- 1. AeroTabs -->
+        <article class="project-card project-card--wide glass-card spotlight-card project-item" data-cat="web" data-anim-child>
+          <div class="project-card-header">
+            <div style="display: flex; align-items: center; gap: 0.85rem;">
+              <img src="../img/aerotabs_logo.png" alt="AeroTabs Logo" class="project-card-logo">
+              <span class="badge badge-accent">BETA BIENTÔT · SAAS ROADMAP</span>
+            </div>
+            <a href="https://aerotabs.com" target="_blank" rel="noopener" class="badge">
+              aerotabs.com ↗
+            </a>
+          </div>
+          <div>
+            <h2 class="project-card-title">AeroTabs — Optimiseur RAM & Espaces de Travail</h2>
+            <p class="project-card-desc">
+              Extension de navigateur (Chrome & Firefox, Manifest V3) conçue pour résoudre le problème des dizaines d'onglets ouverts qui saturent la mémoire. Elle intègre la mise en veille automatique (Tab Sleeping, ~80% de RAM libérée), la synchronisation cloud via Supabase et le partage éphémère chiffré.
+            </p>
+          </div>
+          <div class="project-card-tags">
+            <span class="badge">Manifest V3</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge">Service Worker</span>
+            <span class="badge">Supabase Auth & Sync</span>
+            <span class="badge">Zero-Knowledge Sharing</span>
+            <span class="badge">~80% RAM Économisée</span>
+          </div>
+          <div class="project-card-actions">
+            <a href="extention.html" class="btn btn-primary">
+              Étude Technique Complète →
+            </a>
+            <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Site Officiel
+            </a>
+          </div>
+        </article>
 
-      <article class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🃏</div>
-          <span class="badge badge--status badge--wip">WIP</span>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="projects.card2.title">BoTokard — Discord Community Engine</h2>
-          <p class="project-card__desc" data-i18n="projects.card2.desc">Asynchronous Discord bot for TCG gameplay, Gemini AI interactions, moderation audit logs, Twitch operations, and audio streaming.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Python</span>
-          <span class="badge badge--tech">Discord.py</span>
-          <span class="badge badge--tech">MySQL</span>
-          <span class="badge badge--tech">Gemini API</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="discordbot.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
-        </div>
-      </article>
+        <!-- 2. BoTokard -->
+        <article class="project-card project-card--half glass-card spotlight-card project-item" data-cat="backend" data-anim-child>
+          <div class="project-card-header">
+            <div aria-hidden="true" style="font-size: 1.4rem;">
+              🤖
+            </div>
+            <span class="badge badge-accent">PRODUCTION 24/7 · PROXMOX VM</span>
+          </div>
+          <div>
+            <h2 class="project-card-title">BoTokard — Moteur Communautaire Asynchrone</h2>
+            <p class="project-card-desc">
+              Bot Discord Python multi-tâches hébergé sur une VM Debian sous Proxmox VE. Orchestration en temps réel de webhooks Twitch EventSub, intégration de l'IA Google Gemini (avec rate-limiting), moteur de cartes TCG et transactions MySQL avec verrous atomiques.
+            </p>
+          </div>
+          <div class="project-card-tags">
+            <span class="badge">Python 3</span>
+            <span class="badge">AsyncIO</span>
+            <span class="badge">Discord.py</span>
+            <span class="badge">Twitch API</span>
+            <span class="badge">Google Gemini</span>
+            <span class="badge">MySQL ACID</span>
+            <span class="badge">VM Proxmox VE</span>
+          </div>
+          <div class="project-card-actions">
+            <a href="discordbot.html" class="btn btn-secondary">Étude Technique Complète →</a>
+          </div>
+        </article>
 
-      <article class="project-card" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🔐</div>
-          <span class="badge badge--status badge--live">LIVE</span>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h2>
-          <p class="project-card__desc" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Python</span>
-          <span class="badge badge--tech">RSA</span>
-          <span class="badge badge--tech">AES</span>
-          <span class="badge badge--tech">CLI</span>
-        </div>
-        <div class="project-card__footer">
-          <a href="clipython.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
-          <a href="https://github.com/devbyfab" class="btn btn-ghost btn--sm" target="_blank" rel="noopener" data-i18n="projects.viewGithub">GitHub</a>
-        </div>
-      </article>
+        <!-- 3. CipherVault -->
+        <article class="project-card project-card--half glass-card spotlight-card project-item" data-cat="crypto" data-anim-child>
+          <div class="project-card-header">
+            <div aria-hidden="true" style="font-size: 1.4rem;">
+              🔐
+            </div>
+            <span class="badge badge-accent">OPEN-SOURCE · SÉCURITÉ</span>
+          </div>
+          <div>
+            <h2 class="project-card-title">CipherVault — Chiffrement Hybride RSA / AES</h2>
+            <p class="project-card-desc">
+              Outil de sécurité en Python combinant le chiffrement asymétrique RSA-2048 pour la transmission sécurisée des clés de session et le chiffrement symétrique AES-256-GCM pour protéger les données à pleine vitesse avec intégrité garantie (AEAD).
+            </p>
+          </div>
+          <div class="project-card-tags">
+            <span class="badge">Python</span>
+            <span class="badge">RSA-2048 (OAEP)</span>
+            <span class="badge">AES-256-GCM</span>
+            <span class="badge">Format .cvault Binaire</span>
+            <span class="badge">Keystore Local PEM</span>
+          </div>
+          <div class="project-card-actions">
+            <a href="clipython.html" class="btn btn-secondary">Étude Technique Complète →</a>
+            <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+          </div>
+        </article>
+
+        <!-- 4. The Infinite Botnet Reboot -->
+        <article class="project-card project-card--wide glass-card spotlight-card project-item" data-cat="sim" data-anim-child>
+          <div class="project-card-header">
+            <div aria-hidden="true" style="font-size: 1.4rem;">
+              🕸️
+            </div>
+            <span class="badge">R&D · MOTEUR TYPESCRIPT</span>
+          </div>
+          <div>
+            <h2 class="project-card-title">The Infinite Botnet (Reboot) — Moteur de Simulation</h2>
+            <p class="project-card-desc">
+              Simulateur incrémental complexe codé sous TypeScript et Vite. Architecture découplée : 100% des calculs tournent en tâche de fond dans un Web Worker indépendant via une boucle cadencée à 60Hz avec delta accumulateur, garantissant une interface fluide et sans lag.
+            </p>
+          </div>
+          <div class="project-card-tags">
+            <span class="badge">TypeScript</span>
+            <span class="badge">Vite</span>
+            <span class="badge">Web Workers API</span>
+            <span class="badge">Cadence Fixe 60 Hz</span>
+            <span class="badge">Audio Synthétique Web Audio</span>
+            <span class="badge">Export Base64</span>
+          </div>
+          <div class="project-card-actions">
+            <a href="../games/infinite-botnet-reboot/dist/index.html" class="btn btn-primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Lancer le Jeu Direct
+            </a>
+            <a href="webgames.html" class="btn btn-secondary">Étude Technique Complète →</a>
+          </div>
+        </article>
+
+      </div>
     </section>
   </main>
 
   <a class="project-back-cta" href="../index.html#projects" data-project-back>
     <span class="project-back-cta__icon" aria-hidden="true">←</span>
-    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+    <span class="project-back-cta__label">Retour à l'accueil</span>
   </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="../legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
 

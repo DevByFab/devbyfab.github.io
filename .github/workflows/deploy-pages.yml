@@ -59,6 +59,8 @@ jobs:
 
           mkdir -p .pages-out/games/infinite-botnet-reboot
           cp -a games/infinite-botnet-reboot/dist/. .pages-out/games/infinite-botnet-reboot/
+          mkdir -p .pages-out/games/infinite-botnet-reboot/dist
+          cp -a games/infinite-botnet-reboot/dist/. .pages-out/games/infinite-botnet-reboot/dist/
           touch .pages-out/.nojekyll
 
       - name: Upload Pages artifact
