@@ -1,41 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="DevByFab — Full-Stack Developer Portfolio. Web apps, CLI tools, browser extensions, and more.">
-  <title>DevByFab — Developer Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevByFab — Développeur autodidacte & Passionné de Systèmes. CTeSP Niveau 5 en Cybersécurité et Réseaux. Découvrez mes projets : AeroTabs, BoTokard, CipherVault, Infinite Botnet.">
+  <meta name="author" content="DevByFab">
+  <meta name="i18n-base" content="i18n">
+  <title>DevByFab — Développeur Autodidacte & Systèmes</title>
+  
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Performance Engine (Silent Auto-tuning) -->
+  <script src="js/performance.js"></script>
 </head>
 <body>
 
-  <!-- Animated background -->
+  <!-- Ambient background glow -->
   <div class="bg-gradient" aria-hidden="true"></div>
 
-  <!-- Header — morphs on scroll -->
+  <!-- Minimalist Header -->
   <header class="site-header" id="site-header">
     <nav class="nav-container">
-      <a href="#hero" class="logo">
-        <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="#hero" class="logo" aria-label="DevByFab Accueil">
+          <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Home</a></li>
-        <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projets</a></li>
         <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="cv.html" class="nav-cv-btn" title="Consulter le CV (PDF en PT)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Voir le CV</span>
+        </a>
+
+        <!-- Modern Smooth Language Dropdown -->
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Ouvrir le menu" aria-expanded="false">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
@@ -45,15 +86,38 @@
     <section id="hero" class="section section--hero">
       <canvas id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
       <div class="hero-content">
+        
+        <div class="hero-status-pill">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span data-i18n="home.statusBadge">Disponible · Hybride (Amarante / Porto) & Télétravail</span>
+        </div>
+
         <h1 class="hero-title" data-i18n="home.heroTitle">DevByFab</h1>
-        <p class="hero-subtitle" data-i18n="home.heroSubtitle">Full-Stack Developer & Jack of all trades</p>
-        <p class="hero-tagline" data-i18n="home.heroDesc">Turning random ideas into working tools.</p>
-        <a href="#about" class="scroll-cta" aria-label="Scroll to explore">
-          <span class="scroll-cta__text" data-i18n="home.heroExplore">Explore</span>
-          <span class="scroll-cta__arrow">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-          </span>
-        </a>
+        
+        <p class="hero-role">
+          <strong data-i18n="home.heroRole">Développeur autodidacte & Systèmes</strong>
+        </p>
+        
+        <p class="hero-desc" data-i18n="home.heroDesc">
+          J'ai 20 ans, j'apprends la programmation en solo et j'ai une formation en cybersécurité, réseaux et systèmes (CTeSP Niveau 5). Je prétends pas tout savoir, j'apprends en pratiquant et j'aime juste créer des trucs utiles.
+        </p>
+
+        <!-- Minimal Spec Chips -->
+        <div class="hero-meta-row">
+          <span class="badge badge-accent" data-i18n="home.badgeAutodidact">100% Autodidacte en Code</span>
+          <span class="badge" data-i18n="home.badgeIefp">Éligible Stage IEFP (Niveau 5 / Portugal)</span>
+          <span class="badge" data-i18n="home.badgeLanguages">Trilingue FR (Natif) · PT (Natif) · EN (B2)</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary btn-lg" data-i18n="home.btnProjects">Voir mes projets</a>
+          <a href="cv.html" class="btn btn-secondary btn-lg">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span data-i18n="home.btnCV">Voir le CV (PDF en PT)</span>
+          </a>
+          <a href="#contact" class="btn btn-ghost" data-i18n="home.btnContact">Me contacter</a>
+        </div>
+
       </div>
     </section>
 
@@ -61,258 +125,399 @@
     <section id="about" class="section section--about">
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="about.title">About Me</h2>
-          <p class="section-subtitle" data-i18n="about.subtitle">Code, coke, and systems that run.</p>
+          <h2 class="section-title" data-i18n="about.title">À propos</h2>
+          <p class="section-subtitle" data-i18n="about.subtitle">Une présentation simple et sincère, sans blabla.</p>
         </div>
 
-        <div class="about-grid">
-          <!-- Bio -->
-          <div class="about-bio" data-anim="fade-up">
-            <div class="about-bio__avatar">
-              <img src="img/Logo_Sans_Fond.png" alt="DevByFab">
+        <div class="about-grid-layout" data-anim="stagger">
+          
+          <!-- Editorial Bio Card -->
+          <article class="about-card-main glass-card" data-anim-child>
+            <div>
+              <h3 class="about-editorial-title" data-i18n="about.bioTitle">Curieux, autodidacte et bricoleur de code</h3>
+              <div class="about-editorial-body">
+                <p data-i18n="about.bioP1">
+                  Né et scolarisé en France jusqu'en seconde puis installé au Portugal, je parle couramment français et portugais, et je lis et écris l'anglais technique sans problème. Passionné par l'informatique depuis des années, j'ai tout appris en programmation tout seul : je ne prétends pas tout savoir, j'apprends en pratiquant, en résolvant des pannes et en créant des outils qui me sont utiles au quotidien.
+                </p>
+                <p data-i18n="about.bioP2">
+                  Sur le plan scolaire, j'ai validé une formation de niveau 4 en gestion d'équipements informatiques (GEI) puis un CTeSP de niveau 5 en cybersécurité, réseaux et systèmes. Grâce à mes stages, j'ai pu mettre les mains dans le cambouis : réparer des PC au composant, configurer des switchs et routeurs d'entreprise (Fortinet), et gérer des machines virtuelles sous Proxmox VE et iDRAC.
+                </p>
+              </div>
             </div>
-            <div class="about-bio__text">
-              <h3 data-i18n="about.bioTitle">Who am I?</h3>
-              <p data-i18n="about.desc">I'm 20 and I spend my time testing out new tech. I don't fit into a box: I explore, I break things, and I build them back better. My projects speak for themselves.</p>
+
+            <div style="margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid var(--border-subtle);">
+              <span class="badge badge-accent">
+                <span class="status-dot" style="background: var(--accent-light);"></span>
+                <span data-i18n="about.statusIEFP">Éligible au stage IEFP (Niveau 5 / Ativar.pt au Portugal)</span>
+              </span>
             </div>
+          </article>
+
+          <!-- Side Stack Cards (Centering with left card) -->
+          <div class="about-side-stack" data-anim-child>
+            
+            <article class="about-side-card glass-card">
+              <h4 data-i18n="about.mobilityTitle">Disponibilité & Mobilité</h4>
+              <p data-i18n="about.mobilityDesc">
+                Basé à Amarante : mobile en hybride (rayon d'1h à 1h30 : Porto, Ermesinde, Penafiel, Braga...) ou en télétravail complet.
+              </p>
+              <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge">Hybride / Télétravail</span>
+                <span class="badge">Permis B</span>
+                <span class="badge">Disponible</span>
+              </div>
+            </article>
+
+            <article class="about-side-card glass-card">
+              <h4 data-i18n="skills.languages">Langues</h4>
+              <ul style="display: flex; flex-direction: column; gap: 0.6rem; color: var(--text-secondary); font-size: 0.94rem;">
+                <li data-i18n="skills.langFR"><strong>Français :</strong> Langue maternelle / Natif (scolarité en France)</li>
+                <li data-i18n="skills.langPT"><strong>Portugais :</strong> Langue maternelle / Bilingue fluide</li>
+                <li data-i18n="skills.langEN"><strong>Anglais :</strong> B2 (Technique et conversationnel)</li>
+              </ul>
+            </article>
+
           </div>
 
-          <!-- Skills -->
-          <div class="about-card glass-card" data-anim="fade-up">
-            <h3 data-i18n="about.skillsTitle">Tech Stack</h3>
-            <div class="about-skills">
-              <span class="badge badge--tech">Python</span>
-              <span class="badge badge--tech">JavaScript</span>
-              <span class="badge badge--tech">HTML / CSS</span>
-              <span class="badge badge--tech">FastAPI</span>
-              <span class="badge badge--tech">Discord.py</span>
-              <span class="badge badge--tech">MySQL</span>
-              <span class="badge badge--tech">Supabase</span>
-              <span class="badge badge--tech">Manifest V3</span>
-              <span class="badge badge--tech">Gemini API</span>
-              <span class="badge badge--tech">Twitch API</span>
-              <span class="badge badge--tech">Git</span>
-            </div>
-          </div>
-
-          <!-- Vibe -->
-          <div class="about-card glass-card" data-anim="fade-up">
-            <h3 data-i18n="about.styleTitle">My vibe</h3>
-            <ul class="about-list">
-              <li data-i18n="about.style1">Jack of all trades</li>
-              <li data-i18n="about.style2">Self-taught</li>
-              <li data-i18n="about.style3">Efficient</li>
-              <li data-i18n="about.style4">Curious</li>
-            </ul>
-          </div>
-
-          <!-- Goals -->
-          <div class="about-card glass-card" data-anim="fade-up">
-            <h3 data-i18n="about.goalsTitle">Future Goals</h3>
-            <ul class="about-list">
-              <li data-i18n="about.goal1">Deployment of scalable SaaS solutions (Cloud/Serverless).</li>
-              <li data-i18n="about.goal2">Advanced automation and interconnected ecosystems (Webhooks/API).</li>
-              <li data-i18n="about.goal3">Deepening expertise in Cybersecurity and System Hardening.</li>
-            </ul>
-          </div>
-
-          <!-- Education & Experience -->
-          <div class="about-card glass-card" data-anim="fade-up">
-            <h3 data-i18n="about.pathTitle">Education & Experience</h3>
-            <ul class="about-list">
-              <li data-i18n="about.path1">CTeSP CRSI (Portugal): two-year higher education track in IT equipment management, cybersecurity, and networking.</li>
-              <li data-i18n="about.path2">Internship at Talhes (France) in the IT department.</li>
-              <li data-i18n="about.path3">Internship at Proxsys Solutions (Portugal) focused on IT support and systems.</li>
-            </ul>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== PROJECTS ==================== -->
+    <!-- ==================== SKILLS MATRIX ==================== -->
+    <section id="skills" class="section section--skills">
+      <div class="section-container">
+        <div class="section-header" data-anim="fade-up">
+          <h2 class="section-title" data-i18n="skills.title">Compétences Techniques</h2>
+          <p class="section-subtitle" data-i18n="skills.subtitle">Une palette complète du hardware jusqu'au cloud applicatif.</p>
+        </div>
+
+        <div class="skills-apple-grid" data-anim="stagger">
+          
+          <article class="skill-apple-card glass-card" data-anim-child>
+            <span class="skill-apple-label">Infrastructure</span>
+            <h3 class="skill-apple-title" data-i18n="skills.networks">Réseaux & Cybersécurité</h3>
+            <p class="skill-apple-desc" data-i18n="skills.networksDesc">
+              Fortinet (FortiGate, FortiSwitch), routing, VLANs, pare-feu d'entreprise, cryptographie hybride (RSA/AES), protocoles sécurisés.
+            </p>
+            <div class="skill-apple-tags">
+              <span class="badge">FortiGate</span>
+              <span class="badge">FortiSwitch</span>
+              <span class="badge">VLANs</span>
+              <span class="badge">RSA / AES</span>
+            </div>
+          </article>
+
+          <article class="skill-apple-card glass-card" data-anim-child>
+            <span class="skill-apple-label">Systèmes</span>
+            <h3 class="skill-apple-title" data-i18n="skills.virtualization">Virtualisation & Serveurs</h3>
+            <p class="skill-apple-desc" data-i18n="skills.virtualizationDesc">
+              Proxmox VE (clusters, VMs, LXC), administration à distance iDRAC (Dell/HP), Linux (Debian, Ubuntu Server), Windows Server.
+            </p>
+            <div class="skill-apple-tags">
+              <span class="badge">Proxmox VE</span>
+              <span class="badge">iDRAC</span>
+              <span class="badge">Linux Server</span>
+              <span class="badge">Win Server</span>
+            </div>
+          </article>
+
+          <article class="skill-apple-card glass-card" data-anim-child>
+            <span class="skill-apple-label">Software</span>
+            <h3 class="skill-apple-title" data-i18n="skills.code">Développement & Cloud</h3>
+            <p class="skill-apple-desc" data-i18n="skills.codeDesc">
+              JavaScript, TypeScript, Python, FastAPI, Discord.py, Supabase, APIs REST, extensions Manifest V3, Web Workers.
+            </p>
+            <div class="skill-apple-tags">
+              <span class="badge">Python</span>
+              <span class="badge">TypeScript</span>
+              <span class="badge">Supabase</span>
+              <span class="badge">Manifest V3</span>
+            </div>
+          </article>
+
+          <article class="skill-apple-card glass-card" data-anim-child>
+            <span class="skill-apple-label">Hardware</span>
+            <h3 class="skill-apple-title" data-i18n="skills.hardware">Systèmes & Maintenance</h3>
+            <p class="skill-apple-desc" data-i18n="skills.hardwareDesc">
+              Diagnostic de pannes, réparation de composants hardware, montage et déploiement de postes, maintenance de réseaux locaux.
+            </p>
+            <div class="skill-apple-tags">
+              <span class="badge">Diagnostic</span>
+              <span class="badge">Câblage LAN</span>
+              <span class="badge">Assemblage PC</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CHRONOLOGICAL TIMELINE (Oldest to Most Recent) ==================== -->
+    <section id="experience" class="section section--experience">
+      <div class="section-container">
+        <div class="section-header" data-anim="fade-up">
+          <h2 class="section-title" data-i18n="exp.title">Expériences & Formation</h2>
+          <p class="section-subtitle" data-i18n="exp.timelineTitle">Chronologie du parcours (du plus ancien au plus récent)</p>
+        </div>
+
+        <div class="chrono-timeline" data-anim="stagger">
+          <div class="chrono-track" aria-hidden="true"></div>
+
+          <!-- Step 1: Scolarité en France (Plus ancien) -->
+          <div class="chrono-item" data-anim-child>
+            <div class="chrono-node" aria-hidden="true">
+              <span class="chrono-node-dot"></span>
+            </div>
+            <article class="chrono-card glass-card">
+              <div class="chrono-meta">
+                <span class="chrono-period" data-i18n="exp.item1.period">Jusqu'en 2021</span>
+                <span class="badge">Base Académique</span>
+              </div>
+              <h3 class="chrono-title" data-i18n="exp.item1.title">Scolarité en France (jusqu'en 2nde)</h3>
+              <div class="chrono-place" data-i18n="exp.item1.place">France</div>
+              <p class="chrono-desc" data-i18n="exp.item1.desc">
+                Scolarité complète en France de la naissance à la classe de seconde (10º ano). Socle de formation générale et bilinguisme maternel natif.
+              </p>
+            </article>
+          </div>
+
+          <!-- Step 2: GEI Nível 4 & Stages ClickTech -->
+          <div class="chrono-item" data-anim-child>
+            <div class="chrono-node" aria-hidden="true">
+              <span class="chrono-node-dot"></span>
+            </div>
+            <article class="chrono-card glass-card">
+              <div class="chrono-meta">
+                <span class="chrono-period" data-i18n="exp.item2.period">2021 — 2024</span>
+                <span class="badge">Nível 4 · 3 Stages</span>
+              </div>
+              <h3 class="chrono-title" data-i18n="exp.item2.title">GEI Nível 4 & 3 Stages chez ClickTech</h3>
+              <div class="chrono-place" data-i18n="exp.item2.place">Amarante · Portugal</div>
+              <p class="chrono-desc" data-i18n="exp.item2.desc">
+                Curso Profissional de Gestão de Equipamentos Informáticos (GEI Nível 4) et 3 stages techniques en entreprise chez ClickTech : diagnostic de pannes, réparation hardware au composant, montage de postes clients et maintenance de réseaux locaux.
+              </p>
+            </article>
+          </div>
+
+          <!-- Step 3: CTeSP Nível 5 (2024 - 2026) -->
+          <div class="chrono-item" data-anim-child>
+            <div class="chrono-node" aria-hidden="true">
+              <span class="chrono-node-dot"></span>
+            </div>
+            <article class="chrono-card glass-card">
+              <div class="chrono-meta">
+                <span class="chrono-period" data-i18n="exp.item3.period">2024 — 2026</span>
+                <span class="badge badge-accent">Enseignement Supérieur (Nível 5)</span>
+              </div>
+              <h3 class="chrono-title" data-i18n="exp.item3.title">CTeSP en Cybersécurité, Réseaux et Systèmes</h3>
+              <div class="chrono-place" data-i18n="exp.item3.place">Ensino Superior Politécnico (Nível 5) · Conclu</div>
+              <p class="chrono-desc" data-i18n="exp.item3.desc">
+                Formation supérieure certifiée : architecture réseau d'entreprise, protocoles de routage, politiques de sécurité, virtualisation et administration Linux/Windows.
+              </p>
+            </article>
+          </div>
+
+          <!-- Step 4: Proxsys Solutions (Plus récent / Actuel) -->
+          <div class="chrono-item chrono-item--current" data-anim-child>
+            <div class="chrono-node" aria-hidden="true">
+              <span class="chrono-node-dot"></span>
+            </div>
+            <article class="chrono-card glass-card">
+              <div class="chrono-meta">
+                <span class="chrono-period" data-i18n="exp.item4.period">2026 (Récent)</span>
+                <span class="badge badge-accent">Stage Entreprise</span>
+              </div>
+              <h3 class="chrono-title" data-i18n="exp.item4.title">Stage Réseaux & Infrastructure IT</h3>
+              <div class="chrono-place" data-i18n="exp.item4.place">Proxsys Solutions · Ermesinde</div>
+              <p class="chrono-desc" data-i18n="exp.item4.desc">
+                Configuration et banc d'essai d'équipements d'entreprise Fortinet (FortiGate, switchs, routeurs). Administration hors-bande iDRAC (Dell/HP) et création de VMs/clusters sous Proxmox VE.
+              </p>
+            </article>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROJECTS PRESENTATION ==================== -->
     <section id="projects" class="section section--projects">
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="projects.title">Projects</h2>
-          <p class="section-subtitle" data-i18n="projects.subtitle">My playground: back-end, security, and tools out of nowhere.</p>
+          <h2 class="section-title" data-i18n="projects.title">Projets Phares</h2>
+          <p class="section-subtitle" data-i18n="projects.subtitle">Des outils réels développés en autonomie, axés sur la performance et l'utilité concrète.</p>
         </div>
 
-        <div class="bento-grid" data-anim="stagger">
-          <!-- CryoTabs — Featured large card -->
-          <article class="bento-card bento-card--wide glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">🧩</div>
-              <span class="badge badge--status badge--wip">WIP</span>
+        <div class="projects-grid" data-anim="stagger">
+          
+          <!-- AeroTabs — Featured -->
+          <article class="project-card project-card--wide glass-card" data-anim-child>
+            <div class="project-card-header">
+              <div style="display: flex; align-items: center; gap: 0.9rem;">
+                <img src="img/aerotabs_logo.png" alt="AeroTabs Logo" class="project-card-logo">
+                <span class="badge badge-accent" data-i18n="projects.card1.status">BETA BIENTÔT · SAAS ROADMAP</span>
+              </div>
+              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="color: var(--text-secondary);">
+                aerotabs.com ↗
+              </a>
             </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="projects.card1.title">CryoTabs — RAM Optimizer & Workspace Manager</h3>
-              <p class="bento-card__desc" data-i18n="projects.card1.desc">Ultra-light Manifest V3 extension (~400 KB) built to optimize RAM usage, organize tab workspaces, and evolve into a freemium cross-browser SaaS.</p>
+
+            <div>
+              <h3 class="project-card-title" data-i18n="projects.card1.title">AeroTabs — Optimiseur RAM & Gestionnaire d'Espaces</h3>
+              <p class="project-card-desc" data-i18n="projects.card1.desc">
+                Extension de navigateur (Chrome & Firefox, Manifest V3) avec mécanisme intelligent de suspension d'onglets (Tab Sleeping) pour libérer jusqu'à 80% de RAM, synchronisation cloud sécurisée via Supabase et partage éphémère de sessions chiffrées.
+              </p>
             </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Manifest V3</span>
-              <span class="badge badge--tech">Vanilla JS</span>
-              <span class="badge badge--tech">chrome.storage</span>
-              <span class="badge badge--tech">SaaS</span>
+
+            <div class="project-card-tags">
+              <span class="badge">Manifest V3</span>
+              <span class="badge">Chrome & Firefox</span>
+              <span class="badge">Supabase Cloud</span>
+              <span class="badge">Tab Sleeping</span>
+              <span class="badge">Partage Chiffré</span>
             </div>
-            <div class="bento-card__actions">
-              <a href="project/extention.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+
+            <div class="project-card-actions">
+              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                <span data-i18n="projects.visitSite">Site Officiel</span> ↗
+              </a>
+              <a href="project/extention.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
             </div>
           </article>
 
           <!-- BoTokard -->
-          <article class="bento-card glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">🃏</div>
-              <span class="badge badge--status badge--wip">WIP</span>
+          <article class="project-card project-card--half glass-card" data-anim-child>
+            <div class="project-card-header">
+              <span class="badge" data-i18n="projects.card2.status">PRODUCTION · PROXMOX VM</span>
             </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="projects.card2.title">BoTokard — Discord Community Engine</h3>
-              <p class="bento-card__desc" data-i18n="projects.card2.desc">Asynchronous Discord bot for TCG gameplay, Gemini AI interactions, moderation audit logs, Twitch operations, and audio streaming.</p>
+
+            <div>
+              <h3 class="project-card-title" data-i18n="projects.card2.title">BoTokard — Moteur Communautaire & Automatisation</h3>
+              <p class="project-card-desc" data-i18n="projects.card2.desc">
+                Bot Python asynchrone hébergé sur une VM dédiée sous Proxmox VE. Orchestration en temps réel de l'API Twitch, interactions IA Gemini, moteur de gameplay TCG et système d'audit logs avec base de données MySQL.
+              </p>
             </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Python</span>
-              <span class="badge badge--tech">Discord.py</span>
-              <span class="badge badge--tech">MySQL</span>
-              <span class="badge badge--tech">Gemini API</span>
+
+            <div class="project-card-tags">
+              <span class="badge">Python</span>
+              <span class="badge">Discord.py</span>
+              <span class="badge">Twitch API</span>
+              <span class="badge">Gemini API</span>
+              <span class="badge">Proxmox VM</span>
             </div>
-            <div class="bento-card__actions">
-              <a href="project/discordbot.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
+
+            <div class="project-card-actions">
+              <a href="project/discordbot.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
             </div>
           </article>
 
-          <!-- Python CLI -->
-          <article class="bento-card glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">🔐</div>
-              <span class="badge badge--status badge--live">LIVE</span>
+          <!-- CipherVault -->
+          <article class="project-card project-card--half glass-card" data-anim-child>
+            <div class="project-card-header">
+              <span class="badge" data-i18n="projects.card3.status">OPEN-SOURCE · SÉCURITÉ</span>
             </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="projects.card3.title">Python CLI — Hybrid Cryptography</h3>
-              <p class="bento-card__desc" data-i18n="projects.card3.desc">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
+
+            <div>
+              <h3 class="project-card-title" data-i18n="projects.card3.title">CipherVault — Chiffrement Hybride RSA / AES</h3>
+              <p class="project-card-desc" data-i18n="projects.card3.desc">
+                Outil Python de chiffrement hybride pour sécuriser fichiers et messages. Combine le chiffrement asymétrique RSA pour l'échange de clés et AES pour le traitement haute vitesse des données, avec carnet de contacts local.
+              </p>
             </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Python</span>
-              <span class="badge badge--tech">RSA</span>
-              <span class="badge badge--tech">AES</span>
-              <span class="badge badge--tech">CLI</span>
+
+            <div class="project-card-tags">
+              <span class="badge">Python</span>
+              <span class="badge">RSA 2048</span>
+              <span class="badge">AES-GCM</span>
+              <span class="badge">Keystore Local</span>
             </div>
-            <div class="bento-card__actions">
-              <a href="project/clipython.html" class="btn btn-primary btn--sm" data-i18n="projects.viewProject">View Project</a>
-              <a href="https://github.com/devbyfab" class="btn btn-ghost btn--sm" target="_blank" rel="noopener" data-i18n="projects.viewGithub">GitHub</a>
+
+            <div class="project-card-actions">
+              <a href="project/clipython.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
+              <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" data-i18n="projects.viewGithub">GitHub ↗</a>
             </div>
           </article>
+
+          <!-- The Infinite Botnet (Reboot) -->
+          <article class="project-card project-card--wide glass-card" data-anim-child>
+            <div class="project-card-header">
+              <span class="badge badge-accent" data-i18n="projects.card4.status">R&D · MOTEUR TYPESCRIPT</span>
+            </div>
+
+            <div>
+              <h3 class="project-card-title" data-i18n="projects.card4.title">The Infinite Botnet (Reboot) — Laboratoire de Simulation</h3>
+              <p class="project-card-desc" data-i18n="projects.card4.desc">
+                Moteur de simulation incrémentale complexe développé sous TypeScript et Vite. Architecture réactive optimisée avec Web Workers pour le calcul en tâche de fond, boucles déterministes et gestion d'état poussée.
+              </p>
+            </div>
+
+            <div class="project-card-tags">
+              <span class="badge">TypeScript</span>
+              <span class="badge">Vite</span>
+              <span class="badge">Web Workers</span>
+              <span class="badge">Simulation Systèmes</span>
+            </div>
+
+            <div class="project-card-actions">
+              <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm" data-i18n="projects.card4.play">Lancer le Prototype</a>
+              <a href="project/webgames.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Architecture du Simulateur</a>
+            </div>
+          </article>
+
         </div>
 
-        <div class="section-actions" data-anim="fade-up">
-          <a href="project/projects.html" class="btn btn-primary" data-i18n="projects.viewAll">View All Projects</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== WEB GAMES ==================== -->
-    <section id="webgames" class="section section--webgames">
-      <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="webgames.title">Web Games</h2>
-          <p class="section-subtitle" data-i18n="webgames.subtitle">Incremental and systems-driven browser games: simple loop, deep consequences.</p>
-        </div>
-
-        <div class="bento-grid" data-anim="stagger">
-          <article class="bento-card glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">🕸️</div>
-              <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
-            </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="webgames.card1.title">The Infinite Botnet</h3>
-              <p class="bento-card__desc" data-i18n="webgames.card1.desc">Scale a harmless script into a global botnet economy. Automation grows fast, ethics grows faster.</p>
-            </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Incremental</span>
-              <span class="badge badge--tech">Automation</span>
-              <span class="badge badge--tech">Ethics</span>
-            </div>
-            <div class="bento-card__actions">
-              <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn--sm" data-i18n="webgames.playPrototype">Play Reboot</a>
-              <a href="project/webgames.html#the-infinite-botnet" class="btn btn-ghost btn--sm" data-i18n="webgames.viewGame">View Concept</a>
-            </div>
-          </article>
-
-          <article class="bento-card glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">📉</div>
-              <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
-            </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="webgames.card2.title">SaaS-pocalypse</h3>
-              <p class="bento-card__desc" data-i18n="webgames.card2.desc">Build a tiny startup clicker that spirals into platform wars, churn storms, and survival economics.</p>
-            </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Clicker</span>
-              <span class="badge badge--tech">SaaS</span>
-              <span class="badge badge--tech">Strategy</span>
-            </div>
-            <div class="bento-card__actions">
-              <a href="project/webgames.html#saas-pocalypse" class="btn btn-primary btn--sm" data-i18n="webgames.viewGame">View Concept</a>
-            </div>
-          </article>
-
-          <article class="bento-card bento-card--wide glass-card" data-anim-child>
-            <div class="bento-card__header">
-              <div class="bento-card__icon">🧼</div>
-              <span class="badge badge--status badge--wip" data-i18n="webgames.status.concept">CONCEPT</span>
-            </div>
-            <div class="bento-card__body">
-              <h3 class="bento-card__title" data-i18n="webgames.card3.title">The Cleanest Code</h3>
-              <p class="bento-card__desc" data-i18n="webgames.card3.desc">Optimize code purity metrics until refactors become ideology. Every improvement has a hidden trade-off.</p>
-            </div>
-            <div class="bento-card__tags">
-              <span class="badge badge--tech">Optimization</span>
-              <span class="badge badge--tech">Systems</span>
-              <span class="badge badge--tech">Satire</span>
-            </div>
-            <div class="bento-card__actions">
-              <a href="project/webgames.html#the-cleanest-code" class="btn btn-primary btn--sm" data-i18n="webgames.viewGame">View Concept</a>
-            </div>
-          </article>
-        </div>
-
-        <div class="section-actions" data-anim="fade-up">
-          <a href="project/webgames.html" class="btn btn-primary" data-i18n="webgames.viewAll">View All Games</a>
+        <div style="margin-top: 3rem; text-align: center;" data-anim="fade-up">
+          <a href="project/projects.html" class="btn btn-secondary" data-i18n="projects.viewAll">Voir Tous les Projets</a>
         </div>
       </div>
     </section>
+
     <!-- ==================== CONTACT ==================== -->
     <section id="contact" class="section section--contact">
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="contact.title">Contact</h2>
-          <p class="section-subtitle" data-i18n="contact.subtitle">A question, an idea, a collaboration? Get in touch.</p>
+          <h2 class="section-title" data-i18n="contact.title">Contact & Recrutement</h2>
+          <p class="section-subtitle" data-i18n="contact.subtitle">À la recherche d'un collaborateur autonome, polyvalent et passionné ? Discutons de vos besoins.</p>
         </div>
 
-        <div class="contact-grid" data-anim="fade-up">
-          <a href="mailto:devbyfab@gmail.com" class="contact-card glass-card">
-            <div class="contact-card__icon">✉️</div>
-            <div class="contact-card__info">
-              <span class="contact-card__label" data-i18n="contact.emailLabel">Email</span>
-              <span class="contact-card__value">devbyfab@gmail.com</span>
-            </div>
+        <div class="contact-apple-grid" data-anim="fade-up">
+          
+          <a href="mailto:contact.fabiocp@gmail.com" class="contact-apple-card glass-card">
+            <span class="contact-apple-type" data-i18n="contact.workEmailLabel">Email Emploi & Recrutement</span>
+            <span class="contact-apple-val">contact.fabiocp@gmail.com</span>
+            <span class="contact-apple-note" data-i18n="contact.workEmailSub">Pour toute opportunité professionnelle</span>
           </a>
-          <a href="https://discord.com/users/devbyfab" class="contact-card glass-card" target="_blank" rel="noopener">
-            <div class="contact-card__icon">💬</div>
-            <div class="contact-card__info">
-              <span class="contact-card__label">Discord</span>
-              <span class="contact-card__value">devbyfab</span>
-            </div>
+
+          <a href="mailto:devbyfab@gmail.com" class="contact-apple-card glass-card">
+            <span class="contact-apple-type" data-i18n="contact.projEmailLabel">Email Projets & Collaborations</span>
+            <span class="contact-apple-val">devbyfab@gmail.com</span>
+            <span class="contact-apple-note" data-i18n="contact.projEmailSub">Pour l'open-source et échanges techniques</span>
           </a>
-          <a href="https://github.com/devbyfab" class="contact-card glass-card" target="_blank" rel="noopener">
-            <div class="contact-card__icon">🐙</div>
-            <div class="contact-card__info">
-              <span class="contact-card__label">GitHub</span>
-              <span class="contact-card__value">devbyfab</span>
-            </div>
+
+          <a href="https://discord.com/users/devbyfab" class="contact-apple-card glass-card" target="_blank" rel="noopener">
+            <span class="contact-apple-type" data-i18n="contact.discordLabel">Discord Direct</span>
+            <span class="contact-apple-val">devbyfab</span>
+            <span class="contact-apple-note">Messagerie instantanée technique</span>
+          </a>
+
+          <a href="https://github.com/devbyfab" class="contact-apple-card glass-card" target="_blank" rel="noopener">
+            <span class="contact-apple-type" data-i18n="contact.githubLabel">Profil GitHub</span>
+            <span class="contact-apple-val">github.com/devbyfab</span>
+            <span class="contact-apple-note">Dépôts, code source et commits</span>
+          </a>
+
+        </div>
+
+        <!-- Clean CV Download Banner -->
+        <div class="cv-apple-banner glass-card" data-anim="fade-up">
+          <div>
+            <h3 data-i18n="contact.cvBannerTitle">Consultez mon CV complet</h3>
+            <p data-i18n="contact.cvBannerDesc">Téléchargez mon curriculum vitae au format PDF (coordonnées, détails des compétences et parcours).</p>
+          </div>
+          <a href="assets/CV_Fabio_Pinto.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-lg" download>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span data-i18n="contact.cvBannerBtn">Télécharger CV (PDF)</span>
           </a>
         </div>
+
       </div>
     </section>
 
@@ -322,7 +527,11 @@
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">
+        &copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · 
+        <span data-i18n="footer.tagline">Développé avec passion · Zéro artifice, que du concret.</span> · 
+        <a href="legal.html" data-i18n="footer.legal">Mentions Légales</a>
+      </p>
     </div>
   </footer>
 

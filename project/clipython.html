@@ -1,147 +1,336 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Python CLI — Hybrid Cryptography tool by DevByFab. RSA/AES encryption for files and messages.">
+  <meta name="description" content="CipherVault : Étude technique d'un outil de chiffrement hybride RSA-2048 et AES-256-GCM développé en Python pour la sécurisation de fichiers et de messages par DevByFab.">
   <meta name="i18n-base" content="../i18n">
-  <title data-i18n="clipython.pageTitle">Python CLI — Hybrid Cryptography — DevByFab</title>
+  <title>CipherVault — Étude Technique Cryptographique | DevByFab</title>
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <script src="../js/performance.js"></script>
 </head>
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
+  
   <header class="site-header scrolled">
     <nav class="nav-container">
-      <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="../index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="../index.html#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="../index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="../index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projets</a></li>
         <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="../cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
+
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1 data-i18n="clipython.title">Python CLI — Hybrid Cryptography</h1>
-      <p class="page-hero__subtitle" data-i18n="clipython.subtitle">Command-line tool for hybrid file and message encryption, with RSA/AES key management.</p>
-      <div class="page-hero__badges">
-        <span class="badge badge--tech">Python</span>
-        <span class="badge badge--tech">RSA</span>
-        <span class="badge badge--tech">AES</span>
-        <span class="badge badge--tech">CLI</span>
-        <span class="badge badge--status badge--wip" data-i18n="clipython.status.wip">WIP</span>
+    <section class="tech-hero">
+      <div class="tech-breadcrumb">
+        <a href="../index.html">Accueil</a>
+        <span>/</span>
+        <a href="projects.html">Projets</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">CipherVault</span>
+      </div>
+
+      <div class="tech-hero-icon" style="font-size: 2rem;">
+        🔐
+      </div>
+
+      <h1 class="section-title">CipherVault : Chiffrement Hybride RSA / AES</h1>
+      <p class="section-subtitle">
+        Application Python de sécurité implémentant un pipeline de chiffrement hybride pour échanger et sceller des fichiers sensibles sans intermédiaire.
+      </p>
+
+      <div class="tech-spec-bar">
+        <span class="badge badge-accent">Open-Source</span>
+        <span class="badge">Python 3</span>
+        <span class="badge">RSA-2048 (OAEP)</span>
+        <span class="badge">AES-256 (GCM Authentifié)</span>
+      </div>
+
+      <div class="tech-actions-bar">
+        <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0 1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          Dépôt GitHub ↗
+        </a>
+        <a href="projects.html" class="btn btn-secondary">
+          ← Tous les projets
+        </a>
       </div>
     </section>
 
-    <section class="clipython-overview" data-anim="fade-up">
-      <article class="project-card project-card--cli-overview">
-        <div class="project-card__header">
-          <div class="project-card__icon">🔐</div>
-          <span class="badge badge--status badge--wip" data-i18n="clipython.status.wip">WIP</span>
+    <section class="section-container" style="padding: 0 1.5rem 5rem;">
+      
+      <!-- 1. Le Contexte Sincère -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            1. Pourquoi ce projet ? Comprendre la cryptographie en profondeur
+          </h2>
+          <span class="badge">Objectif d'Apprentissage</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="clipython.overviewTitle">A compact terminal workflow for secure file handling</h2>
-          <p class="project-card__desc" data-i18n="clipython.overviewDesc">The CLI keeps the flow direct: generate keys, encrypt payloads, and restore them with a predictable sequence that avoids unnecessary noise.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech" data-i18n="clipython.tag.hybridEncryption">Hybrid Encryption</span>
-          <span class="badge badge--tech" data-i18n="clipython.tag.keyStorage">Key Storage</span>
-          <span class="badge badge--tech" data-i18n="clipython.tag.terminalUx">Terminal UX</span>
-          <span class="badge badge--tech" data-i18n="clipython.tag.security">Security</span>
-        </div>
-      </article>
-    </section>
-
-    <section class="clipython-grid" data-anim="stagger">
-      <article class="project-card project-card--cli-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🗝️</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="clipython.m1.title">1. Hybrid Encryption Core</h2>
-          <p class="project-card__desc" data-i18n="clipython.m1.desc">RSA protects the exchange while AES handles the payload. The workflow stays explicit from key generation to decryption.</p>
-          <ul class="detail-list">
-            <li data-i18n="clipython.m1.i1">RSA-2048 handles secure key exchange before any payload work starts.</li>
-            <li data-i18n="clipython.m1.i2">AES-256-CBC keeps bulk encryption fast and practical for real files.</li>
-            <li data-i18n="clipython.m1.i3">Each step is staged so the security flow stays deterministic and easy to reason about.</li>
-          </ul>
-        </div>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary);">
+          Pendant ma formation en cybersécurité et réseaux, nous avons étudié les principes théoriques de la cryptographie : les clés publiques et privées, les fonctions de hachage et les chiffrements par bloc. Mais voir des formules mathématiques au tableau ne suffit pas pour comprendre comment un logiciel protège réellement des données sur un disque dur.
+        </p>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary); margin-top: 0.8rem;">
+          J'ai codé CipherVault pour manipuler directement les primitives cryptographiques réelles en Python : générer des paires de clés valides, empaqueter des fichiers en binaire, gérer les vecteurs d'initialisation (IV) et vérifier les tags d'intégrité sans utiliser d'outils propriétaires fermés.
+        </p>
       </article>
 
-      <article class="project-card project-card--cli-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🗂️</div>
+      <!-- 2. Schéma d'Architecture & Flux -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            2. Pipeline Cryptographique Hybride
+          </h2>
+          <span class="badge badge-accent">Schéma RSA + AES</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="clipython.m2.title">2. File & Message Workflow</h2>
-          <p class="project-card__desc" data-i18n="clipython.m2.desc">Text and binary files use the same entry points, so the CLI stays compact even when switching targets.</p>
-          <ul class="detail-list">
-            <li data-i18n="clipython.m2.i1">Encrypt and decrypt short messages without changing the overall workflow.</li>
-            <li data-i18n="clipython.m2.i2">Handle binary files through the same interface for a consistent user path.</li>
-            <li data-i18n="clipython.m2.i3">Keep validation and error handling visible instead of hiding failures behind abstractions.</li>
-          </ul>
+        
+        <p class="about-card-desc" style="color: var(--text-secondary);">
+          Le chiffrement hybride résout le dilemme classique : RSA est sécurisé pour l'échange de clés mais trop lent pour de gros fichiers ; AES est ultra-rapide mais nécessite un secret partagé.
+        </p>
+
+        <div class="flow-diagram">
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 1</div>
+            <div class="flow-node-title">Clé de Session AES</div>
+            <div class="flow-node-desc">
+              Génération d'une clé symétrique éphémère de 256 bits (32 octets) et d'un vecteur d'initialisation aléatoire (IV de 96 bits) via un générateur CSPRNG.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 2</div>
+            <div class="flow-node-title">Chiffrement Payload</div>
+            <div class="flow-node-desc">
+              Le fichier (image, texte, PDF) est chiffré par flux avec AES-256 en mode GCM (Galois/Counter Mode). Le mode produit à la fois le chiffré et un tag d'authentification de 128 bits.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 3</div>
+            <div class="flow-node-title">Scellement RSA</div>
+            <div class="flow-node-desc">
+              La clé éphémère AES de 32 octets est chiffrée avec la clé publique RSA-2048 du destinataire (rembourrage OAEP avec hachage SHA-256).
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 4</div>
+            <div class="flow-node-title">Conteneur .cvault</div>
+            <div class="flow-node-desc">
+              Assemblage binaire : Magic Header (<code>CVLT</code>) + Clé AES chiffrée + IV + Tag d'authentification + Données chiffrées.
+            </div>
+          </div>
         </div>
       </article>
 
-      <article class="project-card project-card--cli-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🔑</div>
+      <!-- 3. Défis Techniques Rencontrés & Solutions -->
+      <div class="section-header" style="text-align: left; margin: 3rem 0 1.5rem;" data-anim="fade-up">
+        <h2 class="section-title" style="font-size: 1.8rem;">3. Les Défis Techniques Rencontrés & Comment je les ai résolus</h2>
+        <p class="section-subtitle" style="text-align: left;">Les pièges courants de la cryptographie appliquée et les choix d'implémentation.</p>
+      </div>
+
+      <div class="bento-grid" data-anim="stagger">
+        
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 01 · Limite de taille RSA</span>
+          <h3 class="challenge-title">Pourquoi ne pas tout chiffrer directement avec RSA ?</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Une clé RSA de 2048 bits ne peut mathématiquement pas chiffrer un message plus grand que son module. Avec le schéma de padding sécurisé OAEP (SHA-256), la charge utile maximale est de seulement 214 octets. Impossible de chiffrer une photo ou un document directement.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Architecture hybride standard : RSA ne chiffre QUE la clé de session AES (qui fait 32 octets, largement sous les 214 octets limites). AES chiffre ensuite le fichier réel sans limite de taille et à la vitesse native du processeur.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 02 · Intégrité des données</span>
+          <h3 class="challenge-title">Garantir que le fichier n'a pas été corrompu ou altéré</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Le mode AES classique (CBC) ne garantit que la confidentialité, pas l'intégrité. Un attaquant peut modifier des octets dans le fichier chiffré sans que le déchiffrement ne génère d'erreur visible (attaques par bit-flipping ou padding oracle).
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Adoption exclusive d'AES-GCM (chiffrement authentifié avec données associées - AEAD). Si ne serait-ce qu'un seul bit du fichier est modifié en cours de route, le tag d'authentification de 16 octets échoue immédiatement et lève une exception <code>InvalidTag</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 03 · Format Fichier Binaire</span>
+          <h3 class="challenge-title">Empaqueter toutes les pièces dans un format propre et portable</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Pour déchiffrer, le destinataire a besoin de la clé de session scellée, de l'IV, du tag d'authentification et du flux chiffré. Séparer ces éléments dans plusieurs fichiers était confus pour l'utilisateur.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Création d'une structure binaire unique avec le module Python <code>struct</code> : 4 octets d'en-tête d'identification (<code>CVLT</code>), 2 octets pour la taille de la clé RSA, le bloc de clé scellé, 12 octets d'IV, 16 octets de tag et le flux chiffré complet.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 04 · Sécurité des clés</span>
+          <h3 class="challenge-title">Stockage et export des clés au format standard PEM</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Stocker des clés privées en texte brut sur le disque dur est une faille majeure de sécurité si la machine est compromise ou prêtée.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Export standardisé PKCS#8 avec chiffrement de la clé privée par mot de passe utilisateur (dérivation de clé PBKDF2 HMAC-SHA256 avec sel aléatoire) et export public X.509 pour le partage facile entre correspondants.
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- 4. Extrait de Code Réel -->
+      <article class="code-card" data-anim="fade-up">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="code-dot code-dot--red"></span>
+            <span class="code-dot code-dot--yellow"></span>
+            <span class="code-dot code-dot--green"></span>
+          </div>
+          <span class="code-filename">ciphervault/crypto/hybrid_engine.py</span>
+          <span class="code-lang-tag">Python (cryptography)</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="clipython.m3.title">3. Key Management & Keystore</h2>
-          <p class="project-card__desc" data-i18n="clipython.m3.desc">Generate, export, import, and organize key pairs for repeatable secure sessions.</p>
-          <ul class="detail-list">
-            <li data-i18n="clipython.m3.i1">Create RSA key pairs from the CLI without leaving the workflow.</li>
-            <li data-i18n="clipython.m3.i2">Export and import keys to support reusable sessions and multiple environments.</li>
-            <li data-i18n="clipython.m3.i3">Keep a structured keystore so future automation stays predictable.</li>
-          </ul>
-        </div>
+        <pre class="code-content"><code><span class="c-kw">import</span> os, struct
+<span class="c-kw">from</span> cryptography.hazmat.primitives.ciphers.aead <span class="c-kw">import</span> AESGCM
+<span class="c-kw">from</span> cryptography.hazmat.primitives.asymmetric <span class="c-kw">import</span> padding
+<span class="c-kw">from</span> cryptography.hazmat.primitives <span class="c-kw">import</span> hashes
+
+<span class="c-kw">def</span> <span class="c-fn">encrypt_hybrid_container</span>(payload_bytes: <span class="c-var">bytes</span>, recipient_rsa_public_key) -> <span class="c-var">bytes</span>:
+    <span class="c-comment"># 1. Génération d'une clé éphémère AES-256 et d'un vecteur d'initialisation IV (96 bits)</span>
+    aes_session_key = AESGCM.generate_key(bit_length=<span class="c-num">256</span>)
+    iv = os.urandom(<span class="c-num">12</span>)
+
+    <span class="c-comment"># 2. Chiffrement authentifié du contenu avec AES-GCM (produit ciphertext + tag 16B)</span>
+    aesgcm = AESGCM(aes_session_key)
+    encrypted_payload = aesgcm.encrypt(iv, payload_bytes, associated_data=<span class="c-var">None</span>)
+
+    <span class="c-comment"># 3. Scellement asymétrique de la clé AES avec la clé publique RSA (Padding OAEP sécurisé)</span>
+    encrypted_session_key = recipient_rsa_public_key.encrypt(
+        aes_session_key,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=<span class="c-var">None</span>
+        )
+    )
+
+    <span class="c-comment"># 4. Construction du conteneur binaire CVLT : [MAGIC 4B][KEY_LEN 2B][ENC_KEY][IV 12B][PAYLOAD]</span>
+    magic_header = <span class="c-str">b"CVLT"</span>
+    key_length = len(encrypted_session_key)
+    header_pack = struct.pack(<span class="c-str">"&gt;4sH"</span>, magic_header, key_length)
+
+    <span class="c-kw">return</span> header_pack + encrypted_session_key + iv + encrypted_payload</code></pre>
       </article>
 
-      <article class="project-card project-card--cli-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">💻</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="clipython.m4.title">4. Terminal UX & Feedback</h2>
-          <p class="project-card__desc" data-i18n="clipython.m4.desc">Menus, progress cues, and color-coded output make the tool readable even in long sessions.</p>
-          <ul class="detail-list">
-            <li data-i18n="clipython.m4.i1">Use compact menus so the CLI stays fast to navigate.</li>
-            <li data-i18n="clipython.m4.i2">Surface progress and state clearly during longer operations.</li>
-            <li data-i18n="clipython.m4.i3">Keep errors readable so debugging stays practical instead of opaque.</li>
-          </ul>
-        </div>
+      <!-- 5. Bilan & Ce que j'ai appris -->
+      <article class="takeaways-box glass-card" data-anim="fade-up">
+        <h3 class="takeaways-title">Ce que ce projet m'a appris en autodidacte</h3>
+        <ul class="takeaways-list">
+          <li>• <strong>Ne jamais réinventer les algorithmes de chiffrement :</strong> Utiliser des bibliothèques cryptographiques reconnues et testées (comme <code>cryptography</code> en Python) plutôt que d'essayer d'implémenter soi-même les calculs mathématiques dans son coin.</li>
+          <li>• <strong>L'importance du chiffrement authentifié (AEAD) :</strong> La confidentialité seule ne sert à rien si on ne peut pas prouver que le message n'a pas été modifié. GCM est indispensable.</li>
+          <li>• <strong>La manipulation des flux binaires :</strong> Gérer des formats de paquets octet par octet avec des en-têtes et des tailles dynamiques donne une vision beaucoup plus claire de ce qui voyage sur le réseau ou est écrit sur le disque.</li>
+        </ul>
       </article>
+
     </section>
   </main>
 
-  <a class="project-back-cta" href="../index.html#projects" data-project-back>
+  <a class="project-back-cta" href="projects.html" data-project-back>
     <span class="project-back-cta__icon" aria-hidden="true">←</span>
-    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+    <span class="project-back-cta__label">Retour aux Projets</span>
   </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="../legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>

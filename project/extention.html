@@ -1,195 +1,331 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-perf="turbo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="CryoTabs portfolio: ultra-light RAM optimizer and workspace manager extension built with Manifest V3 and a SaaS-ready architecture.">
+  <meta name="description" content="AeroTabs : Étude technique de l'extension de navigateur Manifest V3 pour la libération de mémoire RAM (Tab Sleeping), la synchronisation cloud Supabase et le partage éphémère chiffré par DevByFab.">
   <meta name="i18n-base" content="../i18n">
-  <title data-i18n="cryo.pageTitle">CryoTabs — DevByFab</title>
+  <title>AeroTabs — Étude Technique & Architecture | DevByFab</title>
   <link rel="icon" type="image/png" href="../img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <script src="../js/performance.js"></script>
 </head>
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
+  
   <header class="site-header scrolled">
     <nav class="nav-container">
-      <a href="../index.html" class="logo">
-        <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
-      </a>
-      <button class="burger-menu" aria-label="Open menu">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </button>
+      <div class="nav-left">
+        <a href="../index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="../img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+          <span class="logo-name">DevByFab</span>
+        </a>
+      </div>
+
       <ul class="nav-links">
-        <li><a href="../index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="../index.html#webgames" class="nav-link" data-i18n="nav.webgames">Web Games</a></li>
+        <li><a href="../index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="../index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
+        <li><a href="../index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
+        <li><a href="../index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
+        <li><a href="../index.html#projects" class="nav-link active" data-i18n="nav.projects">Projets</a></li>
         <li><a href="../index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+
+      <div class="nav-right">
+        <a href="../cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
+
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </div>
     </nav>
   </header>
 
   <main>
-    <section class="page-hero">
-      <h1 data-i18n="cryo.title">CryoTabs: RAM Optimizer & Workspace Manager</h1>
-      <p class="page-hero__subtitle" data-i18n="cryo.subtitle">An ultra-light Chromium extension (~400 KB), built with Manifest V3 to reduce memory pressure and structure tab-heavy workflows.</p>
+    <section class="tech-hero">
+      <div class="tech-breadcrumb">
+        <a href="../index.html">Accueil</a>
+        <span>/</span>
+        <a href="projects.html">Projets</a>
+        <span>/</span>
+        <span style="color: var(--text-primary);">AeroTabs</span>
+      </div>
+
+      <div class="tech-hero-icon">
+        <img src="../img/aerotabs_logo.png" alt="AeroTabs Logo">
+      </div>
+
+      <h1 class="section-title">AeroTabs : Architecture & Coulisses Techniques</h1>
+      <p class="section-subtitle">
+        Extension de navigateur moderne sous Manifest V3 conçue pour soulager la RAM en mettant les onglets en veille, avec synchronisation Supabase et partage chiffré.
+      </p>
+
+      <div class="tech-spec-bar">
+        <span class="badge badge-accent">Beta en approche</span>
+        <span class="badge">Chrome & Firefox (MV3)</span>
+        <span class="badge">TypeScript & Supabase</span>
+        <span class="badge">Zero-Knowledge Sharing</span>
+      </div>
+
+      <div class="tech-actions-bar">
+        <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Visiter aerotabs.com ↗
+        </a>
+        <a href="projects.html" class="btn btn-secondary">
+          ← Tous les projets
+        </a>
+      </div>
     </section>
 
-    <section class="cryotabs-overview" data-anim="fade-up">
-      <article class="project-card project-card--cryo-overview">
-        <div class="project-card__header">
-          <div class="project-card__icon">🧊</div>
-          <span class="badge badge--status badge--live" data-i18n="cryo.overviewBadge">PERFORMANCE CORE</span>
+    <section class="section-container" style="padding: 0 1.5rem 5rem;">
+      
+      <!-- 1. Le Contexte Sincère -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            1. Pourquoi ce projet ? Le problème concret
+          </h2>
+          <span class="badge">Motivation Initiale</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.overviewTitle">Performance and privacy first, SaaS-ready by design</h2>
-          <p class="project-card__desc" data-i18n="cryo.overviewDesc">CryoTabs avoids heavy frameworks and intrusive injection patterns. V1 focuses on local reliability and low memory usage, while the internal data model is already prepared for a Freemium cloud sync architecture in V2.</p>
-        </div>
-        <div class="project-card__tags">
-          <span class="badge badge--tech">Manifest V3</span>
-          <span class="badge badge--tech">Vanilla JS</span>
-          <span class="badge badge--tech">Service Worker</span>
-          <span class="badge badge--tech">chrome.storage</span>
-          <span class="badge badge--tech">i18n</span>
-          <span class="badge badge--tech">SaaS Roadmap</span>
-        </div>
-      </article>
-    </section>
-
-    <section class="cryotabs-grid" data-anim="stagger">
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🚨</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.problem.title">Market Problem: Heavy tab managers that waste RAM</h2>
-          <p class="project-card__desc" data-i18n="cryo.problem.desc">Most competitors became bloated products: large payloads, aggressive scripts, and fragile async sync logic.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.problem.i1">Many solutions consume several MB and inject logic into every page context.</li>
-            <li data-i18n="cryo.problem.i2">The extension itself can consume more resources than it actually saves.</li>
-            <li data-i18n="cryo.problem.i3">Async Chrome APIs frequently cause tab duplication bugs during state synchronization.</li>
-            <li data-i18n="cryo.problem.i4">Users need reliability, speed, and control without cloud lock-in from day one.</li>
-          </ul>
-        </div>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary);">
+          Comme beaucoup de développeurs ou d'étudiants en veille technique, j'ouvre constamment 30 à 60 onglets en même temps (docs, GitHub, StackOverflow, vidéos de cours...). Sur un PC portable avec 8 ou 16 Go de RAM, le navigateur devient vite un gouffre et mange plus de 5 Go de mémoire.
+        </p>
+        <p class="about-card-desc" style="line-height: 1.7; font-size: 1rem; color: var(--text-secondary); margin-top: 0.8rem;">
+          J'ai testé les extensions existantes : la plupart sont abandonnées depuis le passage obligatoire à <strong>Manifest V3</strong>, d'autres injectent des trackers publicitaires ou plantent au redémarrage en perdant la session. J'ai donc décidé de coder ma propre solution, propre, légère, sans bloatware, et d'en faire un projet complet avec un vrai backend.
+        </p>
       </article>
 
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🗂️</div>
+      <!-- 2. Schéma d'Architecture & Flux -->
+      <article class="blueprint-card glass-card" data-anim="fade-up">
+        <div class="blueprint-header">
+          <h2 class="blueprint-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            2. Architecture du système & Cycle de vie
+          </h2>
+          <span class="badge badge-accent">Flux MV3 & Cloud</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m1.title">1. Zero-Duplication Workspace Engine</h2>
-          <p class="project-card__desc" data-i18n="cryo.m1.desc">Persistent workspaces are backed by strict local synchronization rules to keep tab state coherent.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m1.i1">Logical workspace grouping with persistence in chrome.storage.local.</li>
-            <li data-i18n="cryo.m1.i2">Lifecycle-aware listeners track creation, updates, moves, and closures.</li>
-            <li data-i18n="cryo.m1.i3">State mismatch handling prevents corruption when tabs disappear mid-save.</li>
-            <li data-i18n="cryo.m1.i4">Deduplication safeguards block duplicate tab records during concurrent events.</li>
-          </ul>
-        </div>
-      </article>
+        
+        <p class="about-card-desc" style="color: var(--text-secondary);">
+          L'extension fonctionne selon un modèle asynchrone non-bloquant pour ne jamais ralentir le navigateur de l'utilisateur :
+        </p>
 
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">⚙️</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m2.title">2. Smart Sleep Engine for RAM Optimization</h2>
-          <p class="project-card__desc" data-i18n="cryo.m2.desc">Inactive tabs are discarded in the background to reduce memory pressure while preserving user flow.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m2.i1">Automated tab discard for inactive sessions and hidden workloads.</li>
-            <li data-i18n="cryo.m2.i2">Domain whitelist for critical web apps that must stay fully active.</li>
-            <li data-i18n="cryo.m2.i3">Regex whitelist mode for power users with advanced matching needs.</li>
-            <li data-i18n="cryo.m2.i4">Time-based scheduling to enable or disable optimization by hour.</li>
-          </ul>
+        <div class="flow-diagram">
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 1</div>
+            <div class="flow-node-title">Surveillance d'inactivité</div>
+            <div class="flow-node-desc">
+              Le Service Worker écoute les événements de navigation (<code>chrome.tabs.onActivated</code>, <code>chrome.alarms</code>) et traque le timestamp de dernière consultation.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 2</div>
+            <div class="flow-node-title">Filtre & Sécurité</div>
+            <div class="flow-node-desc">
+              Vérification stricte : si l'onglet joue de l'audio, a un formulaire en cours ou est épinglé, il est protégé et n'est jamais suspendu.
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 3</div>
+            <div class="flow-node-title">Mise en veille (Sleeping)</div>
+            <div class="flow-node-desc">
+              Sauvegarde de l'état (URL, titre, favicon, scroll) dans <code>chrome.storage.local</code>, puis déchargement de la mémoire via une page tampon minimaliste (&lt;15 Ko).
+            </div>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-node-step">Étape 4</div>
+            <div class="flow-node-title">Sync Cloud (Optionnelle)</div>
+            <div class="flow-node-desc">
+              Synchronisation asynchrone avec Supabase (PostgreSQL RLS) avec gestion des conflits offline-first pour retrouver ses espaces de travail sur un autre PC.
+            </div>
+          </div>
         </div>
       </article>
 
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🛟</div>
+      <!-- 3. Défis Techniques Rencontrés & Solutions -->
+      <div class="section-header" style="text-align: left; margin: 3rem 0 1.5rem;" data-anim="fade-up">
+        <h2 class="section-title" style="font-size: 1.8rem;">3. Les Défis Techniques Rencontrés & Comment je les ai résolus</h2>
+        <p class="section-subtitle" style="text-align: left;">Pas de baguette magique : des bugs concrets, de la documentation lue attentivement et des solutions pragmatiques.</p>
+      </div>
+
+      <div class="bento-grid" data-anim="stagger">
+        
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 01 · Cycle de vie MV3</span>
+          <h3 class="challenge-title">Le Service Worker qui s'arrête toutes les 30 secondes</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Contrairement à Manifest V2 qui permettait un script d'arrière-plan permanent, Manifest V3 détruit le Service Worker après ~30 secondes d'inactivité. Toutes les variables en mémoire RAM disparaissaient subitement.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Migration vers une architecture 100% sans état (stateless) : persistance des timestamps dans <code>chrome.storage.local</code> et réveil cadencé avec l'API <code>chrome.alarms</code> qui survit aux arrêts du worker.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 02 · Préservation UX</span>
+          <h3 class="challenge-title">Restauration instantanée de l'onglet sans perdre la position</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Quand l'utilisateur clique sur un onglet suspendu, il ne veut pas voir une page blanche qui recharge lentement depuis zéro au début de l'article en perdant son scroll.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Capture des métadonnées légères avant la suspension et injection d'un micro-loader inline. Au clic, l'URL réelle est réinjectée avec un paramètre d'ancrage et restauration automatique du défilement.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 03 · Données & Offline</span>
+          <h3 class="challenge-title">Synchronisation Cloud sans casser le mode hors-ligne</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Si la connexion Internet coupe dans le train ou si le serveur Supabase répond lentement, l'extension ne doit sous aucun prétexte bloquer l'ouverture d'un onglet.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Pattern « Cache-First » : toute modification est écrite instantanément dans le stockage local du navigateur. Une file d'attente (sync queue) rejoue ensuite les deltas vers Supabase dès que le statut <code>navigator.onLine</code> repasse à vrai.
+            </p>
+          </div>
+        </article>
+
+        <article class="challenge-card glass-card" data-anim-child>
+          <span class="challenge-badge">Défi 04 · Sécurité & Partage</span>
+          <h3 class="challenge-title">Partager un groupe d'onglets sans que le serveur lise les URLs</h3>
+          
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--problem">Le Problème :</div>
+            <p class="challenge-text">
+              Les onglets partagés peuvent contenir des URLs sensibles (tokens temporaires, recherches privées). Stocker ces URLs en clair dans une base de données cloud posait un gros problème éthique.
+            </p>
+          </div>
+
+          <div class="challenge-section-sub">
+            <div class="challenge-subhead challenge-subhead--solution">Ma Solution :</div>
+            <p class="challenge-text">
+              Chiffrement AES-GCM côté client avec clé générée à la volée. La clé est placée dans le fragment de l'URL (<code>#key=...</code>). Comme le hash n'est jamais envoyé au serveur HTTP, le serveur Supabase ne stocke que du bruit incompréhensible (zero-knowledge).
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- 4. Extrait de Code Réel -->
+      <article class="code-card" data-anim="fade-up">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="code-dot code-dot--red"></span>
+            <span class="code-dot code-dot--yellow"></span>
+            <span class="code-dot code-dot--green"></span>
+          </div>
+          <span class="code-filename">src/background/tab-sleep-manager.ts</span>
+          <span class="code-lang-tag">TypeScript</span>
         </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m3.title">3. Known Good State Snapshot Recovery</h2>
-          <p class="project-card__desc" data-i18n="cryo.m3.desc">A panic-safe restore path lets users recover a fully functional workspace state in one click.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m3.i1">Manual recovery button to revert from bad edits or accidental cleanup.</li>
-            <li data-i18n="cryo.m3.i2">Quota-aware design respects the 5 MB storage limit from Chrome.</li>
-            <li data-i18n="cryo.m3.i3">Auto-clean policy keeps only one snapshot by replacing the previous backup.</li>
-            <li data-i18n="cryo.m3.i4">Maximum safety for the user with minimal storage footprint.</li>
-          </ul>
-        </div>
+        <pre class="code-content"><code><span class="c-comment">// Logique simplifiée de décision de mise en veille d'un onglet inactif</span>
+<span class="c-kw">export async function</span> <span class="c-fn">evaluateTabForSleep</span>(tab: <span class="c-var">chrome.tabs.Tab</span>, thresholdMs: <span class="c-num">number</span>): <span class="c-kw">Promise</span>&lt;<span class="c-num">boolean</span>&gt; {
+  <span class="c-comment">// 1. Ne jamais suspendre un onglet actif ou en cours de lecture média</span>
+  <span class="c-kw">if</span> (tab.active || tab.audible || tab.pinned) {
+    <span class="c-kw">return false</span>;
+  }
+
+  <span class="c-comment">// 2. Protéger les pages internes du navigateur (chrome://, about:)</span>
+  <span class="c-kw">if</span> (!tab.url || tab.url.startsWith(<span class="c-str">'chrome://'</span>) || tab.url.startsWith(<span class="c-str">'edge://'</span>)) {
+    <span class="c-kw">return false</span>;
+  }
+
+  <span class="c-comment">// 3. Récupérer le timestamp du dernier accès stocké dans chrome.storage.local</span>
+  <span class="c-kw">const</span> { tabAccessMap = {} } = <span class="c-kw">await</span> chrome.storage.local.get(<span class="c-str">'tabAccessMap'</span>);
+  <span class="c-kw">const</span> lastAccessed = tabAccessMap[tab.id!] || tab.lastAccessed || Date.now();
+  <span class="c-kw">const</span> inactiveDuration = Date.now() - lastAccessed;
+
+  <span class="c-comment">// 4. Déclencher le replacement si le seuil d'inactivité est dépassé</span>
+  <span class="c-kw">if</span> (inactiveDuration >= thresholdMs) {
+    <span class="c-kw">await</span> <span class="c-fn">suspendTab</span>(tab);
+    <span class="c-kw">return true</span>;
+  }
+
+  <span class="c-kw">return false</span>;
+}</code></pre>
       </article>
 
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🎛️</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m4.title">4. Progressive Disclosure UI/UX</h2>
-          <p class="project-card__desc" data-i18n="cryo.m4.desc">The interface is intentionally compact: essential controls first, advanced controls on demand.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m4.i1">Main popup limited to 6 essential actions for low-friction operation.</li>
-            <li data-i18n="cryo.m4.i2">Native dark/light adaptation based on system preferences.</li>
-            <li data-i18n="cryo.m4.i3">Advanced parameters isolated in dedicated dropdown sections.</li>
-            <li data-i18n="cryo.m4.i4">Built-in i18n with automatic language detection and 3-language support.</li>
-          </ul>
-        </div>
+      <!-- 5. Bilan & Ce que j'ai appris -->
+      <article class="takeaways-box glass-card" data-anim="fade-up">
+        <h3 class="takeaways-title">Ce que ce projet m'a appris en autodidacte</h3>
+        <ul class="takeaways-list">
+          <li>• <strong>L'architecture asynchrone stricte :</strong> Manipuler les APIs du navigateur sans figer l'interface m'a forcé à maîtriser les Promises, les queues d'exécution et les contraintes de mémoire.</li>
+          <li>• <strong>Penser sécurité dès le départ :</strong> Travailler sur le chiffrement côté client (Web Crypto API) m'a montré comment concevoir une application où le serveur ne sait rien des données de l'utilisateur.</li>
+          <li>• <strong>Rester pragmatique :</strong> Pas besoin d'un framework lourd de 2 Mo en tâche de fond pour une extension ; le JavaScript vanilla et le DOM natif restent la solution la plus rapide et la plus économe en énergie.</li>
+        </ul>
       </article>
 
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🛠️</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m5.title">5. Lightweight Stack & Code Quality Discipline</h2>
-          <p class="project-card__desc" data-i18n="cryo.m5.desc">The implementation favors deterministic behavior, low overhead, and long-term maintainability.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m5.i1">HTML5, CSS3, and Vanilla JavaScript (ES6+) without heavy frameworks.</li>
-            <li data-i18n="cryo.m5.i2">Strict Manifest V3 architecture with ephemeral service worker lifecycle.</li>
-            <li data-i18n="cryo.m5.i3">Approximate package size of 400 KB, significantly lighter than typical alternatives.</li>
-            <li data-i18n="cryo.m5.i4">Static analysis and cleanup via SonarQube and ESLint, including dead code removal and leak prevention.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="project-card project-card--cryo-module" data-anim-child>
-        <div class="project-card__header">
-          <div class="project-card__icon">🚀</div>
-        </div>
-        <div class="project-card__body">
-          <h2 class="project-card__title" data-i18n="cryo.m6.title">6. SaaS V2 Roadmap: Cloud Sync & Premium Layer</h2>
-          <p class="project-card__desc" data-i18n="cryo.m6.desc">V1 already embeds sync-ready markers to support a smooth transition to a cross-device freemium cloud model.</p>
-          <ul class="cryotabs-list">
-            <li data-i18n="cryo.m6.i1">Cross-browser and cross-device workspace sync across Chromium environments.</li>
-            <li data-i18n="cryo.m6.i2">Google OAuth for passwordless, low-friction secure authentication.</li>
-            <li data-i18n="cryo.m6.i3">Supabase PostgreSQL backend with TLS in transit, encryption at rest, and RLS data isolation.</li>
-            <li data-i18n="cryo.m6.i4">Public one-click workspace sharing links for viral adoption scenarios.</li>
-            <li data-i18n="cryo.m6.i5">Monetization planned with Lemon Squeezy as Merchant of Record.</li>
-          </ul>
-        </div>
-      </article>
     </section>
   </main>
 
-  <a class="project-back-cta" href="../index.html#projects" data-project-back>
+  <a class="project-back-cta" href="projects.html" data-project-back>
     <span class="project-back-cta__icon" aria-hidden="true">←</span>
-    <span class="project-back-cta__label" data-i18n="projects.backProjects">Back to Projects</span>
+    <span class="project-back-cta__label">Retour aux Projets</span>
   </a>
 
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="../legal.html" data-i18n="footer.legal">Legal Notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="../legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
