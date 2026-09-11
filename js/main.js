@@ -70,8 +70,12 @@
         var target = document.querySelector(id);
         if (!target) return;
         e.preventDefault();
-        var top = target.getBoundingClientRect().top + window.pageYOffset - 75;
-        window.scrollTo({ top: top, behavior: 'smooth' });
+        if (window._lenis) {
+          window._lenis.scrollTo(target, { offset: -80 });
+        } else {
+          var top = target.getBoundingClientRect().top + window.pageYOffset - 75;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
       });
     });
   }
