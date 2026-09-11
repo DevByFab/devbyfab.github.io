@@ -101,7 +101,7 @@
       var val = item.getAttribute('data-lang-val').toUpperCase();
       var isActive = val === currentLang;
       item.classList.toggle('active', isActive);
-      item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      item.setAttribute('aria-checked', isActive ? 'true' : 'false');
     });
   }
 

@@ -6,12 +6,31 @@
   'use strict';
   var KEY = 'devbyfab:perf_tier', currentTier = 'turbo';
 
+  function hasHardwareAcceleration() {
+    try {
+      var canvas = document.createElement('canvas');
+      var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return false;
+      var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) {
+        var renderer = (gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '').toLowerCase();
+        if (/swiftshader|llvmpipe|software|basic render|software rasterizer/.test(renderer)) {
+          return false;
+        }
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   function detectOptimalTier() {
     try {
       var s = localStorage.getItem(KEY);
       if (s === 'turbo' || s === 'eco') return s;
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'eco';
-      if ((navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4) return 'eco';
+      if (!hasHardwareAcceleration()) return 'eco';
+      if ((navigator.hardwareConcurrency || 4) <= 2) return 'eco';
     } catch (_) {}
     return 'turbo';
   }

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr" data-perf="turbo">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DevByFab — Développeur autodidacte & Passionné de Systèmes. CTeSP Niveau 5 en Cybersécurité et Réseaux. Découvrez mes projets : AeroTabs, BoTokard, CipherVault, Infinite Botnet.">
+  <meta name="description"
+    content="DevByFab — Développeur autodidacte & Passionné de Systèmes. CTeSP Niveau 5 en Cybersécurité et Réseaux. Découvrez mes projets : AeroTabs, BoTokard, CipherVault, Infinite Botnet.">
   <meta name="author" content="DevByFab">
   <meta name="i18n-base" content="i18n">
   <title>DevByFab — Développeur Autodidacte & Systèmes</title>
-  
+
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -21,6 +25,7 @@
   <!-- Performance Engine (Silent Auto-tuning) -->
   <script src="js/performance.js"></script>
 </head>
+
 <body>
 
   <!-- Ambient background glow -->
@@ -46,26 +51,38 @@
 
       <div class="nav-right">
         <a href="cv.html" class="nav-cv-btn" title="Consulter le CV (PDF en PT)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
           <span data-i18n="nav.cv">Voir le CV</span>
         </a>
 
         <!-- Modern Smooth Language Dropdown -->
         <div class="lang-dropdown" id="lang-dropdown">
-          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="true"
+            aria-expanded="false" aria-label="Choisir la langue">
             <span class="lang-current" id="lang-current-label">FR</span>
-            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
-          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
-            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="menu">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="menuitem"
+              aria-checked="true">
               <span class="lang-name">Français</span>
               <span class="lang-code">FR</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="menuitem" aria-checked="false">
               <span class="lang-name">Português</span>
               <span class="lang-code">PT</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="menuitem" aria-checked="false">
               <span class="lang-name">English</span>
               <span class="lang-code">EN</span>
             </button>
@@ -86,20 +103,22 @@
     <section id="hero" class="section section--hero">
       <canvas id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
       <div class="hero-content">
-        
+
         <div class="hero-status-pill">
           <span class="status-dot" aria-hidden="true"></span>
           <span data-i18n="home.statusBadge">Disponible · Hybride (Amarante / Porto) & Télétravail</span>
         </div>
 
         <h1 class="hero-title" data-i18n="home.heroTitle">DevByFab</h1>
-        
+
         <p class="hero-role">
           <strong data-i18n="home.heroRole">Développeur autodidacte & Systèmes</strong>
         </p>
-        
+
         <p class="hero-desc" data-i18n="home.heroDesc">
-          J'ai 20 ans, j'apprends la programmation en solo et j'ai une formation en cybersécurité, réseaux et systèmes (CTeSP Niveau 5). Je prétends pas tout savoir, j'apprends en pratiquant et j'aime juste créer des trucs utiles.
+          J'ai 20 ans, j'apprends la programmation en solo et j'ai une formation en cybersécurité, réseaux et systèmes
+          (CTeSP Niveau 5). Je prétends pas tout savoir, j'apprends en pratiquant et j'aime juste créer des trucs
+          utiles.
         </p>
 
         <!-- Minimal Spec Chips -->
@@ -112,7 +131,14 @@
         <div class="hero-actions">
           <a href="#projects" class="btn btn-primary btn-lg" data-i18n="home.btnProjects">Voir mes projets</a>
           <a href="cv.html" class="btn btn-secondary btn-lg">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
             <span data-i18n="home.btnCV">Voir le CV (PDF en PT)</span>
           </a>
           <a href="#contact" class="btn btn-ghost" data-i18n="home.btnContact">Me contacter</a>
@@ -130,17 +156,24 @@
         </div>
 
         <div class="about-grid-layout" data-anim="stagger">
-          
+
           <!-- Editorial Bio Card -->
           <article class="about-card-main glass-card" data-anim-child>
             <div>
-              <h3 class="about-editorial-title" data-i18n="about.bioTitle">Curieux, autodidacte et bricoleur de code</h3>
+              <h3 class="about-editorial-title" data-i18n="about.bioTitle">Curieux, autodidacte et bricoleur de code
+              </h3>
               <div class="about-editorial-body">
                 <p data-i18n="about.bioP1">
-                  Né et scolarisé en France jusqu'en seconde puis installé au Portugal, je parle couramment français et portugais, et je lis et écris l'anglais technique sans problème. Passionné par l'informatique depuis des années, j'ai tout appris en programmation tout seul : je ne prétends pas tout savoir, j'apprends en pratiquant, en résolvant des pannes et en créant des outils qui me sont utiles au quotidien.
+                  Né et scolarisé en France jusqu'en seconde puis installé au Portugal, je parle couramment français et
+                  portugais, et je lis et écris l'anglais technique sans problème. Passionné par l'informatique depuis
+                  des années, j'ai tout appris en programmation tout seul : je ne prétends pas tout savoir, j'apprends
+                  en pratiquant, en résolvant des pannes et en créant des outils qui me sont utiles au quotidien.
                 </p>
                 <p data-i18n="about.bioP2">
-                  Sur le plan scolaire, j'ai validé une formation de niveau 4 en gestion d'équipements informatiques (GEI) puis un CTeSP de niveau 5 en cybersécurité, réseaux et systèmes. Grâce à mes stages, j'ai pu mettre les mains dans le cambouis : réparer des PC au composant, configurer des switchs et routeurs d'entreprise (Fortinet), et gérer des machines virtuelles sous Proxmox VE et iDRAC.
+                  Sur le plan scolaire, j'ai validé une formation de niveau 4 en gestion d'équipements informatiques
+                  (GEI) puis un CTeSP de niveau 5 en cybersécurité, réseaux et systèmes. Grâce à mes stages, j'ai pu
+                  mettre les mains dans le cambouis : réparer des PC au composant, configurer des switchs et routeurs
+                  d'entreprise (Fortinet), et gérer des machines virtuelles sous Proxmox VE et iDRAC.
                 </p>
               </div>
             </div>
@@ -155,11 +188,12 @@
 
           <!-- Side Stack Cards (Centering with left card) -->
           <div class="about-side-stack" data-anim-child>
-            
+
             <article class="about-side-card glass-card">
               <h4 data-i18n="about.mobilityTitle">Disponibilité & Mobilité</h4>
               <p data-i18n="about.mobilityDesc">
-                Basé à Amarante : mobile en hybride (rayon d'1h à 1h30 : Porto, Ermesinde, Penafiel, Braga...) ou en télétravail complet.
+                Basé à Amarante : mobile en hybride (rayon d'1h à 1h30 : Porto, Ermesinde, Penafiel, Braga...) ou en
+                télétravail complet.
               </p>
               <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <span class="badge">Hybride / Télétravail</span>
@@ -170,8 +204,10 @@
 
             <article class="about-side-card glass-card">
               <h4 data-i18n="skills.languages">Langues</h4>
-              <ul style="display: flex; flex-direction: column; gap: 0.6rem; color: var(--text-secondary); font-size: 0.94rem;">
-                <li data-i18n="skills.langFR"><strong>Français :</strong> Langue maternelle / Natif (scolarité en France)</li>
+              <ul
+                style="display: flex; flex-direction: column; gap: 0.6rem; color: var(--text-secondary); font-size: 0.94rem;">
+                <li data-i18n="skills.langFR"><strong>Français :</strong> Langue maternelle / Natif (scolarité en
+                  France)</li>
                 <li data-i18n="skills.langPT"><strong>Portugais :</strong> Langue maternelle / Bilingue fluide</li>
                 <li data-i18n="skills.langEN"><strong>Anglais :</strong> B2 (Technique et conversationnel)</li>
               </ul>
@@ -188,16 +224,18 @@
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
           <h2 class="section-title" data-i18n="skills.title">Compétences Techniques</h2>
-          <p class="section-subtitle" data-i18n="skills.subtitle">Une palette complète du hardware jusqu'au cloud applicatif.</p>
+          <p class="section-subtitle" data-i18n="skills.subtitle">Une palette complète du hardware jusqu'au cloud
+            applicatif.</p>
         </div>
 
         <div class="skills-apple-grid" data-anim="stagger">
-          
+
           <article class="skill-apple-card glass-card" data-anim-child>
             <span class="skill-apple-label">Infrastructure</span>
             <h3 class="skill-apple-title" data-i18n="skills.networks">Réseaux & Cybersécurité</h3>
             <p class="skill-apple-desc" data-i18n="skills.networksDesc">
-              Fortinet (FortiGate, FortiSwitch), routing, VLANs, pare-feu d'entreprise, cryptographie hybride (RSA/AES), protocoles sécurisés.
+              Fortinet (FortiGate, FortiSwitch), routing, VLANs, pare-feu d'entreprise, cryptographie hybride (RSA/AES),
+              protocoles sécurisés.
             </p>
             <div class="skill-apple-tags">
               <span class="badge">FortiGate</span>
@@ -211,7 +249,8 @@
             <span class="skill-apple-label">Systèmes</span>
             <h3 class="skill-apple-title" data-i18n="skills.virtualization">Virtualisation & Serveurs</h3>
             <p class="skill-apple-desc" data-i18n="skills.virtualizationDesc">
-              Proxmox VE (clusters, VMs, LXC), administration à distance iDRAC (Dell/HP), Linux (Debian, Ubuntu Server), Windows Server.
+              Proxmox VE (clusters, VMs, LXC), administration à distance iDRAC (Dell/HP), Linux (Debian, Ubuntu Server),
+              Windows Server.
             </p>
             <div class="skill-apple-tags">
               <span class="badge">Proxmox VE</span>
@@ -225,7 +264,8 @@
             <span class="skill-apple-label">Software</span>
             <h3 class="skill-apple-title" data-i18n="skills.code">Développement & Cloud</h3>
             <p class="skill-apple-desc" data-i18n="skills.codeDesc">
-              JavaScript, TypeScript, Python, FastAPI, Discord.py, Supabase, APIs REST, extensions Manifest V3, Web Workers.
+              JavaScript, TypeScript, Python, FastAPI, Discord.py, Supabase, APIs REST, extensions Manifest V3, Web
+              Workers.
             </p>
             <div class="skill-apple-tags">
               <span class="badge">Python</span>
@@ -239,7 +279,8 @@
             <span class="skill-apple-label">Hardware</span>
             <h3 class="skill-apple-title" data-i18n="skills.hardware">Systèmes & Maintenance</h3>
             <p class="skill-apple-desc" data-i18n="skills.hardwareDesc">
-              Diagnostic de pannes, réparation de composants hardware, montage et déploiement de postes, maintenance de réseaux locaux.
+              Diagnostic de pannes, réparation de composants hardware, montage et déploiement de postes, maintenance de
+              réseaux locaux.
             </p>
             <div class="skill-apple-tags">
               <span class="badge">Diagnostic</span>
@@ -257,7 +298,8 @@
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
           <h2 class="section-title" data-i18n="exp.title">Expériences & Formation</h2>
-          <p class="section-subtitle" data-i18n="exp.timelineTitle">Chronologie du parcours (du plus ancien au plus récent)</p>
+          <p class="section-subtitle" data-i18n="exp.timelineTitle">Chronologie du parcours (du plus ancien au plus
+            récent)</p>
         </div>
 
         <div class="chrono-timeline" data-anim="stagger">
@@ -276,7 +318,8 @@
               <h3 class="chrono-title" data-i18n="exp.item1.title">Scolarité en France (jusqu'en 2nde)</h3>
               <div class="chrono-place" data-i18n="exp.item1.place">France</div>
               <p class="chrono-desc" data-i18n="exp.item1.desc">
-                Scolarité complète en France de la naissance à la classe de seconde (10º ano). Socle de formation générale et bilinguisme maternel natif.
+                Scolarité complète en France de la naissance à la classe de seconde (10º ano). Socle de formation
+                générale et bilinguisme maternel natif.
               </p>
             </article>
           </div>
@@ -294,7 +337,9 @@
               <h3 class="chrono-title" data-i18n="exp.item2.title">GEI Nível 4 & 3 Stages chez ClickTech</h3>
               <div class="chrono-place" data-i18n="exp.item2.place">Amarante · Portugal</div>
               <p class="chrono-desc" data-i18n="exp.item2.desc">
-                Curso Profissional de Gestão de Equipamentos Informáticos (GEI Nível 4) et 3 stages techniques en entreprise chez ClickTech : diagnostic de pannes, réparation hardware au composant, montage de postes clients et maintenance de réseaux locaux.
+                Curso Profissional de Gestão de Equipamentos Informáticos (GEI Nível 4) et 3 stages techniques en
+                entreprise chez ClickTech : diagnostic de pannes, réparation hardware au composant, montage de postes
+                clients et maintenance de réseaux locaux.
               </p>
             </article>
           </div>
@@ -312,7 +357,8 @@
               <h3 class="chrono-title" data-i18n="exp.item3.title">CTeSP en Cybersécurité, Réseaux et Systèmes</h3>
               <div class="chrono-place" data-i18n="exp.item3.place">Ensino Superior Politécnico (Nível 5) · Conclu</div>
               <p class="chrono-desc" data-i18n="exp.item3.desc">
-                Formation supérieure certifiée : architecture réseau d'entreprise, protocoles de routage, politiques de sécurité, virtualisation et administration Linux/Windows.
+                Formation supérieure certifiée : architecture réseau d'entreprise, protocoles de routage, politiques de
+                sécurité, virtualisation et administration Linux/Windows.
               </p>
             </article>
           </div>
@@ -330,7 +376,8 @@
               <h3 class="chrono-title" data-i18n="exp.item4.title">Stage Réseaux & Infrastructure IT</h3>
               <div class="chrono-place" data-i18n="exp.item4.place">Proxsys Solutions · Ermesinde</div>
               <p class="chrono-desc" data-i18n="exp.item4.desc">
-                Configuration et banc d'essai d'équipements d'entreprise Fortinet (FortiGate, switchs, routeurs). Administration hors-bande iDRAC (Dell/HP) et création de VMs/clusters sous Proxmox VE.
+                Configuration et banc d'essai d'équipements d'entreprise Fortinet (FortiGate, switchs, routeurs).
+                Administration hors-bande iDRAC (Dell/HP) et création de VMs/clusters sous Proxmox VE.
               </p>
             </article>
           </div>
@@ -344,11 +391,12 @@
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
           <h2 class="section-title" data-i18n="projects.title">Projets Phares</h2>
-          <p class="section-subtitle" data-i18n="projects.subtitle">Des outils réels développés en autonomie, axés sur la performance et l'utilité concrète.</p>
+          <p class="section-subtitle" data-i18n="projects.subtitle">Des outils réels développés en autonomie, axés sur
+            la performance et l'utilité concrète.</p>
         </div>
 
         <div class="projects-grid" data-anim="stagger">
-          
+
           <!-- AeroTabs — Featured -->
           <article class="project-card project-card--wide glass-card" data-anim-child>
             <div class="project-card-header">
@@ -356,15 +404,19 @@
                 <img src="img/aerotabs_logo.png" alt="AeroTabs Logo" class="project-card-logo">
                 <span class="badge badge-accent" data-i18n="projects.card1.status">BETA BIENTÔT · SAAS ROADMAP</span>
               </div>
-              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="color: var(--text-secondary);">
+              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"
+                style="color: var(--text-secondary);">
                 aerotabs.com ↗
               </a>
             </div>
 
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card1.title">AeroTabs — Optimiseur RAM & Gestionnaire d'Espaces</h3>
+              <h3 class="project-card-title" data-i18n="projects.card1.title">AeroTabs — Optimiseur RAM & Gestionnaire
+                d'Espaces</h3>
               <p class="project-card-desc" data-i18n="projects.card1.desc">
-                Extension de navigateur (Chrome & Firefox, Manifest V3) avec mécanisme intelligent de suspension d'onglets (Tab Sleeping) pour libérer jusqu'à 80% de RAM, synchronisation cloud sécurisée via Supabase et partage éphémère de sessions chiffrées.
+                Extension de navigateur (Chrome & Firefox, Manifest V3) avec mécanisme intelligent de suspension
+                d'onglets (Tab Sleeping) pour libérer jusqu'à 80% de RAM, synchronisation cloud sécurisée via Supabase
+                et partage éphémère de sessions chiffrées.
               </p>
             </div>
 
@@ -380,7 +432,8 @@
               <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
                 <span data-i18n="projects.visitSite">Site Officiel</span> ↗
               </a>
-              <a href="project/extention.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
+              <a href="project/extention.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails
+                Techniques</a>
             </div>
           </article>
 
@@ -391,9 +444,12 @@
             </div>
 
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card2.title">BoTokard — Moteur Communautaire & Automatisation</h3>
+              <h3 class="project-card-title" data-i18n="projects.card2.title">BoTokard — Moteur Communautaire &
+                Automatisation</h3>
               <p class="project-card-desc" data-i18n="projects.card2.desc">
-                Bot Python asynchrone hébergé sur une VM dédiée sous Proxmox VE. Orchestration en temps réel de l'API Twitch, interactions IA Gemini, moteur de gameplay TCG et système d'audit logs avec base de données MySQL.
+                Bot Python asynchrone hébergé sur une VM dédiée sous Proxmox VE. Orchestration en temps réel de l'API
+                Twitch, interactions IA Gemini, moteur de gameplay TCG et système d'audit logs avec base de données
+                MySQL.
               </p>
             </div>
 
@@ -406,7 +462,8 @@
             </div>
 
             <div class="project-card-actions">
-              <a href="project/discordbot.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
+              <a href="project/discordbot.html" class="btn btn-secondary btn-sm"
+                data-i18n="projects.viewProject">Détails Techniques</a>
             </div>
           </article>
 
@@ -417,9 +474,12 @@
             </div>
 
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card3.title">CipherVault — Chiffrement Hybride RSA / AES</h3>
+              <h3 class="project-card-title" data-i18n="projects.card3.title">CipherVault — Chiffrement Hybride RSA /
+                AES</h3>
               <p class="project-card-desc" data-i18n="projects.card3.desc">
-                Outil Python de chiffrement hybride pour sécuriser fichiers et messages. Combine le chiffrement asymétrique RSA pour l'échange de clés et AES pour le traitement haute vitesse des données, avec carnet de contacts local.
+                Outil Python de chiffrement hybride pour sécuriser fichiers et messages. Combine le chiffrement
+                asymétrique RSA pour l'échange de clés et AES pour le traitement haute vitesse des données, avec carnet
+                de contacts local.
               </p>
             </div>
 
@@ -431,8 +491,10 @@
             </div>
 
             <div class="project-card-actions">
-              <a href="project/clipython.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails Techniques</a>
-              <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" data-i18n="projects.viewGithub">GitHub ↗</a>
+              <a href="project/clipython.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails
+                Techniques</a>
+              <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"
+                data-i18n="projects.viewGithub">GitHub ↗</a>
             </div>
           </article>
 
@@ -443,9 +505,12 @@
             </div>
 
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card4.title">The Infinite Botnet (Reboot) — Laboratoire de Simulation</h3>
+              <h3 class="project-card-title" data-i18n="projects.card4.title">The Infinite Botnet (Reboot) — Laboratoire
+                de Simulation</h3>
               <p class="project-card-desc" data-i18n="projects.card4.desc">
-                Moteur de simulation incrémentale complexe développé sous TypeScript et Vite. Architecture réactive optimisée avec Web Workers pour le calcul en tâche de fond, boucles déterministes et gestion d'état poussée.
+                Moteur de simulation incrémentale complexe développé sous TypeScript et Vite. Architecture réactive
+                optimisée avec Web Workers pour le calcul en tâche de fond, boucles déterministes et gestion d'état
+                poussée.
               </p>
             </div>
 
@@ -457,15 +522,18 @@
             </div>
 
             <div class="project-card-actions">
-              <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm" data-i18n="projects.card4.play">Lancer le Prototype</a>
-              <a href="project/webgames.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Architecture du Simulateur</a>
+              <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm"
+                data-i18n="projects.card4.play">Lancer le Prototype</a>
+              <a href="project/webgames.html" class="btn btn-secondary btn-sm"
+                data-i18n="projects.viewProject">Architecture du Simulateur</a>
             </div>
           </article>
 
         </div>
 
         <div style="margin-top: 3rem; text-align: center;" data-anim="fade-up">
-          <a href="project/projects.html" class="btn btn-secondary" data-i18n="projects.viewAll">Voir Tous les Projets</a>
+          <a href="project/projects.html" class="btn btn-secondary" data-i18n="projects.viewAll">Voir Tous les
+            Projets</a>
         </div>
       </div>
     </section>
@@ -475,24 +543,28 @@
       <div class="section-container">
         <div class="section-header" data-anim="fade-up">
           <h2 class="section-title" data-i18n="contact.title">Contact & Recrutement</h2>
-          <p class="section-subtitle" data-i18n="contact.subtitle">À la recherche d'un collaborateur autonome, polyvalent et passionné ? Discutons de vos besoins.</p>
+          <p class="section-subtitle" data-i18n="contact.subtitle">À la recherche d'un collaborateur autonome,
+            polyvalent et passionné ? Discutons de vos besoins.</p>
         </div>
 
         <div class="contact-apple-grid" data-anim="fade-up">
-          
+
           <a href="mailto:contact.fabiocp@gmail.com" class="contact-apple-card glass-card">
             <span class="contact-apple-type" data-i18n="contact.workEmailLabel">Email Emploi & Recrutement</span>
             <span class="contact-apple-val">contact.fabiocp@gmail.com</span>
-            <span class="contact-apple-note" data-i18n="contact.workEmailSub">Pour toute opportunité professionnelle</span>
+            <span class="contact-apple-note" data-i18n="contact.workEmailSub">Pour toute opportunité
+              professionnelle</span>
           </a>
 
           <a href="mailto:devbyfab@gmail.com" class="contact-apple-card glass-card">
             <span class="contact-apple-type" data-i18n="contact.projEmailLabel">Email Projets & Collaborations</span>
             <span class="contact-apple-val">devbyfab@gmail.com</span>
-            <span class="contact-apple-note" data-i18n="contact.projEmailSub">Pour l'open-source et échanges techniques</span>
+            <span class="contact-apple-note" data-i18n="contact.projEmailSub">Pour l'open-source et échanges
+              techniques</span>
           </a>
 
-          <a href="https://discord.com/users/devbyfab" class="contact-apple-card glass-card" target="_blank" rel="noopener">
+          <a href="https://discord.com/users/devbyfab" class="contact-apple-card glass-card" target="_blank"
+            rel="noopener">
             <span class="contact-apple-type" data-i18n="contact.discordLabel">Discord Direct</span>
             <span class="contact-apple-val">devbyfab</span>
             <span class="contact-apple-note">Messagerie instantanée technique</span>
@@ -510,10 +582,16 @@
         <div class="cv-apple-banner glass-card" data-anim="fade-up">
           <div>
             <h3 data-i18n="contact.cvBannerTitle">Consultez mon CV complet</h3>
-            <p data-i18n="contact.cvBannerDesc">Téléchargez mon curriculum vitae au format PDF (coordonnées, détails des compétences et parcours).</p>
+            <p data-i18n="contact.cvBannerDesc">Téléchargez mon curriculum vitae au format PDF (coordonnées, détails des
+              compétences et parcours).</p>
           </div>
           <a href="assets/CV_Fabio_Pinto.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-lg" download>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             <span data-i18n="contact.cvBannerBtn">Télécharger CV (PDF)</span>
           </a>
         </div>
@@ -528,17 +606,12 @@
     <div class="footer-separator"></div>
     <div class="footer-content">
       <p class="footer-copy">
-        &copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · 
-        <span data-i18n="footer.tagline">Développé avec passion · Zéro artifice, que du concret.</span> · 
+        &copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> ·
+        <span data-i18n="footer.tagline">Développé avec passion · Zéro artifice, que du concret.</span> ·
         <a href="legal.html" data-i18n="footer.legal">Mentions Légales</a>
       </p>
     </div>
   </footer>
-
-  <!-- Libraries: GSAP + ScrollTrigger + Lenis -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 
   <!-- App scripts -->
   <script src="js/particles.js"></script>
@@ -546,4 +619,5 @@
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" data-perf="turbo">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -9,16 +10,19 @@
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
   <script src="js/performance.js"></script>
 </head>
+
 <body>
   <div class="bg-gradient" aria-hidden="true"></div>
-  
+
   <header class="site-header scrolled">
     <nav class="nav-container">
       <div class="nav-left">
@@ -39,25 +43,37 @@
 
       <div class="nav-right">
         <a href="cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
           <span data-i18n="nav.cv">Mon CV</span>
         </a>
 
         <div class="lang-dropdown" id="lang-dropdown">
-          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la langue">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="true"
+            aria-expanded="false" aria-label="Choisir la langue">
             <span class="lang-current" id="lang-current-label">FR</span>
-            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
-          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
-            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="option" aria-selected="true">
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="menu">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="menuitem"
+              aria-checked="true">
               <span class="lang-name">Français</span>
               <span class="lang-code">FR</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="option" aria-selected="false">
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="menuitem" aria-checked="false">
               <span class="lang-name">Português</span>
               <span class="lang-code">PT</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="option" aria-selected="false">
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="menuitem" aria-checked="false">
               <span class="lang-name">English</span>
               <span class="lang-code">EN</span>
             </button>
@@ -82,13 +98,17 @@
         <div class="about-bio-body">
           <p style="margin-bottom: 1.5rem;">
             <strong>Éditeur du site :</strong> DevByFab<br>
-            <strong>Email Recrutement :</strong> <a href="mailto:contact.fabiocp@gmail.com" style="color: var(--accent-light); text-decoration: underline;">contact.fabiocp@gmail.com</a><br>
-            <strong>Email Projets :</strong> <a href="mailto:devbyfab@gmail.com" style="color: var(--accent-light); text-decoration: underline;">devbyfab@gmail.com</a><br>
-            <strong>Hébergement :</strong> <a href="https://pages.github.com" target="_blank" rel="noopener" style="color: var(--accent-light); text-decoration: underline;">GitHub Pages</a>
+            <strong>Email Recrutement :</strong> <a href="mailto:contact.fabiocp@gmail.com"
+              style="color: var(--accent-light); text-decoration: underline;">contact.fabiocp@gmail.com</a><br>
+            <strong>Email Projets :</strong> <a href="mailto:devbyfab@gmail.com"
+              style="color: var(--accent-light); text-decoration: underline;">devbyfab@gmail.com</a><br>
+            <strong>Hébergement :</strong> <a href="https://pages.github.com" target="_blank" rel="noopener"
+              style="color: var(--accent-light); text-decoration: underline;">GitHub Pages</a>
           </p>
           <p style="color: var(--text-secondary); line-height: 1.7;">
             Ce site web est un portfolio personnel à vocation professionnelle et d'information.<br>
-            Aucune donnée personnelle de pistage n'est collectée sans votre consentement. Le choix de langue est mémorisé localement sur votre navigateur (localStorage).<br>
+            Aucune donnée personnelle de pistage n'est collectée sans votre consentement. Le choix de langue est
+            mémorisé localement sur votre navigateur (localStorage).<br>
             L'ensemble des projets présentés sont des travaux originaux et open-source réalisés par l'auteur.
           </p>
         </div>
@@ -99,15 +119,14 @@
   <footer class="site-footer">
     <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a href="legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a
+          href="legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
 </body>
+
 </html>
