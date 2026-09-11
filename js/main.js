@@ -5,11 +5,21 @@
 (function () {
   'use strict';
 
-  /* Header Morphing */
+  /* Header Morphing with Hysteresis */
   function initHeader() {
     var header = document.querySelector('.site-header');
     if (!header) return;
-    var onScroll = function () { header.classList.toggle('scrolled', window.scrollY > 40); };
+    var isScrolled = false;
+    var onScroll = function () {
+      var y = window.scrollY;
+      if (!isScrolled && y > 50) {
+        isScrolled = true;
+        header.classList.add('scrolled');
+      } else if (isScrolled && y < 20) {
+        isScrolled = false;
+        header.classList.remove('scrolled');
+      }
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
@@ -51,7 +61,7 @@
     updateActive();
   }
 
-  /* Smooth Scroll (Lenis Cooperative) */
+  /* Smooth Scroll */
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
@@ -60,11 +70,8 @@
         var target = document.querySelector(id);
         if (!target) return;
         e.preventDefault();
-        if (window._lenis) {
-          window._lenis.scrollTo(target, { offset: -80 });
-        } else {
-          window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
-        }
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 75;
+        window.scrollTo({ top: top, behavior: 'smooth' });
       });
     });
   }
