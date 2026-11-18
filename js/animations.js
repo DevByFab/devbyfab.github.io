@@ -31,11 +31,13 @@
       io.observe(el);
     });
 
-    document.querySelectorAll('[data-anim="stagger"]').forEach(function (parent) {
-      parent.querySelectorAll('[data-anim-child]').forEach(function (child, i) {
-        child.style.transitionDelay = Math.min(i, 5) * 90 + 'ms';
-        io.observe(child);
+    // Éléments enfants : léger décalage selon leur rang parmi leurs frères
+    document.querySelectorAll('[data-anim-child]').forEach(function (child) {
+      var siblings = Array.prototype.filter.call(child.parentElement.children, function (c) {
+        return c.hasAttribute('data-anim-child');
       });
+      child.style.transitionDelay = Math.min(siblings.indexOf(child), 5) * 90 + 'ms';
+      io.observe(child);
     });
   }
 

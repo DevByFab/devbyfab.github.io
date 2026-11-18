@@ -7,9 +7,7 @@
   <meta name="i18n-base" content="i18n">
   <title>Curriculum Vitae — DevByFab</title>
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -17,7 +15,6 @@
   <script src="js/performance.js"></script>
 </head>
 <body>
-  <div class="bg-gradient" aria-hidden="true"></div>
 
   <header class="site-header scrolled">
     <nav class="nav-container">
@@ -30,10 +27,8 @@
 
       <ul class="nav-links">
         <li><a href="index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
-        <li><a href="index.html#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
-        <li><a href="index.html#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
-        <li><a href="index.html#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
-        <li><a href="index.html#projects" class="nav-link" data-i18n="nav.projects">Projets</a></li>
+        <li><a href="index.html#code" class="nav-link" data-i18n="nav.code">Code</a></li>
+        <li><a href="index.html#parcours" class="nav-link" data-i18n="nav.path">Parcours</a></li>
         <li><a href="index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
 
@@ -81,7 +76,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             Imprimer / PDF
           </button>
-          <a href="assets/CV_Fabio_Pinto.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm" download>
+          <a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm" download>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <span data-i18n="contact.cvBannerBtnPdf">Télécharger le PDF (PT)</span>
           </a>
@@ -104,7 +99,7 @@
             </span>
             <span class="cv-meta-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              20 ans · Permis B
+              <span data-i18n="cv.license">Permis B</span>
             </span>
             <span class="badge badge-accent" data-i18n="about.statusIEFP">Éligible au stage IEFP (Niveau 5 / Ativar.pt)</span>
           </div>

@@ -1,95 +1,79 @@
 <!DOCTYPE html>
-<html lang="fr" data-perf="turbo">
+<html lang="pt" data-perf="turbo" data-i18n-inline="pt" data-i18n-meta>
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="DevByFab — Développeur autodidacte & Passionné de Systèmes. CTeSP Niveau 5 en Cybersécurité et Réseaux. Découvrez mes projets : AeroTabs, BoTokard, CipherVault, Infinite Botnet.">
+  <title>DevByFab — Programação, redes e sistemas | Amarante, Portugal</title>
+  <meta name="description" content="Portefólio de DevByFab: extensões, bots e motores de simulação em JavaScript, TypeScript e Python, e infraestrutura com Proxmox e Fortinet. Disponível perto de Amarante e do Porto, ou em teletrabalho.">
   <meta name="author" content="DevByFab">
   <meta name="i18n-base" content="i18n">
-  <title>DevByFab — Développeur Autodidacte & Systèmes</title>
+  <meta name="theme-color" content="#14111c">
+  <link rel="canonical" href="https://devbyfab.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevByFab">
+  <meta property="og:title" content="DevByFab — Programação, redes e sistemas | Amarante, Portugal">
+  <meta property="og:description" content="Portefólio de DevByFab: extensões, bots e motores de simulação em JavaScript, TypeScript e Python, e infraestrutura com Proxmox e Fortinet. Disponível perto de Amarante e do Porto, ou em teletrabalho.">
+  <meta property="og:url" content="https://devbyfab.github.io/">
+  <meta property="og:locale" content="pt_PT">
 
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-    rel="stylesheet">
-
+  <link rel="preload" href="fonts/fraunces-400-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/instrument-sans-400-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/home.css">
 
-  <!-- Performance Engine (Silent Auto-tuning) -->
   <script src="js/performance.js"></script>
 </head>
 
 <body>
+  <a href="#main" class="skip-link" data-i18n="h.skip">Saltar para o conteúdo</a>
 
-  <!-- Ambient background glow -->
-  <div class="bg-gradient" aria-hidden="true"></div>
-
-  <!-- Minimalist Header -->
   <header class="site-header" id="site-header">
-    <nav class="nav-container">
+    <nav class="nav-container" aria-label="Principal">
       <div class="nav-left">
-        <a href="#hero" class="logo" aria-label="DevByFab Accueil">
-          <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
+        <a href="#hero" class="logo" aria-label="DevByFab">
+          <img src="img/Logo_Sans_Fond.png" alt="" width="28" height="34">
+          <span class="logo-name">DevByFab</span>
         </a>
       </div>
 
-      <ul class="nav-links">
-        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Accueil</a></li>
-        <li><a href="#about" class="nav-link" data-i18n="nav.about">À propos</a></li>
-        <li><a href="#skills" class="nav-link" data-i18n="nav.skills">Compétences</a></li>
-        <li><a href="#experience" class="nav-link" data-i18n="nav.experience">Parcours</a></li>
-        <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projets</a></li>
-        <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Início</a></li>
+        <li><a href="#code" class="nav-link" data-i18n="nav.code">Código</a></li>
+        <li><a href="#parcours" class="nav-link" data-i18n="nav.path">Percurso</a></li>
+        <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contacto</a></li>
       </ul>
 
       <div class="nav-right">
-        <a href="cv.html" class="nav-cv-btn" title="Consulter le CV (PDF en PT)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-            <polyline points="10 9 9 9 8 9" />
-          </svg>
-          <span data-i18n="nav.cv">Voir le CV</span>
-        </a>
+        <a href="cv.html" class="nav-cv-btn" data-i18n="nav.cv">Ver o CV</a>
 
-        <!-- Modern Smooth Language Dropdown -->
         <div class="lang-dropdown" id="lang-dropdown">
           <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="true"
-            aria-expanded="false" aria-label="Choisir la langue">
-            <span class="lang-current" id="lang-current-label">FR</span>
+            aria-expanded="false" aria-label="Idioma / Langue / Language">
+            <span class="lang-current" id="lang-current-label">PT</span>
             <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </button>
           <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="menu">
-            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="menuitem"
-              aria-checked="true">
-              <span class="lang-name">Français</span>
-              <span class="lang-code">FR</span>
+            <button type="button" class="lang-dropdown-item active" data-lang-val="PT" role="menuitem">
+              <span class="lang-name">Português</span><span class="lang-code">PT</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="menuitem" aria-checked="false">
-              <span class="lang-name">Português</span>
-              <span class="lang-code">PT</span>
+            <button type="button" class="lang-dropdown-item" data-lang-val="FR" role="menuitem">
+              <span class="lang-name">Français</span><span class="lang-code">FR</span>
             </button>
-            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="menuitem" aria-checked="false">
-              <span class="lang-name">English</span>
-              <span class="lang-code">EN</span>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="menuitem">
+              <span class="lang-name">English</span><span class="lang-code">EN</span>
             </button>
           </div>
         </div>
 
-        <button class="burger-menu" aria-label="Ouvrir le menu" aria-expanded="false">
+        <button class="burger-menu" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
           <span class="burger-line"></span>
           <span class="burger-line"></span>
         </button>
@@ -97,443 +81,233 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main">
 
     <!-- ==================== HERO ==================== -->
-    <section id="hero" class="section section--hero">
-      <canvas id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
-      <div class="hero-content">
+    <section id="hero" class="section hero">
+      <div class="section-container hero-grid">
 
-        <div class="hero-status-pill">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span data-i18n="home.statusBadge">Disponible · Hybride (Amarante / Porto) & Télétravail</span>
+        <div class="hero-copy">
+          <p class="eyebrow">DevByFab · Amarante, Portugal</p>
+          <h1 class="hero-title" data-i18n-html="h.title">Código e <u>infraestrutura</u>, do rack ao browser.</h1>
+          <p class="hero-lead" data-i18n="h.lead">Formação em Cibersegurança, Redes e Sistemas (CTeSP, nível 5). Aprendi a programar por conta própria e construo extensões de browser, bots e motores de simulação.</p>
+
+          <div class="hero-actions">
+            <a href="#code" class="btn btn-primary btn-lg" data-i18n="h.btnProjects">Ver projetos</a>
+            <a href="#contact" class="btn btn-secondary btn-lg" data-i18n="h.btnContact">Contactar</a>
+            <a href="assets/CV_DevByFab.pdf" class="btn btn-ghost" download data-i18n="h.btnCv">CV (PDF, português)</a>
+          </div>
+
+          <dl class="hero-facts">
+            <div><dt data-i18n="h.f1">Localização</dt><dd data-i18n="h.f1v">Amarante, Portugal</dd></div>
+            <div><dt data-i18n="h.f2">Disponibilidade</dt><dd data-i18n="h.f2v">Estágio ou emprego, presencial até 1h30 de transportes públicos (Porto incluído), ou teletrabalho.</dd></div>
+            <div><dt data-i18n="h.f3">Línguas</dt><dd data-i18n="h.f3v">Português e francês nativos · inglês B2</dd></div>
+            <div><dt data-i18n="h.f4">IEFP</dt><dd data-i18n="h.f4v">Elegível a estágios (nível 5, Ativar.pt)</dd></div>
+          </dl>
         </div>
 
-        <h1 class="hero-title" data-i18n="home.heroTitle">DevByFab</h1>
+        <!-- Carte d'infra : chaque noeud est un bouton, le texte vient du panneau dessous -->
+        <div class="infra">
+          <div class="infra-head">
+            <span data-i18n="h.infraTitle">Mapa de infra</span>
+            <span data-i18n="h.infraHint">passa o rato ou toca</span>
+          </div>
 
-        <p class="hero-role">
-          <strong data-i18n="home.heroRole">Développeur autodidacte & Systèmes</strong>
-        </p>
+          <svg class="infra-svg" viewBox="0 0 480 372" role="group" aria-label="Mapa interativo da infraestrutura que já configurei" data-i18n-aria="h.infraLabel">
+            <text class="infra-ext-text" x="240" y="20">INTERNET</text>
+            <path class="infra-link" d="M240 28 V64" />
+            <path class="infra-link" d="M240 116 V176" />
+            <path class="infra-link" d="M200 228 V264 H82 V300" />
+            <path class="infra-link" d="M240 228 V300" />
+            <path class="infra-link" d="M280 228 V264 H398 V300" />
 
-        <p class="hero-desc" data-i18n="home.heroDesc">
-          J'ai 20 ans, j'apprends la programmation en solo et j'ai une formation en cybersécurité, réseaux et systèmes
-          (CTeSP Niveau 5). Je prétends pas tout savoir, j'apprends en pratiquant et j'aime juste créer des trucs
-          utiles.
-        </p>
+            <g class="node" role="button" tabindex="0" data-node="fw" aria-pressed="false">
+              <rect x="165" y="64" width="150" height="52" rx="8" />
+              <text class="node-label" x="240" y="87">FortiGate</text>
+              <text class="node-sub" x="240" y="104" data-i18n="h.n.fw.sub">Firewall</text>
+            </g>
 
-        <!-- Minimal Spec Chips -->
-        <div class="hero-meta-row">
-          <span class="badge badge-accent" data-i18n="home.badgeAutodidact">100% Autodidacte en Code</span>
-          <span class="badge" data-i18n="home.badgeIefp">Éligible Stage IEFP (Niveau 5 / Portugal)</span>
-          <span class="badge" data-i18n="home.badgeLanguages">Trilingue FR (Natif) · PT (Natif) · EN (B2)</span>
-        </div>
+            <g class="node" role="button" tabindex="0" data-node="sw" aria-pressed="false">
+              <rect x="165" y="176" width="150" height="52" rx="8" />
+              <text class="node-label" x="240" y="199">FortiSwitch</text>
+              <text class="node-sub" x="240" y="216" data-i18n="h.n.sw.sub">Switch</text>
+            </g>
 
-        <div class="hero-actions">
-          <a href="#projects" class="btn btn-primary btn-lg" data-i18n="home.btnProjects">Voir mes projets</a>
-          <a href="cv.html" class="btn btn-secondary btn-lg">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10 9 9 9 8 9" />
-            </svg>
-            <span data-i18n="home.btnCV">Voir le CV (PDF en PT)</span>
-          </a>
-          <a href="#contact" class="btn btn-ghost" data-i18n="home.btnContact">Me contacter</a>
+            <g class="node" role="button" tabindex="0" data-node="cab" aria-pressed="false">
+              <rect x="190" y="248" width="100" height="32" rx="16" />
+              <text class="node-label" x="240" y="268.5" data-i18n="h.n.cab.label">Cablagem</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="px" aria-pressed="false">
+              <rect x="12" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="82" y="324">Proxmox VE</text>
+              <text class="node-sub" x="82" y="341" data-i18n="h.n.px.sub">Virtualização</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="nc" aria-pressed="false">
+              <rect x="170" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="240" y="324">Nextcloud</text>
+              <text class="node-sub" x="240" y="341" data-i18n="h.n.nc.sub">Cloud privada</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="cam" aria-pressed="false">
+              <rect x="328" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="398" y="324" data-i18n="h.n.cam.label">Câmara IP</text>
+              <text class="node-sub" x="398" y="341" data-i18n="h.n.cam.sub">Videovigilância</text>
+            </g>
+          </svg>
+
+          <div class="infra-panel" aria-live="polite">
+            <div data-panel="fw"><h3>FortiGate</h3><p data-i18n="h.p.fw">Configuração e testes de firewalls Fortinet de empresa durante o estágio na Proxsys Solutions.</p></div>
+            <div data-panel="sw"><h3>FortiSwitch</h3><p data-i18n="h.p.sw">Configuração de switches Fortinet e de VLANs, com instalação em rack.</p></div>
+            <div data-panel="cab"><h3 data-i18n="h.n.cab.label">Cablagem</h3><p data-i18n="h.p.cab">Instalação de servidores e racks em clientes, e identificação da cablagem de rede.</p></div>
+            <div data-panel="px"><h3>Proxmox VE</h3><p data-i18n="h.p.px">Máquinas virtuais, contentores LXC e clusters em Proxmox VE. Gestão remota dos servidores via iDRAC. É também onde corre o BoTokard.</p></div>
+            <div data-panel="nc"><h3>Nextcloud</h3><p data-i18n="h.p.nc">Servidores cloud com Nextcloud (base PHP) configurados nos estágios na ClickTech, em Amarante.</p></div>
+            <div data-panel="cam"><h3 data-i18n="h.n.cam.label">Câmara IP</h3><p data-i18n="h.p.cam">Instalação de câmaras IP em clientes e integração na rede local.</p></div>
+          </div>
         </div>
 
       </div>
     </section>
 
-    <!-- ==================== ABOUT ==================== -->
-    <section id="about" class="section section--about">
+    <!-- ==================== CODE ==================== -->
+    <section id="code" class="section section--code">
       <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="about.title">À propos</h2>
-          <p class="section-subtitle" data-i18n="about.subtitle">Une présentation simple et sincère, sans blabla.</p>
-        </div>
+        <span class="eyebrow" data-i18n="h.code.eyebrow">01 · Código</span>
+        <h2 class="section-title" data-i18n="h.code.title">O que eu programo</h2>
+        <p class="section-lead" data-i18n="h.code.lead">É o que mais gosto de fazer e onde mais quero evoluir. Aprendi tudo sozinho, projeto a projeto.</p>
 
-        <div class="about-grid-layout" data-anim="stagger">
+        <div class="projects">
 
-          <!-- Editorial Bio Card -->
-          <article class="about-card-main glass-card" data-anim-child>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.aero.meta">Em beta</p>
             <div>
-              <h3 class="about-editorial-title" data-i18n="about.bioTitle">Curieux, autodidacte et bricoleur de code
-              </h3>
-              <div class="about-editorial-body">
-                <p data-i18n="about.bioP1">
-                  Né et scolarisé en France jusqu'en seconde puis installé au Portugal, je parle couramment français et
-                  portugais, et je lis et écris l'anglais technique sans problème. Passionné par l'informatique depuis
-                  des années, j'ai tout appris en programmation tout seul : je ne prétends pas tout savoir, j'apprends
-                  en pratiquant, en résolvant des pannes et en créant des outils qui me sont utiles au quotidien.
-                </p>
-                <p data-i18n="about.bioP2">
-                  Sur le plan scolaire, j'ai validé une formation de niveau 4 en gestion d'équipements informatiques
-                  (GEI) puis un CTeSP de niveau 5 en cybersécurité, réseaux et systèmes. Grâce à mes stages, j'ai pu
-                  mettre les mains dans le cambouis : réparer des PC au composant, configurer des switchs et routeurs
-                  d'entreprise (Fortinet), et gérer des machines virtuelles sous Proxmox VE et iDRAC.
-                </p>
+              <h3 class="project-title">AeroTabs</h3>
+              <p class="project-desc" data-i18n="h.aero.desc">Extensão para Chrome e Firefox (Manifest V3) que põe os separadores inativos em suspensão para libertar memória. Organiza-os em grupos e espaços de trabalho, sincroniza com Supabase e partilha sessões de forma cifrada. Em preparação para publicação nas lojas do Chrome e do Firefox.</p>
+              <div class="shots">
+                <figure><img src="img/aerotabs/01-quick-actions.jpg" width="960" height="600" loading="lazy" decoding="async"
+                    alt="AeroTabs: ações rápidas para suspender, limpar, organizar e ordenar separadores" data-i18n-alt="h.aero.shot1"></figure>
+                <figure><img src="img/aerotabs/03-workspaces.jpg" width="960" height="600" loading="lazy" decoding="async"
+                    alt="AeroTabs: espaços de trabalho guardados" data-i18n-alt="h.aero.shot2"></figure>
+                <figure><img src="img/aerotabs/05-themes.jpg" width="960" height="600" loading="lazy" decoding="async"
+                    alt="AeroTabs: cinco temas, claro e escuro" data-i18n-alt="h.aero.shot3"></figure>
               </div>
-            </div>
-
-            <div style="margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid var(--border-subtle);">
-              <span class="badge badge-accent">
-                <span class="status-dot" style="background: var(--accent-light);"></span>
-                <span data-i18n="about.statusIEFP">Éligible au stage IEFP (Niveau 5 / Ativar.pt au Portugal)</span>
-              </span>
+              <p class="project-stack">JavaScript · Manifest V3 · Supabase</p>
+              <div class="project-links">
+                <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><span data-i18n="h.aero.site">Site do AeroTabs</span> ↗</a>
+                <a href="project/extention.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
+              </div>
             </div>
           </article>
 
-          <!-- Side Stack Cards (Centering with left card) -->
-          <div class="about-side-stack" data-anim-child>
-
-            <article class="about-side-card glass-card">
-              <h4 data-i18n="about.mobilityTitle">Disponibilité & Mobilité</h4>
-              <p data-i18n="about.mobilityDesc">
-                Basé à Amarante : mobile en hybride (rayon d'1h à 1h30 : Porto, Ermesinde, Penafiel, Braga...) ou en
-                télétravail complet.
-              </p>
-              <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <span class="badge">Hybride / Télétravail</span>
-                <span class="badge">Permis B</span>
-                <span class="badge">Disponible</span>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.ib.meta">Em desenvolvimento</p>
+            <div>
+              <h3 class="project-title">The Infinite Botnet</h3>
+              <p class="project-desc" data-i18n="h.ib.desc">Jogo incremental de simulação, escrito em TypeScript e React. A simulação corre num Web Worker, separada da interface, e o equilíbrio é verificado com simulações automáticas de 8 a 12 horas. Protótipo jogável, ainda por terminar.</p>
+              <p class="project-stack">TypeScript · React · Vite · Web Workers</p>
+              <div class="project-links">
+                <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm" data-i18n="h.ib.play">Jogar o protótipo</a>
+                <a href="project/webgames.html" class="btn btn-ghost btn-sm" data-i18n="h.ib.arch">Arquitetura</a>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="about-side-card glass-card">
-              <h4 data-i18n="skills.languages">Langues</h4>
-              <ul
-                style="display: flex; flex-direction: column; gap: 0.6rem; color: var(--text-secondary); font-size: 0.94rem;">
-                <li data-i18n="skills.langFR"><strong>Français :</strong> Langue maternelle / Natif (scolarité en
-                  France)</li>
-                <li data-i18n="skills.langPT"><strong>Portugais :</strong> Langue maternelle / Bilingue fluide</li>
-                <li data-i18n="skills.langEN"><strong>Anglais :</strong> B2 (Technique et conversationnel)</li>
-              </ul>
-            </article>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.bt.meta">Privado</p>
+            <div>
+              <h3 class="project-title">BoTokard</h3>
+              <p class="project-desc" data-i18n="h.bt.desc">Bot Python assíncrono feito para a comunidade de um streamer: API da Twitch, respostas com a API Gemini, um jogo de cartas e registos de auditoria em MySQL. Corre numa VM Proxmox. É privado e não tem demonstração pública.</p>
+              <p class="project-stack">Python · Discord.py · Twitch API · Gemini API · MySQL</p>
+              <div class="project-links">
+                <a href="project/discordbot.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
+              </div>
+            </div>
+          </article>
 
-          </div>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.cv.meta">Projeto escolar</p>
+            <div>
+              <h3 class="project-title">CipherVault</h3>
+              <p class="project-desc" data-i18n="h.cv.desc">Ferramenta Python de cifragem híbrida: RSA para trocar chaves e AES-GCM para os dados, com uma lista de contactos local. Nasceu como projeto escolar e retomo-o de vez em quando.</p>
+              <p class="project-stack">Python · RSA 2048 · AES-GCM</p>
+              <div class="project-links">
+                <a href="project/clipython.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
+                <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
 
+        </div>
+
+        <div class="stack-line">
+          <p class="project-meta" data-i18n="h.stackLabel">Ferramentas</p>
+          <p>JavaScript · TypeScript · Python · React · Vite · Supabase · FastAPI · MySQL · Web Workers · Discord.py</p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== SKILLS MATRIX ==================== -->
-    <section id="skills" class="section section--skills">
+    <!-- ==================== PARCOURS ==================== -->
+    <section id="parcours" class="section section--path">
       <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="skills.title">Compétences Techniques</h2>
-          <p class="section-subtitle" data-i18n="skills.subtitle">Une palette complète du hardware jusqu'au cloud
-            applicatif.</p>
-        </div>
+        <span class="eyebrow" data-i18n="h.path.eyebrow">02 · Percurso</span>
+        <h2 class="section-title" data-i18n="h.path.title">Onde aprendi</h2>
 
-        <div class="skills-apple-grid" data-anim="stagger">
-
-          <article class="skill-apple-card glass-card" data-anim-child>
-            <span class="skill-apple-label">Infrastructure</span>
-            <h3 class="skill-apple-title" data-i18n="skills.networks">Réseaux & Cybersécurité</h3>
-            <p class="skill-apple-desc" data-i18n="skills.networksDesc">
-              Fortinet (FortiGate, FortiSwitch), routing, VLANs, pare-feu d'entreprise, cryptographie hybride (RSA/AES),
-              protocoles sécurisés.
-            </p>
-            <div class="skill-apple-tags">
-              <span class="badge">FortiGate</span>
-              <span class="badge">FortiSwitch</span>
-              <span class="badge">VLANs</span>
-              <span class="badge">RSA / AES</span>
-            </div>
-          </article>
-
-          <article class="skill-apple-card glass-card" data-anim-child>
-            <span class="skill-apple-label">Systèmes</span>
-            <h3 class="skill-apple-title" data-i18n="skills.virtualization">Virtualisation & Serveurs</h3>
-            <p class="skill-apple-desc" data-i18n="skills.virtualizationDesc">
-              Proxmox VE (clusters, VMs, LXC), administration à distance iDRAC (Dell/HP), Linux (Debian, Ubuntu Server),
-              Windows Server.
-            </p>
-            <div class="skill-apple-tags">
-              <span class="badge">Proxmox VE</span>
-              <span class="badge">iDRAC</span>
-              <span class="badge">Linux Server</span>
-              <span class="badge">Win Server</span>
-            </div>
-          </article>
-
-          <article class="skill-apple-card glass-card" data-anim-child>
-            <span class="skill-apple-label">Software</span>
-            <h3 class="skill-apple-title" data-i18n="skills.code">Développement & Cloud</h3>
-            <p class="skill-apple-desc" data-i18n="skills.codeDesc">
-              JavaScript, TypeScript, Python, FastAPI, Discord.py, Supabase, APIs REST, extensions Manifest V3, Web
-              Workers.
-            </p>
-            <div class="skill-apple-tags">
-              <span class="badge">Python</span>
-              <span class="badge">TypeScript</span>
-              <span class="badge">Supabase</span>
-              <span class="badge">Manifest V3</span>
-            </div>
-          </article>
-
-          <article class="skill-apple-card glass-card" data-anim-child>
-            <span class="skill-apple-label">Hardware</span>
-            <h3 class="skill-apple-title" data-i18n="skills.hardware">Systèmes & Maintenance</h3>
-            <p class="skill-apple-desc" data-i18n="skills.hardwareDesc">
-              Diagnostic de pannes, réparation de composants hardware, montage et déploiement de postes, maintenance de
-              réseaux locaux.
-            </p>
-            <div class="skill-apple-tags">
-              <span class="badge">Diagnostic</span>
-              <span class="badge">Câblage LAN</span>
-              <span class="badge">Assemblage PC</span>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== CHRONOLOGICAL TIMELINE (Oldest to Most Recent) ==================== -->
-    <section id="experience" class="section section--experience">
-      <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="exp.title">Expériences & Formation</h2>
-          <p class="section-subtitle" data-i18n="exp.timelineTitle">Chronologie du parcours (du plus ancien au plus
-            récent)</p>
-        </div>
-
-        <div class="chrono-timeline" data-anim="stagger">
-          <div class="chrono-track" aria-hidden="true"></div>
-
-          <!-- Step 1: Scolarité en France (Plus ancien) -->
-          <div class="chrono-item" data-anim-child>
-            <div class="chrono-node" aria-hidden="true">
-              <span class="chrono-node-dot"></span>
-            </div>
-            <article class="chrono-card glass-card">
-              <div class="chrono-meta">
-                <span class="chrono-period" data-i18n="exp.item1.period">Jusqu'en 2021</span>
-                <span class="badge">Base Académique</span>
-              </div>
-              <h3 class="chrono-title" data-i18n="exp.item1.title">Scolarité en France (jusqu'en 2nde)</h3>
-              <div class="chrono-place" data-i18n="exp.item1.place">France</div>
-              <p class="chrono-desc" data-i18n="exp.item1.desc">
-                Scolarité complète en France de la naissance à la classe de seconde (10º ano). Socle de formation
-                générale et bilinguisme maternel natif.
-              </p>
-            </article>
-          </div>
-
-          <!-- Step 2: GEI Nível 4 & Stages ClickTech -->
-          <div class="chrono-item" data-anim-child>
-            <div class="chrono-node" aria-hidden="true">
-              <span class="chrono-node-dot"></span>
-            </div>
-            <article class="chrono-card glass-card">
-              <div class="chrono-meta">
-                <span class="chrono-period" data-i18n="exp.item2.period">2021 — 2024</span>
-                <span class="badge">Nível 4 · 3 Stages</span>
-              </div>
-              <h3 class="chrono-title" data-i18n="exp.item2.title">GEI Nível 4 & 3 Stages chez ClickTech</h3>
-              <div class="chrono-place" data-i18n="exp.item2.place">Amarante · Portugal</div>
-              <p class="chrono-desc" data-i18n="exp.item2.desc">
-                Curso Profissional de Gestão de Equipamentos Informáticos (GEI Nível 4) et 3 stages techniques en
-                entreprise chez ClickTech : diagnostic de pannes, réparation hardware au composant, montage de postes
-                clients et maintenance de réseaux locaux.
-              </p>
-            </article>
-          </div>
-
-          <!-- Step 3: CTeSP Nível 5 (2024 - 2026) -->
-          <div class="chrono-item" data-anim-child>
-            <div class="chrono-node" aria-hidden="true">
-              <span class="chrono-node-dot"></span>
-            </div>
-            <article class="chrono-card glass-card">
-              <div class="chrono-meta">
-                <span class="chrono-period" data-i18n="exp.item3.period">2024 — 2026</span>
-                <span class="badge badge-accent">Enseignement Supérieur (Nível 5)</span>
-              </div>
-              <h3 class="chrono-title" data-i18n="exp.item3.title">CTeSP en Cybersécurité, Réseaux et Systèmes</h3>
-              <div class="chrono-place" data-i18n="exp.item3.place">Ensino Superior Politécnico (Nível 5) · Conclu</div>
-              <p class="chrono-desc" data-i18n="exp.item3.desc">
-                Formation supérieure certifiée : architecture réseau d'entreprise, protocoles de routage, politiques de
-                sécurité, virtualisation et administration Linux/Windows.
-              </p>
-            </article>
-          </div>
-
-          <!-- Step 4: Proxsys Solutions (Plus récent / Actuel) -->
-          <div class="chrono-item chrono-item--current" data-anim-child>
-            <div class="chrono-node" aria-hidden="true">
-              <span class="chrono-node-dot"></span>
-            </div>
-            <article class="chrono-card glass-card">
-              <div class="chrono-meta">
-                <span class="chrono-period" data-i18n="exp.item4.period">2026 (Récent)</span>
-                <span class="badge badge-accent">Stage Entreprise</span>
-              </div>
-              <h3 class="chrono-title" data-i18n="exp.item4.title">Stage Réseaux & Infrastructure IT</h3>
-              <div class="chrono-place" data-i18n="exp.item4.place">Proxsys Solutions · Ermesinde</div>
-              <p class="chrono-desc" data-i18n="exp.item4.desc">
-                Configuration et banc d'essai d'équipements d'entreprise Fortinet (FortiGate, switchs, routeurs).
-                Administration hors-bande iDRAC (Dell/HP) et création de VMs/clusters sous Proxmox VE.
-              </p>
-            </article>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== PROJECTS PRESENTATION ==================== -->
-    <section id="projects" class="section section--projects">
-      <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="projects.title">Projets Phares</h2>
-          <p class="section-subtitle" data-i18n="projects.subtitle">Des outils réels développés en autonomie, axés sur
-            la performance et l'utilité concrète.</p>
-        </div>
-
-        <div class="projects-grid" data-anim="stagger">
-
-          <!-- AeroTabs — Featured -->
-          <article class="project-card project-card--wide glass-card" data-anim-child>
-            <div class="project-card-header">
-              <div style="display: flex; align-items: center; gap: 0.9rem;">
-                <img src="img/aerotabs_logo.png" alt="AeroTabs Logo" class="project-card-logo">
-                <span class="badge badge-accent" data-i18n="projects.card1.status">BETA BIENTÔT · SAAS ROADMAP</span>
-              </div>
-              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"
-                style="color: var(--text-secondary);">
-                aerotabs.com ↗
-              </a>
-            </div>
-
+        <ol class="timeline">
+          <li class="timeline-item" data-anim-child>
+            <p class="timeline-date" data-i18n="h.e1.date">2026</p>
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card1.title">AeroTabs — Optimiseur RAM & Gestionnaire
-                d'Espaces</h3>
-              <p class="project-card-desc" data-i18n="projects.card1.desc">
-                Extension de navigateur (Chrome & Firefox, Manifest V3) avec mécanisme intelligent de suspension
-                d'onglets (Tab Sleeping) pour libérer jusqu'à 80% de RAM, synchronisation cloud sécurisée via Supabase
-                et partage éphémère de sessions chiffrées.
-              </p>
+              <h3 class="timeline-title" data-i18n="h.e1.title">Estágio de 6 meses na Proxsys Solutions</h3>
+              <p class="timeline-place" data-i18n="h.e1.place">Ermesinde, Portugal</p>
+              <p class="timeline-desc" data-i18n="h.e1.desc">Último ano do CTeSP. Virtualização com Proxmox, switches e firewalls Fortinet, instalação de servidores e racks em clientes, instalação de câmaras IP e identificação de cablagem de rede.</p>
             </div>
-
-            <div class="project-card-tags">
-              <span class="badge">Manifest V3</span>
-              <span class="badge">Chrome & Firefox</span>
-              <span class="badge">Supabase Cloud</span>
-              <span class="badge">Tab Sleeping</span>
-              <span class="badge">Partage Chiffré</span>
-            </div>
-
-            <div class="project-card-actions">
-              <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                <span data-i18n="projects.visitSite">Site Officiel</span> ↗
-              </a>
-              <a href="project/extention.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails
-                Techniques</a>
-            </div>
-          </article>
-
-          <!-- BoTokard -->
-          <article class="project-card project-card--half glass-card" data-anim-child>
-            <div class="project-card-header">
-              <span class="badge" data-i18n="projects.card2.status">PRODUCTION · PROXMOX VM</span>
-            </div>
-
+          </li>
+          <li class="timeline-item" data-anim-child>
+            <p class="timeline-date" data-i18n="h.e2.date">2024 — 2026</p>
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card2.title">BoTokard — Moteur Communautaire &
-                Automatisation</h3>
-              <p class="project-card-desc" data-i18n="projects.card2.desc">
-                Bot Python asynchrone hébergé sur une VM dédiée sous Proxmox VE. Orchestration en temps réel de l'API
-                Twitch, interactions IA Gemini, moteur de gameplay TCG et système d'audit logs avec base de données
-                MySQL.
-              </p>
+              <h3 class="timeline-title" data-i18n="h.e2.title">CTeSP em Cibersegurança, Redes e Sistemas</h3>
+              <p class="timeline-place" data-i18n="h.e2.place">Ensino superior politécnico · nível 5</p>
+              <p class="timeline-desc" data-i18n="h.e2.desc">Arquitetura de redes, encaminhamento e comutação, políticas de segurança, virtualização e administração de servidores Linux e Windows.</p>
             </div>
-
-            <div class="project-card-tags">
-              <span class="badge">Python</span>
-              <span class="badge">Discord.py</span>
-              <span class="badge">Twitch API</span>
-              <span class="badge">Gemini API</span>
-              <span class="badge">Proxmox VM</span>
-            </div>
-
-            <div class="project-card-actions">
-              <a href="project/discordbot.html" class="btn btn-secondary btn-sm"
-                data-i18n="projects.viewProject">Détails Techniques</a>
-            </div>
-          </article>
-
-          <!-- CipherVault -->
-          <article class="project-card project-card--half glass-card" data-anim-child>
-            <div class="project-card-header">
-              <span class="badge" data-i18n="projects.card3.status">OPEN-SOURCE · SÉCURITÉ</span>
-            </div>
-
+          </li>
+          <li class="timeline-item" data-anim-child>
+            <p class="timeline-date" data-i18n="h.e3.date">2021 — 2024</p>
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card3.title">CipherVault — Chiffrement Hybride RSA /
-                AES</h3>
-              <p class="project-card-desc" data-i18n="projects.card3.desc">
-                Outil Python de chiffrement hybride pour sécuriser fichiers et messages. Combine le chiffrement
-                asymétrique RSA pour l'échange de clés et AES pour le traitement haute vitesse des données, avec carnet
-                de contacts local.
-              </p>
+              <h3 class="timeline-title" data-i18n="h.e3.title">Curso profissional GEI (nível 4) e estágios na ClickTech</h3>
+              <p class="timeline-place" data-i18n="h.e3.place">Amarante, Portugal</p>
+              <p class="timeline-desc" data-i18n="h.e3.desc">Dois estágios (11.º e 12.º ano): base PHP, servidor cloud Nextcloud e configuração de equipamentos, além de diagnóstico e reparação de computadores.</p>
             </div>
-
-            <div class="project-card-tags">
-              <span class="badge">Python</span>
-              <span class="badge">RSA 2048</span>
-              <span class="badge">AES-GCM</span>
-              <span class="badge">Keystore Local</span>
-            </div>
-
-            <div class="project-card-actions">
-              <a href="project/clipython.html" class="btn btn-secondary btn-sm" data-i18n="projects.viewProject">Détails
-                Techniques</a>
-              <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"
-                data-i18n="projects.viewGithub">GitHub ↗</a>
-            </div>
-          </article>
-
-          <!-- The Infinite Botnet (Reboot) -->
-          <article class="project-card project-card--wide glass-card" data-anim-child>
-            <div class="project-card-header">
-              <span class="badge badge-accent" data-i18n="projects.card4.status">R&D · MOTEUR TYPESCRIPT</span>
-            </div>
-
+          </li>
+          <li class="timeline-item" data-anim-child>
+            <p class="timeline-date" data-i18n="h.e4.date">Até 2021</p>
             <div>
-              <h3 class="project-card-title" data-i18n="projects.card4.title">The Infinite Botnet (Reboot) — Laboratoire
-                de Simulation</h3>
-              <p class="project-card-desc" data-i18n="projects.card4.desc">
-                Moteur de simulation incrémentale complexe développé sous TypeScript et Vite. Architecture réactive
-                optimisée avec Web Workers pour le calcul en tâche de fond, boucles déterministes et gestion d'état
-                poussée.
-              </p>
+              <h3 class="timeline-title" data-i18n="h.e4.title">Escolaridade em França</h3>
+              <p class="timeline-place" data-i18n="h.e4.place">França</p>
+              <p class="timeline-desc" data-i18n="h.e4.desc">Escola em França até ao 10.º ano, com um estágio de observação na Thales no 9.º ano.</p>
             </div>
+          </li>
+        </ol>
 
-            <div class="project-card-tags">
-              <span class="badge">TypeScript</span>
-              <span class="badge">Vite</span>
-              <span class="badge">Web Workers</span>
-              <span class="badge">Simulation Systèmes</span>
-            </div>
-
-            <div class="project-card-actions">
-              <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm"
-                data-i18n="projects.card4.play">Lancer le Prototype</a>
-              <a href="project/webgames.html" class="btn btn-secondary btn-sm"
-                data-i18n="projects.viewProject">Architecture du Simulateur</a>
-            </div>
-          </article>
-
-        </div>
-
-        <div style="margin-top: 3rem; text-align: center;" data-anim="fade-up">
-          <a href="project/projects.html" class="btn btn-secondary" data-i18n="projects.viewAll">Voir Tous les
-            Projets</a>
+        <div class="skills">
+          <div>
+            <h3 data-i18n="h.sk.code">Código</h3>
+            <ul>
+              <li data-i18n="h.sk.c1">Linguagens: JavaScript, TypeScript, Python</li>
+              <li data-i18n="h.sk.c2">Interface: HTML, CSS, React, Vite</li>
+              <li data-i18n="h.sk.c3">Extensões de browser: Manifest V3</li>
+              <li data-i18n="h.sk.c4">Dados e APIs: Supabase, MySQL, REST, FastAPI</li>
+            </ul>
+          </div>
+          <div>
+            <h3 data-i18n="h.sk.sys">Sistemas e redes</h3>
+            <ul>
+              <li data-i18n="h.sk.s1">Rede: Fortinet (FortiGate, FortiSwitch), VLANs, encaminhamento</li>
+              <li data-i18n="h.sk.s2">Virtualização: Proxmox VE (VMs, LXC, clusters), iDRAC</li>
+              <li data-i18n="h.sk.s3">Sistemas: Debian, Ubuntu Server, Windows Server</li>
+              <li data-i18n="h.sk.s4">Cloud privada: Nextcloud</li>
+              <li data-i18n="h.sk.s5">Hardware: diagnóstico, reparação, cablagem</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -541,81 +315,33 @@
     <!-- ==================== CONTACT ==================== -->
     <section id="contact" class="section section--contact">
       <div class="section-container">
-        <div class="section-header" data-anim="fade-up">
-          <h2 class="section-title" data-i18n="contact.title">Contact & Recrutement</h2>
-          <p class="section-subtitle" data-i18n="contact.subtitle">À la recherche d'un collaborateur autonome,
-            polyvalent et passionné ? Discutons de vos besoins.</p>
+        <span class="eyebrow" data-i18n="h.ct.eyebrow">03 · Contacto</span>
+        <h2 class="section-title" data-i18n="h.ct.title">Vamos falar.</h2>
+        <p class="section-lead" data-i18n="h.ct.lead">Procuro um estágio ou um primeiro emprego em programação, redes ou sistemas, perto de Amarante e do Porto ou em teletrabalho.</p>
+
+        <a href="mailto:contact.fabiocp@gmail.com" class="mail-big">contact.fabiocp@gmail.com</a>
+        <p class="mail-note" data-i18n="h.ct.note">Para propostas de trabalho e recrutamento. Respondo em português, francês ou inglês.</p>
+
+        <div class="contact-rows">
+          <div class="contact-row"><span data-i18n="h.ct.r1">Projetos</span><a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></div>
+          <div class="contact-row"><span>Discord</span><a href="https://discord.com/users/devbyfab" target="_blank" rel="noopener">devbyfab</a></div>
+          <div class="contact-row"><span>GitHub</span><a href="https://github.com/devbyfab" target="_blank" rel="noopener">github.com/devbyfab</a></div>
+          <div class="contact-row"><span data-i18n="h.ct.r4">CV</span><a href="assets/CV_DevByFab.pdf" download data-i18n="h.ct.r4v">Descarregar em PDF (português)</a></div>
         </div>
-
-        <div class="contact-apple-grid" data-anim="fade-up">
-
-          <a href="mailto:contact.fabiocp@gmail.com" class="contact-apple-card glass-card">
-            <span class="contact-apple-type" data-i18n="contact.workEmailLabel">Email Emploi & Recrutement</span>
-            <span class="contact-apple-val">contact.fabiocp@gmail.com</span>
-            <span class="contact-apple-note" data-i18n="contact.workEmailSub">Pour toute opportunité
-              professionnelle</span>
-          </a>
-
-          <a href="mailto:devbyfab@gmail.com" class="contact-apple-card glass-card">
-            <span class="contact-apple-type" data-i18n="contact.projEmailLabel">Email Projets & Collaborations</span>
-            <span class="contact-apple-val">devbyfab@gmail.com</span>
-            <span class="contact-apple-note" data-i18n="contact.projEmailSub">Pour l'open-source et échanges
-              techniques</span>
-          </a>
-
-          <a href="https://discord.com/users/devbyfab" class="contact-apple-card glass-card" target="_blank"
-            rel="noopener">
-            <span class="contact-apple-type" data-i18n="contact.discordLabel">Discord Direct</span>
-            <span class="contact-apple-val">devbyfab</span>
-            <span class="contact-apple-note">Messagerie instantanée technique</span>
-          </a>
-
-          <a href="https://github.com/devbyfab" class="contact-apple-card glass-card" target="_blank" rel="noopener">
-            <span class="contact-apple-type" data-i18n="contact.githubLabel">Profil GitHub</span>
-            <span class="contact-apple-val">github.com/devbyfab</span>
-            <span class="contact-apple-note">Dépôts, code source et commits</span>
-          </a>
-
-        </div>
-
-        <!-- Clean CV Download Banner -->
-        <div class="cv-apple-banner glass-card" data-anim="fade-up">
-          <div>
-            <h3 data-i18n="contact.cvBannerTitle">Consultez mon CV complet</h3>
-            <p data-i18n="contact.cvBannerDesc">Téléchargez mon curriculum vitae au format PDF (coordonnées, détails des
-              compétences et parcours).</p>
-          </div>
-          <a href="assets/CV_Fabio_Pinto.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-lg" download>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span data-i18n="contact.cvBannerBtn">Télécharger CV (PDF)</span>
-          </a>
-        </div>
-
       </div>
     </section>
 
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
-    <div class="footer-separator"></div>
     <div class="footer-content">
       <p class="footer-copy">
-        &copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> ·
-        <span data-i18n="footer.tagline">Développé avec passion · Zéro artifice, que du concret.</span> ·
-        <a href="legal.html" data-i18n="footer.legal">Mentions Légales</a>
+        &copy; DevByFab 2026 · <span data-i18n="footer.rights">Todos os direitos reservados.</span> ·
+        <a href="legal.html" data-i18n="footer.legal">Menções legais</a>
       </p>
     </div>
   </footer>
 
-
-  <!-- App scripts -->
-  <script src="js/particles.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>

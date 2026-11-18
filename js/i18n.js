@@ -10,6 +10,7 @@
   var SUPPORTED = ['FR', 'PT', 'EN'];
   var currentLang = 'FR';
   var translationsCache = {};
+  var booted = false;
 
   /* --- Detect initial language --- */
   function detectLang() {
@@ -23,8 +24,7 @@
     var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
     if (nav.startsWith('pt')) return 'PT';
     if (nav.startsWith('fr')) return 'FR';
-    if (nav.startsWith('en')) return 'EN';
-    return 'FR';
+    return 'EN';
   }
 
   function langToFile(lang) {
@@ -75,6 +75,27 @@
       }
     });
 
+    document.querySelectorAll('[data-i18n-alt]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-alt');
+      if (data[key] !== undefined) el.setAttribute('alt', data[key]);
+    });
+
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-aria');
+      if (data[key] !== undefined) el.setAttribute('aria-label', data[key]);
+    });
+
+    // Titre et description de la page (uniquement si la page le demande)
+    if (document.documentElement.hasAttribute('data-i18n-meta')) {
+      if (data['meta.title']) document.title = data['meta.title'];
+      var desc = document.querySelector('meta[name="description"]');
+      if (desc && data['meta.description']) desc.setAttribute('content', data['meta.description']);
+      var ogT = document.querySelector('meta[property="og:title"]');
+      if (ogT && data['meta.title']) ogT.setAttribute('content', data['meta.title']);
+      var ogD = document.querySelector('meta[property="og:description"]');
+      if (ogD && data['meta.description']) ogD.setAttribute('content', data['meta.description']);
+    }
+
     document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
       var key = el.getAttribute('data-i18n-title');
       if (data[key] !== undefined) {
@@ -106,13 +127,23 @@
   }
 
   /* --- Switch Language --- */
-  async function setLang(lang) {
+  async function setLang(lang, persist) {
     if (SUPPORTED.indexOf(lang.toUpperCase()) === -1) return;
     currentLang = lang.toUpperCase();
 
-    try {
-      localStorage.setItem(STORAGE_KEY, currentLang);
-    } catch (_) {}
+    if (persist) {
+      try {
+        localStorage.setItem(STORAGE_KEY, currentLang);
+      } catch (_) {}
+    }
+
+    // Le HTML contient déjà cette langue : rien à charger, pas de flash.
+    var inline = document.documentElement.getAttribute('data-i18n-inline');
+    if (!booted && inline && inline.toUpperCase() === currentLang) {
+      document.documentElement.lang = inline.toLowerCase();
+      updateDropdownUI();
+      return;
+    }
 
     try {
       var translations = await loadTranslations(currentLang);
@@ -139,7 +170,7 @@
         e.stopPropagation();
         var targetLang = item.getAttribute('data-lang-val');
         if (targetLang) {
-          setLang(targetLang);
+          setLang(targetLang, true);
         }
         dropdown.classList.remove('open');
         trigger.setAttribute('aria-expanded', 'false');
@@ -165,7 +196,8 @@
 
   function init() {
     var detected = detectLang();
-    setLang(detected);
+    setLang(detected, false);
+    booted = true;
     initDropdown();
   }
 

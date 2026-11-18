@@ -1,30 +1,58 @@
 /* ============================================
-   BASE — Design Tokens, Reset & Performance
-   DevByFab Portfolio — Compact & Optimized
+   BASE — Tokens, reset, typographie
+   DevByFab — encre chaude + violet profond, à plat
    ============================================ */
 
 :root {
-  --bg-deep: #050508;
-  --bg-surface: #0a0912;
-  --bg-surface-elevated: #11101c;
-  --bg-card: rgba(255, 255, 255, 0.025);
-  --bg-card-hover: rgba(255, 255, 255, 0.045);
-  --accent: #8f5fff;
-  --accent-light: #a78bfa;
-  --accent-subtle: rgba(143, 95, 255, 0.12);
-  --accent-border: rgba(143, 95, 255, 0.35);
-  --text-primary: #f5f5f7;
-  --text-secondary: #86868b;
-  --text-tertiary: #52525a;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.2);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
+  /* Surfaces */
+  --bg: #14111c;
+  --bg-2: #1b1727;
+  --bg-3: #251f35;
+  --paper: #ebe5f4;
+  --paper-text: #1b1527;
+
+  /* Texte (contrastes mesurés sur --bg : 14:1 / 7:1 / 5.2:1) */
+  --text: #ede8f4;
+  --text-2: #aaa2ba;
+  --text-3: #8d849e;
+
+  /* Violet : plat, jamais de halo */
+  --violet: #5b3ea8;
+  --violet-hi: #6c4fc2;
+  --violet-ink: #c3b3f1;
+
+  --line: rgba(237, 232, 244, 0.12);
+  --line-strong: rgba(237, 232, 244, 0.26);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
   --radius-full: 9999px;
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+
+  --font-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* Alias : les pages projet / CV utilisent encore ces noms */
+  --bg-deep: var(--bg);
+  --bg-surface: var(--bg-2);
+  --bg-surface-elevated: var(--bg-3);
+  --bg-card: var(--bg-2);
+  --bg-card-hover: var(--bg-3);
+  --accent: var(--violet-hi);
+  --accent-light: var(--violet-ink);
+  --accent-subtle: rgba(108, 79, 194, 0.18);
+  --accent-border: rgba(195, 179, 241, 0.32);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --text-tertiary: var(--text-3);
+  --border-subtle: var(--line);
+  --border-hover: var(--line-strong);
+  --font-main: var(--font-body);
+  --font-heading: var(--font-display);
 }
 
 *,
@@ -36,9 +64,9 @@
 }
 
 html {
-  scrollbar-width: thin;
-  scrollbar-color: #26243a #050508;
-  background: var(--bg-deep);
+  background: var(--bg);
+  scrollbar-color: #3a3150 var(--bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -48,16 +76,26 @@ html {
 }
 
 body {
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.01em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
 }
 
 a {
@@ -65,10 +103,14 @@ a {
   text-decoration: none;
 }
 
-img {
+img,
+svg {
   max-width: 100%;
-  height: auto;
   display: block;
+}
+
+img {
+  height: auto;
 }
 
 ul,
@@ -81,50 +123,50 @@ button {
 }
 
 ::selection {
-  background: var(--accent);
-  color: #ffffff;
+  background: var(--violet);
+  color: #fff;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-  background: var(--bg-deep);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #252338;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #3e3b5c;
-}
-
-.bg-gradient {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 90% 50% at 50% -5%, rgba(143, 95, 255, 0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 85% 60%, rgba(143, 95, 255, 0.03) 0%, transparent 70%);
-  transition: opacity 0.5s ease;
+:focus-visible {
+  outline: 2px solid var(--violet-ink);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 section[id] {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 4.5rem;
 }
 
-/* Eco performance override */
-html[data-perf="eco"] #hero-canvas {
-  display: none !important;
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 300;
+  background: var(--paper);
+  color: var(--paper-text);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.bg-gradient {
+  display: none;
+}
+
+html[data-perf="eco"] .infra-link {
+  animation: none !important;
 }
 
 /* --- Apparition au scroll (activée par js/animations.js) --- */
 .js [data-anim="fade-up"],
 .js [data-anim-child] {
   opacity: 0;
-  translate: 0 24px;
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), translate 0.7s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease;
+  translate: 0 20px;
+  transition: opacity 0.7s var(--ease), translate 0.7s var(--ease), border-color 0.3s ease, background 0.3s ease;
 }
 
 .js .is-visible,
@@ -132,4 +174,14 @@ html[data-perf="eco"] #hero-canvas {
 .js.reveal-all [data-anim-child] {
   opacity: 1;
   translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
