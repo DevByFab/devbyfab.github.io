@@ -43,8 +43,6 @@
   font-weight: 500;
   color: var(--text-secondary);
   margin-bottom: 1.8rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .hero-title {
@@ -86,6 +84,23 @@
   gap: 0.75rem;
   flex-wrap: wrap;
   margin-bottom: 2.2rem;
+}
+
+/* Entrée du hero : CSS pur, jouée une seule fois */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-content > * {
+    animation: hero-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-content > :nth-child(2) { animation-delay: 0.08s; }
+  .hero-content > :nth-child(3) { animation-delay: 0.16s; }
+  .hero-content > :nth-child(4) { animation-delay: 0.24s; }
+  .hero-content > :nth-child(5) { animation-delay: 0.32s; }
+  .hero-content > :nth-child(6) { animation-delay: 0.4s; }
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; translate: 0 18px; }
 }
 
 /* --- ABOUT (Balanced 50/50 Grid) --- */

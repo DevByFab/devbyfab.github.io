@@ -26,7 +26,7 @@
   function resize() {
     var section = canvas.parentElement;
     if (!section) return;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = section.offsetWidth * dpr;
     canvas.height = section.offsetHeight * dpr;
     ctx.scale(dpr, dpr);
@@ -86,10 +86,7 @@
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.colorBase + this.alpha + ')';
-    ctx.shadowColor = this.colorBase + '0.6)';
-    ctx.shadowBlur = 6;
     ctx.fill();
-    ctx.shadowBlur = 0;
   };
 
   function initParticles() {

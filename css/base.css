@@ -38,8 +38,13 @@
 html {
   scrollbar-width: thin;
   scrollbar-color: #26243a #050508;
-  scroll-behavior: smooth;
   background: var(--bg-deep);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -110,14 +115,21 @@ section[id] {
 }
 
 /* Eco performance override */
-html[data-perf="eco"] .glass-card,
-html[data-perf="eco"] .site-header,
-html[data-perf="eco"] .lang-dropdown-menu {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: #0d0c15 !important;
-}
-
 html[data-perf="eco"] #hero-canvas {
   display: none !important;
+}
+
+/* --- Apparition au scroll (activée par js/animations.js) --- */
+.js [data-anim="fade-up"],
+.js [data-anim-child] {
+  opacity: 0;
+  translate: 0 24px;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), translate 0.7s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease;
+}
+
+.js .is-visible,
+.js.reveal-all [data-anim="fade-up"],
+.js.reveal-all [data-anim-child] {
+  opacity: 1;
+  translate: 0 0;
 }

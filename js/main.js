@@ -43,42 +43,27 @@
     });
   }
 
-  /* Scroll Spy */
+  /* Scroll Spy (IntersectionObserver : aucune lecture de layout au scroll) */
   function initScrollSpy() {
     var sections = document.querySelectorAll('section[id]');
     var navLinks = document.querySelectorAll('.nav-link');
-    if (!sections.length || !navLinks.length) return;
+    if (!sections.length || !navLinks.length || !('IntersectionObserver' in window)) return;
 
-    var updateActive = function () {
-      var scrollPos = window.scrollY + 180, currentId = '';
-      sections.forEach(function (s) { if (s.offsetTop <= scrollPos) currentId = s.id; });
-      navLinks.forEach(function (l) {
-        var href = l.getAttribute('href') || '';
-        l.classList.toggle('active', href === '#' + currentId || href.endsWith('#' + currentId));
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = entry.target.id;
+        navLinks.forEach(function (l) {
+          var href = l.getAttribute('href') || '';
+          l.classList.toggle('active', href === '#' + id || href.endsWith('#' + id));
+        });
       });
-    };
-    window.addEventListener('scroll', updateActive, { passive: true });
-    updateActive();
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(function (s) { io.observe(s); });
   }
 
-  /* Smooth Scroll */
-  function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        var id = this.getAttribute('href');
-        if (!id || id === '#') return;
-        var target = document.querySelector(id);
-        if (!target) return;
-        e.preventDefault();
-        if (window._lenis) {
-          window._lenis.scrollTo(target, { offset: -80 });
-        } else {
-          var top = target.getBoundingClientRect().top + window.pageYOffset - 75;
-          window.scrollTo({ top: top, behavior: 'smooth' });
-        }
-      });
-    });
-  }
+  /* Les ancres utilisent le scroll natif (CSS scroll-behavior + scroll-margin-top). */
 
   /* Project Filters (Gallery Page) */
   function initProjectFilters() {
@@ -132,7 +117,7 @@
   }
 
   function init() {
-    initHeader(); initBurger(); initScrollSpy(); initSmoothScroll();
+    initHeader(); initBurger(); initScrollSpy();
     initProjectFilters(); initSpotlightCards(); initBotnetSignal();
   }
 
