@@ -13,7 +13,7 @@ Dernière vraie session de développement : 5 mai 2026 (« P2 refont »). Le com
 | `npm run build` | OK (voir « Environnement » pour Windows) |
 | Le jeu démarre dans Chrome | OK : le worker se lance, la cinématique de lore s'affiche, 0 erreur console |
 | Textes en français | OK après correction (voir plus bas) |
-| `npm run balance:sim` | Se lance, mais **ne mesure rien d'utile** (voir « Équilibrage ») |
+| `npm run balance:sim` | Réécrit : mesure fiable (voir « Équilibrage ») |
 
 ## Ce qui existe (preuves dans le code)
 
@@ -35,21 +35,33 @@ Dernière vraie session de développement : 5 mai 2026 (« P2 refont »). Le com
 | Narration | 11 modèles de messages seulement, pas de branches avec conséquences | M5 : narration à embranchements |
 | Tutoriel | v1 seulement (guide par sections) | M7 : tutoriel stratégique |
 | Visuels guerre/matrice | pas de couches visuelles dédiées | M6.1 |
-| Durée de partie | non mesurée de façon fiable | 12 à 20 h |
+| Durée de partie | **mesurée : aucune partie finissable au rythme normal** | 3 à 5 h (décidé le 19 nov.) |
 | Signal vers le portfolio | l'ancien jeu écrivait `infiniteBotnet.portfolioSignal.v1` ; le reboot ne l'écrit pas | à décider |
 
-## Équilibrage : pourquoi `balance:sim` ne prouve rien
+## Équilibrage : mesure réelle (lot L1, 19 nov. 2026)
 
-Le joueur automatique de `src/worker/sim/balanceHarness.ts` est périmé :
+Le joueur automatique a été réécrit (`src/worker/sim/balanceHarness.ts`). Il joue avec les mêmes fonctions que le worker (même boucle, mêmes commandes), avec un hasard reproductible. Commande : `npm run balance:sim -- --seeds=3 --hours=10 [--step=100] [--trace]`.
 
-- il **n'achète aucune amélioration** (depuis avril, les améliorations coûtent des bots) ;
-- il **arrête d'exploiter à 360 bots** (`bots < 360n`), donc il reste bloqué en P1 ;
-- il **ne gère pas la phase P2** (pas de blanchiment, pas d'entreprises-écrans).
+**Résultat au vrai rythme du jeu (ticks de 100 ms), 3 graines × 3 niveaux de joueur, limite 10 h :**
 
-Résultat : 0 partie terminée sur 10. Ce n'est pas la preuve que le jeu est impossible à finir, c'est la preuve que le test n'est plus adapté.
+| Mesure | Résultat |
+| --- | --- |
+| Parties terminées | **0 sur 9** |
+| P1 « Automation » atteinte | vers 43 min |
+| P2 « Cashflow » atteinte | **jamais** en 10 h |
+| Argent gagné pendant 10 h | **0** |
+| Bots après 10 h | environ 10 500 (la P3 en demande 420 000) |
 
-Sonde rapide faite à la main (joueur automatique qui achète les améliorations, à titre indicatif seulement) :
-la phase P1 dure environ 5 h 40 de temps simulé et la P2 est atteinte vers 6 h 30. En entrant en P2, le nombre de bots chute (5 974 à 2 324). À confirmer avec un vrai harness.
+### Cause 1 : l'argent n'arrive jamais à vitesse normale
+`scalePerSecond` (`domain/economy/helpers.ts`) calcule `débit × durée du tick ÷ 1000` en division entière. Avec un tick de 100 ms, un débit de 2 par seconde donne `2 × 100 / 1000 = 0`. Les petits débits ne produisent rien, et le résultat dépend de la durée du tick. En mode turbo (ticks plus longs) l'argent arrive, ce qui masque le défaut quand on teste en accéléré.
+
+### Cause 2 : la croissance automatique est inaccessible
+Sans l'amélioration « Exploit Daemon » (6 500 bots + 1 900 d'argent), la seule source de bots est le geste manuel : environ 1 000 bots par heure, quel que soit le niveau du joueur (le geste est limité par un délai de 2 s). Il faut donc 6 heures juste pour pouvoir l'acheter, et l'argent manque de toute façon (cause 1).
+
+### Autres constats
+- Le niveau du joueur (détendu ou concentré) ne change rien aux résultats : tout est limité par le délai du geste manuel. Le jeu ne récompense pas l'attention.
+- Les paliers P3 à P5 (420 000, 18 millions, 480 millions de bots) sont hors de portée de cette courbe.
+- Les phases P3 à P5 n'ont donc jamais pu être testées avec cette économie : leur équilibrage est entièrement inconnu.
 
 ## Environnement
 
@@ -64,7 +76,7 @@ la phase P1 dure environ 5 h 40 de temps simulé et la P2 est atteinte vers 6 h 
 
 ## Proposition de plan pour finir le jeu
 
-1. **Réparer l'instrument de mesure** : réécrire le joueur automatique (améliorations, P2, guerre, matrice) pour mesurer la vraie durée de partie.
+1. ~~Réparer l'instrument de mesure~~ : fait (lot L1). Voir `docs/design/GAME_DESIGN_V2.md` pour la suite.
 2. **Dérouler la partie à la main** de P0 à P5 avec le mode turbo, et noter chaque blocage ou chiffre absurde. C'est ce qui dira vraiment « où j'en suis ».
 3. **Écrire le contenu manquant** : améliorations P3 à P5, puis les fins.
 4. **Recaler la durée** sur la cible (12 à 20 h, ou réduire la cible : à décider).

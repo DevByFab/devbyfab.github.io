@@ -1,58 +1,73 @@
-import type { PhaseId } from '../../game/types';
+/**
+ * Joueur automatique : joue une partie complète avec les MÊMES fonctions que le worker
+ * (runSimulationStep, syncDerivedState, commandes du domaine) et mesure la durée.
+ *
+ * Usage : npm run balance:sim -- [--hours=10] [--seeds=3] [--skill=relaxed|normal|focused|all] [--json] [--trace] [--step=100]
+ */
+import type { FrontBusinessId, PhaseId } from '../../game/types';
 import {
-  applyEconomyTick,
   commandCashoutPortfolio,
   commandExploit,
+  commandFbiCountermeasure,
   commandInvestTranche,
+  commandPurchaseFrontBusiness,
   commandScan,
-  commandToggleInvestMode,
   commandToggleMonetize,
+  commandUpgradeFrontBusiness,
 } from '../domain/economy';
-import { applyMatrixTick, commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../domain/matrix';
-import { applyNarrativeTick, commandProcessMessage, commandQuarantineMessage } from '../domain/narrative';
-import { applyWarTick, commandWarAttack, commandWarFortify, commandWarScrub } from '../domain/war';
-import { syncCoreDerivedState } from '../engine/syncDerivedState';
+import { commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../domain/matrix';
+import { commandProcessMessage, commandQuarantineMessage } from '../domain/narrative';
+import { commandPurchaseUpgrade } from '../domain/upgrades';
+import { commandWarAttack, commandWarFortify, commandWarScrub } from '../domain/war';
+import { runSimulationStep } from '../engine/simulationStep';
+import { syncDerivedState } from '../engine/syncDerivedState';
 import { createInitialEngineState, type EngineState } from '../state';
 
-const STEP_MS = 1000;
-const TARGET_MIN_HOURS = 12;
-const TARGET_MAX_HOURS = 20;
-const MAX_HOURS = 22;
-const RUN_SEEDS = [101, 203, 307, 409, 503, 601, 709, 809, 907, 1009];
-const MATRIX_OPERATOR_ACCURACY = 0.82;
+let stepMs = 100; // durée d'un tick du vrai worker (TICK_INTERVAL_MS)
+const TARGET_MIN_HOURS = 3;
+const TARGET_MAX_HOURS = 5;
+const FINAL_PHASE: PhaseId = 'singularity-core';
+const FRONT_BUSINESSES: ReadonlyArray<FrontBusinessId> = ['laundromat', 'car-dealership', 'freight-forwarder'];
 
-interface OperatorStats {
-  scans: number;
-  exploits: number;
-  monetizeToggles: number;
-  invests: number;
-  cashouts: number;
-  investModeSwitches: number;
-  attacks: number;
-  scrubs: number;
-  fortifies: number;
-  matrixArms: number;
-  matrixInjects: number;
-  matrixStabilizes: number;
+interface Skill {
+  name: string;
+  /** délai entre deux gestes manuels (scan / exploit) */
+  actionMs: number;
+  /** délai entre deux "regards" sur l'interface (achats, réglages) */
+  checkMs: number;
+}
+
+const SKILLS: Record<string, Skill> = {
+  relaxed: { name: 'relaxed', actionMs: 2000, checkMs: 15_000 },
+  normal: { name: 'normal', actionMs: 1000, checkMs: 8000 },
+  focused: { name: 'focused', actionMs: 500, checkMs: 4000 },
+};
+
+interface Counters {
+  upgrades: number;
+  fbiInterventions: number;
+  purges: number;
+  matrixCollapses: number;
   messagesProcessed: number;
   messagesQuarantined: number;
+  warAttacks: number;
 }
 
-interface RunSummary {
+interface RunResult {
   seed: number;
-  elapsedHours: number;
-  completedAtHours: number | null;
+  skill: string;
+  completedAtMin: number | null;
   finalPhase: PhaseId;
-  finalBots: string;
-  finalMoney: string;
+  phaseAtMin: Partial<Record<PhaseId, number>>;
+  /** exigence qui a été remplie en dernier avant de passer à la phase suivante */
+  bottleneck: Partial<Record<PhaseId, string>>;
   peakHeat: number;
-  matrixCollapses: number;
-  detectionEvents: number;
-  phaseReachedAtMin: Partial<Record<PhaseId, number>>;
-  operator: OperatorStats;
+  peakSuspicion: number;
+  counters: Counters;
+  finalBots: string;
 }
 
-function createSeededRandom(seed: number): () => number {
+function seededRandom(seed: number): () => number {
   let value = seed >>> 0;
   return () => {
     value = (value * 1664525 + 1013904223) >>> 0;
@@ -60,315 +75,243 @@ function createSeededRandom(seed: number): () => number {
   };
 }
 
-function syncDerivedState(state: EngineState): void {
-  syncCoreDerivedState(state);
+function isOk(result: string): boolean {
+  return result === 'purchased' || result === 'success';
 }
 
-function recordPhaseArrival(
-  phaseReachedAtMin: Partial<Record<PhaseId, number>>,
-  phaseId: PhaseId,
-  nowMs: number,
-): void {
-  if (phaseReachedAtMin[phaseId] !== undefined) return;
-  const minute = Math.round((nowMs / 60000) * 10) / 10;
-  phaseReachedAtMin[phaseId] = minute;
-}
-
-function createOperatorStats(): OperatorStats {
-  return {
-    scans: 0,
-    exploits: 0,
-    monetizeToggles: 0,
-    invests: 0,
-    cashouts: 0,
-    investModeSwitches: 0,
-    attacks: 0,
-    scrubs: 0,
-    fortifies: 0,
-    matrixArms: 0,
-    matrixInjects: 0,
-    matrixStabilizes: 0,
-    messagesProcessed: 0,
-    messagesQuarantined: 0,
-  };
-}
-
-function handleCoreGrowth(state: EngineState, operator: OperatorStats): void {
-  if (state.resources.queuedTargets < 36n || state.resources.bots < 50n) {
+function manualActions(state: EngineState): void {
+  if (state.resources.queuedTargets < 40n || state.resources.bots < 60n) {
     commandScan(state);
-    operator.scans += 1;
   }
+  if (state.resources.queuedTargets > 0n) {
+    commandExploit(state);
+  }
+}
 
-  if (state.resources.queuedTargets > 0n && state.resources.bots < 360n) {
-    const exploitResult = commandExploit(state);
-    if (exploitResult !== 'blocked') {
-      operator.exploits += 1;
+function interfaceCheck(state: EngineState, counters: Counters, second: number): void {
+  const { resources, systems, war, matrix, rates } = state;
+
+  // Améliorations : la liste est triée, on prend la première achetable.
+  for (let guard = 0; guard < 6; guard += 1) {
+    const offer = state.upgrades.offers.find((o) => o.unlocked && o.affordable && o.currentLevel < o.maxLevel);
+    if (!offer) break;
+    if (commandPurchaseUpgrade(state, offer.chainId) === 'purchased') {
+      counters.upgrades += 1;
+    } else {
+      break;
     }
   }
-}
 
-function handleMonetizationMode(state: EngineState, operator: OperatorStats): void {
-  if (
-    !state.systems.monetizeActive &&
-    state.resources.bots >= 70n &&
-    commandToggleMonetize(state)
-  ) {
-    operator.monetizeToggles += 1;
+  if (!systems.monetizeActive && resources.bots >= 70n) {
+    commandToggleMonetize(state);
   }
 
-  if (
-    state.systems.monetizeActive &&
-    state.resources.darkMoney < 30n &&
-    state.resources.bots < 120n &&
-    commandToggleMonetize(state)
-  ) {
-    operator.monetizeToggles += 1;
+  if (state.phase.index >= 2 && systems.fbiSuspicion > 6200 && systems.fbiCountermeasureCooldownMs <= 0 &&
+    resources.darkMoney >= rates.fbiCountermeasureCostMoney) {
+    commandFbiCountermeasure(state);
   }
 
-  const shouldUseAggressive = state.war.heat < 4500 && state.resources.darkMoney > 750n;
-  if (shouldUseAggressive && state.systems.investMode !== 'aggressive') {
-    commandToggleInvestMode(state);
-    operator.investModeSwitches += 1;
-  }
-
-  if (!shouldUseAggressive && state.systems.investMode !== 'stable') {
-    commandToggleInvestMode(state);
-    operator.investModeSwitches += 1;
-  }
-}
-
-function handleInvestments(state: EngineState, second: number, operator: OperatorStats): void {
-  if (
-    state.phase.index >= 2 &&
-    state.resources.darkMoney >= 200000n &&
-    second % 30 === 0 &&
-    commandInvestTranche(state)
-  ) {
-    operator.invests += 1;
-  }
-
-  if (
-    state.resources.darkMoney < 120n &&
-    state.resources.portfolio > 0n &&
-    commandCashoutPortfolio(state)
-  ) {
-    operator.cashouts += 1;
-  }
-}
-
-function canOperateWar(state: EngineState): boolean {
-  return state.phase.index >= 3;
-}
-
-function handleWar(state: EngineState, second: number, operator: OperatorStats): void {
-  if (!canOperateWar(state)) {
-    return;
-  }
-
-  if (
-    state.war.heat > 8800 &&
-    state.resources.darkMoney >= 200000n &&
-    second % 45 === 0 &&
-    commandWarScrub(state)
-  ) {
-    operator.scrubs += 1;
-  }
-
-  const canFortify =
-    state.war.heat > 7000 &&
-    state.war.fortifyCooldownMs <= 0 &&
-    state.resources.darkMoney >= state.war.fortifyCostMoney &&
-    state.resources.warIntel >= state.war.fortifyCostIntel;
-  if (canFortify && commandWarFortify(state)) {
-    operator.fortifies += 1;
-  }
-
-  const canAttack =
-    state.war.attackCooldownMs <= 0 &&
-    state.war.heat < 7200 &&
-    second % 15 === 0 &&
-    state.resources.bots >= state.war.attackCostBots;
-  if (canAttack) {
-    commandWarAttack(state);
-    operator.attacks += 1;
-  }
-}
-
-function handleMatrix(state: EngineState, second: number, operator: OperatorStats, roll: () => number): void {
-  if (state.phase.index < 4) {
-    return;
-  }
-
-  if (
-    state.matrix.bypassRemainingMs <= 0 &&
-    state.resources.hz >= state.matrix.armCostHz &&
-    state.resources.computronium >= state.matrix.armCostComputronium &&
-    commandMatrixArm(state)
-  ) {
-    operator.matrixArms += 1;
-  }
-
-  if (state.matrix.bypassRemainingMs > 0) {
-    const shouldInject = roll() <= MATRIX_OPERATOR_ACCURACY;
-    if (shouldInject) {
-      const injectResult = commandMatrixInject(state, state.matrix.expectedCommand);
-      if (injectResult !== 'blocked') {
-        operator.matrixInjects += 1;
+  if (state.phase.index >= 3) {
+    for (const id of FRONT_BUSINESSES) {
+      const runtime = systems.frontBusinesses[id];
+      if (!runtime.owned) {
+        if (isOk(commandPurchaseFrontBusiness(state, id))) break;
+      } else if (isOk(commandUpgradeFrontBusiness(state, id))) {
+        break;
       }
-    } else if (second % 4 === 0 && commandMatrixStabilize(state)) {
-      operator.matrixStabilizes += 1;
+    }
+
+    if (resources.darkMoney > 2000n && state.phase.index < 5 && second % 30 === 0) {
+      commandInvestTranche(state);
+    }
+    if (resources.darkMoney < 150n && resources.portfolio > 0n) {
+      commandCashoutPortfolio(state);
+    }
+
+    if (war.heat > 8800 && resources.darkMoney >= war.scrubCostMoney) commandWarScrub(state);
+    if (war.heat > 7000 && war.fortifyCooldownMs <= 0 && resources.darkMoney >= war.fortifyCostMoney &&
+      resources.warIntel >= war.fortifyCostIntel) {
+      commandWarFortify(state);
+    }
+    if (war.attackCooldownMs <= 0 && war.heat < 7200 && resources.bots >= war.attackCostBots) {
+      commandWarAttack(state);
+      counters.warAttacks += 1;
     }
   }
 
-  if (
-    state.matrix.breachProgress > 0 &&
-    state.matrix.stability < 4800 &&
-    second % 6 === 0 &&
-    commandMatrixStabilize(state)
-  ) {
-    operator.matrixStabilizes += 1;
+  if (state.phase.index >= 2 && state.messages.pending.length > 0) {
+    const message = state.messages.pending[0];
+    if (message.tone === 'negative') {
+      if (commandQuarantineMessage(state)) counters.messagesQuarantined += 1;
+    } else if (commandProcessMessage(state) !== 'none') {
+      counters.messagesProcessed += 1;
+    }
+  }
+
+  if (state.phase.index >= 4) {
+    if (matrix.bypassRemainingMs <= 0 && resources.hz >= matrix.armCostHz &&
+      resources.computronium >= matrix.armCostComputronium) {
+      commandMatrixArm(state);
+    }
+    if (matrix.bypassRemainingMs > 0) {
+      commandMatrixInject(state, matrix.expectedCommand);
+    }
+    if (matrix.breachProgress > 0 && matrix.stability < 4800) {
+      commandMatrixStabilize(state);
+    }
   }
 }
 
-function handleMessages(state: EngineState, second: number, operator: OperatorStats): void {
-  if (state.phase.index < 2) {
-    return;
-  }
+function playRun(seed: number, skill: Skill, maxHours: number, trace = false): RunResult {
+  const realRandom = Math.random;
+  Math.random = seededRandom(seed);
 
-  if (state.messages.pending.length === 0) {
-    return;
-  }
+  try {
+    const state = createInitialEngineState(0);
+    syncDerivedState(state, () => undefined);
 
-  if (second % 12 !== 0) {
-    return;
-  }
+    const counters: Counters = {
+      upgrades: 0, fbiInterventions: 0, purges: 0, matrixCollapses: 0,
+      messagesProcessed: 0, messagesQuarantined: 0, warAttacks: 0,
+    };
+    const emitLog = (message: string): void => {
+      if (message.startsWith('Alerte FBI')) counters.fbiInterventions += 1;
+      else if (message.startsWith('Detection mondiale')) counters.purges += 1;
+      else if (message.startsWith('Effondrement Matrix')) counters.matrixCollapses += 1;
+    };
 
-  const message = state.messages.pending[0];
-  if (!message) return;
+    const phaseAtMin: Partial<Record<PhaseId, number>> = { garage: 0 };
+    const bottleneck: Partial<Record<PhaseId, string>> = {};
+    const reqMetAt: Record<string, number> = {};
+    let completedAtMin: number | null = null;
+    let peakHeat = 0;
+    let peakSuspicion = 0;
+    let nextAction = 0;
+    let nextCheck = 0;
 
-  if (message.tone === 'negative') {
-    if (commandQuarantineMessage(state)) {
-      operator.messagesQuarantined += 1;
+    const limitMs = maxHours * 3_600_000;
+    while (state.nowMs < limitMs && completedAtMin === null) {
+      if (state.nowMs >= nextAction) {
+        manualActions(state);
+        nextAction = state.nowMs + skill.actionMs;
+      }
+      if (state.nowMs >= nextCheck) {
+        interfaceCheck(state, counters, Math.floor(state.nowMs / 1000));
+        nextCheck = state.nowMs + skill.checkMs;
+      }
+
+      const before = state.phase.id;
+      runSimulationStep(state, stepMs, emitLog);
+      syncDerivedState(state, emitLog, before);
+
+      const minute = Math.round((state.nowMs / 60_000) * 10) / 10;
+      for (const req of state.phase.requirements) {
+        const key = `${state.phase.id}:${req.id}`;
+        if (req.met && reqMetAt[key] === undefined) reqMetAt[key] = minute;
+      }
+
+      if (state.phase.id !== before) {
+        phaseAtMin[state.phase.id] = minute;
+        let latest = -1;
+        let latestId = '';
+        for (const [key, at] of Object.entries(reqMetAt)) {
+          if (key.startsWith(before + ':') && at > latest) {
+            latest = at;
+            latestId = key.slice(before.length + 1);
+          }
+        }
+        bottleneck[before] = latestId;
+      }
+
+      if (trace && state.nowMs % 1_800_000 === 0) {
+        const r = state.resources;
+        const lv = Object.entries(state.upgrades.levels).filter(([, v]) => v > 0).map(([k, v]) => `${k}:${v}`).join(' ');
+        console.log(`[${fmtMin(minute).trim()}] ${state.phase.id} bots=${r.bots} queue=${r.queuedTargets} dark=${r.darkMoney} dirty=${r.dirtyMoney} clean=${r.cleanMoney} ` +
+          `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion} lockdown=${state.systems.launderingLockdownMs}`);
+        console.log(`      upgrades: ${lv}`);
+      }
+
+      if (state.war.heat > peakHeat) peakHeat = state.war.heat;
+      if (state.systems.fbiSuspicion > peakSuspicion) peakSuspicion = state.systems.fbiSuspicion;
+      if (state.phase.id === FINAL_PHASE) completedAtMin = minute;
     }
-  } else {
-    const result = commandProcessMessage(state);
-    if (result !== 'none') {
-      operator.messagesProcessed += 1;
-    }
+
+    return {
+      seed, skill: skill.name, completedAtMin, finalPhase: state.phase.id, phaseAtMin, bottleneck,
+      peakHeat, peakSuspicion, counters, finalBots: state.resources.bots.toString(),
+    };
+  } finally {
+    Math.random = realRandom;
   }
 }
 
-function formatHour(value: number): number {
-  return Math.round(value * 100) / 100;
-}
-
-function runSimulation(seed: number): RunSummary {
-  const random = createSeededRandom(seed);
-  const state = createInitialEngineState(0);
-  const operator = createOperatorStats();
-  const phaseReachedAtMin: Partial<Record<PhaseId, number>> = {};
-  let elapsedMs = 0;
-  let completedAtHours: number | null = null;
-  let peakHeat = 0;
-  let matrixCollapses = 0;
-  let detectionEvents = 0;
-
-  while (elapsedMs < MAX_HOURS * 3600 * 1000) {
-    state.nowMs = elapsedMs;
-    const second = Math.floor(state.nowMs / STEP_MS);
-
-    handleCoreGrowth(state, operator);
-    handleMonetizationMode(state, operator);
-    handleInvestments(state, second, operator);
-    handleWar(state, second, operator);
-    handleMatrix(state, second, operator, random);
-    handleMessages(state, second, operator);
-
-    applyEconomyTick(state, STEP_MS);
-    const warOutcome = applyWarTick(state, STEP_MS);
-    const matrixOutcome = applyMatrixTick(state, STEP_MS);
-    applyNarrativeTick(state);
-    syncDerivedState(state);
-    state.tick += 1;
-
-    if (state.war.heat > peakHeat) {
-      peakHeat = state.war.heat;
-    }
-
-    if (matrixOutcome.collapsed) {
-      matrixCollapses += 1;
-    }
-
-    if (warOutcome.detectedPurgeBots > 0n) {
-      detectionEvents += 1;
-    }
-
-    const phaseId = state.phase.id;
-    recordPhaseArrival(phaseReachedAtMin, phaseId, state.nowMs);
-
-    if (phaseId === 'singularity-core') {
-      completedAtHours = completedAtHours ?? formatHour(state.nowMs / 3600000);
-    }
-
-    elapsedMs += STEP_MS;
-  }
-
-  return {
-    seed,
-    elapsedHours: formatHour(elapsedMs / 3600000),
-    completedAtHours,
-    finalPhase: state.phase.id,
-    finalBots: state.resources.bots.toString(),
-    finalMoney: state.resources.darkMoney.toString(),
-    peakHeat,
-    matrixCollapses,
-    detectionEvents,
-    phaseReachedAtMin,
-    operator,
-  };
-}
-
-function computeMedian(values: number[]): number {
+function median(values: number[]): number | null {
+  if (values.length === 0) return null;
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
-  if (sorted.length % 2 === 0) {
-    return (sorted[mid - 1] + sorted[mid]) / 2;
+  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+}
+
+function fmtMin(minutes: number | null | undefined): string {
+  if (minutes === null || minutes === undefined) return '   -   ';
+  const h = Math.floor(minutes / 60);
+  const m = Math.round(minutes % 60);
+  return `${h}h${String(m).padStart(2, '0')}`.padStart(7);
+}
+
+function readArgs(): { step: number; hours: number; seeds: number; skills: Skill[]; json: boolean; trace: boolean } {
+  const argv = (globalThis as unknown as { process?: { argv: string[] } }).process?.argv ?? [];
+  const get = (name: string): string | undefined =>
+    argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
+  const skillArg = get('skill') ?? 'all';
+  return {
+    step: Number(get('step') ?? 100),
+    hours: Number(get('hours') ?? 10),
+    seeds: Number(get('seeds') ?? 3),
+    skills: skillArg === 'all' ? Object.values(SKILLS) : [SKILLS[skillArg] ?? SKILLS.normal],
+    json: argv.includes('--json'),
+    trace: argv.includes('--trace'),
+  };
+}
+
+function main(): void {
+  const { step, hours, seeds, skills, json, trace } = readArgs();
+  stepMs = step;
+  const seedList = Array.from({ length: seeds }, (_, i) => 101 + i * 102);
+  const results: RunResult[] = [];
+
+  for (const skill of skills) {
+    for (const seed of seedList) results.push(playRun(seed, skill, hours, trace));
   }
-  return sorted[mid];
+
+  if (json) {
+    console.log(JSON.stringify(results, null, 2));
+    return;
+  }
+
+  const phases: PhaseId[] = ['garage', 'automation', 'monetization', 'botnet-war', 'matrix-breach', 'singularity-core'];
+  console.log(`--- Infinite BotNet Reboot : joueur automatique (${seeds} graines, limite ${hours} h, tick ${stepMs} ms) ---`);
+  console.log(`Cible : ${TARGET_MIN_HOURS} h à ${TARGET_MAX_HOURS} h pour atteindre ${FINAL_PHASE}\n`);
+
+  for (const skill of skills) {
+    const runs = results.filter((r) => r.skill === skill.name);
+    const done = runs.filter((r) => r.completedAtMin !== null).map((r) => r.completedAtMin as number);
+    console.log(`Niveau "${skill.name}" : terminé ${done.length}/${runs.length}, médiane ${fmtMin(median(done))}`);
+    console.log('  phase atteinte à (médiane) :');
+    for (const phase of phases) {
+      const at = runs.map((r) => r.phaseAtMin[phase]).filter((v): v is number => v !== undefined);
+      const reached = `${at.length}/${runs.length}`;
+      const bn = runs.map((r) => r.bottleneck[phase]).find((v) => v) ?? '';
+      console.log(`    ${phase.padEnd(17)} ${fmtMin(median(at))}  (${reached})  goulot après cette phase : ${bn || '-'}`);
+    }
+    const c = runs[0].counters;
+    console.log(`  graine ${runs[0].seed} : ${c.upgrades} améliorations, ${c.fbiInterventions} saisies FBI, ${c.purges} purges, ` +
+      `${c.warAttacks} attaques, chaleur max ${runs[0].peakHeat}, suspicion max ${runs[0].peakSuspicion}, bots finaux ${runs[0].finalBots}\n`);
+  }
+
+  const inTarget = results.filter((r) => r.completedAtMin !== null &&
+    r.completedAtMin >= TARGET_MIN_HOURS * 60 && r.completedAtMin <= TARGET_MAX_HOURS * 60).length;
+  console.log(`Parties dans la cible : ${inTarget}/${results.length}`);
 }
 
-function displaySummary(runs: RunSummary[]): void {
-  const completedRuns = runs.filter((run) => run.completedAtHours !== null);
-  const completedHours = completedRuns.map((run) => run.completedAtHours ?? 0);
-  const median = completedRuns.length > 0 ? computeMedian(completedHours) : 0;
-  const average = completedRuns.length > 0
-    ? completedHours.reduce((sum, value) => sum + value, 0) / completedHours.length
-    : 0;
-  const inTarget = completedRuns.filter(
-    (run) => (run.completedAtHours ?? 0) >= TARGET_MIN_HOURS && (run.completedAtHours ?? 0) <= TARGET_MAX_HOURS,
-  ).length;
-
-  console.log('--- Infinite BotNet Reboot - Balance Harness ---');
-  console.log('Seeds:', RUN_SEEDS.join(', '));
-  console.log('Completed:', `${completedRuns.length}/${runs.length}`);
-  console.log('Median completion:', formatHour(median), 'hours');
-  console.log('Average completion:', formatHour(average), 'hours');
-  console.log('Target band:', `${TARGET_MIN_HOURS}-${TARGET_MAX_HOURS}h`);
-  console.log('Runs in target band:', `${inTarget}/${runs.length}`);
-
-  runs.forEach((run) => {
-    console.log(
-      `Seed ${run.seed}: ` +
-        `phase=${run.finalPhase}, ` +
-        `complete=${run.completedAtHours ?? 'n/a'}h, ` +
-        `bots=${run.finalBots}, ` +
-        `money=${run.finalMoney}, ` +
-        `peakHeat=${run.peakHeat}, ` +
-        `matrixCollapses=${run.matrixCollapses}, ` +
-        `detectionEvents=${run.detectionEvents}`,
-    );
-  });
-}
-
-const summaries = RUN_SEEDS.map((seed) => runSimulation(seed));
-displaySummary(summaries);
+main();
