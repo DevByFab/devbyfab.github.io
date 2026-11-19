@@ -19,7 +19,7 @@ export function runSimulationStep(
 ): SimulationStepBaseline {
   const baseline: SimulationStepBaseline = {
     previousBots: state.resources.bots,
-    previousMoney: state.resources.darkMoney,
+    previousMoney: state.resources.money,
     previousHeat: state.war.heat,
     previousPhaseId: state.phase.id,
   };
@@ -29,11 +29,7 @@ export function runSimulationStep(
   const economyTickOutcome = applyEconomyTick(state, scaledDeltaMs);
   if (economyTickOutcome.fbiIntervention) {
     emitLog(
-      'Alerte FBI: saisie de ' +
-        economyTickOutcome.seizedDirtyMoney.toString() +
-        ' dirty money et ' +
-        economyTickOutcome.seizedDarkMoney.toString() +
-        ' dark money.',
+      'Alerte FBI: saisie de ' + Math.floor(economyTickOutcome.seizedMoney) + ' en argent.',
       'warn',
     );
   }

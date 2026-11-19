@@ -22,7 +22,7 @@ export interface PhaseProgress {
 export interface PhaseProgressInput {
   bots: number;
   scans: number;
-  darkMoney: number;
+  money: number;
   portfolio: number;
   warWins: number;
   messagesProcessed: number;
@@ -45,7 +45,7 @@ function isPhaseUnlocked(input: PhaseProgressInput, phase: PhaseDefinition): boo
   const req = phase.requirements;
   if (!isRequirementMet(input.bots, req.minBots)) return false;
   if (req.minScans !== undefined && !isRequirementMet(input.scans, req.minScans)) return false;
-  if (req.minMoney !== undefined && !isRequirementMet(input.darkMoney, req.minMoney)) return false;
+  if (req.minMoney !== undefined && !isRequirementMet(input.money, req.minMoney)) return false;
   if (req.minPortfolio !== undefined && !isRequirementMet(input.portfolio, req.minPortfolio)) return false;
   if (req.minWarWins !== undefined && !isRequirementMet(input.warWins, req.minWarWins)) return false;
   if (
@@ -95,7 +95,7 @@ function buildNextRequirements(
   }
 
   if (req.minMoney !== undefined) {
-    list.push(requirementEntry('money', 'Dark Money', input.darkMoney, req.minMoney));
+    list.push(requirementEntry('money', 'Dark Money', input.money, req.minMoney));
   }
 
   if (req.minPortfolio !== undefined) {

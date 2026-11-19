@@ -12,7 +12,7 @@ export function computeRewardValue(state: EngineState, template: FrNarrativeTemp
     case 'targets':
       return maxBigInt(12, state.resources.queuedTargets / 4 + 10);
     case 'money':
-      return maxBigInt(70, state.resources.darkMoney / 38 + 35);
+      return maxBigInt(70, state.resources.money / 38 + 35);
     case 'portfolio':
       return maxBigInt(50, state.resources.portfolio / 28 + 25);
     case 'intel':
@@ -63,7 +63,7 @@ export function applyPositiveReward(state: EngineState, message: EngineMessage):
       state.resources.queuedTargets += value;
       break;
     case 'money':
-      state.resources.darkMoney += value;
+      state.resources.money += value;
       break;
     case 'portfolio':
       state.resources.portfolio += value;
@@ -91,8 +91,8 @@ export function applyNegativeReward(state: EngineState, message: EngineMessage):
         state.resources.queuedTargets > value ? state.resources.queuedTargets - value : 0;
       break;
     case 'money':
-      state.resources.darkMoney =
-        state.resources.darkMoney > value ? state.resources.darkMoney - value : 0;
+      state.resources.money =
+        state.resources.money > value ? state.resources.money - value : 0;
       break;
     case 'portfolio':
       state.resources.portfolio =

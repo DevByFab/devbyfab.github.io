@@ -1,30 +1,28 @@
-import type { FbiRiskState, InvestMode, LaunderingProfile } from '../../../game/types';
+import type { FbiRiskState, InvestMode } from '../../../game/types';
 import { clamp } from './helpers';
 
 export const FBI_SUSPICION_WATCH_THRESHOLD = 4400;
 export const FBI_SUSPICION_ALERT_THRESHOLD = 7800;
 
-const DIRTY_PRESSURE_DIVISOR = 32_000;
-const DIRTY_PRESSURE_MAX = 28;
+// Un gros tas d'argent attire l'attention : +1 de pression par 32 000 en poche, plafonné.
+const MONEY_PRESSURE_DIVISOR = 32_000;
+const MONEY_PRESSURE_MAX = 28;
 const AGGRESSIVE_INVEST_PRESSURE = 12;
 
-const SUSPICION_GAIN_LOW_RISK = 9;
-const SUSPICION_GAIN_HIGH_YIELD = 24;
+// La monétisation active est l'activité criminelle : la suspicion monte tant qu'elle tourne.
+const SUSPICION_GAIN_ACTIVE = 9;
 const SUSPICION_DECAY_IDLE = 10;
 
 const INTERVENTION_MIN_CHANCE_BPS = 90;
 const INTERVENTION_MAX_CHANCE_BPS = 3600;
 const INTERVENTION_SUSPICION_BASELINE = 7500;
 const INTERVENTION_SUSPICION_STEP = 10;
-const INTERVENTION_PROFILE_LOW_RISK_BONUS = 50;
-const INTERVENTION_PROFILE_HIGH_YIELD_BONUS = 220;
+const INTERVENTION_BASE_BONUS = 50;
 
 interface SuspicionDeltaInput {
   phaseIndex: number;
-  dirtyMoney: number;
-  launderingActive: boolean;
-  launderingLockdownMs: number;
-  launderingProfile: LaunderingProfile;
+  money: number;
+  monetizeActive: boolean;
   investMode: InvestMode;
   frontBusinessRiskPressurePerSec: number;
 }
@@ -32,12 +30,11 @@ interface SuspicionDeltaInput {
 interface InterventionChanceInput {
   phaseIndex: number;
   suspicion: number;
-  launderingProfile: LaunderingProfile;
 }
 
-function computeDirtyPressure(dirtyMoney: number): number {
-  const dirtyPressure = Number(dirtyMoney > 0 ? dirtyMoney / DIRTY_PRESSURE_DIVISOR : 0);
-  return clamp(dirtyPressure, 0, DIRTY_PRESSURE_MAX);
+function computeMoneyPressure(money: number): number {
+  const pressure = money > 0 ? money / MONEY_PRESSURE_DIVISOR : 0;
+  return clamp(pressure, 0, MONEY_PRESSURE_MAX);
 }
 
 export function resolveFbiRiskState(suspicion: number): FbiRiskState {
@@ -57,11 +54,14 @@ export function computeFbiSuspicionDeltaPerSec(input: Readonly<SuspicionDeltaInp
     return 0;
   }
 
-  if (input.launderingActive && input.launderingLockdownMs <= 0) {
-    const baseGain = input.launderingProfile === 'high-yield' ? SUSPICION_GAIN_HIGH_YIELD : SUSPICION_GAIN_LOW_RISK;
-    const dirtyPressure = computeDirtyPressure(input.dirtyMoney);
+  if (input.monetizeActive) {
     const investPressure = input.investMode === 'aggressive' ? AGGRESSIVE_INVEST_PRESSURE : 0;
-    return baseGain + dirtyPressure + investPressure + input.frontBusinessRiskPressurePerSec;
+    return (
+      SUSPICION_GAIN_ACTIVE +
+      computeMoneyPressure(input.money) +
+      investPressure +
+      input.frontBusinessRiskPressurePerSec
+    );
   }
 
   return -SUSPICION_DECAY_IDLE + input.frontBusinessRiskPressurePerSec;
@@ -74,19 +74,10 @@ export function computeFbiInterventionChancePerSecondBps(
     return 0;
   }
 
-  const profilePressure =
-    input.launderingProfile === 'high-yield'
-      ? INTERVENTION_PROFILE_HIGH_YIELD_BONUS
-      : INTERVENTION_PROFILE_LOW_RISK_BONUS;
-
   const baseChance =
     INTERVENTION_MIN_CHANCE_BPS +
     Math.floor((input.suspicion - INTERVENTION_SUSPICION_BASELINE) / INTERVENTION_SUSPICION_STEP) +
-    profilePressure;
+    INTERVENTION_BASE_BONUS;
 
-  return clamp(
-    baseChance,
-    INTERVENTION_MIN_CHANCE_BPS,
-    INTERVENTION_MAX_CHANCE_BPS,
-  );
+  return clamp(baseChance, INTERVENTION_MIN_CHANCE_BPS, INTERVENTION_MAX_CHANCE_BPS);
 }

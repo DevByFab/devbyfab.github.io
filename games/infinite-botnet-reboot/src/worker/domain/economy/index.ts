@@ -9,8 +9,6 @@ export {
   commandExploit,
   commandInvestTranche,
   commandScan,
-  commandToggleLaunderProfile,
-  commandToggleLaundering,
   commandToggleInvestMode,
   commandToggleMonetize,
   type ExploitResult,

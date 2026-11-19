@@ -548,10 +548,7 @@ function App() {
       <section className="resource-grid compact-grid" data-guide="resource-grid">
         <ResourceCard label={t('reboot.resources.bots')} value={snapshot.resources.bots} />
         <ResourceCard label={t('reboot.resources.targets')} value={snapshot.resources.queuedTargets} />
-        <ResourceCard label={t('reboot.resources.darkMoney')} value={snapshot.resources.darkMoney} />
-        {economyUnlocked ? (
-          <ResourceCard label={t('reboot.resources.cleanMoney')} value={snapshot.resources.cleanMoney} />
-        ) : null}
+        <ResourceCard label={t('reboot.resources.money')} value={snapshot.resources.money} />
         {economyUnlocked ? (
           <ResourceCard label={t('reboot.resources.portfolio')} value={snapshot.resources.portfolio} />
         ) : null}
@@ -597,8 +594,6 @@ function App() {
             snapshot={snapshot}
             unlocked={economyUnlocked}
             onToggleMonetize={gameActions.toggleMonetize}
-            onToggleLaundering={gameActions.toggleLaundering}
-            onToggleLaunderProfile={gameActions.toggleLaunderProfile}
             onPurchaseFrontBusiness={gameActions.purchaseFrontBusiness}
             onUpgradeFrontBusiness={gameActions.upgradeFrontBusiness}
             onToggleFrontBusinessMode={gameActions.toggleFrontBusinessMode}

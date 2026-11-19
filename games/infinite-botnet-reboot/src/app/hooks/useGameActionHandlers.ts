@@ -59,8 +59,6 @@ interface UseGameActionHandlersResult {
   sendExploit: () => void;
   purchaseUpgrade: (chainId: string) => void;
   toggleMonetize: () => void;
-  toggleLaundering: () => void;
-  toggleLaunderProfile: () => void;
   purchaseFrontBusiness: (frontBusinessId: FrontBusinessId) => void;
   upgradeFrontBusiness: (frontBusinessId: FrontBusinessId) => void;
   toggleFrontBusinessMode: (frontBusinessId: FrontBusinessId) => void;
@@ -87,8 +85,6 @@ export function useGameActionHandlers(
   const sendExploit = useSimpleCommandHandler(playUiCue, sendCommand, 'EXPLOIT', 'exploitClick');
   const purchaseUpgrade = useUpgradeCommandHandler(playUiCue, sendCommand);
   const toggleMonetize = useSimpleCommandHandler(playUiCue, sendCommand, 'TOGGLE_MONETIZE');
-  const toggleLaundering = useSimpleCommandHandler(playUiCue, sendCommand, 'TOGGLE_LAUNDERING');
-  const toggleLaunderProfile = useSimpleCommandHandler(playUiCue, sendCommand, 'TOGGLE_LAUNDER_PROFILE');
   const purchaseFrontBusiness = useFrontBusinessCommandHandler(
     playUiCue,
     sendCommand,
@@ -132,8 +128,6 @@ export function useGameActionHandlers(
     sendExploit,
     purchaseUpgrade,
     toggleMonetize,
-    toggleLaundering,
-    toggleLaunderProfile,
     purchaseFrontBusiness,
     upgradeFrontBusiness,
     toggleFrontBusinessMode,

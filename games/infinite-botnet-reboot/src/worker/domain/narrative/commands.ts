@@ -28,11 +28,11 @@ export function commandQuarantineMessage(state: EngineState): boolean {
   }
 
   const quarantineCost = (message.quarantineCost);
-  if (state.resources.darkMoney < quarantineCost) {
+  if (state.resources.money < quarantineCost) {
     return false;
   }
 
-  state.resources.darkMoney -= quarantineCost;
+  state.resources.money -= quarantineCost;
   state.messages.pending.shift();
   state.messages.processed += 1;
   state.milestones.messagesHandled += 1;

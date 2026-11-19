@@ -95,7 +95,7 @@ function checkRequirements(
     return 'Bots insuffisants';
   }
 
-  if (requirements.minMoney !== undefined && state.resources.darkMoney < requirements.minMoney) {
+  if (requirements.minMoney !== undefined && state.resources.money < requirements.minMoney) {
     return 'Dark money insuffisant';
   }
 
@@ -130,7 +130,7 @@ function checkRequirements(
 
 function canAfford(state: EngineState, cost: UpgradeCost): boolean {
   if (state.resources.bots < costValue(cost.bots)) return false;
-  if (state.resources.darkMoney < costValue(cost.darkMoney)) return false;
+  if (state.resources.money < costValue(cost.money)) return false;
   if (state.resources.warIntel < costValue(cost.warIntel)) return false;
   if (state.resources.hz < costValue(cost.hz)) return false;
   if (state.resources.computronium < costValue(cost.computronium)) return false;
@@ -139,7 +139,7 @@ function canAfford(state: EngineState, cost: UpgradeCost): boolean {
 }
 
 function hasLockedCostResource(state: EngineState, cost: UpgradeCost): boolean {
-  if (costValue(cost.darkMoney) > 0 && state.phase.index < 2) {
+  if (costValue(cost.money) > 0 && state.phase.index < 2) {
     return true;
   }
 
@@ -160,7 +160,7 @@ function hasLockedCostResource(state: EngineState, cost: UpgradeCost): boolean {
 
 function spendCost(state: EngineState, cost: UpgradeCost): void {
   state.resources.bots -= costValue(cost.bots);
-  state.resources.darkMoney -= costValue(cost.darkMoney);
+  state.resources.money -= costValue(cost.money);
   state.resources.warIntel -= costValue(cost.warIntel);
   state.resources.hz -= costValue(cost.hz);
   state.resources.computronium -= costValue(cost.computronium);
@@ -254,7 +254,7 @@ function toOffer(
     resourceLocked,
     statusText,
     costBots: costValue(cost.bots),
-    costMoney: costValue(cost.darkMoney),
+    costMoney: costValue(cost.money),
     costIntel: costValue(cost.warIntel),
     costHz: costValue(cost.hz),
     costComputronium: costValue(cost.computronium),

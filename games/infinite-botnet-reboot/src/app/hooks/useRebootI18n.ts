@@ -4,8 +4,9 @@ import frCatalog from '../../content/i18n/fr.json';
 type TranslationVars = Record<string, string | number>;
 type TranslationCatalog = Record<string, string>;
 
-const primaryCatalog = enCatalog as TranslationCatalog;
-const fallbackCatalog = frCatalog as TranslationCatalog;
+// Le jeu est en français d'abord ; l'anglais ne sert que de secours pour une clé manquante.
+const primaryCatalog = frCatalog as TranslationCatalog;
+const fallbackCatalog = enCatalog as TranslationCatalog;
 
 function interpolate(template: string, vars?: TranslationVars): string {
   if (!vars) return template;

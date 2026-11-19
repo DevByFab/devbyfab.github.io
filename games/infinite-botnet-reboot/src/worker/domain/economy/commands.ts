@@ -3,8 +3,8 @@ import type { EngineState } from '../../state';
 import { refreshEconomyDerivedRates } from './deriveRates';
 import {
   type FrontBusinessRuntimeState,
-  getFrontBusinessBuyCostDarkMoney,
-  getFrontBusinessUpgradeCostDarkMoney,
+  getFrontBusinessBuyCost,
+  getFrontBusinessUpgradeCost,
   getNextFrontBusinessMode,
   isFrontBusinessMaxed,
 } from './frontBusinesses';
@@ -70,6 +70,8 @@ function finalizeFrontBusinessCommand(state: EngineState): void {
   refreshEconomyDerivedRates(state);
 }
 
+const FBI_COUNTERMEASURE_RELIEF = 1400;
+
 export function commandScan(state: EngineState): boolean {
   if (state.systems.manualScanCooldownMs > 0) {
     return false;
@@ -121,29 +123,6 @@ export function commandToggleMonetize(state: EngineState): boolean {
   return true;
 }
 
-export function commandToggleLaundering(state: EngineState): boolean {
-  if (state.phase.index < 2) {
-    return false;
-  }
-
-  if (!state.systems.launderingActive && state.systems.launderingLockdownMs > 0) {
-    return false;
-  }
-
-  state.systems.launderingActive = !state.systems.launderingActive;
-  return true;
-}
-
-export function commandToggleLaunderProfile(state: EngineState): boolean {
-  if (state.phase.index < 3) {
-    return false;
-  }
-
-  state.systems.launderingProfile =
-    state.systems.launderingProfile === 'low-risk' ? 'high-yield' : 'low-risk';
-  return true;
-}
-
 export function commandPurchaseFrontBusiness(
   state: EngineState,
   frontBusinessId: FrontBusinessId | undefined,
@@ -157,12 +136,12 @@ export function commandPurchaseFrontBusiness(
     return 'locked';
   }
 
-  const cost = getFrontBusinessBuyCostDarkMoney(context.frontBusinessId);
-  if (state.resources.darkMoney < cost) {
+  const cost = getFrontBusinessBuyCost(context.frontBusinessId);
+  if (state.resources.money < cost) {
     return 'insufficient';
   }
 
-  state.resources.darkMoney -= cost;
+  state.resources.money -= cost;
   state.systems.frontBusinesses[context.frontBusinessId] = {
     owned: true,
     level: 1,
@@ -185,15 +164,15 @@ export function commandUpgradeFrontBusiness(
     return 'maxed';
   }
 
-  const upgradeCost = getFrontBusinessUpgradeCostDarkMoney(
+  const upgradeCost = getFrontBusinessUpgradeCost(
     context.frontBusinessId,
     context.runtime.level,
   );
-  if (upgradeCost <= 0 || state.resources.darkMoney < upgradeCost) {
+  if (upgradeCost <= 0 || state.resources.money < upgradeCost) {
     return 'insufficient';
   }
 
-  state.resources.darkMoney -= upgradeCost;
+  state.resources.money -= upgradeCost;
   context.runtime.level += 1;
   finalizeFrontBusinessCommand(state);
   return 'success';
@@ -224,23 +203,13 @@ export function commandFbiCountermeasure(state: EngineState): boolean {
 
   refreshEconomyDerivedRates(state);
   const cost = state.rates.fbiCountermeasureCostMoney;
-  if (state.resources.darkMoney < cost) {
+  if (state.resources.money < cost) {
     return false;
   }
 
-  state.resources.darkMoney -= cost;
+  state.resources.money -= cost;
 
-  const suspicionRelief = state.systems.launderingProfile === 'high-yield' ? 1800 : 1400;
-  state.systems.fbiSuspicion = Math.max(0, state.systems.fbiSuspicion - suspicionRelief);
-
-  if (state.systems.launderingLockdownMs > 0) {
-    state.systems.launderingLockdownMs = Math.max(0, state.systems.launderingLockdownMs - 5000);
-  }
-
-  const evidenceBurn = state.resources.dirtyMoney / 10;
-  if (evidenceBurn > 0) {
-    state.resources.dirtyMoney -= evidenceBurn;
-  }
+  state.systems.fbiSuspicion = Math.max(0, state.systems.fbiSuspicion - FBI_COUNTERMEASURE_RELIEF);
 
   state.systems.fbiCountermeasureCooldownMs = 18_000;
   return true;
@@ -251,14 +220,14 @@ export function commandInvestTranche(state: EngineState): boolean {
     return false;
   }
 
-  const available = state.resources.darkMoney;
+  const available = state.resources.money;
   const tranche = maxBigInt(40, available / 8);
 
   if (tranche < 80 || available < tranche) {
     return false;
   }
 
-  state.resources.darkMoney -= tranche;
+  state.resources.money -= tranche;
   state.resources.portfolio += tranche;
   state.milestones.investments += 1;
   return true;
@@ -274,7 +243,7 @@ export function commandCashoutPortfolio(state: EngineState): boolean {
   }
 
   const payout = (state.resources.portfolio * 94) / 100;
-  state.resources.darkMoney += payout;
+  state.resources.money += payout;
   state.resources.portfolio = 0;
   return true;
 }

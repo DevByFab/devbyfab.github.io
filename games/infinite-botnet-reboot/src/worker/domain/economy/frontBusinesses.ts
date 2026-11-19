@@ -15,40 +15,36 @@ export type FrontBusinessRuntimeMap = Record<FrontBusinessId, FrontBusinessRunti
 
 interface FrontBusinessDefinition {
   id: FrontBusinessId;
-  baseBuyCostDarkMoney: number;
-  baseDarkToCleanPerSec: number;
+  baseBuyCost: number;
+  baseIncomePerSec: number;
   baseMaintenancePerSec: number;
   baseRiskBps: number;
-  baseCleanEfficiencyBps: number;
   maxLevel: number;
 }
 
 const FRONT_BUSINESS_DEFINITIONS: ReadonlyArray<FrontBusinessDefinition> = [
   {
     id: 'laundromat',
-    baseBuyCostDarkMoney: 1200,
-    baseDarkToCleanPerSec: 8,
+    baseBuyCost: 1200,
+    baseIncomePerSec: 6,
     baseMaintenancePerSec: 2,
     baseRiskBps: 170,
-    baseCleanEfficiencyBps: 9000,
     maxLevel: 5,
   },
   {
     id: 'car-dealership',
-    baseBuyCostDarkMoney: 3800,
-    baseDarkToCleanPerSec: 16,
+    baseBuyCost: 3800,
+    baseIncomePerSec: 14,
     baseMaintenancePerSec: 6,
     baseRiskBps: 260,
-    baseCleanEfficiencyBps: 8650,
     maxLevel: 5,
   },
   {
     id: 'freight-forwarder',
-    baseBuyCostDarkMoney: 8600,
-    baseDarkToCleanPerSec: 34,
+    baseBuyCost: 8600,
+    baseIncomePerSec: 30,
     baseMaintenancePerSec: 13,
     baseRiskBps: 340,
-    baseCleanEfficiencyBps: 8400,
     maxLevel: 4,
   },
 ];
@@ -63,10 +59,8 @@ export const FRONT_BUSINESS_IDS: ReadonlyArray<FrontBusinessId> =
   FRONT_BUSINESS_DEFINITIONS.map((definition) => definition.id);
 
 export interface FrontBusinessComputedMetrics {
-  darkToCleanPerSec: number;
-  cleanYieldPerSec: number;
+  incomePerSec: number;
   maintenancePerSec: number;
-  cleanEfficiencyBps: number;
   riskBps: number;
 }
 
@@ -86,12 +80,6 @@ function getModeRiskBonusBps(mode: FrontBusinessMode): number {
   if (mode === 'discreet') return -180;
   if (mode === 'aggressive') return 320;
   return 0;
-}
-
-function getModeCleanYieldBps(mode: FrontBusinessMode): number {
-  if (mode === 'discreet') return 10400;
-  if (mode === 'aggressive') return 9250;
-  return 10000;
 }
 
 function applyMultiplier(value: number, multiplierBps: number): number {
@@ -114,11 +102,11 @@ export function createInitialFrontBusinesses(): FrontBusinessRuntimeMap {
   };
 }
 
-export function getFrontBusinessBuyCostDarkMoney(id: FrontBusinessId): number {
-  return getFrontBusinessDefinition(id).baseBuyCostDarkMoney;
+export function getFrontBusinessBuyCost(id: FrontBusinessId): number {
+  return getFrontBusinessDefinition(id).baseBuyCost;
 }
 
-export function getFrontBusinessUpgradeCostDarkMoney(
+export function getFrontBusinessUpgradeCost(
   id: FrontBusinessId,
   currentLevel: number,
 ): number {
@@ -128,7 +116,7 @@ export function getFrontBusinessUpgradeCostDarkMoney(
     return 0;
   }
 
-  const base = definition.baseBuyCostDarkMoney;
+  const base = definition.baseBuyCost;
   const levelFactor = 10 + (nextLevel * 8);
   return (base * levelFactor) / 10;
 }
@@ -146,19 +134,17 @@ export function computeFrontBusinessMetrics(
 ): FrontBusinessComputedMetrics {
   if (!runtime.owned || runtime.level <= 0) {
     return {
-      darkToCleanPerSec: 0,
-      cleanYieldPerSec: 0,
+      incomePerSec: 0,
       maintenancePerSec: 0,
-      cleanEfficiencyBps: 0,
       riskBps: 0,
     };
   }
 
   const definition = getFrontBusinessDefinition(id);
   const levelBoostBps = 10_000 + Math.max(0, runtime.level - 1) * 1700;
-  const throughputWithLevel = applyMultiplier(definition.baseDarkToCleanPerSec, levelBoostBps);
-  const darkToCleanPerSec = applyMultiplier(
-    throughputWithLevel,
+  const incomeWithLevel = applyMultiplier(definition.baseIncomePerSec, levelBoostBps);
+  const incomePerSec = applyMultiplier(
+    incomeWithLevel,
     getThroughputModeMultiplierBps(runtime.mode),
   );
 
@@ -176,21 +162,9 @@ export function computeFrontBusinessMetrics(
     3800,
   );
 
-  const cleanEfficiencyBps = clamp(
-    definition.baseCleanEfficiencyBps +
-      Math.max(0, runtime.level - 1) * 90 +
-      (getModeCleanYieldBps(runtime.mode) - 10_000),
-    7200,
-    9850,
-  );
-
-  const cleanYieldPerSec = applyMultiplier(darkToCleanPerSec, cleanEfficiencyBps);
-
   return {
-    darkToCleanPerSec,
-    cleanYieldPerSec,
+    incomePerSec,
     maintenancePerSec,
-    cleanEfficiencyBps,
     riskBps,
   };
 }
@@ -208,12 +182,11 @@ export function buildFrontBusinessSnapshots(
       owned: runtime.owned,
       level: runtime.level,
       mode: runtime.mode,
-      darkToCleanPerSec: metrics.darkToCleanPerSec,
-      cleanYieldPerSec: metrics.cleanYieldPerSec,
+      incomePerSec: metrics.incomePerSec,
       maintenancePerSec: metrics.maintenancePerSec,
       riskBps: metrics.riskBps,
-      buyCostDarkMoney: getFrontBusinessBuyCostDarkMoney(id),
-      upgradeCostDarkMoney: getFrontBusinessUpgradeCostDarkMoney(id, runtime.level),
+      buyCost: getFrontBusinessBuyCost(id),
+      upgradeCost: getFrontBusinessUpgradeCost(id, runtime.level),
     };
   });
 }

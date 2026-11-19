@@ -58,9 +58,9 @@ function applyDetectionPulse(state: EngineState, phasePressure: number): number 
 
   state.resources.bots = state.resources.bots > purge ? state.resources.bots - purge : 0;
 
-  const moneyPenalty = state.resources.darkMoney / 280;
-  state.resources.darkMoney =
-    state.resources.darkMoney > moneyPenalty ? state.resources.darkMoney - moneyPenalty : 0;
+  const moneyPenalty = state.resources.money / 280;
+  state.resources.money =
+    state.resources.money > moneyPenalty ? state.resources.money - moneyPenalty : 0;
 
   state.war.heat = clamp(state.war.heat - 260, 0, 10000);
   return purge;
@@ -143,7 +143,7 @@ export function commandWarAttack(state: EngineState): WarAttackResult {
     const rewardIntel = 6 + (Math.floor((state.war.streak + 1) / 2));
 
     state.resources.bots += rewardBots;
-    state.resources.darkMoney += rewardMoney;
+    state.resources.money += rewardMoney;
     state.resources.warIntel += rewardIntel;
 
     state.war.wins += 1;
@@ -173,11 +173,11 @@ export function commandWarScrub(state: EngineState): boolean {
   refreshWarDerived(state);
   const effects = computeUpgradeEffects(state);
 
-  if (state.resources.darkMoney < state.war.scrubCostMoney) {
+  if (state.resources.money < state.war.scrubCostMoney) {
     return false;
   }
 
-  state.resources.darkMoney -= state.war.scrubCostMoney;
+  state.resources.money -= state.war.scrubCostMoney;
   const baseRelief = 900 + Math.floor(state.war.heat / 9);
   const relief = Math.floor((baseRelief * (10_000 + effects.scrubReliefBps)) / 10_000);
   state.war.heat = clamp(state.war.heat - relief, 0, 10000);
@@ -197,7 +197,7 @@ export function commandWarFortify(state: EngineState): boolean {
     return false;
   }
 
-  if (state.resources.darkMoney < state.war.fortifyCostMoney) {
+  if (state.resources.money < state.war.fortifyCostMoney) {
     return false;
   }
 
@@ -205,7 +205,7 @@ export function commandWarFortify(state: EngineState): boolean {
     return false;
   }
 
-  state.resources.darkMoney -= state.war.fortifyCostMoney;
+  state.resources.money -= state.war.fortifyCostMoney;
   state.resources.warIntel -= state.war.fortifyCostIntel;
   state.war.defenseRemainingMs = 30_000;
   state.war.fortifyCooldownMs = 75_000;

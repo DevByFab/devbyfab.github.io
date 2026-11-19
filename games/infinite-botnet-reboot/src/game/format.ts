@@ -23,6 +23,13 @@ export function formatBigValue(value: number | string): string {
   return raw.toLocaleString('en-US');
 }
 
+/** Débit par seconde : garde une décimale sous 10 pour ne pas afficher 0 pour 0,4/s. */
+export function formatRate(value: number): string {
+  if (!Number.isFinite(value) || value === 0) return '0';
+  if (Math.abs(value) < 10) return value.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  return formatBigValue(value);
+}
+
 export function formatPercentFromBps(bps: number): string {
   return (bps / 100).toFixed(2) + '%';
 }

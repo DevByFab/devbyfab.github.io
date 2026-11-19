@@ -14,7 +14,7 @@ interface WarTabPanelProps {
 
 export function WarTabPanel(props: Readonly<WarTabPanelProps>) {
   const bots = (props.snapshot.resources.bots);
-  const money = (props.snapshot.resources.darkMoney);
+  const money = (props.snapshot.resources.money);
   const intel = (props.snapshot.resources.warIntel);
 
   const attackCost = (props.snapshot.war.attackCostBots);

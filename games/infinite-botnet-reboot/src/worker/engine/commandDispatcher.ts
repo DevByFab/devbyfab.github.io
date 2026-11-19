@@ -8,8 +8,6 @@ import {
   commandExploit,
   commandInvestTranche,
   commandScan,
-  commandToggleLaunderProfile,
-  commandToggleLaundering,
   commandToggleInvestMode,
   commandToggleMonetize,
   type FrontBusinessCommandResult,
@@ -87,30 +85,6 @@ export function dispatchCommand(
         emitLog('Monetisation activee.', 'info');
       } else {
         emitLog('Monetisation mise en pause.', 'info');
-      }
-      break;
-    }
-    case 'TOGGLE_LAUNDERING': {
-      const toggled = commandToggleLaundering(state);
-      if (!toggled) {
-        if (state.phase.index < 2) {
-          emitLog('Blanchiment indisponible avant P2.', 'warn');
-        } else {
-          emitLog('Blanchiment verrouille temporairement par pression FBI.', 'warn');
-        }
-      } else if (state.systems.launderingActive) {
-        emitLog('Blanchiment active: flux dirty -> dark money engage.', 'info');
-      } else {
-        emitLog('Blanchiment en pause: accumulation des fonds sales.', 'warn');
-      }
-      break;
-    }
-    case 'TOGGLE_LAUNDER_PROFILE': {
-      const switched = commandToggleLaunderProfile(state);
-      if (!switched) {
-        emitLog('Profil blanchiment indisponible avant P3.', 'warn');
-      } else {
-        emitLog('Profil blanchiment -> ' + state.systems.launderingProfile + '.', 'info');
       }
       break;
     }

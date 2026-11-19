@@ -11,7 +11,7 @@ export function syncCoreDerivedState(state: EngineState): void {
     {
       bots: state.resources.bots,
       scans: state.milestones.scans,
-      darkMoney: state.resources.darkMoney,
+      money: state.resources.money,
       portfolio: state.resources.portfolio,
       warWins: state.war.wins,
       messagesProcessed: state.messages.processed,

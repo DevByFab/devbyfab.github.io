@@ -78,7 +78,7 @@ function runTick(): void {
     state.telemetry.botsPerSec =
       ((state.resources.bots - baseline.previousBots) * 1000) / (scaledDelta);
     state.telemetry.moneyPerSec =
-      ((state.resources.darkMoney - baseline.previousMoney) * 1000) / (scaledDelta);
+      ((state.resources.money - baseline.previousMoney) * 1000) / (scaledDelta);
     state.telemetry.heatPerSec = Math.round(
       ((state.war.heat - baseline.previousHeat) * 1000) / scaledDelta,
     );
@@ -128,7 +128,7 @@ function applyDebugPhaseAccess(phaseIndex: number): void {
   }
 
   if (requirements.minMoney !== undefined) {
-    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, requirements.minMoney);
+    state.resources.money = maxBigInt(state.resources.money, requirements.minMoney);
   }
 
   if (requirements.minPortfolio !== undefined) {
@@ -167,7 +167,7 @@ function applyDebugPhaseAccess(phaseIndex: number): void {
   }
 
   if (phaseIndex >= 2) {
-    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, 2_000);
+    state.resources.money = maxBigInt(state.resources.money, 2_000);
   }
 
   state.systems.manualScanCooldownMs = 0;

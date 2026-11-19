@@ -33,7 +33,7 @@ export interface UpgradeLevelRequirements {
 
 export interface UpgradeCost {
   bots?: number;
-  darkMoney?: number;
+  money?: number;
   warIntel?: number;
   hz?: number;
   computronium?: number;

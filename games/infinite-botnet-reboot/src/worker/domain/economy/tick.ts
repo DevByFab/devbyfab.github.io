@@ -14,8 +14,7 @@ import {
 
 export interface EconomyTickOutcome {
   fbiIntervention: boolean;
-  seizedDirtyMoney: number;
-  seizedDarkMoney: number;
+  seizedMoney: number;
 }
 
 function minBigInt(left: number, right: number): number {
@@ -94,20 +93,7 @@ function applyMonetization(state: EngineState, deltaMs: number): void {
 
   const gainedFunds = (converted * (state.rates.moneyYieldBps)) / 10_000;
 
-  if (state.phase.index >= 2) {
-    state.resources.dirtyMoney += gainedFunds;
-    return;
-  }
-
-  state.resources.darkMoney += gainedFunds;
-}
-
-function tickLaunderingLockdown(state: EngineState, deltaMs: number): void {
-  if (state.systems.launderingLockdownMs <= 0) {
-    return;
-  }
-
-  state.systems.launderingLockdownMs = Math.max(0, state.systems.launderingLockdownMs - deltaMs);
+  state.resources.money += gainedFunds;
 }
 
 function tickFbiCountermeasureCooldown(state: EngineState, deltaMs: number): void {
@@ -132,52 +118,15 @@ function tickFrontBusinessActionCooldown(state: EngineState, deltaMs: number): v
   );
 }
 
-function applyLaundering(state: EngineState, deltaMs: number): void {
-  if (state.phase.index < 2) {
-    if (state.resources.dirtyMoney > 0) {
-      state.resources.darkMoney += state.resources.dirtyMoney;
-      state.resources.dirtyMoney = 0;
-    }
-    return;
-  }
-
-  if (!state.systems.launderingActive) {
-    return;
-  }
-
-  if (state.systems.launderingLockdownMs > 0) {
-    return;
-  }
-
-  let processed = scalePerSecond(state.rates.launderingDirtyPerSec, deltaMs);
-  processed = minBigInt(processed, state.resources.dirtyMoney);
-
-  if (processed <= 0) {
-    return;
-  }
-
-  const gainedMoney = (processed * (state.rates.launderingEfficiencyBps)) / 10_000;
-  state.resources.dirtyMoney -= processed;
-  state.resources.darkMoney += gainedMoney;
-}
-
-function applyFrontBusinessOperations(state: EngineState, deltaMs: number): void {
+function applyBusinessIncome(state: EngineState, deltaMs: number): void {
   if (state.phase.index < 3) {
     return;
   }
 
-  let converted = scalePerSecond(state.rates.frontBusinessDarkToCleanPerSec, deltaMs);
-  converted = minBigInt(converted, state.resources.darkMoney);
-
-  if (converted <= 0) {
-    return;
+  const income = scalePerSecond(state.rates.frontBusinessIncomePerSec, deltaMs);
+  if (income > 0) {
+    state.resources.money += income;
   }
-
-  state.resources.darkMoney -= converted;
-
-  const gainedCleanMoney =
-    (converted * (state.rates.frontBusinessCleanEfficiencyBps)) / 10_000;
-  state.resources.cleanMoney += gainedCleanMoney;
 }
 
 function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): void {
@@ -190,22 +139,10 @@ function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): voi
     return;
   }
 
-  if (state.resources.darkMoney >= maintenanceDrain) {
-    state.resources.darkMoney -= maintenanceDrain;
-    return;
-  }
-
-  const remainingDrain = maintenanceDrain - state.resources.darkMoney;
-  state.resources.darkMoney = 0;
-
-  const cleanFallbackDrain = remainingDrain / 2;
-  if (cleanFallbackDrain > 0) {
-    state.resources.cleanMoney =
-      state.resources.cleanMoney > cleanFallbackDrain
-        ? state.resources.cleanMoney - cleanFallbackDrain
-        : 0;
-  }
+  state.resources.money = Math.max(0, state.resources.money - maintenanceDrain);
 }
+
+const FBI_SEIZURE_BPS = 1000;
 
 function applyFbiPressureAndEvents(
   state: EngineState,
@@ -213,8 +150,7 @@ function applyFbiPressureAndEvents(
 ): EconomyTickOutcome {
   const outcome: EconomyTickOutcome = {
     fbiIntervention: false,
-    seizedDirtyMoney: 0,
-    seizedDarkMoney: 0,
+    seizedMoney: 0,
   };
 
   if (state.phase.index < 2) {
@@ -224,10 +160,8 @@ function applyFbiPressureAndEvents(
 
   const suspicionDeltaPerSec = computeFbiSuspicionDeltaPerSec({
     phaseIndex: state.phase.index,
-    dirtyMoney: state.resources.dirtyMoney,
-    launderingActive: state.systems.launderingActive,
-    launderingLockdownMs: state.systems.launderingLockdownMs,
-    launderingProfile: state.systems.launderingProfile,
+    money: state.resources.money,
+    monetizeActive: state.systems.monetizeActive,
     investMode: state.systems.investMode,
     frontBusinessRiskPressurePerSec: Math.floor(state.rates.frontBusinessRiskBps / 100),
   });
@@ -239,7 +173,6 @@ function applyFbiPressureAndEvents(
   const chancePerSecondBps = computeFbiInterventionChancePerSecondBps({
     phaseIndex: state.phase.index,
     suspicion: state.systems.fbiSuspicion,
-    launderingProfile: state.systems.launderingProfile,
   });
 
   if (chancePerSecondBps <= 0) {
@@ -253,28 +186,12 @@ function applyFbiPressureAndEvents(
     return outcome;
   }
 
-  const seizureBps = state.systems.launderingProfile === 'high-yield' ? 1600 : 1000;
-  const moneySeizureBps = Math.max(500, seizureBps - 300);
-
-  const seizedDirtyMoney = (state.resources.dirtyMoney * (seizureBps)) / 10_000;
-  const seizedDarkMoney = (state.resources.darkMoney * (moneySeizureBps)) / 10_000;
-
-  state.resources.dirtyMoney =
-    state.resources.dirtyMoney > seizedDirtyMoney
-      ? state.resources.dirtyMoney - seizedDirtyMoney
-      : 0;
-  state.resources.darkMoney =
-    state.resources.darkMoney > seizedDarkMoney
-      ? state.resources.darkMoney - seizedDarkMoney
-      : 0;
-
+  const seizedMoney = (state.resources.money * FBI_SEIZURE_BPS) / 10_000;
+  state.resources.money = Math.max(0, state.resources.money - seizedMoney);
   state.systems.fbiSuspicion = Math.max(1900, state.systems.fbiSuspicion - 2800);
-  state.systems.launderingLockdownMs =
-    state.systems.launderingProfile === 'high-yield' ? 16_000 : 10_000;
 
   outcome.fbiIntervention = true;
-  outcome.seizedDirtyMoney = seizedDirtyMoney;
-  outcome.seizedDarkMoney = seizedDarkMoney;
+  outcome.seizedMoney = seizedMoney;
   return outcome;
 }
 
@@ -308,13 +225,13 @@ function applyMaintenanceDrain(state: EngineState, deltaMs: number): void {
     return;
   }
 
-  if (state.resources.darkMoney >= maintenanceDrain) {
-    state.resources.darkMoney -= maintenanceDrain;
+  if (state.resources.money >= maintenanceDrain) {
+    state.resources.money -= maintenanceDrain;
     return;
   }
 
-  const missing = maintenanceDrain - state.resources.darkMoney;
-  state.resources.darkMoney = 0;
+  const missing = maintenanceDrain - state.resources.money;
+  state.resources.money = 0;
   const purgeBots = missing * 4;
   state.resources.bots = state.resources.bots > purgeBots ? state.resources.bots - purgeBots : 0;
 }
@@ -336,9 +253,9 @@ function applyLateResources(state: EngineState, deltaMs: number): void {
 
   const forgeRate = Math.floor(state.resources.brainMatter / 2_300_000);
   const possibleForge = scalePerSecond(forgeRate, deltaMs);
-  if (possibleForge > 0 && state.resources.darkMoney > possibleForge) {
+  if (possibleForge > 0 && state.resources.money > possibleForge) {
     state.resources.brainMatter -= possibleForge;
-    state.resources.darkMoney -= possibleForge;
+    state.resources.money -= possibleForge;
     state.resources.computronium += possibleForge;
   }
 }
@@ -348,14 +265,12 @@ export function applyEconomyTick(state: EngineState, deltaMs: number): EconomyTi
 
   tickManualScanCooldown(state, deltaMs);
   tickManualExploitCooldown(state, deltaMs);
-  tickLaunderingLockdown(state, deltaMs);
   tickFbiCountermeasureCooldown(state, deltaMs);
   tickFrontBusinessActionCooldown(state, deltaMs);
   applyAutoScan(state, deltaMs);
   applyAutoExploit(state, deltaMs);
   applyMonetization(state, deltaMs);
-  applyLaundering(state, deltaMs);
-  applyFrontBusinessOperations(state, deltaMs);
+  applyBusinessIncome(state, deltaMs);
   const economyOutcome = applyFbiPressureAndEvents(state, deltaMs);
   applyPortfolioYield(state, deltaMs);
   applyMaintenanceDrain(state, deltaMs);

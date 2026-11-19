@@ -17,23 +17,9 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.autoExploitPerSec = 0;
   state.rates.monetizeBotsPerSec = maxBigInt(2, bots / 1200 + (state.phase.index));
 
-  const launderingBase = maxBigInt(3, bots / 1750 + phaseFactor / 2);
-  const launderingThroughputBoostBps =
-    state.systems.launderingProfile === 'high-yield' ? 1800 : 0;
-  state.rates.launderingDirtyPerSec = applyBpsMultiplier(
-    launderingBase,
-    launderingThroughputBoostBps,
-  );
-
   if (state.rates.autoScanPerSec > 48_000_000) state.rates.autoScanPerSec = 48_000_000;
   const monetizeCap = 950_000 * ((state.phase.index + 1) * (state.phase.index + 1));
   if (state.rates.monetizeBotsPerSec > monetizeCap) state.rates.monetizeBotsPerSec = monetizeCap;
-
-  const launderingCap = 780_000 * ((state.phase.index + 1) * (state.phase.index + 1));
-  state.rates.launderingDirtyPerSec =
-    state.rates.launderingDirtyPerSec > launderingCap
-      ? launderingCap
-      : state.rates.launderingDirtyPerSec;
 
   state.rates.autoScanPerSec = applyBpsMultiplier(state.rates.autoScanPerSec, effects.autoScanBps);
 
@@ -69,56 +55,29 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     9800,
   );
 
-  const suspicionPenaltyBps =
-    state.systems.fbiSuspicion >= 7800 ? 950 : state.systems.fbiSuspicion >= 4400 ? 420 : 0;
-  const launderingBaseEfficiency =
-    state.systems.launderingProfile === 'high-yield' ? 8850 : 7850;
-  state.rates.launderingEfficiencyBps = clamp(
-    launderingBaseEfficiency - suspicionPenaltyBps,
-    6000,
-    9300,
-  );
-
-  let totalFrontDarkToCleanPerSec = 0;
-  let totalFrontCleanYieldPerSec = 0;
+  let totalFrontIncomePerSec = 0;
   let totalFrontMaintenancePerSec = 0;
   let totalFrontRiskBps = 0;
-  let weightedFrontCleanEfficiency = 0;
 
   for (const frontBusinessId of FRONT_BUSINESS_IDS) {
     const runtime = state.systems.frontBusinesses[frontBusinessId];
     const metrics = computeFrontBusinessMetrics(frontBusinessId, runtime, state.phase.index);
 
-    totalFrontDarkToCleanPerSec += metrics.darkToCleanPerSec;
-    totalFrontCleanYieldPerSec += metrics.cleanYieldPerSec;
+    totalFrontIncomePerSec += metrics.incomePerSec;
     totalFrontMaintenancePerSec += metrics.maintenancePerSec;
     totalFrontRiskBps += metrics.riskBps;
-    weightedFrontCleanEfficiency +=
-      metrics.darkToCleanPerSec * (metrics.cleanEfficiencyBps);
   }
 
-  state.rates.frontBusinessDarkToCleanPerSec = totalFrontDarkToCleanPerSec;
-  state.rates.frontBusinessCleanYieldPerSec = totalFrontCleanYieldPerSec;
+  state.rates.frontBusinessIncomePerSec = totalFrontIncomePerSec;
   state.rates.frontBusinessMaintenancePerSec = totalFrontMaintenancePerSec;
   state.rates.frontBusinessRiskBps = clamp(totalFrontRiskBps, 0, 5400);
 
-  if (totalFrontDarkToCleanPerSec > 0) {
-    state.rates.frontBusinessCleanEfficiencyBps = clamp(
-      Number(weightedFrontCleanEfficiency / totalFrontDarkToCleanPerSec),
-      7000,
-      9900,
-    );
-  } else {
-    state.rates.frontBusinessCleanEfficiencyBps = 0;
-  }
-
   const baseCountermeasureCost =
     180 + (Math.floor(clamp(state.systems.fbiSuspicion, 0, 10_000) / 55));
-  const profileCost = state.systems.launderingProfile === 'high-yield' ? 150 : 0;
-  const dirtyExposureCost = maxBigInt(0, state.resources.dirtyMoney / 2400);
+  const exposureCost = maxBigInt(0, state.resources.money / 2400);
   state.rates.fbiCountermeasureCostMoney = maxBigInt(
     180,
-    baseCountermeasureCost + profileCost + dirtyExposureCost,
+    baseCountermeasureCost + exposureCost,
   );
 
   const moneyYieldBase = 5500 + state.phase.index * 120;

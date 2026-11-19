@@ -8,8 +8,6 @@ export type PhaseId =
 
 export type InvestMode = 'stable' | 'aggressive';
 
-export type LaunderingProfile = 'low-risk' | 'high-yield';
-
 export type FbiRiskState = 'clear' | 'watch' | 'alert';
 
 export type FrontBusinessId =
@@ -95,9 +93,7 @@ export interface ProgressionSnapshot {
 export interface ResourceSnapshot {
   bots: number;
   queuedTargets: number;
-  dirtyMoney: number;
-  darkMoney: number;
-  cleanMoney: number;
+  money: number;
   portfolio: number;
   warIntel: number;
   hz: number;
@@ -110,30 +106,21 @@ export interface FrontBusinessSnapshot {
   owned: boolean;
   level: number;
   mode: FrontBusinessMode;
-  darkToCleanPerSec: number;
-  cleanYieldPerSec: number;
+  incomePerSec: number;
   maintenancePerSec: number;
   riskBps: number;
-  buyCostDarkMoney: number;
-  upgradeCostDarkMoney: number;
+  buyCost: number;
+  upgradeCost: number;
 }
 
 export interface EconomySnapshot {
   monetizeActive: boolean;
   monetizeBotsPerSec: number;
-  dirtyMoney: number;
-  cleanMoney: number;
-  launderingActive: boolean;
-  launderingProfile: LaunderingProfile;
-  launderingThroughputPerSec: number;
-  launderingEfficiencyBps: number;
-  frontBusinessDarkToCleanPerSec: number;
-  frontBusinessCleanYieldPerSec: number;
+  frontBusinessIncomePerSec: number;
   frontBusinessMaintenancePerSec: number;
   frontBusinessRiskBps: number;
   frontBusinessActionCooldownMs: number;
   frontBusinesses: FrontBusinessSnapshot[];
-  launderingLockdownMs: number;
   fbiSuspicion: number;
   fbiRiskState: FbiRiskState;
   fbiInterventionChanceBps: number;
@@ -213,13 +200,9 @@ export interface PersistedEngineRates {
   autoScanPerSec: number;
   autoExploitPerSec: number;
   monetizeBotsPerSec: number;
-  launderingDirtyPerSec: number;
-  launderingEfficiencyBps: number;
-  frontBusinessDarkToCleanPerSec: number;
-  frontBusinessCleanYieldPerSec: number;
+  frontBusinessIncomePerSec: number;
   frontBusinessMaintenancePerSec: number;
   frontBusinessRiskBps: number;
-  frontBusinessCleanEfficiencyBps: number;
   fbiCountermeasureCostMoney: number;
   moneyYieldBps: number;
   investStableBps: number;
@@ -241,11 +224,8 @@ export type PersistedFrontBusinessMap = Record<FrontBusinessId, PersistedFrontBu
 
 export interface PersistedEngineSystems {
   monetizeActive: boolean;
-  launderingActive: boolean;
-  launderingProfile: LaunderingProfile;
   frontBusinesses: PersistedFrontBusinessMap;
   frontBusinessActionCooldownMs: number;
-  launderingLockdownMs: number;
   fbiSuspicion: number;
   fbiCountermeasureCooldownMs: number;
   investMode: InvestMode;

@@ -14,7 +14,7 @@ interface MatrixTabPanelProps {
 }
 
 export function MatrixTabPanel(props: Readonly<MatrixTabPanelProps>) {
-  const money = (props.snapshot.resources.darkMoney);
+  const money = (props.snapshot.resources.money);
 
   const matrixArmCostHz = (props.snapshot.matrix.armCostHz);
   const matrixArmCostComp = (props.snapshot.matrix.armCostComputronium);

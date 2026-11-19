@@ -150,7 +150,7 @@ export function commandMatrixInject(
 
     if (state.matrix.breachProgress >= 100) {
       state.resources.warIntel += 50;
-      state.resources.darkMoney += 12_000;
+      state.resources.money += 12_000;
       state.resources.computronium += 15;
     }
 
@@ -168,11 +168,11 @@ export function commandMatrixStabilize(state: EngineState): boolean {
   refreshMatrixDerived(state);
   const effects = computeUpgradeEffects(state);
 
-  if (!state.matrix.unlocked || state.resources.darkMoney < state.matrix.stabilizeCostMoney) {
+  if (!state.matrix.unlocked || state.resources.money < state.matrix.stabilizeCostMoney) {
     return false;
   }
 
-  state.resources.darkMoney -= state.matrix.stabilizeCostMoney;
+  state.resources.money -= state.matrix.stabilizeCostMoney;
   state.matrix.stability = clamp(
     state.matrix.stability + 980 + effects.matrixStabilizeGain,
     0,

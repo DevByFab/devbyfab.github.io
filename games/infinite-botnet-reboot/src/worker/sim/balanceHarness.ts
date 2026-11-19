@@ -107,7 +107,7 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
   }
 
   if (state.phase.index >= 2 && systems.fbiSuspicion > 6200 && systems.fbiCountermeasureCooldownMs <= 0 &&
-    resources.darkMoney >= rates.fbiCountermeasureCostMoney) {
+    resources.money >= rates.fbiCountermeasureCostMoney) {
     commandFbiCountermeasure(state);
   }
 
@@ -121,15 +121,15 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
       }
     }
 
-    if (resources.darkMoney > 2000 && state.phase.index < 5 && second % 30 === 0) {
+    if (resources.money > 2000 && state.phase.index < 5 && second % 30 === 0) {
       commandInvestTranche(state);
     }
-    if (resources.darkMoney < 150 && resources.portfolio > 0) {
+    if (resources.money < 150 && resources.portfolio > 0) {
       commandCashoutPortfolio(state);
     }
 
-    if (war.heat > 8800 && resources.darkMoney >= war.scrubCostMoney) commandWarScrub(state);
-    if (war.heat > 7000 && war.fortifyCooldownMs <= 0 && resources.darkMoney >= war.fortifyCostMoney &&
+    if (war.heat > 8800 && resources.money >= war.scrubCostMoney) commandWarScrub(state);
+    if (war.heat > 7000 && war.fortifyCooldownMs <= 0 && resources.money >= war.fortifyCostMoney &&
       resources.warIntel >= war.fortifyCostIntel) {
       commandWarFortify(state);
     }
@@ -226,8 +226,8 @@ function playRun(seed: number, skill: Skill, maxHours: number, trace = false): R
       if (trace && state.nowMs % 1_800_000 === 0) {
         const r = state.resources;
         const lv = Object.entries(state.upgrades.levels).filter(([, v]) => v > 0).map(([k, v]) => `${k}:${v}`).join(' ');
-        console.log(`[${fmtMin(minute).trim()}] ${state.phase.id} bots=${r.bots} queue=${r.queuedTargets} dark=${r.darkMoney} dirty=${r.dirtyMoney} clean=${r.cleanMoney} ` +
-          `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion} lockdown=${state.systems.launderingLockdownMs}`);
+        console.log(`[${fmtMin(minute).trim()}] ${state.phase.id} bots=${r.bots} queue=${r.queuedTargets} money=${r.money} ` +
+          `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion}`);
         console.log(`      upgrades: ${lv}`);
       }
 
