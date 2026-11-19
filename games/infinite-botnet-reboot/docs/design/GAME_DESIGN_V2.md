@@ -1,6 +1,6 @@
 # Infinite BotNet — Conception v2 (partie de 3 à 5 heures)
 
-Statut : **validé le 19 nov. 2026**. Lot L1 terminé (mesure faite), lot L2 à lancer.
+Statut : **validé le 19 nov. 2026**. Lots L1 et L2 terminés ; lot L3 (courbe d'équilibrage) à lancer.
 Décisions prises avec Fabio :
 - durée de partie 3 à 5 h ;
 - quatre fins (Vengeance, Résilience, Folie, Prison) ;
@@ -56,6 +56,8 @@ Supprimés ou fusionnés : l'argent « dark » (fusionné avec argent sale), por
 Hz, matière cérébrale et computronium ne disparaissent pas : ils ne servent plus que pour la **5e fin cachée « Singularité »** (voir section 5), débloquée tardivement et seulement si le joueur la cherche.
 Le mini-jeu de la matrice (saisie de commandes) devient une **infiltration** d'une grande entreprise : braquage à risque, utilisable en P3 et P4. À valider.
 
+> **Mise à jour du 19 nov.** : le blanchiment est supprimé et il n'y a plus qu'une seule monnaie (« Argent »). Dans la Vengeance, le critère n'est donc plus « argent propre » mais **argent total + suspicion basse** ; dans la Résilience, le joueur doit **dépenser** son argent (restitution, écoles, hôpitaux, puits).
+
 ## 5. Les quatre fins
 
 Le héros a tout perdu : emploi, femme, garde du fils, logement. Quatre issues, trois choisies, une subie.
@@ -104,7 +106,7 @@ Au début de P4, un écran présente les trois voies avec leurs exigences. Le ch
 | Lot | Contenu | Résultat vérifiable |
 | --- | --- | --- |
 | L1 ✅ | Réparer le joueur automatique et mesurer l'existant | **fait** : 0 partie sur 9 finissable à vitesse normale (voir `ETAT_DES_LIEUX_2026-11.md`) |
-| L2 | Passage des `bigint` aux nombres, réduction à 6 ressources | le jeu compile et se joue comme avant |
+| L2 ✅ | Nombres normaux, **blanchiment supprimé, monnaies fusionnées en une seule « Argent »** (décidé le 19 nov.) | **fait** : lint, build et interface vérifiés ; les commerces deviennent des sources de revenu |
 | L3 | Nouvelle courbe : paliers de phase, coûts, améliorations de P0 à P3 | médiane P0 à P3 dans le calendrier |
 | L4 | Système de voies et de projets finaux (3 voies + prison) | les 4 fins atteignables en test automatique |
 | L5 | Contenu : améliorations P4/P5, messages, textes des fins | fins jouables de bout en bout |
