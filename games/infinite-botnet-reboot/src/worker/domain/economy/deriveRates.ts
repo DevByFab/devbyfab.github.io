@@ -8,16 +8,16 @@ import { applyBpsMultiplier, clamp, maxBigInt } from './helpers';
 
 export function refreshEconomyDerivedRates(state: EngineState): void {
   const { bots } = state.resources;
-  const phaseFactor = BigInt(state.phase.index + 1);
+  const phaseFactor = (state.phase.index + 1);
   const effects = computeUpgradeEffects(state);
   const hasOperatorMacros = (state.upgrades.levels['qol-operator-macros'] ?? 0) > 0;
 
-  state.rates.manualScanGain = BigInt(1 + clamp(effects.manualScanGainFlat, 0, 6));
-  state.rates.autoScanPerSec = bots < 110n ? 0n : bots / 118n + phaseFactor / 2n;
-  state.rates.autoExploitPerSec = 0n;
-  state.rates.monetizeBotsPerSec = maxBigInt(2n, bots / 1200n + BigInt(state.phase.index));
+  state.rates.manualScanGain = (1 + clamp(effects.manualScanGainFlat, 0, 6));
+  state.rates.autoScanPerSec = bots < 110 ? 0 : bots / 118 + phaseFactor / 2;
+  state.rates.autoExploitPerSec = 0;
+  state.rates.monetizeBotsPerSec = maxBigInt(2, bots / 1200 + (state.phase.index));
 
-  const launderingBase = maxBigInt(3n, bots / 1750n + phaseFactor / 2n);
+  const launderingBase = maxBigInt(3, bots / 1750 + phaseFactor / 2);
   const launderingThroughputBoostBps =
     state.systems.launderingProfile === 'high-yield' ? 1800 : 0;
   state.rates.launderingDirtyPerSec = applyBpsMultiplier(
@@ -25,11 +25,11 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     launderingThroughputBoostBps,
   );
 
-  if (state.rates.autoScanPerSec > 48_000_000n) state.rates.autoScanPerSec = 48_000_000n;
-  const monetizeCap = 950_000n * BigInt((state.phase.index + 1) * (state.phase.index + 1));
+  if (state.rates.autoScanPerSec > 48_000_000) state.rates.autoScanPerSec = 48_000_000;
+  const monetizeCap = 950_000 * ((state.phase.index + 1) * (state.phase.index + 1));
   if (state.rates.monetizeBotsPerSec > monetizeCap) state.rates.monetizeBotsPerSec = monetizeCap;
 
-  const launderingCap = 780_000n * BigInt((state.phase.index + 1) * (state.phase.index + 1));
+  const launderingCap = 780_000 * ((state.phase.index + 1) * (state.phase.index + 1));
   state.rates.launderingDirtyPerSec =
     state.rates.launderingDirtyPerSec > launderingCap
       ? launderingCap
@@ -38,13 +38,13 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.autoScanPerSec = applyBpsMultiplier(state.rates.autoScanPerSec, effects.autoScanBps);
 
   if (effects.autoExploitUnlock > 0) {
-    const autoExploitBase = bots < 400n ? 0n : bots / 240n + phaseFactor / 4n;
+    const autoExploitBase = bots < 400 ? 0 : bots / 240 + phaseFactor / 4;
     state.rates.autoExploitPerSec = applyBpsMultiplier(autoExploitBase, effects.autoExploitBps);
-    if (state.rates.autoExploitPerSec > 42_000_000n) state.rates.autoExploitPerSec = 42_000_000n;
+    if (state.rates.autoExploitPerSec > 42_000_000) state.rates.autoExploitPerSec = 42_000_000;
   }
 
   const queuedTargetsForScanCooldown = Number(
-    state.resources.queuedTargets > 220n ? 220n : state.resources.queuedTargets,
+    state.resources.queuedTargets > 220 ? 220 : state.resources.queuedTargets,
   );
   const dynamicScanCooldownMs = 90 + Math.floor((queuedTargetsForScanCooldown / 220) * 210);
   state.rates.manualScanCommandCooldownBaseMs = clamp(
@@ -79,11 +79,11 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     9300,
   );
 
-  let totalFrontDarkToCleanPerSec = 0n;
-  let totalFrontCleanYieldPerSec = 0n;
-  let totalFrontMaintenancePerSec = 0n;
+  let totalFrontDarkToCleanPerSec = 0;
+  let totalFrontCleanYieldPerSec = 0;
+  let totalFrontMaintenancePerSec = 0;
   let totalFrontRiskBps = 0;
-  let weightedFrontCleanEfficiency = 0n;
+  let weightedFrontCleanEfficiency = 0;
 
   for (const frontBusinessId of FRONT_BUSINESS_IDS) {
     const runtime = state.systems.frontBusinesses[frontBusinessId];
@@ -94,7 +94,7 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
     totalFrontMaintenancePerSec += metrics.maintenancePerSec;
     totalFrontRiskBps += metrics.riskBps;
     weightedFrontCleanEfficiency +=
-      metrics.darkToCleanPerSec * BigInt(metrics.cleanEfficiencyBps);
+      metrics.darkToCleanPerSec * (metrics.cleanEfficiencyBps);
   }
 
   state.rates.frontBusinessDarkToCleanPerSec = totalFrontDarkToCleanPerSec;
@@ -102,7 +102,7 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.frontBusinessMaintenancePerSec = totalFrontMaintenancePerSec;
   state.rates.frontBusinessRiskBps = clamp(totalFrontRiskBps, 0, 5400);
 
-  if (totalFrontDarkToCleanPerSec > 0n) {
+  if (totalFrontDarkToCleanPerSec > 0) {
     state.rates.frontBusinessCleanEfficiencyBps = clamp(
       Number(weightedFrontCleanEfficiency / totalFrontDarkToCleanPerSec),
       7000,
@@ -113,11 +113,11 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   }
 
   const baseCountermeasureCost =
-    180n + BigInt(Math.floor(clamp(state.systems.fbiSuspicion, 0, 10_000) / 55));
-  const profileCost = state.systems.launderingProfile === 'high-yield' ? 150n : 0n;
-  const dirtyExposureCost = maxBigInt(0n, state.resources.dirtyMoney / 2400n);
+    180 + (Math.floor(clamp(state.systems.fbiSuspicion, 0, 10_000) / 55));
+  const profileCost = state.systems.launderingProfile === 'high-yield' ? 150 : 0;
+  const dirtyExposureCost = maxBigInt(0, state.resources.dirtyMoney / 2400);
   state.rates.fbiCountermeasureCostMoney = maxBigInt(
-    180n,
+    180,
     baseCountermeasureCost + profileCost + dirtyExposureCost,
   );
 
@@ -125,6 +125,6 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.moneyYieldBps = clamp(moneyYieldBase + effects.moneyYieldBps, 5000, 8400);
 
   const maintenanceReductionBps = clamp(effects.maintenanceReductionBps, 0, 8500);
-  const maintenanceRate = (2n * BigInt(10_000 - maintenanceReductionBps)) / 10_000n;
-  state.rates.maintenancePerThousandBots = maxBigInt(1n, maintenanceRate);
+  const maintenanceRate = (2 * (10_000 - maintenanceReductionBps)) / 10_000;
+  state.rates.maintenancePerThousandBots = maxBigInt(1, maintenanceRate);
 }

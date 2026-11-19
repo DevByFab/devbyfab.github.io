@@ -14,13 +14,13 @@ interface MatrixTabPanelProps {
 }
 
 export function MatrixTabPanel(props: Readonly<MatrixTabPanelProps>) {
-  const money = BigInt(props.snapshot.resources.darkMoney);
+  const money = (props.snapshot.resources.darkMoney);
 
-  const matrixArmCostHz = BigInt(props.snapshot.matrix.armCostHz);
-  const matrixArmCostComp = BigInt(props.snapshot.matrix.armCostComputronium);
-  const matrixInjectCostHz = BigInt(props.snapshot.matrix.injectCostHz);
-  const matrixInjectCostComp = BigInt(props.snapshot.matrix.injectCostComputronium);
-  const matrixStabilizeCost = BigInt(props.snapshot.matrix.stabilizeCostMoney);
+  const matrixArmCostHz = (props.snapshot.matrix.armCostHz);
+  const matrixArmCostComp = (props.snapshot.matrix.armCostComputronium);
+  const matrixInjectCostHz = (props.snapshot.matrix.injectCostHz);
+  const matrixInjectCostComp = (props.snapshot.matrix.injectCostComputronium);
+  const matrixStabilizeCost = (props.snapshot.matrix.stabilizeCostMoney);
 
   return (
     <section className="system-grid" role="tabpanel" id="panel-matrix" aria-labelledby="tab-matrix">
@@ -47,8 +47,8 @@ export function MatrixTabPanel(props: Readonly<MatrixTabPanelProps>) {
               className="btn"
               disabled={
                 !props.snapshot.matrix.unlocked ||
-                BigInt(props.snapshot.resources.hz) < matrixArmCostHz ||
-                BigInt(props.snapshot.resources.computronium) < matrixArmCostComp
+                (props.snapshot.resources.hz) < matrixArmCostHz ||
+                (props.snapshot.resources.computronium) < matrixArmCostComp
               }
               onClick={props.onArm}
             >
@@ -58,8 +58,8 @@ export function MatrixTabPanel(props: Readonly<MatrixTabPanelProps>) {
               className="btn"
               disabled={
                 !props.snapshot.matrix.unlocked ||
-                BigInt(props.snapshot.resources.hz) < matrixInjectCostHz ||
-                BigInt(props.snapshot.resources.computronium) < matrixInjectCostComp
+                (props.snapshot.resources.hz) < matrixInjectCostHz ||
+                (props.snapshot.resources.computronium) < matrixInjectCostComp
               }
               onClick={props.onInject}
             >

@@ -41,8 +41,8 @@ export type PhaseRequirementId =
 export interface PhaseRequirementSnapshot {
   id: PhaseRequirementId;
   label: string;
-  current: string;
-  target: string;
+  current: number;
+  target: number;
   met: boolean;
 }
 
@@ -69,11 +69,11 @@ export interface UpgradeOfferSnapshot {
   affordable: boolean;
   resourceLocked: boolean;
   statusText: string;
-  costBots: string;
-  costMoney: string;
-  costIntel: string;
-  costHz: string;
-  costComputronium: string;
+  costBots: number;
+  costMoney: number;
+  costIntel: number;
+  costHz: number;
+  costComputronium: number;
 }
 
 export interface UpgradesSnapshot {
@@ -93,16 +93,16 @@ export interface ProgressionSnapshot {
 }
 
 export interface ResourceSnapshot {
-  bots: string;
-  queuedTargets: string;
-  dirtyMoney: string;
-  darkMoney: string;
-  cleanMoney: string;
-  portfolio: string;
-  warIntel: string;
-  hz: string;
-  brainMatter: string;
-  computronium: string;
+  bots: number;
+  queuedTargets: number;
+  dirtyMoney: number;
+  darkMoney: number;
+  cleanMoney: number;
+  portfolio: number;
+  warIntel: number;
+  hz: number;
+  brainMatter: number;
+  computronium: number;
 }
 
 export interface FrontBusinessSnapshot {
@@ -110,26 +110,26 @@ export interface FrontBusinessSnapshot {
   owned: boolean;
   level: number;
   mode: FrontBusinessMode;
-  darkToCleanPerSec: string;
-  cleanYieldPerSec: string;
-  maintenancePerSec: string;
+  darkToCleanPerSec: number;
+  cleanYieldPerSec: number;
+  maintenancePerSec: number;
   riskBps: number;
-  buyCostDarkMoney: string;
-  upgradeCostDarkMoney: string;
+  buyCostDarkMoney: number;
+  upgradeCostDarkMoney: number;
 }
 
 export interface EconomySnapshot {
   monetizeActive: boolean;
-  monetizeBotsPerSec: string;
-  dirtyMoney: string;
-  cleanMoney: string;
+  monetizeBotsPerSec: number;
+  dirtyMoney: number;
+  cleanMoney: number;
   launderingActive: boolean;
   launderingProfile: LaunderingProfile;
-  launderingThroughputPerSec: string;
+  launderingThroughputPerSec: number;
   launderingEfficiencyBps: number;
-  frontBusinessDarkToCleanPerSec: string;
-  frontBusinessCleanYieldPerSec: string;
-  frontBusinessMaintenancePerSec: string;
+  frontBusinessDarkToCleanPerSec: number;
+  frontBusinessCleanYieldPerSec: number;
+  frontBusinessMaintenancePerSec: number;
   frontBusinessRiskBps: number;
   frontBusinessActionCooldownMs: number;
   frontBusinesses: FrontBusinessSnapshot[];
@@ -137,7 +137,7 @@ export interface EconomySnapshot {
   fbiSuspicion: number;
   fbiRiskState: FbiRiskState;
   fbiInterventionChanceBps: number;
-  fbiCountermeasureCost: string;
+  fbiCountermeasureCost: number;
   fbiCountermeasureCooldownMs: number;
   moneyYieldBps: number;
   exploitCooldownMs: number;
@@ -146,7 +146,7 @@ export interface EconomySnapshot {
   stableInvestBps: number;
   aggressiveInvestMinBps: number;
   aggressiveInvestMaxBps: number;
-  maintenanceMoneyPerSec: string;
+  maintenanceMoneyPerSec: number;
 }
 
 export interface WarSnapshot {
@@ -157,10 +157,10 @@ export interface WarSnapshot {
   attackCooldownMs: number;
   fortifyCooldownMs: number;
   defenseRemainingMs: number;
-  attackCostBots: string;
-  scrubCostMoney: string;
-  fortifyCostMoney: string;
-  fortifyCostIntel: string;
+  attackCostBots: number;
+  scrubCostMoney: number;
+  fortifyCostMoney: number;
+  fortifyCostIntel: number;
   projectedSuccessBps: number;
 }
 
@@ -172,11 +172,11 @@ export interface MatrixSnapshot {
   expectedCommand: string;
   successfulInjections: number;
   failedInjections: number;
-  armCostHz: string;
-  armCostComputronium: string;
-  injectCostHz: string;
-  injectCostComputronium: string;
-  stabilizeCostMoney: string;
+  armCostHz: number;
+  armCostComputronium: number;
+  injectCostHz: number;
+  injectCostComputronium: number;
+  stabilizeCostMoney: number;
 }
 
 export interface NarrativeMessage {
@@ -186,9 +186,9 @@ export interface NarrativeMessage {
   subject: string;
   body: string;
   rewardType: MessageRewardType;
-  rewardValue: string;
+  rewardValue: number;
   rewardLabel: string;
-  quarantineCost: string;
+  quarantineCost: number;
   createdAtMs: number;
 }
 
@@ -200,32 +200,32 @@ export interface MessageSnapshot {
 }
 
 export interface TelemetrySnapshot {
-  botsPerSec: string;
-  moneyPerSec: string;
+  botsPerSec: number;
+  moneyPerSec: number;
   heatPerSec: number;
 }
 
 export interface PersistedEngineRates {
-  manualScanGain: string;
+  manualScanGain: number;
   manualScanCommandCooldownBaseMs: number;
   exploitChanceBps: number;
   manualExploitCooldownBaseMs: number;
-  autoScanPerSec: string;
-  autoExploitPerSec: string;
-  monetizeBotsPerSec: string;
-  launderingDirtyPerSec: string;
+  autoScanPerSec: number;
+  autoExploitPerSec: number;
+  monetizeBotsPerSec: number;
+  launderingDirtyPerSec: number;
   launderingEfficiencyBps: number;
-  frontBusinessDarkToCleanPerSec: string;
-  frontBusinessCleanYieldPerSec: string;
-  frontBusinessMaintenancePerSec: string;
+  frontBusinessDarkToCleanPerSec: number;
+  frontBusinessCleanYieldPerSec: number;
+  frontBusinessMaintenancePerSec: number;
   frontBusinessRiskBps: number;
   frontBusinessCleanEfficiencyBps: number;
-  fbiCountermeasureCostMoney: string;
+  fbiCountermeasureCostMoney: number;
   moneyYieldBps: number;
   investStableBps: number;
   investAggressiveMinBps: number;
   investAggressiveMaxBps: number;
-  maintenancePerThousandBots: string;
+  maintenancePerThousandBots: number;
   heatPerMonetizePerSec: number;
   heatPerAggressivePerSec: number;
   messageIntervalBaseMs: number;
@@ -273,8 +273,8 @@ export interface PersistedEngineUpgrades {
 }
 
 export interface PersistedEngineTelemetry {
-  botsPerSec: string;
-  moneyPerSec: string;
+  botsPerSec: number;
+  moneyPerSec: number;
   heatPerSec: number;
 }
 

@@ -4,7 +4,7 @@ import { clamp } from './helpers';
 export const FBI_SUSPICION_WATCH_THRESHOLD = 4400;
 export const FBI_SUSPICION_ALERT_THRESHOLD = 7800;
 
-const DIRTY_PRESSURE_DIVISOR = 32_000n;
+const DIRTY_PRESSURE_DIVISOR = 32_000;
 const DIRTY_PRESSURE_MAX = 28;
 const AGGRESSIVE_INVEST_PRESSURE = 12;
 
@@ -21,7 +21,7 @@ const INTERVENTION_PROFILE_HIGH_YIELD_BONUS = 220;
 
 interface SuspicionDeltaInput {
   phaseIndex: number;
-  dirtyMoney: bigint;
+  dirtyMoney: number;
   launderingActive: boolean;
   launderingLockdownMs: number;
   launderingProfile: LaunderingProfile;
@@ -35,8 +35,8 @@ interface InterventionChanceInput {
   launderingProfile: LaunderingProfile;
 }
 
-function computeDirtyPressure(dirtyMoney: bigint): number {
-  const dirtyPressure = Number(dirtyMoney > 0n ? dirtyMoney / DIRTY_PRESSURE_DIVISOR : 0n);
+function computeDirtyPressure(dirtyMoney: number): number {
+  const dirtyPressure = Number(dirtyMoney > 0 ? dirtyMoney / DIRTY_PRESSURE_DIVISOR : 0);
   return clamp(dirtyPressure, 0, DIRTY_PRESSURE_MAX);
 }
 

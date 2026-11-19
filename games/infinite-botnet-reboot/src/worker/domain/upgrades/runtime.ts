@@ -29,8 +29,8 @@ const EMPTY_EFFECTS: UpgradeEffects = {
   messageIntervalReductionBps: 0,
 };
 
-function costValue(value: bigint | undefined): bigint {
-  return value ?? 0n;
+function costValue(value: number | undefined): number {
+  return value ?? 0;
 }
 
 function getCurrentLevel(state: EngineState, chainId: string): number {
@@ -74,7 +74,7 @@ function checkRequirements(
 ): string | null {
   if (!requirements) return null;
 
-  const emergencyProgressionByBots = state.resources.bots >= 1000n && state.phase.index <= 1;
+  const emergencyProgressionByBots = state.resources.bots >= 1000 && state.phase.index <= 1;
 
   if (
     requirements.minPhaseIndex !== undefined &&
@@ -139,19 +139,19 @@ function canAfford(state: EngineState, cost: UpgradeCost): boolean {
 }
 
 function hasLockedCostResource(state: EngineState, cost: UpgradeCost): boolean {
-  if (costValue(cost.darkMoney) > 0n && state.phase.index < 2) {
+  if (costValue(cost.darkMoney) > 0 && state.phase.index < 2) {
     return true;
   }
 
-  if (costValue(cost.warIntel) > 0n && state.phase.index < 3) {
+  if (costValue(cost.warIntel) > 0 && state.phase.index < 3) {
     return true;
   }
 
-  if (costValue(cost.hz) > 0n && state.phase.index < 4) {
+  if (costValue(cost.hz) > 0 && state.phase.index < 4) {
     return true;
   }
 
-  if (costValue(cost.computronium) > 0n && state.phase.index < 4) {
+  if (costValue(cost.computronium) > 0 && state.phase.index < 4) {
     return true;
   }
 
@@ -211,11 +211,11 @@ function toOffer(
       affordable: false,
       resourceLocked: false,
       statusText: 'Niveau max atteint',
-      costBots: '0',
-      costMoney: '0',
-      costIntel: '0',
-      costHz: '0',
-      costComputronium: '0',
+      costBots: 0,
+      costMoney: 0,
+      costIntel: 0,
+      costHz: 0,
+      costComputronium: 0,
     };
   }
 
@@ -253,21 +253,21 @@ function toOffer(
     affordable,
     resourceLocked,
     statusText,
-    costBots: costValue(cost.bots).toString(),
-    costMoney: costValue(cost.darkMoney).toString(),
-    costIntel: costValue(cost.warIntel).toString(),
-    costHz: costValue(cost.hz).toString(),
-    costComputronium: costValue(cost.computronium).toString(),
+    costBots: costValue(cost.bots),
+    costMoney: costValue(cost.darkMoney),
+    costIntel: costValue(cost.warIntel),
+    costHz: costValue(cost.hz),
+    costComputronium: costValue(cost.computronium),
   };
 }
 
-function totalOfferCost(offer: UpgradeOfferSnapshot): bigint {
+function totalOfferCost(offer: UpgradeOfferSnapshot): number {
   return (
-    BigInt(offer.costBots) +
-    BigInt(offer.costMoney) +
-    BigInt(offer.costIntel) +
-    BigInt(offer.costHz) +
-    BigInt(offer.costComputronium)
+    (offer.costBots) +
+    (offer.costMoney) +
+    (offer.costIntel) +
+    (offer.costHz) +
+    (offer.costComputronium)
   );
 }
 

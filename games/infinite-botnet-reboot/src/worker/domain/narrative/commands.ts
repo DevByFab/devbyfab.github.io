@@ -27,7 +27,7 @@ export function commandQuarantineMessage(state: EngineState): boolean {
     return false;
   }
 
-  const quarantineCost = BigInt(message.quarantineCost);
+  const quarantineCost = (message.quarantineCost);
   if (state.resources.darkMoney < quarantineCost) {
     return false;
   }

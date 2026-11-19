@@ -4,7 +4,7 @@ export const P1_AUTOMATION_PHASE: PhaseDefinition = {
   id: 'automation',
   label: 'P1 Recon Automation',
   requirements: {
-    minBots: 180n,
+    minBots: 180,
     minScans: 80,
     minExploitSuccesses: 30,
   },

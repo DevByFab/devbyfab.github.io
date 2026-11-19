@@ -1,32 +1,32 @@
 import type { FrNarrativeTemplate } from '../../../content/fr/narrativeCatalog';
 import type { EngineMessage, EngineState } from '../../state';
 
-function maxBigInt(left: bigint, right: bigint): bigint {
+function maxBigInt(left: number, right: number): number {
   return left > right ? left : right;
 }
 
-export function computeRewardValue(state: EngineState, template: FrNarrativeTemplate): bigint {
+export function computeRewardValue(state: EngineState, template: FrNarrativeTemplate): number {
   switch (template.rewardType) {
     case 'bots':
-      return maxBigInt(30n, state.resources.bots / 45n + 18n);
+      return maxBigInt(30, state.resources.bots / 45 + 18);
     case 'targets':
-      return maxBigInt(12n, state.resources.queuedTargets / 4n + 10n);
+      return maxBigInt(12, state.resources.queuedTargets / 4 + 10);
     case 'money':
-      return maxBigInt(70n, state.resources.darkMoney / 38n + 35n);
+      return maxBigInt(70, state.resources.darkMoney / 38 + 35);
     case 'portfolio':
-      return maxBigInt(50n, state.resources.portfolio / 28n + 25n);
+      return maxBigInt(50, state.resources.portfolio / 28 + 25);
     case 'intel':
-      return BigInt(4 + Math.floor(state.phase.index / 2));
+      return (4 + Math.floor(state.phase.index / 2));
     case 'heat-relief':
-      return BigInt(240 + state.phase.index * 30);
+      return (240 + state.phase.index * 30);
     default:
-      return 0n;
+      return 0;
   }
 }
 
 export function describeReward(
   rewardType: FrNarrativeTemplate['rewardType'],
-  value: bigint,
+  value: number,
   tone: FrNarrativeTemplate['tone'],
 ): string {
   const signedPrefix = tone === 'negative' ? '-' : '+';
@@ -53,7 +53,7 @@ export function describeReward(
 }
 
 export function applyPositiveReward(state: EngineState, message: EngineMessage): void {
-  const value = BigInt(message.rewardValue);
+  const value = (message.rewardValue);
 
   switch (message.rewardType) {
     case 'bots':
@@ -80,27 +80,27 @@ export function applyPositiveReward(state: EngineState, message: EngineMessage):
 }
 
 export function applyNegativeReward(state: EngineState, message: EngineMessage): void {
-  const value = BigInt(message.rewardValue);
+  const value = (message.rewardValue);
 
   switch (message.rewardType) {
     case 'bots':
-      state.resources.bots = state.resources.bots > value ? state.resources.bots - value : 0n;
+      state.resources.bots = state.resources.bots > value ? state.resources.bots - value : 0;
       break;
     case 'targets':
       state.resources.queuedTargets =
-        state.resources.queuedTargets > value ? state.resources.queuedTargets - value : 0n;
+        state.resources.queuedTargets > value ? state.resources.queuedTargets - value : 0;
       break;
     case 'money':
       state.resources.darkMoney =
-        state.resources.darkMoney > value ? state.resources.darkMoney - value : 0n;
+        state.resources.darkMoney > value ? state.resources.darkMoney - value : 0;
       break;
     case 'portfolio':
       state.resources.portfolio =
-        state.resources.portfolio > value ? state.resources.portfolio - value : 0n;
+        state.resources.portfolio > value ? state.resources.portfolio - value : 0;
       break;
     case 'intel':
       state.resources.warIntel =
-        state.resources.warIntel > value ? state.resources.warIntel - value : 0n;
+        state.resources.warIntel > value ? state.resources.warIntel - value : 0;
       break;
     case 'heat-relief':
       state.war.heat = Math.min(10_000, state.war.heat + Number(value));

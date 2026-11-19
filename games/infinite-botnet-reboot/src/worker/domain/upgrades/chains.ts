@@ -9,7 +9,7 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Micro-boost de precision exploit pour fluidifier les toutes premieres actions.',
     levels: [
       {
-        cost: { bots: 10n },
+        cost: { bots: 10 },
         requirements: { minScans: 2 },
         effects: { exploitChanceBps: 25 },
       },
@@ -23,7 +23,7 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Legere optimisation du cycle exploit pour accelerer le tout debut de P0.',
     levels: [
       {
-        cost: { bots: 25n },
+        cost: { bots: 25 },
         requirements: { minExploitSuccesses: 3 },
         effects: { manualExploitCooldownReductionBps: 500 },
       },
@@ -37,17 +37,17 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Augmente le volume de cibles ajoutees a chaque scan manuel.',
     levels: [
       {
-        cost: { bots: 45n },
+        cost: { bots: 45 },
         requirements: { minScans: 6 },
         effects: { manualScanGainFlat: 1 },
       },
       {
-        cost: { bots: 160n },
+        cost: { bots: 160 },
         requirements: { minScans: 18, minExploitSuccesses: 6 },
         effects: { manualScanGainFlat: 1 },
       },
       {
-        cost: { bots: 1_200n, darkMoney: 240n },
+        cost: { bots: 1_200, darkMoney: 240 },
         requirements: { minPhaseIndex: 1, minScans: 120, minExploitSuccesses: 70 },
         effects: { manualScanGainFlat: 1 },
       },
@@ -61,17 +61,17 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Augmente la cadence de scan passif pour alimenter la file de cibles.',
     levels: [
       {
-        cost: { bots: 90n },
+        cost: { bots: 90 },
         requirements: { minScans: 12, minExploitSuccesses: 5 },
         effects: { autoScanBps: 220 },
       },
       {
-        cost: { bots: 360n, darkMoney: 70n },
+        cost: { bots: 360, darkMoney: 70 },
         requirements: { minScans: 42, minExploitSuccesses: 18 },
         effects: { autoScanBps: 280 },
       },
       {
-        cost: { bots: 2_600n, darkMoney: 540n },
+        cost: { bots: 2_600, darkMoney: 540 },
         requirements: { minPhaseIndex: 1, minScans: 220, minExploitSuccesses: 120 },
         effects: { autoScanBps: 420 },
       },
@@ -85,12 +85,12 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Fluidifie la file de cibles et stabilise les tentatives exploit.',
     levels: [
       {
-        cost: { bots: 120n },
+        cost: { bots: 120 },
         requirements: { minScans: 24 },
         effects: { autoScanBps: 180 },
       },
       {
-        cost: { bots: 460n, darkMoney: 110n },
+        cost: { bots: 460, darkMoney: 110 },
         requirements: { minScans: 75, minExploitSuccesses: 35 },
         effects: { autoScanBps: 240, exploitChanceBps: 70 },
       },
@@ -104,17 +104,17 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Tier cooldown: 2000ms -> 1000ms -> 500ms -> 0ms.',
     levels: [
       {
-        cost: { bots: 140n, darkMoney: 30n },
+        cost: { bots: 140, darkMoney: 30 },
         requirements: { minScans: 18, minExploitSuccesses: 8 },
         effects: { manualExploitCooldownReductionBps: 5000 },
       },
       {
-        cost: { bots: 520n, darkMoney: 120n },
+        cost: { bots: 520, darkMoney: 120 },
         requirements: { minScans: 65, minExploitSuccesses: 35 },
         effects: { manualExploitCooldownReductionBps: 7500 },
       },
       {
-        cost: { bots: 8_800n, darkMoney: 2_600n },
+        cost: { bots: 8_800, darkMoney: 2_600 },
         requirements: { minPhaseIndex: 1, minScans: 320, minExploitSuccesses: 210 },
         effects: { manualExploitCooldownDisable: 1 },
       },
@@ -128,22 +128,22 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Renforce la precision exploit et stabilise la progression early game.',
     levels: [
       {
-        cost: { bots: 170n },
+        cost: { bots: 170 },
         requirements: { minExploitSuccesses: 10 },
         effects: { exploitChanceBps: 80 },
       },
       {
-        cost: { bots: 700n, darkMoney: 160n },
+        cost: { bots: 700, darkMoney: 160 },
         requirements: { minScans: 55, minExploitSuccesses: 28 },
         effects: { exploitChanceBps: 120 },
       },
       {
-        cost: { bots: 11_500n, darkMoney: 3_200n },
+        cost: { bots: 11_500, darkMoney: 3_200 },
         requirements: { minPhaseIndex: 1, minScans: 360, minExploitSuccesses: 220 },
         effects: { exploitChanceBps: 170 },
       },
       {
-        cost: { bots: 145_000n, darkMoney: 38_000n },
+        cost: { bots: 145_000, darkMoney: 38_000 },
         requirements: { minPhaseIndex: 2, minScans: 900, minExploitSuccesses: 700 },
         effects: { exploitChanceBps: 240 },
       },
@@ -157,7 +157,7 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Debloque la hotkey Exploit et raffine les commandes du noyeau.',
     levels: [
       {
-        cost: { bots: 280n },
+        cost: { bots: 280 },
         requirements: { minScans: 80, minExploitSuccesses: 45 },
         effects: {},
       },
@@ -172,8 +172,8 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Branche active: precision exploit et cadence manuelle agressive.',
     levels: [
       {
-        cost: { bots: 920n, darkMoney: 220n },
-        requirements: { minBots: 160n, minScans: 75, minExploitSuccesses: 30 },
+        cost: { bots: 920, darkMoney: 220 },
+        requirements: { minBots: 160, minScans: 75, minExploitSuccesses: 30 },
         effects: {
           exploitChanceBps: 240,
           manualExploitCooldownReductionBps: 1200,
@@ -190,8 +190,8 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Branche passive: reseau dense, scans continus et auto-exploit precoce.',
     levels: [
       {
-        cost: { bots: 920n, darkMoney: 220n },
-        requirements: { minBots: 160n, minScans: 75, minExploitSuccesses: 30 },
+        cost: { bots: 920, darkMoney: 220 },
+        requirements: { minBots: 160, minScans: 75, minExploitSuccesses: 30 },
         effects: {
           autoScanBps: 220,
           autoExploitUnlock: 1,
@@ -208,17 +208,17 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Accelere les exploits passifs pour les longues sessions.',
     levels: [
       {
-        cost: { bots: 6_500n, darkMoney: 1_900n },
+        cost: { bots: 6_500, darkMoney: 1_900 },
         requirements: { minPhaseIndex: 1, minScans: 340, minExploitSuccesses: 240 },
         effects: { autoExploitUnlock: 1, autoExploitBps: 420 },
       },
       {
-        cost: { bots: 76_000n, darkMoney: 22_000n },
+        cost: { bots: 76_000, darkMoney: 22_000 },
         requirements: { minPhaseIndex: 2, minScans: 900, minExploitSuccesses: 700 },
         effects: { autoExploitBps: 640, exploitChanceBps: 80 },
       },
       {
-        cost: { bots: 920_000n, darkMoney: 250_000n },
+        cost: { bots: 920_000, darkMoney: 250_000 },
         requirements: { minPhaseIndex: 3, minScans: 2_600, minExploitSuccesses: 2_600 },
         effects: { autoExploitBps: 900, exploitChanceBps: 130 },
       },
@@ -232,18 +232,18 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Renforce le rendement financier global et la stabilite de maintenance.',
     levels: [
       {
-        cost: { darkMoney: 14_000n },
-        requirements: { minPhaseIndex: 2, minMoney: 8_000n },
+        cost: { darkMoney: 14_000 },
+        requirements: { minPhaseIndex: 2, minMoney: 8_000 },
         effects: { moneyYieldBps: 180, maintenanceReductionBps: 350 },
       },
       {
-        cost: { darkMoney: 160_000n },
-        requirements: { minPhaseIndex: 3, minMoney: 120_000n },
+        cost: { darkMoney: 160_000 },
+        requirements: { minPhaseIndex: 3, minMoney: 120_000 },
         effects: { moneyYieldBps: 240, maintenanceReductionBps: 550 },
       },
       {
-        cost: { darkMoney: 1_300_000n },
-        requirements: { minPhaseIndex: 4, minMoney: 900_000n },
+        cost: { darkMoney: 1_300_000 },
+        requirements: { minPhaseIndex: 4, minMoney: 900_000 },
         effects: { moneyYieldBps: 320, maintenanceReductionBps: 800 },
       },
     ],
@@ -256,7 +256,7 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
     summary: 'Palier endgame global pour lisser la progression vers les dernieres phases.',
     levels: [
       {
-        cost: { bots: 2_800_000n, darkMoney: 650_000n },
+        cost: { bots: 2_800_000, darkMoney: 650_000 },
         requirements: { minPhaseIndex: 3, minScans: 3_500, minExploitSuccesses: 2_000 },
         effects: {
           autoScanBps: 900,
@@ -265,7 +265,7 @@ export const UPGRADE_CHAINS: UpgradeChainDefinition[] = [
         },
       },
       {
-        cost: { bots: 24_000_000n, darkMoney: 4_200_000n },
+        cost: { bots: 24_000_000, darkMoney: 4_200_000 },
         requirements: { minPhaseIndex: 4, minScans: 6_500, minExploitSuccesses: 5_000 },
         effects: {
           autoScanBps: 1200,

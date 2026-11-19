@@ -5,7 +5,7 @@ import { computeUpgradeEffects } from './upgrades';
 export type WarAttackResult = 'blocked' | 'win' | 'loss';
 
 export interface WarTickOutcome {
-  detectedPurgeBots: bigint;
+  detectedPurgeBots: number;
 }
 
 function coolDown(valueMs: number, deltaMs: number): number {
@@ -18,10 +18,10 @@ function computeHeatPerSecond(
   heatPerSecDelta: number,
 ): number {
   const cappedBotsForHeat =
-    state.resources.bots > 9_000_000_000_000_000n
-      ? 9_000_000_000_000_000n
+    state.resources.bots > 9_000_000_000_000_000
+      ? 9_000_000_000_000_000
       : state.resources.bots;
-  const botMagnitude = Math.log10(Number(cappedBotsForHeat + 1n));
+  const botMagnitude = Math.log10(Number(cappedBotsForHeat + 1));
   const automationHeat = clamp(Math.floor(botMagnitude) - 6, 0, 6);
   const monetizeHeat = state.systems.monetizeActive ? 1 : 0;
   const investHeat =
@@ -41,7 +41,7 @@ function computeHeatPerSecond(
   );
 }
 
-function applyDetectionPulse(state: EngineState, phasePressure: number): bigint {
+function applyDetectionPulse(state: EngineState, phasePressure: number): number {
   const triggerChance = clamp(
     4 + Math.floor((state.war.heat - 9300) / 30) + phasePressure * 2,
     4,
@@ -49,32 +49,32 @@ function applyDetectionPulse(state: EngineState, phasePressure: number): bigint 
   );
   const rolled = Math.floor(Math.random() * 100);
   if (rolled >= triggerChance) {
-    return 0n;
+    return 0;
   }
 
-  const purgeDivisor = BigInt(Math.max(40, 190 - phasePressure * 18));
-  const purgeFloor = BigInt(80 + phasePressure * 30);
+  const purgeDivisor = (Math.max(40, 190 - phasePressure * 18));
+  const purgeFloor = (80 + phasePressure * 30);
   const purge = maxBigInt(purgeFloor, state.resources.bots / purgeDivisor);
 
-  state.resources.bots = state.resources.bots > purge ? state.resources.bots - purge : 0n;
+  state.resources.bots = state.resources.bots > purge ? state.resources.bots - purge : 0;
 
-  const moneyPenalty = state.resources.darkMoney / 280n;
+  const moneyPenalty = state.resources.darkMoney / 280;
   state.resources.darkMoney =
-    state.resources.darkMoney > moneyPenalty ? state.resources.darkMoney - moneyPenalty : 0n;
+    state.resources.darkMoney > moneyPenalty ? state.resources.darkMoney - moneyPenalty : 0;
 
   state.war.heat = clamp(state.war.heat - 260, 0, 10000);
   return purge;
 }
 
-function applyDetectionTick(state: EngineState, phasePressure: number, deltaMs: number): bigint {
+function applyDetectionTick(state: EngineState, phasePressure: number, deltaMs: number): number {
   if (phasePressure < 4 || state.war.heat < 9300) {
     state.war.detectionAccumulatorMs = 0;
-    return 0n;
+    return 0;
   }
 
   state.war.detectionAccumulatorMs += deltaMs;
 
-  let purgedBots = 0n;
+  let purgedBots = 0;
   while (state.war.detectionAccumulatorMs >= 1000) {
     state.war.detectionAccumulatorMs -= 1000;
     purgedBots += applyDetectionPulse(state, phasePressure);
@@ -88,10 +88,10 @@ export function refreshWarDerived(state: EngineState): void {
   const { bots } = state.resources;
   const { heat } = state.war;
 
-  state.war.attackCostBots = maxBigInt(120n, bots / 220n + 120n);
-  state.war.scrubCostMoney = maxBigInt(140n, BigInt(180 + Math.floor(heat * 3.4)));
-  state.war.fortifyCostMoney = maxBigInt(420n, BigInt(420 + Math.floor(heat * 5.2)));
-  state.war.fortifyCostIntel = maxBigInt(3n, BigInt(3 + Math.floor(state.war.wins / 11)));
+  state.war.attackCostBots = maxBigInt(120, bots / 220 + 120);
+  state.war.scrubCostMoney = maxBigInt(140, (180 + Math.floor(heat * 3.4)));
+  state.war.fortifyCostMoney = maxBigInt(420, (420 + Math.floor(heat * 5.2)));
+  state.war.fortifyCostIntel = maxBigInt(3, (3 + Math.floor(state.war.wins / 11)));
 
   const defenseBoost = state.war.defenseRemainingMs > 0 ? 450 : 0;
   const streakBoost = Math.min(1400, state.war.streak * 150);
@@ -138,9 +138,9 @@ export function commandWarAttack(state: EngineState): WarAttackResult {
   const roll = Math.floor(Math.random() * 10_000);
   if (roll < state.war.projectedSuccessBps) {
     const rewardBps = Math.min(9600, 8600 + state.war.streak * 90);
-    const rewardBots = (state.war.attackCostBots * BigInt(rewardBps)) / 10_000n;
-    const rewardMoney = maxBigInt(25n, state.war.attackCostBots / 18n);
-    const rewardIntel = 6n + BigInt(Math.floor((state.war.streak + 1) / 2));
+    const rewardBots = (state.war.attackCostBots * (rewardBps)) / 10_000;
+    const rewardMoney = maxBigInt(25, state.war.attackCostBots / 18);
+    const rewardIntel = 6 + (Math.floor((state.war.streak + 1) / 2));
 
     state.resources.bots += rewardBots;
     state.resources.darkMoney += rewardMoney;

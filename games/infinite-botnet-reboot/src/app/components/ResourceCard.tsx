@@ -2,7 +2,7 @@ import { formatBigValue } from '../../game/format';
 
 interface ResourceCardProps {
   label: string;
-  value: string;
+  value: number;
 }
 
 export function ResourceCard(props: Readonly<ResourceCardProps>) {

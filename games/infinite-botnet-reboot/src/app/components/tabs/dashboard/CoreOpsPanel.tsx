@@ -11,7 +11,7 @@ interface CoreOpsPanelProps {
 }
 
 export function CoreOpsPanel(props: Readonly<CoreOpsPanelProps>) {
-  const queuedTargets = BigInt(props.snapshot.resources.queuedTargets);
+  const queuedTargets = (props.snapshot.resources.queuedTargets);
   const exploitLocked = props.snapshot.economy.exploitCooldownMs > 0;
   const exploitCooldownBaseMs = Math.max(0, props.snapshot.economy.exploitCooldownBaseMs);
   const exploitCooldownFillPercent =
@@ -36,7 +36,7 @@ export function CoreOpsPanel(props: Readonly<CoreOpsPanelProps>) {
         <button className="btn" onClick={props.onSendScan}>
           {props.t('reboot.panel.coreOps.scanButton')}
         </button>
-        <button className="btn" disabled={queuedTargets <= 0n || exploitLocked} onClick={props.onSendExploit}>
+        <button className="btn" disabled={queuedTargets <= 0 || exploitLocked} onClick={props.onSendExploit}>
           {props.t('reboot.panel.coreOps.exploitButton')}
         </button>
       </div>

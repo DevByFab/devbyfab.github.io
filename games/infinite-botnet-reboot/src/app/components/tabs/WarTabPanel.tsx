@@ -13,14 +13,14 @@ interface WarTabPanelProps {
 }
 
 export function WarTabPanel(props: Readonly<WarTabPanelProps>) {
-  const bots = BigInt(props.snapshot.resources.bots);
-  const money = BigInt(props.snapshot.resources.darkMoney);
-  const intel = BigInt(props.snapshot.resources.warIntel);
+  const bots = (props.snapshot.resources.bots);
+  const money = (props.snapshot.resources.darkMoney);
+  const intel = (props.snapshot.resources.warIntel);
 
-  const attackCost = BigInt(props.snapshot.war.attackCostBots);
-  const scrubCost = BigInt(props.snapshot.war.scrubCostMoney);
-  const fortifyCostMoney = BigInt(props.snapshot.war.fortifyCostMoney);
-  const fortifyCostIntel = BigInt(props.snapshot.war.fortifyCostIntel);
+  const attackCost = (props.snapshot.war.attackCostBots);
+  const scrubCost = (props.snapshot.war.scrubCostMoney);
+  const fortifyCostMoney = (props.snapshot.war.fortifyCostMoney);
+  const fortifyCostIntel = (props.snapshot.war.fortifyCostIntel);
 
   return (
     <section className="system-grid" role="tabpanel" id="panel-war" aria-labelledby="tab-war">

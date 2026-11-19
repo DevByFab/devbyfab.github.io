@@ -6,19 +6,19 @@ type TranslateFn = (key: string) => string;
 export function formatUpgradeCosts(offer: UpgradeOfferSnapshot, t: TranslateFn): string[] {
   const costs: string[] = [];
 
-  if (BigInt(offer.costBots) > 0n) {
+  if ((offer.costBots) > 0) {
     costs.push(t('reboot.resources.bots') + ' ' + formatBigValue(offer.costBots));
   }
-  if (BigInt(offer.costMoney) > 0n) {
+  if ((offer.costMoney) > 0) {
     costs.push('$ ' + formatBigValue(offer.costMoney));
   }
-  if (BigInt(offer.costIntel) > 0n) {
+  if ((offer.costIntel) > 0) {
     costs.push(t('reboot.resources.warIntel') + ' ' + formatBigValue(offer.costIntel));
   }
-  if (BigInt(offer.costHz) > 0n) {
+  if ((offer.costHz) > 0) {
     costs.push(t('reboot.resources.hz') + ' ' + formatBigValue(offer.costHz));
   }
-  if (BigInt(offer.costComputronium) > 0n) {
+  if ((offer.costComputronium) > 0) {
     costs.push(t('reboot.resources.computronium') + ' ' + formatBigValue(offer.costComputronium));
   }
 

@@ -20,10 +20,10 @@ export interface PhaseProgress {
 }
 
 export interface PhaseProgressInput {
-  bots: bigint;
+  bots: number;
   scans: number;
-  darkMoney: bigint;
-  portfolio: bigint;
+  darkMoney: number;
+  portfolio: number;
   warWins: number;
   messagesProcessed: number;
   exploitSuccesses: number;
@@ -37,7 +37,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-function isRequirementMet(value: bigint | number, target: bigint | number): boolean {
+function isRequirementMet(value: number | number, target: number | number): boolean {
   return value >= target;
 }
 
@@ -67,14 +67,14 @@ function isPhaseUnlocked(input: PhaseProgressInput, phase: PhaseDefinition): boo
 function requirementEntry(
   id: PhaseRequirementId,
   label: string,
-  current: bigint | number,
-  target: bigint | number,
+  current: number | number,
+  target: number | number,
 ): PhaseRequirementSnapshot {
   return {
     id,
     label,
-    current: current.toString(),
-    target: target.toString(),
+    current: current,
+    target: target,
     met: isRequirementMet(current, target),
   };
 }
@@ -144,7 +144,7 @@ export function resolvePhaseProgress(
     }
   }
 
-  if (AUTOMATION_PHASE_INDEX > index && input.bots >= 1000n) {
+  if (AUTOMATION_PHASE_INDEX > index && input.bots >= 1000) {
     index = AUTOMATION_PHASE_INDEX;
   }
 
@@ -176,7 +176,7 @@ export function resolvePhaseProgress(
 
   const interval = next.requirements.minBots - current.requirements.minBots;
   const progressed = input.bots - current.requirements.minBots;
-  const ratio = Number((progressed * 10000n) / interval);
+  const ratio = Number((progressed * 10000) / interval);
 
   return {
     id: current.id,

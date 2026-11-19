@@ -30,7 +30,7 @@ let state = createInitialEngineState(Date.now());
 let loopHandle: number | null = null;
 let previousWallTickMs = Date.now();
 
-function maxBigInt(left: bigint, right: bigint): bigint {
+function maxBigInt(left: number, right: number): number {
   return left > right ? left : right;
 }
 
@@ -76,9 +76,9 @@ function runTick(): void {
 
   if (scaledDelta > 0) {
     state.telemetry.botsPerSec =
-      ((state.resources.bots - baseline.previousBots) * 1000n) / BigInt(scaledDelta);
+      ((state.resources.bots - baseline.previousBots) * 1000) / (scaledDelta);
     state.telemetry.moneyPerSec =
-      ((state.resources.darkMoney - baseline.previousMoney) * 1000n) / BigInt(scaledDelta);
+      ((state.resources.darkMoney - baseline.previousMoney) * 1000) / (scaledDelta);
     state.telemetry.heatPerSec = Math.round(
       ((state.war.heat - baseline.previousHeat) * 1000) / scaledDelta,
     );
@@ -163,11 +163,11 @@ function applyDebugPhaseAccess(phaseIndex: number): void {
   }
 
   if (phaseIndex >= 1) {
-    state.resources.queuedTargets = maxBigInt(state.resources.queuedTargets, 120n);
+    state.resources.queuedTargets = maxBigInt(state.resources.queuedTargets, 120);
   }
 
   if (phaseIndex >= 2) {
-    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, 2_000n);
+    state.resources.darkMoney = maxBigInt(state.resources.darkMoney, 2_000);
   }
 
   state.systems.manualScanCooldownMs = 0;

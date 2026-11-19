@@ -46,12 +46,12 @@ function clampPercent(value: number): number {
 }
 
 export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
-  const money = BigInt(props.snapshot.resources.darkMoney);
-  const dirtyMoney = BigInt(props.snapshot.economy.dirtyMoney);
-  const cleanMoney = BigInt(props.snapshot.economy.cleanMoney);
-  const portfolio = BigInt(props.snapshot.resources.portfolio);
+  const money = (props.snapshot.resources.darkMoney);
+  const dirtyMoney = (props.snapshot.economy.dirtyMoney);
+  const cleanMoney = (props.snapshot.economy.cleanMoney);
+  const portfolio = (props.snapshot.resources.portfolio);
   const phaseIndex = props.snapshot.phase.index;
-  const fbiCountermeasureCost = BigInt(props.snapshot.economy.fbiCountermeasureCost);
+  const fbiCountermeasureCost = (props.snapshot.economy.fbiCountermeasureCost);
   const frontBusinessCooldownMs = props.snapshot.economy.frontBusinessActionCooldownMs;
   const frontBusinessCooldownSeconds = Math.ceil(frontBusinessCooldownMs / 1000);
   const frontBusinessActionLocked = frontBusinessCooldownMs > 0;
@@ -62,7 +62,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
   const fbiCountermeasureLocked = props.snapshot.economy.fbiCountermeasureCooldownMs > 0;
   const hasCountermeasureBudget = money >= fbiCountermeasureCost;
   const missingCountermeasureBudget =
-    hasCountermeasureBudget ? 0n : fbiCountermeasureCost - money;
+    hasCountermeasureBudget ? 0 : fbiCountermeasureCost - money;
   const fbiInterventionChance = formatPercentFromBps(props.snapshot.economy.fbiInterventionChanceBps);
   const fbiSuspicionPercent = (props.snapshot.economy.fbiSuspicion / 100).toLocaleString('en-US', {
     minimumFractionDigits: 1,
@@ -115,7 +115,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
     }
   } else if (props.snapshot.economy.fbiRiskState === 'watch') {
     advisoryKey = 'reboot.panel.cashflow.adviceWatchBalance';
-  } else if (dirtyMoney <= 0n) {
+  } else if (dirtyMoney <= 0) {
     advisoryKey = 'reboot.panel.cashflow.adviceFeedPipeline';
   } else {
     advisoryKey = 'reboot.panel.cashflow.adviceMaintainFlow';
@@ -154,7 +154,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
     );
   }
 
-  if (dirtyMoney <= 0n) {
+  if (dirtyMoney <= 0) {
     contextualHints.add(props.t('reboot.panel.cashflow.pipelineHint'));
   }
 
@@ -321,10 +321,10 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
               </div>
               <p className="queue-hint">{props.t('reboot.panel.cashflow.investmentCopy')}</p>
               <div className="button-row">
-                <button className="btn" disabled={money < 80n} onClick={props.onInvestTranche}>
+                <button className="btn" disabled={money < 80} onClick={props.onInvestTranche}>
                   {props.t('reboot.panel.cashflow.investTranche')}
                 </button>
-                <button className="btn ghost" disabled={portfolio <= 0n} onClick={props.onCashout}>
+                <button className="btn ghost" disabled={portfolio <= 0} onClick={props.onCashout}>
                   {props.t('reboot.panel.cashflow.cashout')}
                 </button>
                 <button className="btn ghost" onClick={props.onToggleInvestMode}>
@@ -353,13 +353,13 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
               <p className="queue-hint">{props.t('reboot.panel.cashflow.frontBusiness.copy')}</p>
               <div className="cashflow-front-grid">
                 {frontBusinesses.map((frontBusiness) => {
-            const buyCost = BigInt(frontBusiness.buyCostDarkMoney);
-            const upgradeCost = BigInt(frontBusiness.upgradeCostDarkMoney);
+            const buyCost = (frontBusiness.buyCostDarkMoney);
+            const upgradeCost = (frontBusiness.upgradeCostDarkMoney);
             const frontBusinessRiskMeter = clampPercent(frontBusiness.riskBps / 100);
             const upgradeDisabled =
               !frontBusiness.owned ||
               frontBusinessActionLocked ||
-              upgradeCost <= 0n ||
+              upgradeCost <= 0 ||
               money < upgradeCost;
             const buyDisabled = frontBusiness.owned || frontBusinessActionLocked || money < buyCost;
 
@@ -420,7 +420,7 @@ export function CashflowTabPanel(props: Readonly<CashflowTabPanelProps>) {
                   >
                     {props.t('reboot.panel.cashflow.frontBusiness.upgrade', {
                       cost:
-                        upgradeCost > 0n
+                        upgradeCost > 0
                           ? formatBigValue(frontBusiness.upgradeCostDarkMoney)
                           : props.t('reboot.panel.cashflow.frontBusiness.maxed'),
                     })}

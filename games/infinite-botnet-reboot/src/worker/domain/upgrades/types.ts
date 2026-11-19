@@ -23,8 +23,8 @@ export interface UpgradeEffects {
 export interface UpgradeLevelRequirements {
   minPhaseIndex?: number;
   minScans?: number;
-  minBots?: bigint;
-  minMoney?: bigint;
+  minBots?: number;
+  minMoney?: number;
   minWarWins?: number;
   minMessagesHandled?: number;
   minExploitSuccesses?: number;
@@ -32,11 +32,11 @@ export interface UpgradeLevelRequirements {
 }
 
 export interface UpgradeCost {
-  bots?: bigint;
-  darkMoney?: bigint;
-  warIntel?: bigint;
-  hz?: bigint;
-  computronium?: bigint;
+  bots?: number;
+  darkMoney?: number;
+  warIntel?: number;
+  hz?: number;
+  computronium?: number;
 }
 
 export interface UpgradeLevelDefinition {

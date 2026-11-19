@@ -6,8 +6,8 @@ import type { EngineState } from '../state';
 import type { EmitLog } from './types';
 
 export interface SimulationStepBaseline {
-  previousBots: bigint;
-  previousMoney: bigint;
+  previousBots: number;
+  previousMoney: number;
   previousHeat: number;
   previousPhaseId: string;
 }
@@ -39,7 +39,7 @@ export function runSimulationStep(
   }
 
   const warTickOutcome = applyWarTick(state, scaledDeltaMs);
-  if (warTickOutcome.detectedPurgeBots > 0n) {
+  if (warTickOutcome.detectedPurgeBots > 0) {
     emitLog(
       'Detection mondiale: purge automatique de ' +
         warTickOutcome.detectedPurgeBots.toString() +

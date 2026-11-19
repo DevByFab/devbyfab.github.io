@@ -4,7 +4,7 @@ import { computeUpgradeEffects } from './upgrades';
 
 export interface MatrixTickOutcome {
   collapsed: boolean;
-  collapsePurgedBots: bigint;
+  collapsePurgedBots: number;
 }
 
 export type MatrixInjectResult = 'blocked' | 'success' | 'failure';
@@ -12,10 +12,10 @@ export type MatrixInjectResult = 'blocked' | 'success' | 'failure';
 const MATRIX_TOKENS = ['fractal.root', 'lattice.echo', 'ghost.thread', 'dyson.seed'];
 const MATRIX_FLAGS = ['--f12', '--ghost', '--route', '--cold'];
 
-function applyCostReduction(value: bigint, reductionBps: number, floor: bigint): bigint {
+function applyCostReduction(value: number, reductionBps: number, floor: number): number {
   if (value <= floor || reductionBps <= 0) return value;
   const clampedReduction = clamp(reductionBps, 0, 8500);
-  const next = (value * BigInt(10_000 - clampedReduction)) / 10_000n;
+  const next = (value * (10_000 - clampedReduction)) / 10_000;
   return maxBigInt(floor, next);
 }
 
@@ -42,23 +42,23 @@ export function refreshMatrixDerived(state: EngineState): void {
 
   const effects = computeUpgradeEffects(state);
 
-  const deficit = BigInt(Math.max(0, 10_000 - state.matrix.stability));
+  const deficit = (Math.max(0, 10_000 - state.matrix.stability));
 
-  state.matrix.armCostHz = 1200n + BigInt(state.phase.index * 220);
-  state.matrix.armCostComputronium = 8n;
-  state.matrix.injectCostHz = 1800n + BigInt(state.phase.index * 180);
-  state.matrix.injectCostComputronium = 6n;
-  state.matrix.stabilizeCostMoney = maxBigInt(2200n, 2200n + deficit * 2n);
+  state.matrix.armCostHz = 1200 + (state.phase.index * 220);
+  state.matrix.armCostComputronium = 8;
+  state.matrix.injectCostHz = 1800 + (state.phase.index * 180);
+  state.matrix.injectCostComputronium = 6;
+  state.matrix.stabilizeCostMoney = maxBigInt(2200, 2200 + deficit * 2);
 
   state.matrix.armCostHz = applyCostReduction(
     state.matrix.armCostHz,
     effects.matrixArmCostReductionBps,
-    400n,
+    400,
   );
   state.matrix.injectCostHz = applyCostReduction(
     state.matrix.injectCostHz,
     effects.matrixInjectCostReductionBps,
-    600n,
+    600,
   );
 }
 
@@ -66,7 +66,7 @@ export function applyMatrixTick(state: EngineState, deltaMs: number): MatrixTick
   refreshMatrixDerived(state);
 
   if (!state.matrix.unlocked) {
-    return { collapsed: false, collapsePurgedBots: 0n };
+    return { collapsed: false, collapsePurgedBots: 0 };
   }
 
   state.matrix.bypassRemainingMs = Math.max(0, state.matrix.bypassRemainingMs - deltaMs);
@@ -82,11 +82,11 @@ export function applyMatrixTick(state: EngineState, deltaMs: number): MatrixTick
   state.matrix.stability = clamp(state.matrix.stability - decay, 0, 10000);
 
   if (state.matrix.stability > 0) {
-    return { collapsed: false, collapsePurgedBots: 0n };
+    return { collapsed: false, collapsePurgedBots: 0 };
   }
 
-  const purge = maxBigInt(2_000n, state.resources.bots / 16n);
-  state.resources.bots = state.resources.bots > purge ? state.resources.bots - purge : 0n;
+  const purge = maxBigInt(2_000, state.resources.bots / 16);
+  state.resources.bots = state.resources.bots > purge ? state.resources.bots - purge : 0;
   state.matrix.stability = 2800;
   state.matrix.breachProgress = Math.max(0, state.matrix.breachProgress - 18);
   state.war.heat = clamp(state.war.heat + 550, 0, 10000);
@@ -149,9 +149,9 @@ export function commandMatrixInject(
     state.war.heat = clamp(state.war.heat + 70, 0, 10000);
 
     if (state.matrix.breachProgress >= 100) {
-      state.resources.warIntel += 50n;
-      state.resources.darkMoney += 12_000n;
-      state.resources.computronium += 15n;
+      state.resources.warIntel += 50;
+      state.resources.darkMoney += 12_000;
+      state.resources.computronium += 15;
     }
 
     return 'success';

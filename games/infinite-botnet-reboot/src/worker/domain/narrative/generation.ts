@@ -13,7 +13,7 @@ function makeMessage(state: EngineState): EngineMessage {
   const allowedRewardTypes = allowedRewardTypesForPhase(state.phase.index);
   const template = pickTemplateForPhase(bucket, allowedRewardTypes);
   const rewardValue = computeRewardValue(state, template);
-  const quarantineCost = maxBigInt(60n, state.resources.darkMoney / 90n + 40n);
+  const quarantineCost = maxBigInt(60, state.resources.darkMoney / 90 + 40);
 
   state.messages.sequence += 1;
 
@@ -24,9 +24,9 @@ function makeMessage(state: EngineState): EngineMessage {
     subject: template.subject,
     body: template.body,
     rewardType: template.rewardType,
-    rewardValue: rewardValue.toString(),
+    rewardValue: rewardValue,
     rewardLabel: describeReward(template.rewardType, rewardValue, template.tone),
-    quarantineCost: quarantineCost.toString(),
+    quarantineCost: quarantineCost,
     createdAtMs: state.nowMs,
   };
 }

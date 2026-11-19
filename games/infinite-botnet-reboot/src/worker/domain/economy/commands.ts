@@ -89,18 +89,18 @@ export function commandExploit(state: EngineState): ExploitResult {
     return 'cooldown';
   }
 
-  if (state.resources.queuedTargets <= 0n) {
+  if (state.resources.queuedTargets < 1) {
     return 'blocked';
   }
 
-  state.resources.queuedTargets -= 1n;
+  state.resources.queuedTargets -= 1;
   state.milestones.exploitAttempts += 1;
   state.systems.manualExploitCooldownMs =
     state.rates.manualExploitCooldownBaseMs > 0 ? state.rates.manualExploitCooldownBaseMs : 0;
   const roll = Math.floor(Math.random() * 10_000);
 
   if (roll < state.rates.exploitChanceBps) {
-    state.resources.bots += 1n;
+    state.resources.bots += 1;
     state.milestones.exploitSuccesses += 1;
     return 'success';
   }
@@ -113,7 +113,7 @@ export function commandToggleMonetize(state: EngineState): boolean {
     return false;
   }
 
-  if (!state.systems.monetizeActive && state.resources.bots < 50n) {
+  if (!state.systems.monetizeActive && state.resources.bots < 50) {
     return false;
   }
 
@@ -189,7 +189,7 @@ export function commandUpgradeFrontBusiness(
     context.frontBusinessId,
     context.runtime.level,
   );
-  if (upgradeCost <= 0n || state.resources.darkMoney < upgradeCost) {
+  if (upgradeCost <= 0 || state.resources.darkMoney < upgradeCost) {
     return 'insufficient';
   }
 
@@ -237,8 +237,8 @@ export function commandFbiCountermeasure(state: EngineState): boolean {
     state.systems.launderingLockdownMs = Math.max(0, state.systems.launderingLockdownMs - 5000);
   }
 
-  const evidenceBurn = state.resources.dirtyMoney / 10n;
-  if (evidenceBurn > 0n) {
+  const evidenceBurn = state.resources.dirtyMoney / 10;
+  if (evidenceBurn > 0) {
     state.resources.dirtyMoney -= evidenceBurn;
   }
 
@@ -252,9 +252,9 @@ export function commandInvestTranche(state: EngineState): boolean {
   }
 
   const available = state.resources.darkMoney;
-  const tranche = maxBigInt(40n, available / 8n);
+  const tranche = maxBigInt(40, available / 8);
 
-  if (tranche < 80n || available < tranche) {
+  if (tranche < 80 || available < tranche) {
     return false;
   }
 
@@ -269,13 +269,13 @@ export function commandCashoutPortfolio(state: EngineState): boolean {
     return false;
   }
 
-  if (state.resources.portfolio <= 0n) {
+  if (state.resources.portfolio <= 0) {
     return false;
   }
 
-  const payout = (state.resources.portfolio * 94n) / 100n;
+  const payout = (state.resources.portfolio * 94) / 100;
   state.resources.darkMoney += payout;
-  state.resources.portfolio = 0n;
+  state.resources.portfolio = 0;
   return true;
 }
 

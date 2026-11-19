@@ -4,9 +4,9 @@ export const P3_BOTNET_WAR_PHASE: PhaseDefinition = {
   id: 'botnet-war',
   label: 'P3 Botnet War',
   requirements: {
-    minBots: 420_000n,
+    minBots: 420_000,
     minScans: 2_000,
-    minMoney: 26_000n,
+    minMoney: 26_000,
     minMessagesProcessed: 8,
   },
 };

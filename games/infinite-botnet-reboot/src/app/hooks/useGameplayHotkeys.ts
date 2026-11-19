@@ -60,7 +60,7 @@ export function useGameplayHotkeys(params: Readonly<UseGameplayHotkeysParams>): 
       }
 
       if (
-        BigInt(currentSnapshot.resources.queuedTargets) <= 0n ||
+        (currentSnapshot.resources.queuedTargets) <= 0 ||
         currentSnapshot.economy.exploitCooldownMs > 0
       ) {
         return;

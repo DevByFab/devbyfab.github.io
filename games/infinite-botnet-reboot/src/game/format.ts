@@ -1,27 +1,21 @@
-const SCALE_STEPS: Array<{ threshold: bigint; divisor: bigint; suffix: string }> = [
-  { threshold: 1_000_000_000_000_000n, divisor: 1_000_000_000_000_000n, suffix: 'Qa' },
-  { threshold: 1_000_000_000_000n, divisor: 1_000_000_000_000n, suffix: 'T' },
-  { threshold: 1_000_000_000n, divisor: 1_000_000_000n, suffix: 'B' },
-  { threshold: 1_000_000n, divisor: 1_000_000n, suffix: 'M' },
-  { threshold: 1_000n, divisor: 1_000n, suffix: 'K' },
+const SCALE_STEPS: Array<{ threshold: number; suffix: string }> = [
+  { threshold: 1e15, suffix: 'Qa' },
+  { threshold: 1e12, suffix: 'T' },
+  { threshold: 1e9, suffix: 'B' },
+  { threshold: 1e6, suffix: 'M' },
+  { threshold: 1e3, suffix: 'K' },
 ];
 
-function parseBigInt(value: string | bigint | number): bigint {
-  if (typeof value === 'bigint') return value;
-  if (typeof value === 'number') return BigInt(Math.trunc(value));
-  if (value.trim() === '') return 0n;
-  return BigInt(value);
-}
-
-export function formatBigValue(value: string | bigint | number): string {
-  const raw = parseBigInt(value);
-  const isNegative = raw < 0n;
-  const absolute = isNegative ? -raw : raw;
+/** Affiche un montant : entier jusqu'à 999, puis 1.5K, 2.34M, etc. Accepte aussi une chaîne (anciennes sauvegardes). */
+export function formatBigValue(value: number | string): string {
+  const parsed = typeof value === 'number' ? value : Number(value);
+  const raw = Number.isFinite(parsed) ? Math.trunc(parsed) : 0;
+  const absolute = Math.abs(raw);
+  const sign = raw < 0 ? '-' : '';
 
   for (const step of SCALE_STEPS) {
     if (absolute >= step.threshold) {
-      const scaled = Number((absolute * 100n) / step.divisor) / 100;
-      const sign = isNegative ? '-' : '';
+      const scaled = Math.floor((absolute / step.threshold) * 100) / 100;
       return sign + scaled.toLocaleString('en-US', { maximumFractionDigits: 2 }) + step.suffix;
     }
   }

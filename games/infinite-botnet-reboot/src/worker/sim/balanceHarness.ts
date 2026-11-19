@@ -80,10 +80,10 @@ function isOk(result: string): boolean {
 }
 
 function manualActions(state: EngineState): void {
-  if (state.resources.queuedTargets < 40n || state.resources.bots < 60n) {
+  if (state.resources.queuedTargets < 40 || state.resources.bots < 60) {
     commandScan(state);
   }
-  if (state.resources.queuedTargets > 0n) {
+  if (state.resources.queuedTargets >= 1) {
     commandExploit(state);
   }
 }
@@ -102,7 +102,7 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
     }
   }
 
-  if (!systems.monetizeActive && resources.bots >= 70n) {
+  if (!systems.monetizeActive && resources.bots >= 70) {
     commandToggleMonetize(state);
   }
 
@@ -121,10 +121,10 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
       }
     }
 
-    if (resources.darkMoney > 2000n && state.phase.index < 5 && second % 30 === 0) {
+    if (resources.darkMoney > 2000 && state.phase.index < 5 && second % 30 === 0) {
       commandInvestTranche(state);
     }
-    if (resources.darkMoney < 150n && resources.portfolio > 0n) {
+    if (resources.darkMoney < 150 && resources.portfolio > 0) {
       commandCashoutPortfolio(state);
     }
 

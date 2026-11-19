@@ -14,17 +14,17 @@ import {
 
 export interface EconomyTickOutcome {
   fbiIntervention: boolean;
-  seizedDirtyMoney: bigint;
-  seizedDarkMoney: bigint;
+  seizedDirtyMoney: number;
+  seizedDarkMoney: number;
 }
 
-function minBigInt(left: bigint, right: bigint): bigint {
+function minBigInt(left: number, right: number): number {
   return left < right ? left : right;
 }
 
 function applyAutoScan(state: EngineState, deltaMs: number): void {
   const autoScanned = scalePerSecond(state.rates.autoScanPerSec, deltaMs);
-  if (autoScanned <= 0n) {
+  if (autoScanned <= 0) {
     return;
   }
 
@@ -57,21 +57,14 @@ function applyAutoExploit(state: EngineState, deltaMs: number): void {
   let attempts = scalePerSecond(state.rates.autoExploitPerSec, deltaMs);
   attempts = minBigInt(attempts, state.resources.queuedTargets);
 
-  if (attempts <= 0n) {
+  if (attempts <= 0) {
     return;
   }
 
   state.resources.queuedTargets -= attempts;
   state.milestones.exploitAttempts = bumpCounter(state.milestones.exploitAttempts, attempts);
 
-  let successes = (attempts * BigInt(state.rates.exploitChanceBps)) / 10_000n;
-  if (successes === 0n) {
-    const roll = Math.floor(Math.random() * 10_000);
-    if (roll < state.rates.exploitChanceBps) {
-      successes = 1n;
-    }
-  }
-
+  const successes = (attempts * state.rates.exploitChanceBps) / 10_000;
   state.resources.bots += successes;
   state.milestones.exploitSuccesses = bumpCounter(state.milestones.exploitSuccesses, successes);
 }
@@ -87,19 +80,19 @@ function applyMonetization(state: EngineState, deltaMs: number): void {
   }
 
   let converted = scalePerSecond(state.rates.monetizeBotsPerSec, deltaMs);
-  const maxThroughput = maxBigInt(2n, state.resources.bots / 2n);
+  const maxThroughput = maxBigInt(2, state.resources.bots / 2);
   converted = minBigInt(converted, maxThroughput);
 
-  if (converted <= 0n) {
+  if (converted <= 0) {
     return;
   }
 
-  const attrition = converted / 14n;
-  if (attrition > 0n) {
-    state.resources.bots = state.resources.bots > attrition ? state.resources.bots - attrition : 0n;
+  const attrition = converted / 14;
+  if (attrition > 0) {
+    state.resources.bots = state.resources.bots > attrition ? state.resources.bots - attrition : 0;
   }
 
-  const gainedFunds = (converted * BigInt(state.rates.moneyYieldBps)) / 10_000n;
+  const gainedFunds = (converted * (state.rates.moneyYieldBps)) / 10_000;
 
   if (state.phase.index >= 2) {
     state.resources.dirtyMoney += gainedFunds;
@@ -141,9 +134,9 @@ function tickFrontBusinessActionCooldown(state: EngineState, deltaMs: number): v
 
 function applyLaundering(state: EngineState, deltaMs: number): void {
   if (state.phase.index < 2) {
-    if (state.resources.dirtyMoney > 0n) {
+    if (state.resources.dirtyMoney > 0) {
       state.resources.darkMoney += state.resources.dirtyMoney;
-      state.resources.dirtyMoney = 0n;
+      state.resources.dirtyMoney = 0;
     }
     return;
   }
@@ -159,11 +152,11 @@ function applyLaundering(state: EngineState, deltaMs: number): void {
   let processed = scalePerSecond(state.rates.launderingDirtyPerSec, deltaMs);
   processed = minBigInt(processed, state.resources.dirtyMoney);
 
-  if (processed <= 0n) {
+  if (processed <= 0) {
     return;
   }
 
-  const gainedMoney = (processed * BigInt(state.rates.launderingEfficiencyBps)) / 10_000n;
+  const gainedMoney = (processed * (state.rates.launderingEfficiencyBps)) / 10_000;
   state.resources.dirtyMoney -= processed;
   state.resources.darkMoney += gainedMoney;
 }
@@ -176,14 +169,14 @@ function applyFrontBusinessOperations(state: EngineState, deltaMs: number): void
   let converted = scalePerSecond(state.rates.frontBusinessDarkToCleanPerSec, deltaMs);
   converted = minBigInt(converted, state.resources.darkMoney);
 
-  if (converted <= 0n) {
+  if (converted <= 0) {
     return;
   }
 
   state.resources.darkMoney -= converted;
 
   const gainedCleanMoney =
-    (converted * BigInt(state.rates.frontBusinessCleanEfficiencyBps)) / 10_000n;
+    (converted * (state.rates.frontBusinessCleanEfficiencyBps)) / 10_000;
   state.resources.cleanMoney += gainedCleanMoney;
 }
 
@@ -193,7 +186,7 @@ function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): voi
   }
 
   const maintenanceDrain = scalePerSecond(state.rates.frontBusinessMaintenancePerSec, deltaMs);
-  if (maintenanceDrain <= 0n) {
+  if (maintenanceDrain <= 0) {
     return;
   }
 
@@ -203,14 +196,14 @@ function applyFrontBusinessMaintenance(state: EngineState, deltaMs: number): voi
   }
 
   const remainingDrain = maintenanceDrain - state.resources.darkMoney;
-  state.resources.darkMoney = 0n;
+  state.resources.darkMoney = 0;
 
-  const cleanFallbackDrain = remainingDrain / 2n;
-  if (cleanFallbackDrain > 0n) {
+  const cleanFallbackDrain = remainingDrain / 2;
+  if (cleanFallbackDrain > 0) {
     state.resources.cleanMoney =
       state.resources.cleanMoney > cleanFallbackDrain
         ? state.resources.cleanMoney - cleanFallbackDrain
-        : 0n;
+        : 0;
   }
 }
 
@@ -220,8 +213,8 @@ function applyFbiPressureAndEvents(
 ): EconomyTickOutcome {
   const outcome: EconomyTickOutcome = {
     fbiIntervention: false,
-    seizedDirtyMoney: 0n,
-    seizedDarkMoney: 0n,
+    seizedDirtyMoney: 0,
+    seizedDarkMoney: 0,
   };
 
   if (state.phase.index < 2) {
@@ -263,17 +256,17 @@ function applyFbiPressureAndEvents(
   const seizureBps = state.systems.launderingProfile === 'high-yield' ? 1600 : 1000;
   const moneySeizureBps = Math.max(500, seizureBps - 300);
 
-  const seizedDirtyMoney = (state.resources.dirtyMoney * BigInt(seizureBps)) / 10_000n;
-  const seizedDarkMoney = (state.resources.darkMoney * BigInt(moneySeizureBps)) / 10_000n;
+  const seizedDirtyMoney = (state.resources.dirtyMoney * (seizureBps)) / 10_000;
+  const seizedDarkMoney = (state.resources.darkMoney * (moneySeizureBps)) / 10_000;
 
   state.resources.dirtyMoney =
     state.resources.dirtyMoney > seizedDirtyMoney
       ? state.resources.dirtyMoney - seizedDirtyMoney
-      : 0n;
+      : 0;
   state.resources.darkMoney =
     state.resources.darkMoney > seizedDarkMoney
       ? state.resources.darkMoney - seizedDarkMoney
-      : 0n;
+      : 0;
 
   state.systems.fbiSuspicion = Math.max(1900, state.systems.fbiSuspicion - 2800);
   state.systems.launderingLockdownMs =
@@ -290,7 +283,7 @@ function applyPortfolioYield(state: EngineState, deltaMs: number): void {
     return;
   }
 
-  if (state.resources.portfolio <= 0n) {
+  if (state.resources.portfolio <= 0) {
     return;
   }
 
@@ -300,18 +293,18 @@ function applyPortfolioYield(state: EngineState, deltaMs: number): void {
       : randomIntInclusive(state.rates.investAggressiveMinBps, state.rates.investAggressiveMaxBps);
 
   const deltaPortfolio =
-    (state.resources.portfolio * BigInt(bps) * BigInt(deltaMs)) / 10_000n / 1000n;
+    (state.resources.portfolio * (bps) * (deltaMs)) / 10_000 / 1000;
 
   const nextPortfolio = state.resources.portfolio + deltaPortfolio;
-  state.resources.portfolio = nextPortfolio > 0n ? nextPortfolio : 0n;
+  state.resources.portfolio = nextPortfolio > 0 ? nextPortfolio : 0;
 }
 
 function applyMaintenanceDrain(state: EngineState, deltaMs: number): void {
   const maintenancePerSecond =
-    (state.resources.bots / 4000n) * state.rates.maintenancePerThousandBots;
+    Math.floor(state.resources.bots / 4000) * state.rates.maintenancePerThousandBots;
   const maintenanceDrain = scalePerSecond(maintenancePerSecond, deltaMs);
 
-  if (maintenanceDrain <= 0n) {
+  if (maintenanceDrain <= 0) {
     return;
   }
 
@@ -321,19 +314,19 @@ function applyMaintenanceDrain(state: EngineState, deltaMs: number): void {
   }
 
   const missing = maintenanceDrain - state.resources.darkMoney;
-  state.resources.darkMoney = 0n;
-  const purgeBots = missing * 4n;
-  state.resources.bots = state.resources.bots > purgeBots ? state.resources.bots - purgeBots : 0n;
+  state.resources.darkMoney = 0;
+  const purgeBots = missing * 4;
+  state.resources.bots = state.resources.bots > purgeBots ? state.resources.bots - purgeBots : 0;
 }
 
 function applyLateResources(state: EngineState, deltaMs: number): void {
   if (state.phase.index >= 3) {
-    const hzGain = scalePerSecond(maxBigInt(0n, state.resources.bots / 1_900_000n), deltaMs);
+    const hzGain = scalePerSecond(Math.floor(state.resources.bots / 1_900_000), deltaMs);
     state.resources.hz += hzGain;
   }
 
   if (state.phase.index >= 4) {
-    const brainGain = scalePerSecond(maxBigInt(0n, state.resources.hz / 1_800_000n), deltaMs);
+    const brainGain = scalePerSecond(Math.floor(state.resources.hz / 1_800_000), deltaMs);
     state.resources.brainMatter += brainGain;
   }
 
@@ -341,9 +334,9 @@ function applyLateResources(state: EngineState, deltaMs: number): void {
     return;
   }
 
-  const forgeRate = maxBigInt(0n, state.resources.brainMatter / 2_300_000n);
+  const forgeRate = Math.floor(state.resources.brainMatter / 2_300_000);
   const possibleForge = scalePerSecond(forgeRate, deltaMs);
-  if (possibleForge > 0n && state.resources.darkMoney > possibleForge) {
+  if (possibleForge > 0 && state.resources.darkMoney > possibleForge) {
     state.resources.brainMatter -= possibleForge;
     state.resources.darkMoney -= possibleForge;
     state.resources.computronium += possibleForge;

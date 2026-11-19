@@ -26,39 +26,39 @@ import { resolvePhaseProgress } from './domain/phases';
 import { UPGRADE_CHAINS } from './domain/upgrades/chains';
 
 export interface EngineResources {
-  bots: bigint;
-  queuedTargets: bigint;
-  dirtyMoney: bigint;
-  darkMoney: bigint;
-  cleanMoney: bigint;
-  portfolio: bigint;
-  warIntel: bigint;
-  hz: bigint;
-  brainMatter: bigint;
-  computronium: bigint;
+  bots: number;
+  queuedTargets: number;
+  dirtyMoney: number;
+  darkMoney: number;
+  cleanMoney: number;
+  portfolio: number;
+  warIntel: number;
+  hz: number;
+  brainMatter: number;
+  computronium: number;
 }
 
 export interface EngineRates {
-  manualScanGain: bigint;
+  manualScanGain: number;
   manualScanCommandCooldownBaseMs: number;
   exploitChanceBps: number;
   manualExploitCooldownBaseMs: number;
-  autoScanPerSec: bigint;
-  autoExploitPerSec: bigint;
-  monetizeBotsPerSec: bigint;
-  launderingDirtyPerSec: bigint;
+  autoScanPerSec: number;
+  autoExploitPerSec: number;
+  monetizeBotsPerSec: number;
+  launderingDirtyPerSec: number;
   launderingEfficiencyBps: number;
-  frontBusinessDarkToCleanPerSec: bigint;
-  frontBusinessCleanYieldPerSec: bigint;
-  frontBusinessMaintenancePerSec: bigint;
+  frontBusinessDarkToCleanPerSec: number;
+  frontBusinessCleanYieldPerSec: number;
+  frontBusinessMaintenancePerSec: number;
   frontBusinessRiskBps: number;
   frontBusinessCleanEfficiencyBps: number;
-  fbiCountermeasureCostMoney: bigint;
+  fbiCountermeasureCostMoney: number;
   moneyYieldBps: number;
   investStableBps: number;
   investAggressiveMinBps: number;
   investAggressiveMaxBps: number;
-  maintenancePerThousandBots: bigint;
+  maintenancePerThousandBots: number;
   heatPerMonetizePerSec: number;
   heatPerAggressivePerSec: number;
   messageIntervalBaseMs: number;
@@ -88,10 +88,10 @@ export interface EngineWar {
   defenseRemainingMs: number;
   detectionAccumulatorMs: number;
   projectedSuccessBps: number;
-  attackCostBots: bigint;
-  scrubCostMoney: bigint;
-  fortifyCostMoney: bigint;
-  fortifyCostIntel: bigint;
+  attackCostBots: number;
+  scrubCostMoney: number;
+  fortifyCostMoney: number;
+  fortifyCostIntel: number;
 }
 
 export interface EngineMatrix {
@@ -102,11 +102,11 @@ export interface EngineMatrix {
   expectedCommand: string;
   successfulInjections: number;
   failedInjections: number;
-  armCostHz: bigint;
-  armCostComputronium: bigint;
-  injectCostHz: bigint;
-  injectCostComputronium: bigint;
-  stabilizeCostMoney: bigint;
+  armCostHz: number;
+  armCostComputronium: number;
+  injectCostHz: number;
+  injectCostComputronium: number;
+  stabilizeCostMoney: number;
 }
 
 export interface EngineMessage extends NarrativeMessage {
@@ -139,8 +139,8 @@ export interface EngineMilestones {
 }
 
 export interface EngineTelemetry {
-  botsPerSec: bigint;
-  moneyPerSec: bigint;
+  botsPerSec: number;
+  moneyPerSec: number;
   heatPerSec: number;
 }
 
@@ -183,21 +183,14 @@ function clampInteger(value: unknown, fallback: number, min: number, max: number
   return Math.floor(clampNumber(value, fallback, min, max));
 }
 
-function parseBigIntValue(value: unknown, fallback: bigint): bigint {
-  if (typeof value === 'bigint') {
-    return value;
+function parseNumberValue(value: unknown, fallback: number): number {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : fallback;
   }
 
-  if (typeof value === 'number' && Number.isInteger(value)) {
-    return BigInt(value);
-  }
-
-  if (typeof value === 'string') {
-    try {
-      return BigInt(value);
-    } catch {
-      return fallback;
-    }
+  if (typeof value === 'string' && value.trim() !== '') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
   }
 
   return fallback;
@@ -308,13 +301,9 @@ function sanitizePendingMessage(
     subject,
     body,
     rewardType: parseMessageRewardType(raw.rewardType, 'bots'),
-    rewardValue:
-      typeof raw.rewardValue === 'string' && raw.rewardValue.length > 0 ? raw.rewardValue : '0',
+    rewardValue: parseNumberValue(raw.rewardValue, 0),
     rewardLabel: typeof raw.rewardLabel === 'string' ? raw.rewardLabel : '',
-    quarantineCost:
-      typeof raw.quarantineCost === 'string' && raw.quarantineCost.length > 0
-        ? raw.quarantineCost
-        : '0',
+    quarantineCost: parseNumberValue(raw.quarantineCost, 0),
     createdAtMs: clampInteger(raw.createdAtMs, fallbackNowMs, 0, Number.MAX_SAFE_INTEGER),
   };
 }
@@ -366,10 +355,10 @@ function sanitizeUpgradeLevels(value: unknown): Record<string, number> {
 
 export function createInitialEngineState(nowMs: number): EngineState {
   const phase = resolvePhaseProgress({
-    bots: 0n,
+    bots: 0,
     scans: 0,
-    darkMoney: 0n,
-    portfolio: 0n,
+    darkMoney: 0,
+    portfolio: 0,
     warWins: 0,
     messagesProcessed: 0,
     exploitSuccesses: 0,
@@ -382,38 +371,38 @@ export function createInitialEngineState(nowMs: number): EngineState {
     turbo: 1,
     phase,
     resources: {
-      bots: 0n,
-      queuedTargets: 0n,
-      dirtyMoney: 0n,
-      darkMoney: 0n,
-      cleanMoney: 0n,
-      portfolio: 0n,
-      warIntel: 0n,
-      hz: 0n,
-      brainMatter: 0n,
-      computronium: 0n,
+      bots: 0,
+      queuedTargets: 0,
+      dirtyMoney: 0,
+      darkMoney: 0,
+      cleanMoney: 0,
+      portfolio: 0,
+      warIntel: 0,
+      hz: 0,
+      brainMatter: 0,
+      computronium: 0,
     },
     rates: {
-      manualScanGain: 1n,
+      manualScanGain: 1,
       manualScanCommandCooldownBaseMs: 140,
       exploitChanceBps: 6200,
       manualExploitCooldownBaseMs: 2000,
-      autoScanPerSec: 0n,
-      autoExploitPerSec: 0n,
-      monetizeBotsPerSec: 2n,
-      launderingDirtyPerSec: 3n,
+      autoScanPerSec: 0,
+      autoExploitPerSec: 0,
+      monetizeBotsPerSec: 2,
+      launderingDirtyPerSec: 3,
       launderingEfficiencyBps: 8200,
-      frontBusinessDarkToCleanPerSec: 0n,
-      frontBusinessCleanYieldPerSec: 0n,
-      frontBusinessMaintenancePerSec: 0n,
+      frontBusinessDarkToCleanPerSec: 0,
+      frontBusinessCleanYieldPerSec: 0,
+      frontBusinessMaintenancePerSec: 0,
       frontBusinessRiskBps: 0,
       frontBusinessCleanEfficiencyBps: 0,
-      fbiCountermeasureCostMoney: 260n,
+      fbiCountermeasureCostMoney: 260,
       moneyYieldBps: 6200,
       investStableBps: 8,
       investAggressiveMinBps: -22,
       investAggressiveMaxBps: 30,
-      maintenancePerThousandBots: 2n,
+      maintenancePerThousandBots: 2,
       heatPerMonetizePerSec: 6,
       heatPerAggressivePerSec: 3,
       messageIntervalBaseMs: 85_000,
@@ -441,10 +430,10 @@ export function createInitialEngineState(nowMs: number): EngineState {
       defenseRemainingMs: 0,
       detectionAccumulatorMs: 0,
       projectedSuccessBps: 4500,
-      attackCostBots: 120n,
-      scrubCostMoney: 180n,
-      fortifyCostMoney: 500n,
-      fortifyCostIntel: 3n,
+      attackCostBots: 120,
+      scrubCostMoney: 180,
+      fortifyCostMoney: 500,
+      fortifyCostIntel: 3,
     },
     matrix: {
       unlocked: false,
@@ -454,11 +443,11 @@ export function createInitialEngineState(nowMs: number): EngineState {
       expectedCommand: 'inject fractal.root --f12',
       successfulInjections: 0,
       failedInjections: 0,
-      armCostHz: 1200n,
-      armCostComputronium: 8n,
-      injectCostHz: 1800n,
-      injectCostComputronium: 6n,
-      stabilizeCostMoney: 2400n,
+      armCostHz: 1200,
+      armCostComputronium: 8,
+      injectCostHz: 1800,
+      injectCostComputronium: 6,
+      stabilizeCostMoney: 2400,
     },
     messages: {
       pending: [],
@@ -482,8 +471,8 @@ export function createInitialEngineState(nowMs: number): EngineState {
       messagesHandled: 0,
     },
     telemetry: {
-      botsPerSec: 0n,
-      moneyPerSec: 0n,
+      botsPerSec: 0,
+      moneyPerSec: 0,
       heatPerSec: 0,
     },
     logSequence: 0,
@@ -505,38 +494,38 @@ export function toPersistedState(
       turbo: state.turbo,
       phase: { ...state.phase },
       resources: {
-        bots: state.resources.bots.toString(),
-        queuedTargets: state.resources.queuedTargets.toString(),
-        dirtyMoney: state.resources.dirtyMoney.toString(),
-        darkMoney: state.resources.darkMoney.toString(),
-        cleanMoney: state.resources.cleanMoney.toString(),
-        portfolio: state.resources.portfolio.toString(),
-        warIntel: state.resources.warIntel.toString(),
-        hz: state.resources.hz.toString(),
-        brainMatter: state.resources.brainMatter.toString(),
-        computronium: state.resources.computronium.toString(),
+        bots: state.resources.bots,
+        queuedTargets: state.resources.queuedTargets,
+        dirtyMoney: state.resources.dirtyMoney,
+        darkMoney: state.resources.darkMoney,
+        cleanMoney: state.resources.cleanMoney,
+        portfolio: state.resources.portfolio,
+        warIntel: state.resources.warIntel,
+        hz: state.resources.hz,
+        brainMatter: state.resources.brainMatter,
+        computronium: state.resources.computronium,
       },
       rates: {
-        manualScanGain: state.rates.manualScanGain.toString(),
+        manualScanGain: state.rates.manualScanGain,
         manualScanCommandCooldownBaseMs: state.rates.manualScanCommandCooldownBaseMs,
         exploitChanceBps: state.rates.exploitChanceBps,
         manualExploitCooldownBaseMs: state.rates.manualExploitCooldownBaseMs,
-        autoScanPerSec: state.rates.autoScanPerSec.toString(),
-        autoExploitPerSec: state.rates.autoExploitPerSec.toString(),
-        monetizeBotsPerSec: state.rates.monetizeBotsPerSec.toString(),
-        launderingDirtyPerSec: state.rates.launderingDirtyPerSec.toString(),
+        autoScanPerSec: state.rates.autoScanPerSec,
+        autoExploitPerSec: state.rates.autoExploitPerSec,
+        monetizeBotsPerSec: state.rates.monetizeBotsPerSec,
+        launderingDirtyPerSec: state.rates.launderingDirtyPerSec,
         launderingEfficiencyBps: state.rates.launderingEfficiencyBps,
-        frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec.toString(),
-        frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec.toString(),
-        frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec.toString(),
+        frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec,
+        frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec,
+        frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec,
         frontBusinessRiskBps: state.rates.frontBusinessRiskBps,
         frontBusinessCleanEfficiencyBps: state.rates.frontBusinessCleanEfficiencyBps,
-        fbiCountermeasureCostMoney: state.rates.fbiCountermeasureCostMoney.toString(),
+        fbiCountermeasureCostMoney: state.rates.fbiCountermeasureCostMoney,
         moneyYieldBps: state.rates.moneyYieldBps,
         investStableBps: state.rates.investStableBps,
         investAggressiveMinBps: state.rates.investAggressiveMinBps,
         investAggressiveMaxBps: state.rates.investAggressiveMaxBps,
-        maintenancePerThousandBots: state.rates.maintenancePerThousandBots.toString(),
+        maintenancePerThousandBots: state.rates.maintenancePerThousandBots,
         heatPerMonetizePerSec: state.rates.heatPerMonetizePerSec,
         heatPerAggressivePerSec: state.rates.heatPerAggressivePerSec,
         messageIntervalBaseMs: state.rates.messageIntervalBaseMs,
@@ -564,10 +553,10 @@ export function toPersistedState(
         defenseRemainingMs: state.war.defenseRemainingMs,
         detectionAccumulatorMs: state.war.detectionAccumulatorMs,
         projectedSuccessBps: state.war.projectedSuccessBps,
-        attackCostBots: state.war.attackCostBots.toString(),
-        scrubCostMoney: state.war.scrubCostMoney.toString(),
-        fortifyCostMoney: state.war.fortifyCostMoney.toString(),
-        fortifyCostIntel: state.war.fortifyCostIntel.toString(),
+        attackCostBots: state.war.attackCostBots,
+        scrubCostMoney: state.war.scrubCostMoney,
+        fortifyCostMoney: state.war.fortifyCostMoney,
+        fortifyCostIntel: state.war.fortifyCostIntel,
       },
       matrix: {
         unlocked: state.matrix.unlocked,
@@ -577,11 +566,11 @@ export function toPersistedState(
         expectedCommand: state.matrix.expectedCommand,
         successfulInjections: state.matrix.successfulInjections,
         failedInjections: state.matrix.failedInjections,
-        armCostHz: state.matrix.armCostHz.toString(),
-        armCostComputronium: state.matrix.armCostComputronium.toString(),
-        injectCostHz: state.matrix.injectCostHz.toString(),
-        injectCostComputronium: state.matrix.injectCostComputronium.toString(),
-        stabilizeCostMoney: state.matrix.stabilizeCostMoney.toString(),
+        armCostHz: state.matrix.armCostHz,
+        armCostComputronium: state.matrix.armCostComputronium,
+        injectCostHz: state.matrix.injectCostHz,
+        injectCostComputronium: state.matrix.injectCostComputronium,
+        stabilizeCostMoney: state.matrix.stabilizeCostMoney,
       },
       messages: {
         pending: state.messages.pending.map((message) => ({ ...message })),
@@ -604,8 +593,8 @@ export function toPersistedState(
         messagesHandled: state.milestones.messagesHandled,
       },
       telemetry: {
-        botsPerSec: state.telemetry.botsPerSec.toString(),
-        moneyPerSec: state.telemetry.moneyPerSec.toString(),
+        botsPerSec: state.telemetry.botsPerSec,
+        moneyPerSec: state.telemetry.moneyPerSec,
         heatPerSec: state.telemetry.heatPerSec,
       },
       logSequence: state.logSequence,
@@ -637,28 +626,28 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
     turbo: clampInteger(persistedState.turbo, fallback.turbo, 1, 40),
     phase: fallback.phase,
     resources: {
-      bots: parseBigIntValue(persistedState.resources.bots, fallback.resources.bots),
-      queuedTargets: parseBigIntValue(
+      bots: parseNumberValue(persistedState.resources.bots, fallback.resources.bots),
+      queuedTargets: parseNumberValue(
         persistedState.resources.queuedTargets,
         fallback.resources.queuedTargets,
       ),
-      dirtyMoney: parseBigIntValue(persistedState.resources.dirtyMoney, fallback.resources.dirtyMoney),
-      darkMoney: parseBigIntValue(persistedState.resources.darkMoney, fallback.resources.darkMoney),
-      cleanMoney: parseBigIntValue(persistedState.resources.cleanMoney, fallback.resources.cleanMoney),
-      portfolio: parseBigIntValue(persistedState.resources.portfolio, fallback.resources.portfolio),
-      warIntel: parseBigIntValue(persistedState.resources.warIntel, fallback.resources.warIntel),
-      hz: parseBigIntValue(persistedState.resources.hz, fallback.resources.hz),
-      brainMatter: parseBigIntValue(
+      dirtyMoney: parseNumberValue(persistedState.resources.dirtyMoney, fallback.resources.dirtyMoney),
+      darkMoney: parseNumberValue(persistedState.resources.darkMoney, fallback.resources.darkMoney),
+      cleanMoney: parseNumberValue(persistedState.resources.cleanMoney, fallback.resources.cleanMoney),
+      portfolio: parseNumberValue(persistedState.resources.portfolio, fallback.resources.portfolio),
+      warIntel: parseNumberValue(persistedState.resources.warIntel, fallback.resources.warIntel),
+      hz: parseNumberValue(persistedState.resources.hz, fallback.resources.hz),
+      brainMatter: parseNumberValue(
         persistedState.resources.brainMatter,
         fallback.resources.brainMatter,
       ),
-      computronium: parseBigIntValue(
+      computronium: parseNumberValue(
         persistedState.resources.computronium,
         fallback.resources.computronium,
       ),
     },
     rates: {
-      manualScanGain: parseBigIntValue(persistedState.rates.manualScanGain, fallback.rates.manualScanGain),
+      manualScanGain: parseNumberValue(persistedState.rates.manualScanGain, fallback.rates.manualScanGain),
       manualScanCommandCooldownBaseMs: clampInteger(
         persistedState.rates.manualScanCommandCooldownBaseMs,
         fallback.rates.manualScanCommandCooldownBaseMs,
@@ -677,16 +666,16 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         0,
         120_000,
       ),
-      autoScanPerSec: parseBigIntValue(persistedState.rates.autoScanPerSec, fallback.rates.autoScanPerSec),
-      autoExploitPerSec: parseBigIntValue(
+      autoScanPerSec: parseNumberValue(persistedState.rates.autoScanPerSec, fallback.rates.autoScanPerSec),
+      autoExploitPerSec: parseNumberValue(
         persistedState.rates.autoExploitPerSec,
         fallback.rates.autoExploitPerSec,
       ),
-      monetizeBotsPerSec: parseBigIntValue(
+      monetizeBotsPerSec: parseNumberValue(
         persistedState.rates.monetizeBotsPerSec,
         fallback.rates.monetizeBotsPerSec,
       ),
-      launderingDirtyPerSec: parseBigIntValue(
+      launderingDirtyPerSec: parseNumberValue(
         persistedState.rates.launderingDirtyPerSec,
         fallback.rates.launderingDirtyPerSec,
       ),
@@ -696,15 +685,15 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         1000,
         10_000,
       ),
-      frontBusinessDarkToCleanPerSec: parseBigIntValue(
+      frontBusinessDarkToCleanPerSec: parseNumberValue(
         persistedState.rates.frontBusinessDarkToCleanPerSec,
         fallback.rates.frontBusinessDarkToCleanPerSec,
       ),
-      frontBusinessCleanYieldPerSec: parseBigIntValue(
+      frontBusinessCleanYieldPerSec: parseNumberValue(
         persistedState.rates.frontBusinessCleanYieldPerSec,
         fallback.rates.frontBusinessCleanYieldPerSec,
       ),
-      frontBusinessMaintenancePerSec: parseBigIntValue(
+      frontBusinessMaintenancePerSec: parseNumberValue(
         persistedState.rates.frontBusinessMaintenancePerSec,
         fallback.rates.frontBusinessMaintenancePerSec,
       ),
@@ -720,7 +709,7 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         0,
         10_000,
       ),
-      fbiCountermeasureCostMoney: parseBigIntValue(
+      fbiCountermeasureCostMoney: parseNumberValue(
         persistedState.rates.fbiCountermeasureCostMoney,
         fallback.rates.fbiCountermeasureCostMoney,
       ),
@@ -748,7 +737,7 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         -10_000,
         10_000,
       ),
-      maintenancePerThousandBots: parseBigIntValue(
+      maintenancePerThousandBots: parseNumberValue(
         persistedState.rates.maintenancePerThousandBots,
         fallback.rates.maintenancePerThousandBots,
       ),
@@ -865,13 +854,13 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         0,
         10_000,
       ),
-      attackCostBots: parseBigIntValue(persistedState.war.attackCostBots, fallback.war.attackCostBots),
-      scrubCostMoney: parseBigIntValue(persistedState.war.scrubCostMoney, fallback.war.scrubCostMoney),
-      fortifyCostMoney: parseBigIntValue(
+      attackCostBots: parseNumberValue(persistedState.war.attackCostBots, fallback.war.attackCostBots),
+      scrubCostMoney: parseNumberValue(persistedState.war.scrubCostMoney, fallback.war.scrubCostMoney),
+      fortifyCostMoney: parseNumberValue(
         persistedState.war.fortifyCostMoney,
         fallback.war.fortifyCostMoney,
       ),
-      fortifyCostIntel: parseBigIntValue(
+      fortifyCostIntel: parseNumberValue(
         persistedState.war.fortifyCostIntel,
         fallback.war.fortifyCostIntel,
       ),
@@ -913,20 +902,20 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         0,
         Number.MAX_SAFE_INTEGER,
       ),
-      armCostHz: parseBigIntValue(persistedState.matrix.armCostHz, fallback.matrix.armCostHz),
-      armCostComputronium: parseBigIntValue(
+      armCostHz: parseNumberValue(persistedState.matrix.armCostHz, fallback.matrix.armCostHz),
+      armCostComputronium: parseNumberValue(
         persistedState.matrix.armCostComputronium,
         fallback.matrix.armCostComputronium,
       ),
-      injectCostHz: parseBigIntValue(
+      injectCostHz: parseNumberValue(
         persistedState.matrix.injectCostHz,
         fallback.matrix.injectCostHz,
       ),
-      injectCostComputronium: parseBigIntValue(
+      injectCostComputronium: parseNumberValue(
         persistedState.matrix.injectCostComputronium,
         fallback.matrix.injectCostComputronium,
       ),
-      stabilizeCostMoney: parseBigIntValue(
+      stabilizeCostMoney: parseNumberValue(
         persistedState.matrix.stabilizeCostMoney,
         fallback.matrix.stabilizeCostMoney,
       ),
@@ -1013,8 +1002,8 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
       ),
     },
     telemetry: {
-      botsPerSec: parseBigIntValue(persistedState.telemetry.botsPerSec, fallback.telemetry.botsPerSec),
-      moneyPerSec: parseBigIntValue(
+      botsPerSec: parseNumberValue(persistedState.telemetry.botsPerSec, fallback.telemetry.botsPerSec),
+      moneyPerSec: parseNumberValue(
         persistedState.telemetry.moneyPerSec,
         fallback.telemetry.moneyPerSec,
       ),
@@ -1058,7 +1047,7 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
 
 export function toSnapshot(state: EngineState): GameSnapshot {
   const maintenancePerSecond =
-    (state.resources.bots / 1000n) * state.rates.maintenancePerThousandBots;
+    (state.resources.bots / 1000) * state.rates.maintenancePerThousandBots;
 
   return {
     version: state.version,
@@ -1066,29 +1055,29 @@ export function toSnapshot(state: EngineState): GameSnapshot {
     timestampMs: state.nowMs,
     phase: state.phase,
     resources: {
-      bots: state.resources.bots.toString(),
-      queuedTargets: state.resources.queuedTargets.toString(),
-      dirtyMoney: state.resources.dirtyMoney.toString(),
-      darkMoney: state.resources.darkMoney.toString(),
-      cleanMoney: state.resources.cleanMoney.toString(),
-      portfolio: state.resources.portfolio.toString(),
-      warIntel: state.resources.warIntel.toString(),
-      hz: state.resources.hz.toString(),
-      brainMatter: state.resources.brainMatter.toString(),
-      computronium: state.resources.computronium.toString(),
+      bots: state.resources.bots,
+      queuedTargets: state.resources.queuedTargets,
+      dirtyMoney: state.resources.dirtyMoney,
+      darkMoney: state.resources.darkMoney,
+      cleanMoney: state.resources.cleanMoney,
+      portfolio: state.resources.portfolio,
+      warIntel: state.resources.warIntel,
+      hz: state.resources.hz,
+      brainMatter: state.resources.brainMatter,
+      computronium: state.resources.computronium,
     },
     economy: {
       monetizeActive: state.systems.monetizeActive,
-      monetizeBotsPerSec: state.rates.monetizeBotsPerSec.toString(),
-      dirtyMoney: state.resources.dirtyMoney.toString(),
-      cleanMoney: state.resources.cleanMoney.toString(),
+      monetizeBotsPerSec: state.rates.monetizeBotsPerSec,
+      dirtyMoney: state.resources.dirtyMoney,
+      cleanMoney: state.resources.cleanMoney,
       launderingActive: state.systems.launderingActive,
       launderingProfile: state.systems.launderingProfile,
-      launderingThroughputPerSec: state.rates.launderingDirtyPerSec.toString(),
+      launderingThroughputPerSec: state.rates.launderingDirtyPerSec,
       launderingEfficiencyBps: state.rates.launderingEfficiencyBps,
-      frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec.toString(),
-      frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec.toString(),
-      frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec.toString(),
+      frontBusinessDarkToCleanPerSec: state.rates.frontBusinessDarkToCleanPerSec,
+      frontBusinessCleanYieldPerSec: state.rates.frontBusinessCleanYieldPerSec,
+      frontBusinessMaintenancePerSec: state.rates.frontBusinessMaintenancePerSec,
       frontBusinessRiskBps: state.rates.frontBusinessRiskBps,
       frontBusinessActionCooldownMs: state.systems.frontBusinessActionCooldownMs,
       frontBusinesses: buildFrontBusinessSnapshots(
@@ -1103,7 +1092,7 @@ export function toSnapshot(state: EngineState): GameSnapshot {
         suspicion: state.systems.fbiSuspicion,
         launderingProfile: state.systems.launderingProfile,
       }),
-      fbiCountermeasureCost: state.rates.fbiCountermeasureCostMoney.toString(),
+      fbiCountermeasureCost: state.rates.fbiCountermeasureCostMoney,
       fbiCountermeasureCooldownMs: state.systems.fbiCountermeasureCooldownMs,
       moneyYieldBps: state.rates.moneyYieldBps,
       exploitCooldownMs: state.systems.manualExploitCooldownMs,
@@ -1112,7 +1101,7 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       stableInvestBps: state.rates.investStableBps,
       aggressiveInvestMinBps: state.rates.investAggressiveMinBps,
       aggressiveInvestMaxBps: state.rates.investAggressiveMaxBps,
-      maintenanceMoneyPerSec: maintenancePerSecond.toString(),
+      maintenanceMoneyPerSec: maintenancePerSecond,
     },
     war: {
       heat: state.war.heat,
@@ -1122,10 +1111,10 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       attackCooldownMs: state.war.attackCooldownMs,
       fortifyCooldownMs: state.war.fortifyCooldownMs,
       defenseRemainingMs: state.war.defenseRemainingMs,
-      attackCostBots: state.war.attackCostBots.toString(),
-      scrubCostMoney: state.war.scrubCostMoney.toString(),
-      fortifyCostMoney: state.war.fortifyCostMoney.toString(),
-      fortifyCostIntel: state.war.fortifyCostIntel.toString(),
+      attackCostBots: state.war.attackCostBots,
+      scrubCostMoney: state.war.scrubCostMoney,
+      fortifyCostMoney: state.war.fortifyCostMoney,
+      fortifyCostIntel: state.war.fortifyCostIntel,
       projectedSuccessBps: state.war.projectedSuccessBps,
     },
     matrix: {
@@ -1136,11 +1125,11 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       expectedCommand: state.matrix.expectedCommand,
       successfulInjections: state.matrix.successfulInjections,
       failedInjections: state.matrix.failedInjections,
-      armCostHz: state.matrix.armCostHz.toString(),
-      armCostComputronium: state.matrix.armCostComputronium.toString(),
-      injectCostHz: state.matrix.injectCostHz.toString(),
-      injectCostComputronium: state.matrix.injectCostComputronium.toString(),
-      stabilizeCostMoney: state.matrix.stabilizeCostMoney.toString(),
+      armCostHz: state.matrix.armCostHz,
+      armCostComputronium: state.matrix.armCostComputronium,
+      injectCostHz: state.matrix.injectCostHz,
+      injectCostComputronium: state.matrix.injectCostComputronium,
+      stabilizeCostMoney: state.matrix.stabilizeCostMoney,
     },
     messages: {
       unread: state.messages.pending.length,
@@ -1163,8 +1152,8 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       messagesHandled: state.milestones.messagesHandled,
     },
     telemetry: {
-      botsPerSec: state.telemetry.botsPerSec.toString(),
-      moneyPerSec: state.telemetry.moneyPerSec.toString(),
+      botsPerSec: state.telemetry.botsPerSec,
+      moneyPerSec: state.telemetry.moneyPerSec,
       heatPerSec: state.telemetry.heatPerSec,
     },
   };

@@ -7,10 +7,10 @@ export interface PhaseDefinition {
 }
 
 export interface PhaseRequirements {
-  minBots: bigint;
+  minBots: number;
   minScans?: number;
-  minMoney?: bigint;
-  minPortfolio?: bigint;
+  minMoney?: number;
+  minPortfolio?: number;
   minWarWins?: number;
   minMessagesProcessed?: number;
   minExploitSuccesses?: number;

@@ -15,9 +15,9 @@ export type FrontBusinessRuntimeMap = Record<FrontBusinessId, FrontBusinessRunti
 
 interface FrontBusinessDefinition {
   id: FrontBusinessId;
-  baseBuyCostDarkMoney: bigint;
-  baseDarkToCleanPerSec: bigint;
-  baseMaintenancePerSec: bigint;
+  baseBuyCostDarkMoney: number;
+  baseDarkToCleanPerSec: number;
+  baseMaintenancePerSec: number;
   baseRiskBps: number;
   baseCleanEfficiencyBps: number;
   maxLevel: number;
@@ -26,27 +26,27 @@ interface FrontBusinessDefinition {
 const FRONT_BUSINESS_DEFINITIONS: ReadonlyArray<FrontBusinessDefinition> = [
   {
     id: 'laundromat',
-    baseBuyCostDarkMoney: 1200n,
-    baseDarkToCleanPerSec: 8n,
-    baseMaintenancePerSec: 2n,
+    baseBuyCostDarkMoney: 1200,
+    baseDarkToCleanPerSec: 8,
+    baseMaintenancePerSec: 2,
     baseRiskBps: 170,
     baseCleanEfficiencyBps: 9000,
     maxLevel: 5,
   },
   {
     id: 'car-dealership',
-    baseBuyCostDarkMoney: 3800n,
-    baseDarkToCleanPerSec: 16n,
-    baseMaintenancePerSec: 6n,
+    baseBuyCostDarkMoney: 3800,
+    baseDarkToCleanPerSec: 16,
+    baseMaintenancePerSec: 6,
     baseRiskBps: 260,
     baseCleanEfficiencyBps: 8650,
     maxLevel: 5,
   },
   {
     id: 'freight-forwarder',
-    baseBuyCostDarkMoney: 8600n,
-    baseDarkToCleanPerSec: 34n,
-    baseMaintenancePerSec: 13n,
+    baseBuyCostDarkMoney: 8600,
+    baseDarkToCleanPerSec: 34,
+    baseMaintenancePerSec: 13,
     baseRiskBps: 340,
     baseCleanEfficiencyBps: 8400,
     maxLevel: 4,
@@ -63,9 +63,9 @@ export const FRONT_BUSINESS_IDS: ReadonlyArray<FrontBusinessId> =
   FRONT_BUSINESS_DEFINITIONS.map((definition) => definition.id);
 
 export interface FrontBusinessComputedMetrics {
-  darkToCleanPerSec: bigint;
-  cleanYieldPerSec: bigint;
-  maintenancePerSec: bigint;
+  darkToCleanPerSec: number;
+  cleanYieldPerSec: number;
+  maintenancePerSec: number;
   cleanEfficiencyBps: number;
   riskBps: number;
 }
@@ -94,12 +94,12 @@ function getModeCleanYieldBps(mode: FrontBusinessMode): number {
   return 10000;
 }
 
-function applyMultiplier(value: bigint, multiplierBps: number): bigint {
-  if (value <= 0n || multiplierBps <= 0) {
-    return 0n;
+function applyMultiplier(value: number, multiplierBps: number): number {
+  if (value <= 0 || multiplierBps <= 0) {
+    return 0;
   }
 
-  return (value * BigInt(multiplierBps)) / 10_000n;
+  return (value * (multiplierBps)) / 10_000;
 }
 
 export function getFrontBusinessDefinition(id: FrontBusinessId): FrontBusinessDefinition {
@@ -114,23 +114,23 @@ export function createInitialFrontBusinesses(): FrontBusinessRuntimeMap {
   };
 }
 
-export function getFrontBusinessBuyCostDarkMoney(id: FrontBusinessId): bigint {
+export function getFrontBusinessBuyCostDarkMoney(id: FrontBusinessId): number {
   return getFrontBusinessDefinition(id).baseBuyCostDarkMoney;
 }
 
 export function getFrontBusinessUpgradeCostDarkMoney(
   id: FrontBusinessId,
   currentLevel: number,
-): bigint {
+): number {
   const definition = getFrontBusinessDefinition(id);
   const nextLevel = currentLevel + 1;
   if (nextLevel > definition.maxLevel) {
-    return 0n;
+    return 0;
   }
 
   const base = definition.baseBuyCostDarkMoney;
-  const levelFactor = 10n + BigInt(nextLevel * 8);
-  return (base * levelFactor) / 10n;
+  const levelFactor = 10 + (nextLevel * 8);
+  return (base * levelFactor) / 10;
 }
 
 export function getNextFrontBusinessMode(mode: FrontBusinessMode): FrontBusinessMode {
@@ -146,9 +146,9 @@ export function computeFrontBusinessMetrics(
 ): FrontBusinessComputedMetrics {
   if (!runtime.owned || runtime.level <= 0) {
     return {
-      darkToCleanPerSec: 0n,
-      cleanYieldPerSec: 0n,
-      maintenancePerSec: 0n,
+      darkToCleanPerSec: 0,
+      cleanYieldPerSec: 0,
+      maintenancePerSec: 0,
       cleanEfficiencyBps: 0,
       riskBps: 0,
     };
@@ -208,12 +208,12 @@ export function buildFrontBusinessSnapshots(
       owned: runtime.owned,
       level: runtime.level,
       mode: runtime.mode,
-      darkToCleanPerSec: metrics.darkToCleanPerSec.toString(),
-      cleanYieldPerSec: metrics.cleanYieldPerSec.toString(),
-      maintenancePerSec: metrics.maintenancePerSec.toString(),
+      darkToCleanPerSec: metrics.darkToCleanPerSec,
+      cleanYieldPerSec: metrics.cleanYieldPerSec,
+      maintenancePerSec: metrics.maintenancePerSec,
       riskBps: metrics.riskBps,
-      buyCostDarkMoney: getFrontBusinessBuyCostDarkMoney(id).toString(),
-      upgradeCostDarkMoney: getFrontBusinessUpgradeCostDarkMoney(id, runtime.level).toString(),
+      buyCostDarkMoney: getFrontBusinessBuyCostDarkMoney(id),
+      upgradeCostDarkMoney: getFrontBusinessUpgradeCostDarkMoney(id, runtime.level),
     };
   });
 }
