@@ -1,5 +1,5 @@
-import enCatalog from '../../../../../i18n/en.json';
-import frCatalog from '../../../../../i18n/fr.json';
+import enCatalog from '../../content/i18n/en.json';
+import frCatalog from '../../content/i18n/fr.json';
 
 type TranslationVars = Record<string, string | number>;
 type TranslationCatalog = Record<string, string>;
