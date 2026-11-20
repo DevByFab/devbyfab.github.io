@@ -1,7 +1,7 @@
 # Infinite BotNet — Conception v2 (partie de 3 à 5 heures)
 
 Statut : **validé le 19 nov. 2026**. Lots L1, L2 et L3 terminés ; lot L4 (voies, projets finaux, prison) à lancer.
-Décisions prises avec Fabio :
+Décisions prises avec DevByFab :
 - durée de partie 3 à 5 h ;
 - quatre fins (Vengeance, Résilience, Folie, Prison) ;
 - **le thème IA / singularité est gardé comme 5e fin cachée** (pas supprimé) ;

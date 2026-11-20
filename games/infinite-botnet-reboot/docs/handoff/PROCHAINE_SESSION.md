@@ -36,7 +36,6 @@ Nombres JS normaux (plus de bigint) · un seul argent (blanchiment supprimé, fa
 - Les améliorations `autoScanBps` / `autoExploitBps` pèsent peu ou pas : la file de cibles grossit sans limite (1e13+ en fin de partie) et seule la chance d'exploit compte. À régler avec le contenu d'améliorations (L5).
 - Chaleur/guerre : coûts de purge et de renfort inchangés (24 000 argent à chaleur 7 200). La simulation purge dès 6 500 de chaleur (avant : 8 800, ce qui bloquait les victoires). P4/P5 n'ont jamais été jouées à la main.
 - Suspicion max observée 9 900 (relaxed) : la prison n'existe pas encore, une saisie FBI retire 10 % de l'argent.
-- Le design v2 écrit encore le vrai prénom (« Fabio ») dans `GAME_DESIGN_V2.md` (suivi dans git, poussé) : à remplacer par DevByFab si tu veux appliquer la règle de confidentialité.
 
 ## Lots suivants
 - L4 : voies + projets finaux, prison (compte à rebours d'arrestation), écran de choix en P4, fin cachée, objectif P0 « payer le loyer avant l'expulsion ». Mettre la simulation à jour : « terminé » = 3 projets de la voie.
