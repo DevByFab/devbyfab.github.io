@@ -6,6 +6,9 @@ import {
 } from './frontBusinesses';
 import { applyBpsMultiplier, clamp, maxBigInt } from './helpers';
 
+// Croissance passive : bots / diviseur tentatives par seconde (exponentielle). Plus grand = plus lent.
+const AUTO_EXPLOIT_DIVISOR = 800;
+
 export function refreshEconomyDerivedRates(state: EngineState): void {
   const { bots } = state.resources;
   const phaseFactor = (state.phase.index + 1);
@@ -24,7 +27,7 @@ export function refreshEconomyDerivedRates(state: EngineState): void {
   state.rates.autoScanPerSec = applyBpsMultiplier(state.rates.autoScanPerSec, effects.autoScanBps);
 
   if (effects.autoExploitUnlock > 0) {
-    const autoExploitBase = bots < 400 ? 0 : bots / 240 + phaseFactor / 4;
+    const autoExploitBase = bots / AUTO_EXPLOIT_DIVISOR + phaseFactor / 4;
     state.rates.autoExploitPerSec = applyBpsMultiplier(autoExploitBase, effects.autoExploitBps);
     if (state.rates.autoExploitPerSec > 42_000_000) state.rates.autoExploitPerSec = 42_000_000;
   }

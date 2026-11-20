@@ -1,6 +1,6 @@
 # Infinite BotNet — Conception v2 (partie de 3 à 5 heures)
 
-Statut : **validé le 19 nov. 2026**. Lots L1 et L2 terminés ; lot L3 (courbe d'équilibrage) à lancer.
+Statut : **validé le 19 nov. 2026**. Lots L1, L2 et L3 terminés ; lot L4 (voies, projets finaux, prison) à lancer.
 Décisions prises avec Fabio :
 - durée de partie 3 à 5 h ;
 - quatre fins (Vengeance, Résilience, Folie, Prison) ;
@@ -107,7 +107,7 @@ Au début de P4, un écran présente les trois voies avec leurs exigences. Le ch
 | --- | --- | --- |
 | L1 ✅ | Réparer le joueur automatique et mesurer l'existant | **fait** : 0 partie sur 9 finissable à vitesse normale (voir `ETAT_DES_LIEUX_2026-11.md`) |
 | L2 ✅ | Nombres normaux, **blanchiment supprimé, monnaies fusionnées en une seule « Argent »** (décidé le 19 nov.) | **fait** : lint, build et interface vérifiés ; les commerces deviennent des sources de revenu |
-| L3 | Nouvelle courbe : paliers de phase, coûts, améliorations de P0 à P3 | médiane P0 à P3 dans le calendrier |
+| L3 ✅ | Nouvelle courbe : paliers de phase, coûts, améliorations de P0 à P3 | **fait le 20 nov.** : 9 parties sur 9 terminées entre 3 h 48 et 4 h 01 (P1 16 min, P2 50 min, P3 1 h 52, P4 3 h 00, P5 3 h 48) ; détail dans `BALANCE_REFERENCE.md` |
 | L4 | Système de voies et de projets finaux (3 voies + prison) | les 4 fins atteignables en test automatique |
 | L5 | Contenu : améliorations P4/P5, messages, textes des fins | fins jouables de bout en bout |
 | L6 | Optimisation de l'interface et de la boucle | mesure avant/après |

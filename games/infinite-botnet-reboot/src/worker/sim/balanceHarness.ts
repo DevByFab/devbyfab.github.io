@@ -2,7 +2,7 @@
  * Joueur automatique : joue une partie complète avec les MÊMES fonctions que le worker
  * (runSimulationStep, syncDerivedState, commandes du domaine) et mesure la durée.
  *
- * Usage : npm run balance:sim -- [--hours=10] [--seeds=3] [--skill=relaxed|normal|focused|all] [--json] [--trace] [--step=100]
+ * Usage : npm run balance:sim -- [--hours=10] [--seeds=3] [--skill=relaxed|normal|focused|all] [--json] [--trace [--every=30]] [--step=100]
  */
 import type { FrontBusinessId, PhaseId } from '../../game/types';
 import {
@@ -24,6 +24,7 @@ import { syncDerivedState } from '../engine/syncDerivedState';
 import { createInitialEngineState, type EngineState } from '../state';
 
 let stepMs = 100; // durée d'un tick du vrai worker (TICK_INTERVAL_MS)
+let traceEveryMs = 1_800_000; // --every=<minutes> avec --trace
 const TARGET_MIN_HOURS = 3;
 const TARGET_MAX_HOURS = 5;
 const FINAL_PHASE: PhaseId = 'singularity-core';
@@ -128,7 +129,7 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
       commandCashoutPortfolio(state);
     }
 
-    if (war.heat > 8800 && resources.money >= war.scrubCostMoney) commandWarScrub(state);
+    if (war.heat > 6500 && resources.money >= war.scrubCostMoney) commandWarScrub(state);
     if (war.heat > 7000 && war.fortifyCooldownMs <= 0 && resources.money >= war.fortifyCostMoney &&
       resources.warIntel >= war.fortifyCostIntel) {
       commandWarFortify(state);
@@ -223,12 +224,14 @@ function playRun(seed: number, skill: Skill, maxHours: number, trace = false): R
         bottleneck[before] = latestId;
       }
 
-      if (trace && state.nowMs % 1_800_000 === 0) {
+      if (trace && state.nowMs % traceEveryMs === 0) {
         const r = state.resources;
         const lv = Object.entries(state.upgrades.levels).filter(([, v]) => v > 0).map(([k, v]) => `${k}:${v}`).join(' ');
         console.log(`[${fmtMin(minute).trim()}] ${state.phase.id} bots=${r.bots} queue=${r.queuedTargets} money=${r.money} ` +
           `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion}`);
-        console.log(`      upgrades: ${lv}`);
+        const unmet = state.phase.requirements.filter((q) => !q.met).map((q) => `${q.id} ${Math.floor(q.current)}/${q.target}`).join(', ');
+        console.log(`      upgrades: ${lv}
+      manque : ${unmet || '-'}`);
       }
 
       if (state.war.heat > peakHeat) peakHeat = state.war.heat;
@@ -259,13 +262,14 @@ function fmtMin(minutes: number | null | undefined): string {
   return `${h}h${String(m).padStart(2, '0')}`.padStart(7);
 }
 
-function readArgs(): { step: number; hours: number; seeds: number; skills: Skill[]; json: boolean; trace: boolean } {
+function readArgs(): { step: number; every: number; hours: number; seeds: number; skills: Skill[]; json: boolean; trace: boolean } {
   const argv = (globalThis as unknown as { process?: { argv: string[] } }).process?.argv ?? [];
   const get = (name: string): string | undefined =>
     argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
   const skillArg = get('skill') ?? 'all';
   return {
     step: Number(get('step') ?? 100),
+    every: Number(get('every') ?? 30),
     hours: Number(get('hours') ?? 10),
     seeds: Number(get('seeds') ?? 3),
     skills: skillArg === 'all' ? Object.values(SKILLS) : [SKILLS[skillArg] ?? SKILLS.normal],
@@ -275,8 +279,9 @@ function readArgs(): { step: number; hours: number; seeds: number; skills: Skill
 }
 
 function main(): void {
-  const { step, hours, seeds, skills, json, trace } = readArgs();
+  const { step, every, hours, seeds, skills, json, trace } = readArgs();
   stepMs = step;
+  traceEveryMs = every * 60_000;
   const seedList = Array.from({ length: seeds }, (_, i) => 101 + i * 102);
   const results: RunResult[] = [];
 

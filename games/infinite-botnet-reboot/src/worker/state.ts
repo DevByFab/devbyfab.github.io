@@ -17,6 +17,7 @@ import {
   createInitialFrontBusinesses,
   type FrontBusinessRuntimeMap,
 } from './domain/economy/frontBusinesses';
+import { botMaintenancePerSec } from './domain/economy/helpers';
 import {
   computeFbiInterventionChancePerSecondBps,
   resolveFbiRiskState,
@@ -974,8 +975,10 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
 }
 
 export function toSnapshot(state: EngineState): GameSnapshot {
-  const maintenancePerSecond =
-    (state.resources.bots / 1000) * state.rates.maintenancePerThousandBots;
+  const maintenancePerSecond = botMaintenancePerSec(
+    state.resources.bots,
+    state.rates.maintenancePerThousandBots,
+  );
 
   return {
     version: state.version,

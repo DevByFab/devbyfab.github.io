@@ -16,6 +16,15 @@ Toutes les valeurs ci-dessous viennent directement du code courant.
 - Scope: micro-ajustement P0 uniquement, sans modification des gates de phase ni du protocole UI/worker.
 - Validation lot moyen attendue pour cette iteration: `npm run lint` + `npm run balance:sim` + test manuel P0 (achats 10 -> 25 -> 45).
 
+### 2026-11-20 - Lot L3, nouvelle courbe (partie de 3 a 5 h)
+- Ce document date d'avril. Seuls le tableau des phases ci-dessous et cette note sont a jour ; les tableaux d'ameliorations plus bas ne le sont plus (couts, prerequis). La source de verite est `chains.ts`.
+- Exploit Daemon niveau 1 : disponible des P0, cout 100 bots, prerequis 60 scans et 120 exploits reussis. L'auto-exploit demarre sans seuil de bots.
+- Croissance passive : `bots / 800` tentatives par seconde (`AUTO_EXPLOIT_DIVISOR` dans `deriveRates.ts`), plus une base de `(phase + 1) / 4`. Le nombre de bots double environ toutes les 11 a 15 minutes.
+- Les ameliorations qui coutaient des bots (de 90 a 24 millions) coutent maintenant de l'argent, sauf Exploit Seed, Cooldown Primer, Scan Burst niveau 1 et Exploit Daemon niveau 1. Les bots servent a grandir, l'argent sert a acheter.
+- Entretien : un palier de 16 000 bots coute 2 argent par seconde (c'etait 4 000). Avant, il depassait le revenu de monetisation vers 9 000 bots et l'argent tombait a 0.
+- Les prerequis de scans manuels ont disparu des phases P2 et P3 et des ameliorations tardives : les scans manuels s'arretent des que l'automatisation tourne.
+- Mesure (`balance:sim`, 3 graines, 3 niveaux de joueur) : 9 parties sur 9 terminees entre 3 h 48 et 4 h 01. Phases atteintes (mediane) : P1 16 min, P2 50 min, P3 1 h 52, P4 3 h 00, P5 3 h 48.
+
 ## Regles de disponibilite des upgrades
 - Une chaine apparait si phase.index >= discoverPhaseIndex (ou si deja achetee auparavant).
 - Un niveau est achetable seulement si:
@@ -35,10 +44,10 @@ Toutes les valeurs ci-dessous viennent directement du code courant.
 |---|---|---|---|
 | 0 | garage | P0 Garage | bots >= 0 |
 | 1 | automation | P1 Recon Automation | bots >= 180, scans >= 80, exploitSuccesses >= 30 |
-| 2 | monetization | P2 Cashflow Hijack | bots >= 6500, scans >= 650, darkMoney >= 1700, exploitSuccesses >= 240 |
-| 3 | botnet-war | P3 Botnet War | bots >= 420000, scans >= 2000, darkMoney >= 26000, messagesProcessed >= 8 |
-| 4 | matrix-breach | P4 Matrix Edge | bots >= 18000000, portfolio >= 190000, warWins >= 18, messagesProcessed >= 28 |
-| 5 | singularity-core | P5 Singularity Core | bots >= 480000000, darkMoney >= 11000000, warWins >= 65, messagesProcessed >= 65 |
+| 2 | monetization | P2 Cashflow Hijack | bots >= 3500, darkMoney >= 1700, exploitSuccesses >= 240 |
+| 3 | botnet-war | P3 Botnet War | bots >= 100000, darkMoney >= 12000, messagesProcessed >= 8 |
+| 4 | matrix-breach | P4 Matrix Edge | bots >= 5000000, portfolio >= 190000, warWins >= 18, messagesProcessed >= 28 |
+| 5 | singularity-core | P5 Singularity Core | bots >= 100000000, darkMoney >= 10000000, warWins >= 65, messagesProcessed >= 65 |
 
 ### Note importante sur la barre de progression phase
 La progression phase (progressBps) est calculee principalement sur le nombre de bots entre la phase courante et la suivante.

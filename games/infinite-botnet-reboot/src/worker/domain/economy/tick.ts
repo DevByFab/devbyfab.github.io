@@ -1,6 +1,7 @@
 import type { EngineState } from '../../state';
 import { refreshEconomyDerivedRates } from './deriveRates';
 import {
+  botMaintenancePerSec,
   bumpCounter,
   clamp,
   maxBigInt,
@@ -217,8 +218,10 @@ function applyPortfolioYield(state: EngineState, deltaMs: number): void {
 }
 
 function applyMaintenanceDrain(state: EngineState, deltaMs: number): void {
-  const maintenancePerSecond =
-    Math.floor(state.resources.bots / 4000) * state.rates.maintenancePerThousandBots;
+  const maintenancePerSecond = botMaintenancePerSec(
+    state.resources.bots,
+    state.rates.maintenancePerThousandBots,
+  );
   const maintenanceDrain = scalePerSecond(maintenancePerSecond, deltaMs);
 
   if (maintenanceDrain <= 0) {
