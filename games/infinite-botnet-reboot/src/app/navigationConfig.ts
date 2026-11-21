@@ -130,6 +130,15 @@ const GUIDE_STEP_MESSAGES: GuideStepDefinition = {
   bodyKey: 'reboot.guide.step.messages.body',
 };
 
+const GUIDE_STEP_STORY: GuideStepDefinition = {
+  id: 'story',
+  tab: 'story',
+  selector: '[data-guide="story"]',
+  focusKey: 'reboot.guide.focus.story',
+  titleKey: 'reboot.guide.step.story.title',
+  bodyKey: 'reboot.guide.step.story.body',
+};
+
 const GUIDE_STEPS_P1: ReadonlyArray<GuideStepDefinition> = [
   GUIDE_STEP_TOP_ACTIONS,
   GUIDE_STEP_RESOURCES,
@@ -145,7 +154,13 @@ const GUIDE_STEPS_P2: ReadonlyArray<GuideStepDefinition> = [
   GUIDE_STEP_TABS,
 ];
 
+const GUIDE_STEPS_P4: ReadonlyArray<GuideStepDefinition> = [GUIDE_STEP_STORY, GUIDE_STEP_TABS];
+
 export function getGuideStepsForPhase(phaseIndex: number): ReadonlyArray<GuideStepDefinition> {
+  if (phaseIndex >= 4) {
+    return GUIDE_STEPS_P4;
+  }
+
   if (phaseIndex >= 2) {
     return GUIDE_STEPS_P2;
   }

@@ -134,5 +134,8 @@
   "reboot.story.ending.prison.title": "The file was complete",
   "reboot.story.ending.prison.p1": "The agents are there before you've shut the computer down. No shouting, no kicked-in door: they had your address for weeks.",
   "reboot.story.ending.prison.p2": "The trial takes a morning. The bots, the money, everything is seized.",
-  "reboot.story.ending.prison.p3": "There's no connection in the cell. Only time, and the image of the son you couldn't keep. You can start again: this time, watch your suspicion."
+  "reboot.story.ending.prison.p3": "There's no connection in the cell. Only time, and the image of the son you couldn't keep. You can start again: this time, watch your suspicion.",
+  "reboot.guide.focus.story": "Your path",
+  "reboot.guide.step.story.title": "Choosing a path",
+  "reboot.guide.step.story.body": "In P4 you pick a path: Vengeance, Resilience or Madness. The choice is permanent. In P5 you carry out its three projects to reach an ending. Watch your suspicion: at 100%, a warrant is issued."
 }

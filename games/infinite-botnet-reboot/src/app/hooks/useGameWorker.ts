@@ -389,8 +389,17 @@ export function useGameWorker(): GameWorkerController {
       void triggerAutosave();
     }, GAME_AUTOSAVE_INTERVAL_MS);
 
+    // La sauvegarde est moins fréquente : on sauvegarde aussi dès que l'onglet est caché ou fermé.
+    const saveWhenHidden = (): void => {
+      if (document.visibilityState === 'hidden') void triggerAutosave();
+    };
+    document.addEventListener('visibilitychange', saveWhenHidden);
+    window.addEventListener('pagehide', saveWhenHidden);
+
     return () => {
       window.clearInterval(autosaveTimer);
+      document.removeEventListener('visibilitychange', saveWhenHidden);
+      window.removeEventListener('pagehide', saveWhenHidden);
     };
   }, [ready, triggerAutosave]);
 

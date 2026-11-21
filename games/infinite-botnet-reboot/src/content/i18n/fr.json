@@ -357,5 +357,8 @@
   "reboot.story.ending.prison.title": "Le dossier était complet",
   "reboot.story.ending.prison.p1": "Les agents sont là avant que tu aies fermé l'ordinateur. Pas de cris, pas de porte défoncée : ils connaissaient ton adresse depuis des semaines.",
   "reboot.story.ending.prison.p2": "Le procès dure une matinée. Les bots, l'argent, tout est saisi.",
-  "reboot.story.ending.prison.p3": "Dans la cellule, il n'y a pas de connexion. Seulement le temps, et l'image de ton fils que tu n'as pas pu garder. Tu peux recommencer : cette fois, surveille ta suspicion."
+  "reboot.story.ending.prison.p3": "Dans la cellule, il n'y a pas de connexion. Seulement le temps, et l'image de ton fils que tu n'as pas pu garder. Tu peux recommencer : cette fois, surveille ta suspicion.",
+  "reboot.guide.focus.story": "Ta voie",
+  "reboot.guide.step.story.title": "Choisir sa voie",
+  "reboot.guide.step.story.body": "En P4, tu choisis une voie : Vengeance, Résilience ou Folie. Le choix est définitif. En P5, tu mènes ses trois projets à bout pour atteindre une fin. Surveille la suspicion : à 100 %, un mandat est lancé."
 }

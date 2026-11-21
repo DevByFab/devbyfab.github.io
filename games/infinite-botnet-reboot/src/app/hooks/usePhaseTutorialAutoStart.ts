@@ -14,7 +14,7 @@ interface UsePhaseTutorialAutoStartArgs {
 }
 
 function isSupportedPhaseTutorial(phaseIndex: number): boolean {
-  return phaseIndex >= 1 && phaseIndex <= 2;
+  return (phaseIndex >= 1 && phaseIndex <= 2) || phaseIndex === 4;
 }
 
 export function usePhaseTutorialAutoStart(

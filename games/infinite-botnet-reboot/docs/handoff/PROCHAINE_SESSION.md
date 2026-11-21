@@ -1,6 +1,6 @@
 # Infinite BotNet Reboot — reprise de session
 
-Mis à jour le 21 nov. 2026 (fin du lot L4). Remplace `AGENT_HANDOFF.md` (daté d'avril, périmé) pour savoir où on en est.
+Mis à jour le 21 nov. 2026 (fin du lot L4, début de L5, L6 et L7). Remplace `AGENT_HANDOFF.md` (daté d'avril, périmé) pour savoir où on en est.
 Lire aussi : `games/infinite-botnet-reboot/docs/design/GAME_DESIGN_V2.md` (conception validée) et `games/infinite-botnet-reboot/docs/balance/BALANCE_REFERENCE.md` (note L3 + tableau des phases à jour).
 
 ## Objectif
@@ -31,6 +31,9 @@ Nombres JS normaux (plus de bigint) · un seul argent (blanchiment supprimé, fa
   - Choix de la voie à partir de P4 (écran bloquant, bouton « Plus tard », onglet **Voie**) ; les projets se lancent à partir de P5 (un à la fois, dans l'ordre). Vengeance : argent + suspicion basse pour les projets 2 et 3. Résilience : dépenser, et le projet 3 ne laisse que 5 000 d'argent. Folie : bots + victoires de guerre, la chaleur monte pendant les projets.
   - Interface : `PathChoiceOverlay`, `StoryTabPanel`, `ArrestBanner`, `EndingOverlay`, textes FR/EN dans `src/content/i18n/*.json` (clés `reboot.story.*`). Le menu de debug des phases permet maintenant d'aller jusqu'à P5.
   - Joueur automatique : `--path=vengeance|resilience|madness|prison|all`. « Terminé » = une fin atteinte.
+- L5 (début, 21 nov.) : 12 nouvelles chaînes d'améliorations (P2 à P5 : guerre, matrice, économie, filtre de messages, deux doctrines exclusives en P3), soit 55 niveaux au total (28 avant). Effets surtout non liés à la vitesse de progression : la médiane de fin n'a pas bougé (4 h 12 à 4 h 24, 27 parties sur 27 dans la cible).
+- L6 (début, 21 nov.) : le moteur envoie l'état à l'interface environ 4 fois par seconde au lieu de 10 (`GAME_SNAPSHOT_INTERVAL_MS`), sauvegarde toutes les 10 s au lieu de 2 s, et aussi quand l'onglet est caché. Mesuré dans Chrome : 10,0 → 4,1 messages/s, 5 → 1 sauvegarde par 10 s.
+- L7 (début, 21 nov.) : tutoriel de la voie (P4, 2 étapes, démarre au passage en P4 ou via le bouton Tutoriel).
 - Vérifié : `eslint .`, `tsc -b`, `vite build`, joueur automatique, et un test Chrome (puppeteer) sur le choix de voie, les projets, le bandeau de mandat et les 4 fins à 1280 px et 390 px, sans débordement ni erreur JS.
 
 ## Mesure du 21 nov. (L4, `balance:sim --seeds=9 --hours=7 --skill=all`)
@@ -47,6 +50,9 @@ Nombres JS normaux (plus de bigint) · un seul argent (blanchiment supprimé, fa
 - Les coûts des projets (L4) sont un premier réglage : ils pèsent peu à côté de l'argent de fin de partie (21 M à l'entrée de P5, 90 M une dizaine de minutes plus tard). À durcir avec le contenu de L5.
 
 ## Lots suivants
+- L5 (reste) : messages à embranchements, textes des améliorations en français propre (les anciennes sont sans accents), équilibrage fin des coûts des projets, fin cachée.
+- L6 (reste) : envoi de différences seulement (au lieu de l'état complet), pas de simulation de 250 ms avec rattrapage en arrière-plan.
+- L7 (reste) : objectif P0 « payer le loyer avant l'expulsion », cinématiques de fin (aujourd'hui du texte seulement), et **une partie complète jouée à la main** (jamais faite : tout est vérifié par le joueur automatique et par des tests d'écrans).
 - L4 (reste) : la fin cachée « Singularité » (Hz, matière cérébrale, computronium) n'est pas faite ; l'objectif P0 « payer le loyer avant l'expulsion » non plus.
 - L5 : contenu (40 à 60 améliorations, P3 à P5 aujourd'hui vides ; messages à embranchements ; textes de fins).
 - L6 : optimisation (snapshots ~4 Hz en diffs, rendu de l'onglet visible seulement, pas de 250 ms avec rattrapage, sauvegarde toutes les 10 s).

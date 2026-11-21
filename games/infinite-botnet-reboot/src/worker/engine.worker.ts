@@ -3,6 +3,7 @@
 import {
   DEBUG_PHASE_ACCESS_MAX_INDEX,
   GAME_SAVE_SCHEMA_VERSION,
+  GAME_SNAPSHOT_INTERVAL_MS,
 } from '../app/constants';
 import type {
   UiToWorkerMessage,
@@ -29,6 +30,8 @@ const MAX_SIM_DELTA_MS = 2_000;
 let state = createInitialEngineState(Date.now());
 let loopHandle: number | null = null;
 let previousWallTickMs = Date.now();
+let lastSnapshotWallMs = 0;
+let endingAnnounced = false;
 
 function maxBigInt(left: number, right: number): number {
   return left > right ? left : right;
@@ -84,7 +87,18 @@ function runTick(): void {
     );
   }
 
-  dispatchSnapshot('SNAPSHOT');
+  // L'interface n'a pas besoin de 10 images par seconde : 4 suffisent, sauf changement de phase ou fin de partie.
+  const endingJustReached = state.story.ending !== null && !endingAnnounced;
+  if (
+    // la marge de 50 ms évite de sauter un tick quand le minuteur a un peu de retard
+    now - lastSnapshotWallMs >= GAME_SNAPSHOT_INTERVAL_MS - 50 ||
+    baseline.previousPhaseId !== state.phase.id ||
+    endingJustReached
+  ) {
+    lastSnapshotWallMs = now;
+    endingAnnounced = state.story.ending !== null;
+    dispatchSnapshot('SNAPSHOT');
+  }
 }
 
 function ensureLoopStarted(): void {
@@ -95,6 +109,7 @@ function ensureLoopStarted(): void {
 }
 
 function resetEngine(): void {
+  endingAnnounced = false;
   state = createInitialEngineState(Date.now());
   syncDerivedState(state, emitLog);
   emitLog('Session reboot initialisee.', 'info');

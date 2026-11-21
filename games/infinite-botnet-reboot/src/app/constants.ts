@@ -22,7 +22,9 @@ export const UNLOCK_HINT_STORAGE_KEY = 'ibr_unlock_hints_v1';
 export const AUDIO_SETTINGS_STORAGE_KEY = 'ibr_audio_settings_v1';
 export const GAME_SAVE_STORAGE_KEY = 'ibr_game_save_v1';
 export const GAME_SAVE_SCHEMA_VERSION = 2;
-export const GAME_AUTOSAVE_INTERVAL_MS = 2_000;
+export const GAME_AUTOSAVE_INTERVAL_MS = 10_000;
+/** Le moteur tourne à 10 Hz mais n'envoie l'état à l'interface que 4 fois par seconde. */
+export const GAME_SNAPSHOT_INTERVAL_MS = 250;
 
 export const LORE_MIN_READ_MS = 0;
 export const LORE_TRANSITION_MS = 340;

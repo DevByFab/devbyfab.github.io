@@ -115,7 +115,8 @@ function storyActions(state: EngineState, mode: PathMode): boolean {
   // Les avocats refusent un client trop exposé : on coupe la monétisation et on refroidit avant de lancer, puis on tient.
   const needsCalm = path === 'vengeance' && definition.maxSuspicion < NO_LIMIT && mode !== 'prison';
   const readyToSpend = story.projectRunning || resources.money >= definition.costMoney;
-  const hold = needsCalm && readyToSpend;
+  // Sans réserve pour payer les contre-mesures, couper la monétisation bloque tout : on la rallume le temps de refaire un peu d'argent.
+  const hold = needsCalm && readyToSpend && resources.money >= 50_000;
   if (hold) {
     if (systems.monetizeActive) commandToggleMonetize(state);
     if (systems.fbiSuspicion > definition.maxSuspicion - 300) commandFbiCountermeasure(state);
@@ -267,7 +268,7 @@ function playRun(seed: number, skill: Skill, mode: PathMode, maxHours: number, t
         const r = state.resources;
         const lv = Object.entries(state.upgrades.levels).filter(([, v]) => v > 0).map(([k, v]) => `${k}:${v}`).join(' ');
         console.log(`[${fmtMin(minute).trim()}] ${state.phase.id} bots=${r.bots} queue=${r.queuedTargets} money=${r.money} ` +
-          `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion}`);
+          `autoScan=${state.rates.autoScanPerSec}/s autoExploit=${state.rates.autoExploitPerSec}/s suspicion=${state.systems.fbiSuspicion} monetize=${state.systems.monetizeActive} projet=${state.story.projectsDone}${state.story.projectRunning ? '*' : ''} frontIncome=${Math.floor(state.rates.frontBusinessIncomePerSec)} frontMaint=${Math.floor(state.rates.frontBusinessMaintenancePerSec)}`);
         const unmet = state.phase.requirements.filter((q) => !q.met).map((q) => `${q.id} ${Math.floor(q.current)}/${q.target}`).join(', ');
         console.log(`      upgrades: ${lv}
       manque : ${unmet || '-'}`);
