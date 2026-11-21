@@ -21,12 +21,9 @@
       }
     } catch (_) {}
 
-    // Première langue de la liste du navigateur qui est PT, FR ou EN ; sinon EN.
-    var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
-    for (var i = 0; i < prefs.length; i++) {
-      var code = String(prefs[i]).slice(0, 2).toUpperCase();
-      if (SUPPORTED.indexOf(code) !== -1) return code;
-    }
+    var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    if (nav.startsWith('pt')) return 'PT';
+    if (nav.startsWith('fr')) return 'FR';
     return 'EN';
   }
 
@@ -90,14 +87,13 @@
 
     // Titre et description de la page (uniquement si la page le demande)
     if (document.documentElement.hasAttribute('data-i18n-meta')) {
-      var mp = document.documentElement.getAttribute('data-i18n-meta') || 'meta';
-      if (data[mp + '.title']) document.title = data[mp + '.title'];
+      if (data['meta.title']) document.title = data['meta.title'];
       var desc = document.querySelector('meta[name="description"]');
-      if (desc && data[mp + '.description']) desc.setAttribute('content', data[mp + '.description']);
+      if (desc && data['meta.description']) desc.setAttribute('content', data['meta.description']);
       var ogT = document.querySelector('meta[property="og:title"]');
-      if (ogT && data[mp + '.title']) ogT.setAttribute('content', data[mp + '.title']);
+      if (ogT && data['meta.title']) ogT.setAttribute('content', data['meta.title']);
       var ogD = document.querySelector('meta[property="og:description"]');
-      if (ogD && data[mp + '.description']) ogD.setAttribute('content', data[mp + '.description']);
+      if (ogD && data['meta.description']) ogD.setAttribute('content', data['meta.description']);
     }
 
     document.querySelectorAll('[data-i18n-title]').forEach(function (el) {

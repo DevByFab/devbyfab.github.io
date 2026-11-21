@@ -1,5 +1,5 @@
 /* ============================================
-   COMPONENTS — Boutons, menu de langue
+   COMPONENTS — Boutons, badges, menu de langue, cartes
    ============================================ */
 
 /* --- BOUTONS --- */
@@ -29,12 +29,14 @@
   background: var(--violet-hi);
 }
 
-.btn-secondary {
+.btn-secondary,
+.btn-outline {
   border-color: var(--line-strong);
   color: var(--text);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn-outline:hover {
   background: var(--bg-3);
   border-color: var(--violet-ink);
 }
@@ -154,9 +156,70 @@
   color: var(--violet-ink);
 }
 
-/* Écrans tactiles : boutons d'au moins 44 px de haut */
-@media (pointer: coarse) {
-  .btn-sm {
-    min-height: 44px;
-  }
+/* --- BADGES & CARTES (pages projet / CV) --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.badge-accent {
+  background: var(--accent-subtle);
+  border-color: var(--accent-border);
+  color: var(--violet-ink);
+}
+
+.glass-card {
+  position: relative;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--line-strong);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4cc38a;
+  display: inline-block;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+/* --- BOUTON RETOUR FLOTTANT --- */
+.project-back-cta {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 120;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+.project-back-cta:hover {
+  border-color: var(--violet-ink);
 }

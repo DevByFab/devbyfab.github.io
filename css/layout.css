@@ -17,21 +17,6 @@
   border-bottom-color: var(--line);
 }
 
-/* Progression de la page, plate, collée au bas de l'en-tête */
-.level-bar {
-  position: absolute;
-  inset: auto 0 -1px 0;
-  height: 3px;
-}
-
-.level-bar span {
-  display: block;
-  height: 100%;
-  background: var(--violet-ink);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-}
-
 .nav-container {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -207,6 +192,10 @@ main {
   background: var(--bg);
 }
 
+.footer-separator {
+  display: none;
+}
+
 .footer-content {
   max-width: 1120px;
   margin: 0 auto;
@@ -228,7 +217,7 @@ main {
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 1040px) {
+@media (max-width: 860px) {
   .nav-container {
     display: flex;
     justify-content: space-between;
@@ -271,42 +260,5 @@ main {
 
   .nav-link.active {
     color: var(--violet-ink);
-  }
-}
-
-/* --- ZONES TACTILES : 44 px minimum, sans toucher à la mise en page --- */
-@media (pointer: coarse) {
-  .burger-menu {
-    width: 44px;
-    height: 44px;
-  }
-
-  .lang-dropdown-trigger,
-  .footer-copy a,
-  .contact-row a,
-  .step-links .btn-ghost,
-  .hero-actions .btn-ghost {
-    position: relative;
-  }
-
-  .lang-dropdown-trigger::after,
-  .footer-copy a::after,
-  .contact-row a::after,
-  .step-links .btn-ghost::after,
-  .hero-actions .btn-ghost::after {
-    content: "";
-    position: absolute;
-    inset: -0.7rem -0.3rem;
-  }
-}
-
-/* Le bouton CV de l'en-tête disparaît sous 1040 px : on le retrouve dans le menu */
-.nav-cv-item {
-  display: none;
-}
-
-@media (max-width: 1040px) {
-  .nav-cv-item {
-    display: list-item;
   }
 }

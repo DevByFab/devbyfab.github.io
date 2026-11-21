@@ -1,5 +1,5 @@
 /* ============================================
-   MAIN — En-tête, menu burger, scroll spy, chapitres, progression
+   MAIN — Header, Burger, ScrollSpy, Filters & Cursor
    DevByFab Portfolio — Compact & Optimized
    ============================================ */
 (function () {
@@ -65,56 +65,88 @@
 
   /* Les ancres utilisent le scroll natif (CSS scroll-behavior + scroll-margin-top). */
 
-  /* Chapitres : l'étape qui croise le milieu de l'écran pilote la scène (data-step + .on sur les calques) */
-  function initChapters() {
-    var chapters = document.querySelectorAll('[data-chapter]');
-    if (!chapters.length) return;
-    // Sur mobile la scène occupe le haut de l'écran : on change d'étape plus bas, là où le texte est visible
-    var narrow = window.matchMedia('(max-width: 900px)');
+  /* Project Filters (Gallery Page) */
+  function initProjectFilters() {
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var projectItems = document.querySelectorAll('.project-item');
+    if (!filterBtns.length || !projectItems.length) return;
 
-    chapters.forEach(function (chapter) {
-      var steps = chapter.querySelectorAll('.step');
-      var layers = chapter.querySelectorAll('.layer');
-
-      function show(n) {
-        chapter.setAttribute('data-step', n);
-        steps.forEach(function (s) { s.classList.toggle('is-current', s.getAttribute('data-step-n') === n); });
-        layers.forEach(function (l) {
-          l.classList.toggle('on', (' ' + l.getAttribute('data-l') + ' ').indexOf(' ' + n + ' ') !== -1);
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var cat = btn.getAttribute('data-filter');
+        projectItems.forEach(function (card) {
+          card.style.display = (cat === 'all' || card.getAttribute('data-cat') === cat) ? '' : 'none';
         });
-      }
-
-      show('1');
-      if (!('IntersectionObserver' in window)) return;
-
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) show(e.target.getAttribute('data-step-n')); });
-      }, { rootMargin: narrow.matches ? '-45% 0px -48% 0px' : '-50% 0px -42% 0px' });
-
-      steps.forEach(function (s) { io.observe(s); });
+      });
     });
   }
 
-  /* Barre de progression : la page se « remplit » au scroll */
-  function initProgress() {
-    var fill = document.getElementById('level-fill');
-    if (!fill) return;
-    var ticking = false;
-    function update() {
-      ticking = false;
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      fill.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+  /* Spotlight Cursor on Cards */
+  function initSpotlightCards() {
+    var cards = document.querySelectorAll('.spotlight-card');
+    if (!cards.length || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    cards.forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        if (document.documentElement.getAttribute('data-perf') === 'eco') return;
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+      });
+      card.addEventListener('mouseleave', function () {
+        card.style.setProperty('--mouse-x', '-500px');
+        card.style.setProperty('--mouse-y', '-500px');
+      });
+    });
+  }
+
+  /* Infinite Botnet Easter Egg Signal */
+  function initBotnetSignal() {
+    try {
+      var raw = localStorage.getItem('infiniteBotnet.portfolioSignal.v1');
+      if (!raw) return;
+      var p = JSON.parse(raw);
+      if (p && document.body) {
+        document.body.classList.add('botnet-ending-active');
+        if (p.selected && p.selected !== 'none') document.body.classList.add('botnet-ending-' + p.selected);
+        if (p.triadSigil) document.body.classList.add('botnet-ending-triad');
+      }
+    } catch (_) {}
+  }
+
+  /* Carte d'infra : un noeud actif à la fois, le texte est dans le panneau */
+  function initInfra() {
+    var nodes = document.querySelectorAll('.node[data-node]');
+    var panels = document.querySelectorAll('[data-panel]');
+    if (!nodes.length) return;
+
+    function select(id) {
+      nodes.forEach(function (n) {
+        var on = n.getAttribute('data-node') === id;
+        n.classList.toggle('is-active', on);
+        n.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== id; });
     }
-    window.addEventListener('scroll', function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(update); }
-    }, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+
+    nodes.forEach(function (n) {
+      var id = n.getAttribute('data-node');
+      n.addEventListener('click', function () { select(id); });
+      n.addEventListener('mouseenter', function () { select(id); });
+      n.addEventListener('focus', function () { select(id); });
+      n.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id); }
+      });
+    });
+    select('fw');
   }
 
   function init() {
+    initInfra();
     initHeader(); initBurger(); initScrollSpy();
-    initChapters(); initProgress();
+    initProjectFilters(); initSpotlightCards(); initBotnetSignal();
   }
 
   if (document.readyState === 'loading') {

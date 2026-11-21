@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevByFab — Programação, redes e sistemas</title>
+  <title>DevByFab — Programação, redes e sistemas | Amarante, Portugal</title>
   <meta name="description"
-    content="Portefólio de DevByFab: extensão de browser, jogo, bots e ferramentas em JavaScript, TypeScript e Python, mais redes e servidores com Proxmox e Fortinet. Disponível no norte de Portugal ou em teletrabalho.">
+    content="Portefólio de DevByFab: extensões, bots e motores de simulação em JavaScript, TypeScript e Python, e infraestrutura com Proxmox e Fortinet. Disponível perto de Amarante e do Porto, ou em teletrabalho.">
   <meta name="author" content="DevByFab">
   <meta name="i18n-base" content="i18n">
   <meta name="theme-color" content="#14111c">
   <link rel="canonical" href="https://devbyfab.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="DevByFab">
-  <meta property="og:title" content="DevByFab — Programação, redes e sistemas">
+  <meta property="og:title" content="DevByFab — Programação, redes e sistemas | Amarante, Portugal">
   <meta property="og:description"
-    content="Portefólio de DevByFab: extensão de browser, jogo, bots e ferramentas em JavaScript, TypeScript e Python, mais redes e servidores com Proxmox e Fortinet. Disponível no norte de Portugal ou em teletrabalho.">
+    content="Portefólio de DevByFab: extensões, bots e motores de simulação em JavaScript, TypeScript e Python, e infraestrutura com Proxmox e Fortinet. Disponível perto de Amarante e do Porto, ou em teletrabalho.">
   <meta property="og:url" content="https://devbyfab.github.io/">
   <meta property="og:locale" content="pt_PT">
 
@@ -44,17 +44,14 @@
       </div>
 
       <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="nav-link active" data-i18n="nav.home">Início</a></li>
         <li><a href="#code" class="nav-link" data-i18n="nav.code">Código</a></li>
-        <li><a href="#network" class="nav-link" data-i18n="nav.net">Redes</a></li>
-        <li><a href="#modeling" class="nav-link" data-i18n="nav.3d">3D</a></li>
-        <li><a href="#ai" class="nav-link" data-i18n="nav.ai">IA</a></li>
         <li><a href="#parcours" class="nav-link" data-i18n="nav.path">Percurso</a></li>
         <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contacto</a></li>
-        <li class="nav-cv-item"><a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="nav-link" data-i18n="nav.cv">Ver o CV</a></li>
       </ul>
 
       <div class="nav-right">
-        <a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="nav-cv-btn" data-i18n="nav.cv">Ver o CV</a>
+        <a href="cv.html" class="nav-cv-btn" data-i18n="nav.cv">Ver o CV</a>
 
         <div class="lang-dropdown" id="lang-dropdown">
           <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="true"
@@ -84,7 +81,6 @@
         </button>
       </div>
     </nav>
-    <div class="level-bar" aria-hidden="true"><span id="level-fill"></span></div>
   </header>
 
   <main id="main">
@@ -92,282 +88,224 @@
     <!-- ==================== HERO ==================== -->
     <section id="hero" class="section hero">
       <div class="section-container hero-grid">
+
         <div class="hero-copy">
-          <p class="eyebrow" data-i18n="h.hi">Olá, sou o DevByFab</p>
-          <h1 class="hero-title" data-i18n-html="h.title">Programo de <u>noite</u> e aprendo o resto pelo caminho.</h1>
-          <p class="hero-lead" data-i18n="h.lead">Fiz o CTeSP em Cibersegurança, Redes e Sistemas (nível 5). Os professores aconselharam-me o curso porque eu andava indeciso: gostava de hardware, de redes e de programação, e o curso junta as três.</p>
-          <p class="hero-lead" data-i18n="h.lead2">Aprendi a programar sozinho: primeiro um site antigo e um jogo pequeno para a escola, nada de especial, e depois o AeroTabs, o meu primeiro projeto a sério, que continuo a levar o mais longe que consigo.</p>
+          <p class="eyebrow">DevByFab · Amarante, Portugal</p>
+          <h1 class="hero-title" data-i18n-html="h.title">Código e <u>infraestrutura</u>, do rack ao browser.</h1>
+          <p class="hero-lead" data-i18n="h.lead">Formação em Cibersegurança, Redes e Sistemas (CTeSP, nível 5). Aprendi
+            a programar por conta própria e construo extensões de browser, bots e motores de simulação.</p>
 
           <div class="hero-actions">
             <a href="#code" class="btn btn-primary btn-lg" data-i18n="h.btnProjects">Ver projetos</a>
             <a href="#contact" class="btn btn-secondary btn-lg" data-i18n="h.btnContact">Contactar</a>
-            <a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="h.btnCv">CV (PDF, português)</a>
+            <a href="assets/CV_DevByFab.pdf" class="btn btn-ghost" download data-i18n="h.btnCv">CV (PDF, português)</a>
           </div>
-        </div>
 
-        <aside class="profile" aria-labelledby="profile-title">
-          <div class="profile-head">
-            <h2 class="profile-title" id="profile-title" data-i18n="h.f.title">Em resumo</h2>
-            <p class="profile-status"><span class="status-dot" aria-hidden="true"></span><span data-i18n="h.f.status">Disponível · estágio ou primeiro emprego</span></p>
-          </div>
-          <dl class="profile-list">
-            <div><dt data-i18n="h.f.l1">Procuro</dt><dd data-i18n="h.f.v1">Um sítio onde possa evoluir, no norte de Portugal ou em teletrabalho, e onde se possa rir enquanto se trabalha.</dd></div>
-            <div><dt data-i18n="h.f.l2">Línguas</dt><dd data-i18n="h.f.v2">Português e francês (nativos), inglês (B2).</dd></div>
-            <div><dt data-i18n="h.f.l3">Método</dt><dd data-i18n="h.f.v3">Planeio o máximo de detalhes antes de escrever a primeira linha. Depois lanço-me.</dd></div>
-            <div><dt data-i18n="h.f.l4">No teclado</dt><dd data-i18n="h.f.v4">Dois ecrãs: o código de um lado, a pré-visualização do outro. Queria um terceiro para música ou um vídeo em fundo. Programo de noite, mas guardo o dia para os amigos.</dd></div>
-            <div><dt data-i18n="h.f.l5">Fora do código</dt><dd data-i18n="h.f.v5">Overwatch desde o lançamento, Clair Obscur, LoL, anime. Dez anos de taekwondo, cinto vermelho e preto.</dd></div>
+          <dl class="hero-facts">
+            <div>
+              <dt data-i18n="h.f1">Localização</dt>
+              <dd data-i18n="h.f1v">Amarante, Portugal</dd>
+            </div>
+            <div>
+              <dt data-i18n="h.f2">Disponibilidade</dt>
+              <dd data-i18n="h.f2v">Estágio ou emprego, presencial até 1h30 de transportes públicos (Porto incluído), ou
+                teletrabalho.</dd>
+            </div>
+            <div>
+              <dt data-i18n="h.f3">Línguas</dt>
+              <dd data-i18n="h.f3v">Português e francês nativos · inglês B2</dd>
+            </div>
+            <div>
+              <dt data-i18n="h.f4">IEFP</dt>
+              <dd data-i18n="h.f4v">Elegível a estágios (nível 5, Ativar.pt)</dd>
+            </div>
           </dl>
-        </aside>
+        </div>
+
+        <!-- Carte d'infra : chaque noeud est un bouton, le texte vient du panneau dessous -->
+        <div class="infra">
+          <div class="infra-head">
+            <span data-i18n="h.infraTitle">Mapa de infra</span>
+            <span data-i18n="h.infraHint">passa o rato ou toca</span>
+          </div>
+
+          <svg class="infra-svg" viewBox="0 0 480 372" role="group"
+            aria-label="Mapa interativo da infraestrutura que já configurei" data-i18n-aria="h.infraLabel">
+            <text class="infra-ext-text" x="240" y="20">INTERNET</text>
+            <path class="infra-link" d="M240 28 V64" />
+            <path class="infra-link" d="M240 116 V176" />
+            <path class="infra-link" d="M200 228 V264 H82 V300" />
+            <path class="infra-link" d="M240 228 V300" />
+            <path class="infra-link" d="M280 228 V264 H398 V300" />
+
+            <g class="node" role="button" tabindex="0" data-node="fw" aria-pressed="false">
+              <rect x="165" y="64" width="150" height="52" rx="8" />
+              <text class="node-label" x="240" y="87">FortiGate</text>
+              <text class="node-sub" x="240" y="104" data-i18n="h.n.fw.sub">Firewall</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="sw" aria-pressed="false">
+              <rect x="165" y="176" width="150" height="52" rx="8" />
+              <text class="node-label" x="240" y="199">FortiSwitch</text>
+              <text class="node-sub" x="240" y="216" data-i18n="h.n.sw.sub">Switch</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="cab" aria-pressed="false">
+              <rect x="190" y="248" width="100" height="32" rx="16" />
+              <text class="node-label" x="240" y="268.5" data-i18n="h.n.cab.label">Cablagem</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="px" aria-pressed="false">
+              <rect x="12" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="82" y="324">Proxmox VE</text>
+              <text class="node-sub" x="82" y="341" data-i18n="h.n.px.sub">Virtualização</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="nc" aria-pressed="false">
+              <rect x="170" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="240" y="324">Nextcloud</text>
+              <text class="node-sub" x="240" y="341" data-i18n="h.n.nc.sub">Cloud privada</text>
+            </g>
+
+            <g class="node" role="button" tabindex="0" data-node="cam" aria-pressed="false">
+              <rect x="328" y="300" width="140" height="56" rx="8" />
+              <text class="node-label" x="398" y="324" data-i18n="h.n.cam.label">Câmara IP</text>
+              <text class="node-sub" x="398" y="341" data-i18n="h.n.cam.sub">Videovigilância</text>
+            </g>
+          </svg>
+
+          <div class="infra-panel" aria-live="polite">
+            <div data-panel="fw">
+              <h3>FortiGate</h3>
+              <p data-i18n="h.p.fw">Configuração e testes de firewalls Fortinet de empresa durante o estágio na Proxsys
+                Solutions.</p>
+            </div>
+            <div data-panel="sw">
+              <h3>FortiSwitch</h3>
+              <p data-i18n="h.p.sw">Configuração de switches Fortinet e de VLANs, com instalação em rack.</p>
+            </div>
+            <div data-panel="cab">
+              <h3 data-i18n="h.n.cab.label">Cablagem</h3>
+              <p data-i18n="h.p.cab">Instalação de servidores e racks em clientes, e identificação da cablagem de rede.
+              </p>
+            </div>
+            <div data-panel="px">
+              <h3>Proxmox VE</h3>
+              <p data-i18n="h.p.px">Máquinas virtuais, contentores LXC e clusters em Proxmox VE. Gestão remota dos
+                servidores via iDRAC. É também onde corre o BoTokard.</p>
+            </div>
+            <div data-panel="nc">
+              <h3>Nextcloud</h3>
+              <p data-i18n="h.p.nc">Servidores cloud com Nextcloud (base PHP) configurados nos estágios na ClickTech, em
+                Amarante.</p>
+            </div>
+            <div data-panel="cam">
+              <h3 data-i18n="h.n.cam.label">Câmara IP</h3>
+              <p data-i18n="h.p.cam">Instalação de câmaras IP em clientes e integração na rede local.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- ==================== 01 CODE ==================== -->
-    <section id="code" class="section chapter" data-chapter data-step="1">
-      <div class="section-container" data-level="01">
-        <span class="eyebrow" data-i18n="h.c1.eyebrow">Nível 1 · Código</span>
-        <h2 class="section-title" data-i18n="h.c1.title">O que eu programo</h2>
-        <p class="section-lead" data-i18n="h.c1.lead">É o que mais gosto de fazer. Aprendi sozinho, a tropeçar muitas vezes.</p>
+    <!-- ==================== CODE ==================== -->
+    <section id="code" class="section section--code">
+      <div class="section-container">
+        <span class="eyebrow" data-i18n="h.code.eyebrow">01 · Código</span>
+        <h2 class="section-title" data-i18n="h.code.title">O que eu programo</h2>
+        <p class="section-lead" data-i18n="h.code.lead">É o que mais gosto de fazer e onde mais quero evoluir. Aprendi
+          tudo sozinho, projeto a projeto.</p>
 
-        <div class="chapter-inner">
-          <div class="scene" aria-hidden="true">
-            <img class="layer" data-l="1" src="img/aerotabs/01-quick-actions.jpg" width="960" height="600" alt="" loading="lazy" decoding="async">
+        <div class="projects">
 
-            <svg class="layer" data-l="2" viewBox="0 0 400 300">
-              <path class="s-line" d="M40 250 H360" />
-              <rect class="bar f-1" style="--i:0" x="60" y="210" width="36" height="40" rx="3" />
-              <rect class="bar f-1" style="--i:1" x="112" y="190" width="36" height="60" rx="3" />
-              <rect class="bar f-1" style="--i:2" x="164" y="160" width="36" height="90" rx="3" />
-              <rect class="bar f-2" style="--i:3" x="216" y="130" width="36" height="120" rx="3" />
-              <rect class="bar f-2" style="--i:4" x="268" y="90" width="36" height="160" rx="3" />
-              <rect class="bar f-ink" style="--i:5" x="320" y="40" width="36" height="210" rx="3" />
-            </svg>
-
-            <svg class="layer" data-l="3" viewBox="0 0 400 300">
-              <g class="pop" style="--i:0"><rect class="f-3 s-line" x="40" y="50" width="210" height="52" rx="12" /><rect class="f-line" x="58" y="68" width="120" height="6" rx="3" /><rect class="f-line" x="58" y="82" width="80" height="6" rx="3" /></g>
-              <g class="pop" style="--i:1"><rect class="f-1" x="150" y="124" width="210" height="52" rx="12" /><rect class="f-ink" x="168" y="142" width="130" height="6" rx="3" /><rect class="f-ink" x="168" y="156" width="90" height="6" rx="3" /></g>
-              <g class="pop" style="--i:2"><rect class="f-3 s-line" x="40" y="198" width="170" height="52" rx="12" /><rect class="f-line" x="58" y="216" width="100" height="6" rx="3" /><rect class="f-line" x="58" y="230" width="60" height="6" rx="3" /></g>
-            </svg>
-
-            <svg class="layer" data-l="4" viewBox="0 0 400 300">
-              <g class="pop" style="--i:0"><rect class="f-line" x="34" y="150" width="84" height="7" rx="3" /><rect class="f-line" x="34" y="168" width="64" height="7" rx="3" /><rect class="f-line" x="34" y="186" width="76" height="7" rx="3" /></g>
-              <path class="shackle s-ink" d="M168 138 V104 a32 32 0 0 1 64 0 V138" />
-              <rect class="f-1" x="140" y="138" width="120" height="98" rx="10" />
-              <circle class="f-bg" cx="200" cy="182" r="11" />
-              <rect class="f-bg" x="196" y="188" width="8" height="24" rx="3" />
-              <g class="pop" style="--i:2"><rect class="f-ink" x="284" y="150" width="14" height="14" rx="2" /><rect class="f-2" x="304" y="150" width="14" height="14" rx="2" /><rect class="f-ink" x="324" y="150" width="14" height="14" rx="2" /><rect class="f-2" x="284" y="172" width="14" height="14" rx="2" /><rect class="f-ink" x="304" y="172" width="14" height="14" rx="2" /><rect class="f-2" x="324" y="172" width="14" height="14" rx="2" /></g>
-            </svg>
-          </div>
-
-          <div class="steps">
-            <article class="step" data-step-n="1">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><b>01/04</b></p>
-              <h3 class="step-title">AeroTabs</h3>
-              <p class="step-desc" data-i18n="h.s1.desc">O meu primeiro projeto a sério, que no início se chamava CryoTabs. Guardo tudo aberto: vídeos, repositórios do GitHub, documentação. O browser já não aguentava, por isso fiz uma extensão que põe a dormir os separadores que não estou a usar. Adorei resolver um problema meu. O mais difícil foi ter boas ideias sem a transformar numa confusão. Está em beta e estou a preparar a publicação no Chrome e no Firefox.</p>
-              <p class="step-stack">JavaScript · Manifest V3 · Supabase</p>
-              <div class="step-links">
-                <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><span data-i18n="h.aero.site">Site do AeroTabs</span> ↗</a>
-                <a href="project/extention.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Sobre o projeto</a>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.aero.meta">Em beta</p>
+            <div>
+              <h3 class="project-title">AeroTabs</h3>
+              <p class="project-desc" data-i18n="h.aero.desc">Extensão para Chrome e Firefox (Manifest V3) que põe os
+                separadores inativos em suspensão para libertar memória. Organiza-os em grupos e espaços de trabalho,
+                sincroniza com Supabase e partilha sessões de forma cifrada. Em preparação para publicação nas lojas do
+                Chrome e do Firefox.</p>
+              <div class="shots">
+                <figure><img src="img/aerotabs/01-quick-actions.jpg" width="960" height="600" loading="lazy"
+                    decoding="async"
+                    alt="AeroTabs: ações rápidas para suspender, limpar, organizar e ordenar separadores"
+                    data-i18n-alt="h.aero.shot1"></figure>
+                <figure><img src="img/aerotabs/03-workspaces.jpg" width="960" height="600" loading="lazy"
+                    decoding="async" alt="AeroTabs: espaços de trabalho guardados" data-i18n-alt="h.aero.shot2">
+                </figure>
+                <figure><img src="img/aerotabs/05-themes.jpg" width="960" height="600" loading="lazy" decoding="async"
+                    alt="AeroTabs: cinco temas, claro e escuro" data-i18n-alt="h.aero.shot3"></figure>
               </div>
-            </article>
-
-            <article class="step" data-step-n="2">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span><span></span><b>02/04</b></p>
-              <h3 class="step-title">The Infinite Botnet</h3>
-              <p class="step-desc" data-i18n="h.s2.desc">Sempre gostei de videojogos, e este é um primeiro passo para fazer um dia o meu, em 3D e com uma história. Joga-se no browser: fazemos crescer uma rede de bots e escolhemos como acaba. O mais difícil é o equilíbrio entre um jogo agradável e completo, mas não demasiado difícil. Como não vou testá-lo à mão durante centenas de horas, escrevi um jogador automático que simula partidas. Nas últimas simulações, uma partida dura entre 3 h 48 e 4 h 01.</p>
-              <p class="step-stack">TypeScript · React · Vite · Web Workers</p>
-              <div class="step-links">
-                <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm" data-i18n="h.ib.play">Jogar o protótipo</a>
-                <a href="project/webgames.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Sobre o projeto</a>
+              <p class="project-stack">JavaScript · Manifest V3 · Supabase</p>
+              <div class="project-links">
+                <a href="https://aerotabs.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><span
+                    data-i18n="h.aero.site">Site do AeroTabs</span> ↗</a>
+                <a href="project/extention.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="step" data-step-n="3">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><b>03/04</b></p>
-              <h3 class="step-title">BoTokard</h3>
-              <p class="step-desc" data-i18n="h.s3.desc">Um bot para a comunidade de um streamer. O que mais gostei foi ver uma coisa que fiz a ser usada de verdade, pelo streamer e pelos espetadores. Está terminado, mas é privado, por isso não o posso mostrar.</p>
-              <p class="step-stack">Python · Discord.py · Twitch API · Gemini API · MySQL</p>
-              <div class="step-links">
-                <a href="project/discordbot.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Sobre o projeto</a>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.ib.meta">Em desenvolvimento</p>
+            <div>
+              <h3 class="project-title">The Infinite Botnet</h3>
+              <p class="project-desc" data-i18n="h.ib.desc">Jogo incremental de simulação, escrito em TypeScript e
+                React. A simulação corre num Web Worker, separada da interface, e o equilíbrio é verificado com
+                simulações automáticas de 8 a 12 horas. Protótipo jogável, ainda por terminar.</p>
+              <p class="project-stack">TypeScript · React · Vite · Web Workers</p>
+              <div class="project-links">
+                <a href="games/infinite-botnet-reboot/" class="btn btn-primary btn-sm" data-i18n="h.ib.play">Jogar o
+                  protótipo</a>
+                <a href="project/webgames.html" class="btn btn-ghost btn-sm" data-i18n="h.ib.arch">Arquitetura</a>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="step" data-step-n="4">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><b>04/04</b></p>
-              <h3 class="step-title">CipherVault</h3>
-              <p class="step-desc" data-i18n="h.s4.desc">Um projeto da escola: uma ferramenta de cifragem. Sinceramente, não é o meu género de projeto, mas aprendi coisas importantes. Está feito a cerca de 70 % e custa-me encontrar motivação para o acabar.</p>
-              <p class="step-stack">Python · RSA 2048 · AES-GCM</p>
-              <div class="step-links">
-                <a href="project/clipython.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Sobre o projeto</a>
-                <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub ↗</a>
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.bt.meta">Privado</p>
+            <div>
+              <h3 class="project-title">BoTokard</h3>
+              <p class="project-desc" data-i18n="h.bt.desc">Bot Python assíncrono feito para a comunidade de um
+                streamer: API da Twitch, respostas com a API Gemini, um jogo de cartas e registos de auditoria em MySQL.
+                Corre numa VM Proxmox. É privado e não tem demonstração pública.</p>
+              <p class="project-stack">Python · Discord.py · Twitch API · Gemini API · MySQL</p>
+              <div class="project-links">
+                <a href="project/discordbot.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
               </div>
-            </article>
-          </div>
+            </div>
+          </article>
+
+          <article class="project" data-anim-child>
+            <p class="project-meta" data-i18n="h.cv.meta">Projeto escolar</p>
+            <div>
+              <h3 class="project-title">CipherVault</h3>
+              <p class="project-desc" data-i18n="h.cv.desc">Ferramenta Python de cifragem híbrida: RSA para trocar
+                chaves e AES-GCM para os dados, com uma lista de contactos local. Nasceu como projeto escolar e retomo-o
+                de vez em quando.</p>
+              <p class="project-stack">Python · RSA 2048 · AES-GCM</p>
+              <div class="project-links">
+                <a href="project/clipython.html" class="btn btn-ghost btn-sm" data-i18n="h.study">Estudo técnico</a>
+                <a href="https://github.com/devbyfab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub
+                  ↗</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="stack-line">
+          <p class="project-meta" data-i18n="h.stackLabel">Ferramentas</p>
+          <p>JavaScript · TypeScript · Python · React · Vite · Supabase · FastAPI · MySQL · Web Workers · Discord.py</p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== 02 RÉSEAU ==================== -->
-    <section id="network" class="section chapter chapter--flip" data-chapter data-step="1">
-      <div class="section-container" data-level="02">
-        <span class="eyebrow" data-i18n="h.c2.eyebrow">Nível 2 · Redes</span>
-        <h2 class="section-title" data-i18n="h.c2.title">Redes e cibersegurança</h2>
-        <p class="section-lead" data-i18n="h.c2.lead">Onde o hardware, as redes e a programação se encontram.</p>
-
-        <div class="chapter-inner">
-          <div class="scene" aria-hidden="true">
-            <svg class="layer" data-l="1" viewBox="0 0 400 300">
-              <circle class="node f-3 s-line" cx="200" cy="34" r="16" />
-              <path class="draw s-ink-thin" d="M200 50 V86" />
-              <rect class="node f-1" x="168" y="86" width="64" height="30" rx="6" />
-              <path class="draw s-ink-thin" d="M200 116 V152" />
-              <rect class="node f-2" x="140" y="152" width="120" height="28" rx="6" />
-              <path class="draw s-ink-thin" d="M200 180 V206 H90 V238" />
-              <path class="draw s-ink-thin" d="M200 180 V238" />
-              <path class="draw s-ink-thin" d="M200 180 V206 H310 V238" />
-              <rect class="node f-3 s-line" x="58" y="238" width="64" height="36" rx="6" />
-              <rect class="node f-3 s-line" x="168" y="238" width="64" height="36" rx="6" />
-              <rect class="node f-3 s-line" x="278" y="238" width="64" height="36" rx="6" />
-            </svg>
-
-            <svg class="layer" data-l="2" viewBox="0 0 400 300">
-              <rect class="f-3 s-line" x="106" y="24" width="188" height="252" rx="10" />
-              <g class="unit" style="--i:0"><rect class="f-1" x="120" y="40" width="160" height="36" rx="5" /><circle class="f-ink" cx="136" cy="58" r="4" /><rect class="f-ink" x="152" y="55" width="70" height="6" rx="3" /></g>
-              <g class="unit" style="--i:1"><rect class="f-2" x="120" y="86" width="160" height="36" rx="5" /><circle class="f-ink" cx="136" cy="104" r="4" /><rect class="f-ink" x="152" y="101" width="50" height="6" rx="3" /></g>
-              <g class="unit" style="--i:2"><rect class="f-1" x="120" y="132" width="160" height="36" rx="5" /><circle class="f-ink" cx="136" cy="150" r="4" /><rect class="f-ink" x="152" y="147" width="90" height="6" rx="3" /></g>
-              <g class="unit" style="--i:3"><rect class="f-2" x="120" y="178" width="160" height="36" rx="5" /><circle class="f-ink" cx="136" cy="196" r="4" /><rect class="f-ink" x="152" y="193" width="60" height="6" rx="3" /></g>
-              <g class="unit" style="--i:4"><rect class="f-1" x="120" y="224" width="160" height="36" rx="5" /><circle class="f-ink" cx="136" cy="242" r="4" /><rect class="f-ink" x="152" y="239" width="80" height="6" rx="3" /></g>
-            </svg>
-
-            <svg class="layer" data-l="3" viewBox="0 0 400 300">
-              <path class="f-3 s-ink" d="M200 36 L288 70 V148 C288 204 250 242 200 262 C150 242 112 204 112 148 V70 Z" />
-              <path class="draw s-ink-check" d="M158 150 L192 184 L246 120" />
-            </svg>
-          </div>
-
-          <div class="steps">
-            <article class="step" data-step-n="1">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span></span><span></span><b>01/03</b></p>
-              <h3 class="step-title" data-i18n="h.n1.title">Na escola</h3>
-              <p class="step-desc" data-i18n="h.n1.desc">No CTeSP: arquitetura de redes, encaminhamento e comutação, políticas de segurança, virtualização e administração de servidores Linux e Windows.</p>
-            </article>
-            <article class="step" data-step-n="2">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span><b>02/03</b></p>
-              <h3 class="step-title" data-i18n="h.n2.title">Nos estágios</h3>
-              <p class="step-desc" data-i18n="h.n2.desc">São as minhas únicas experiências em empresa até agora, mas o trabalho foi concreto: instalei servidores e racks em clientes, identifiquei cablagem de rede e instalei câmaras IP. Trabalhei com máquinas virtuais e clusters em Proxmox, geridos à distância via iDRAC, e com Nextcloud na ClickTech. Na Proxsys, configurei firewalls FortiGate e switches FortiSwitch, com VLANs.</p>
-            </article>
-            <article class="step" data-step-n="3">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><b>03/03</b></p>
-              <h3 class="step-title" data-i18n="h.n3.title">E fora das aulas</h3>
-              <p class="step-desc" data-i18n="h.n3.desc">Leio sobre cibersegurança e sobre informática em geral para me manter a par do que muda.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 03 3D ==================== -->
-    <section id="modeling" class="section chapter" data-chapter data-step="1">
-      <div class="section-container" data-level="03">
-        <span class="eyebrow" data-i18n="h.c3.eyebrow">Nível 3 · 3D</span>
-        <h2 class="section-title" data-i18n="h.c3.title">Modelação 3D</h2>
-        <p class="section-lead" data-i18n="h.c3.lead">Sou muito sensível à beleza de um jogo: Clair Obscur, Elden Ring e Monster Hunter deixam-me de queixo caído. Por isso estou a aprender a fazer um bocadinho disso.</p>
-
-        <div class="chapter-inner">
-          <div class="scene">
-            <img class="layer" data-l="1 2" src="img/blender-premier-rendu.webp" width="1280" height="720" loading="lazy" decoding="async"
-              alt="Render em Blender de um donut com cobertura de chocolate num prato e de uma caneca cinzenta num pires, sobre uma superfície de betão"
-              data-i18n-alt="h.d.alt">
-          </div>
-
-          <div class="steps">
-            <article class="step" data-step-n="1">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span></span><b>01/02</b></p>
-              <h3 class="step-title" data-i18n="h.d1.title">Comecei há pouco</h3>
-              <p class="step-desc" data-i18n="h.d1.desc">Comecei o Blender há pouco tempo. Este é o meu render do tutorial do donut, que ainda nem acabei. Diverte-me muito, por isso vou continuar.</p>
-            </article>
-            <article class="step" data-step-n="2">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><b>02/02</b></p>
-              <h3 class="step-title" data-i18n="h.d2.title">Um dia</h3>
-              <p class="step-desc" data-i18n="h.d2.desc">Gostava que, um dia, esta secção fosse uma cena 3D feita por mim em Blender. Por agora estou nos primeiros passos.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 04 IA ==================== -->
-    <section id="ai" class="section chapter chapter--flip" data-chapter data-step="1">
-      <div class="section-container" data-level="04">
-        <span class="eyebrow" data-i18n="h.c4.eyebrow">Nível 4 · IA</span>
-        <h2 class="section-title" data-i18n="h.c4.title">Inteligência artificial</h2>
-        <p class="section-lead" data-i18n="h.c4.lead">Uso-a todos os dias e quero perceber como funciona, para tirar o máximo dela.</p>
-
-        <div class="chapter-inner">
-          <div class="scene" aria-hidden="true">
-            <svg class="layer" data-l="1" viewBox="0 0 400 300">
-              <rect class="f-3 s-line" x="50" y="50" width="300" height="200" rx="12" />
-              <circle class="f-line" cx="74" cy="74" r="5" /><circle class="f-line" cx="92" cy="74" r="5" /><circle class="f-line" cx="110" cy="74" r="5" />
-              <rect class="grow f-1" style="--i:0" x="74" y="108" width="150" height="10" rx="5" />
-              <rect class="grow f-2" style="--i:1" x="98" y="134" width="210" height="10" rx="5" />
-              <rect class="grow f-1" style="--i:2" x="98" y="160" width="120" height="10" rx="5" />
-              <rect class="grow f-ink" style="--i:3" x="74" y="186" width="180" height="10" rx="5" />
-              <rect class="grow f-2" style="--i:4" x="74" y="212" width="90" height="10" rx="5" />
-            </svg>
-
-            <svg class="layer" data-l="2" viewBox="0 0 400 300">
-              <circle class="f-3 s-ink-lg" cx="170" cy="112" r="54" />
-              <path class="s-ink-lg" d="M210 152 L262 204" />
-              <rect class="grow f-1" style="--i:0" x="100" y="222" width="200" height="9" rx="4" />
-              <rect class="grow f-2" style="--i:1" x="100" y="242" width="150" height="9" rx="4" />
-              <rect class="grow f-1" style="--i:2" x="100" y="262" width="180" height="9" rx="4" />
-            </svg>
-
-            <svg class="layer" data-l="3" viewBox="0 0 400 300">
-              <circle class="ring" cx="200" cy="150" r="104" />
-              <ellipse class="f-1" cx="200" cy="168" rx="36" ry="48" />
-              <circle class="f-2" cx="200" cy="108" r="18" />
-              <path class="s-ink" d="M186 94 L172 76 M214 94 L228 76 M166 150 L138 138 M166 172 L136 176 M168 194 L142 212 M234 150 L262 138 M234 172 L264 176 M232 194 L258 212" />
-            </svg>
-
-            <svg class="layer" data-l="4" viewBox="0 0 400 300">
-              <rect class="idea f-1" style="--tx:-70px;--ty:30px;--r:-9deg;--i:0" x="110" y="52" width="180" height="30" rx="6" />
-              <rect class="idea f-2" style="--tx:60px;--ty:70px;--r:7deg;--i:1" x="110" y="96" width="180" height="30" rx="6" />
-              <rect class="idea f-1" style="--tx:-40px;--ty:-40px;--r:12deg;--i:2" x="110" y="140" width="180" height="30" rx="6" />
-              <rect class="idea f-ink" style="--tx:80px;--ty:-60px;--r:-6deg;--i:3" x="110" y="184" width="180" height="30" rx="6" />
-              <rect class="idea f-2" style="--tx:-60px;--ty:-110px;--r:10deg;--i:4" x="110" y="228" width="180" height="30" rx="6" />
-            </svg>
-          </div>
-
-          <div class="steps">
-            <article class="step" data-step-n="1">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><b>01/04</b></p>
-              <h3 class="step-title" data-i18n="h.a1.title">Programar mais depressa</h3>
-              <p class="step-desc" data-i18n="h.a1.desc">Ajuda-me a escrever código mais depressa do que sozinho.</p>
-            </article>
-            <article class="step" data-step-n="2">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span><span></span><b>02/04</b></p>
-              <h3 class="step-title" data-i18n="h.a2.title">Pesquisar</h3>
-              <p class="step-desc" data-i18n="h.a2.desc">Encontro informação mais depressa do que a procurar à mão.</p>
-            </article>
-            <article class="step" data-step-n="3">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><b>03/04</b></p>
-              <h3 class="step-title" data-i18n="h.a3.title">Os bugs que não encontro sozinho</h3>
-              <p class="step-desc" data-i18n="h.a3.desc">Os erros parvos desaparecem depressa. Quando um problema a sério me escapa, ela ajuda-me a analisá-lo.</p>
-            </article>
-            <article class="step" data-step-n="4">
-              <p class="step-hud" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><b>04/04</b></p>
-              <h3 class="step-title" data-i18n="h.a4.title">As ideias que vão para todo o lado</h3>
-              <p class="step-desc" data-i18n="h.a4.desc">Planeio muito antes de programar, mas as ideias fogem-me logo para todo o lado. Falar delas com ela ajuda-me a pô-las em ordem.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== 05 PARCOURS ==================== -->
+    <!-- ==================== PARCOURS ==================== -->
     <section id="parcours" class="section section--path">
       <div class="section-container">
-        <span class="eyebrow" data-i18n="h.path.eyebrow">Percurso</span>
+        <span class="eyebrow" data-i18n="h.path.eyebrow">02 · Percurso</span>
         <h2 class="section-title" data-i18n="h.path.title">Onde aprendi</h2>
 
         <ol class="timeline">
@@ -375,8 +313,10 @@
             <p class="timeline-date" data-i18n="h.e1.date">2026</p>
             <div>
               <h3 class="timeline-title" data-i18n="h.e1.title">Estágio de 6 meses na Proxsys Solutions</h3>
-              <p class="timeline-place" data-i18n="h.e1.place">Portugal</p>
-              <p class="timeline-desc" data-i18n="h.e1.desc">Último ano do CTeSP. Virtualização com Proxmox, switches e firewalls Fortinet, servidores e racks instalados em clientes, câmaras IP e identificação da cablagem de rede.</p>
+              <p class="timeline-place" data-i18n="h.e1.place">Ermesinde, Portugal</p>
+              <p class="timeline-desc" data-i18n="h.e1.desc">Último ano do CTeSP. Virtualização com Proxmox, switches e
+                firewalls Fortinet, instalação de servidores e racks em clientes, instalação de câmaras IP e
+                identificação de cablagem de rede.</p>
             </div>
           </li>
           <li class="timeline-item" data-anim-child>
@@ -384,15 +324,18 @@
             <div>
               <h3 class="timeline-title" data-i18n="h.e2.title">CTeSP em Cibersegurança, Redes e Sistemas</h3>
               <p class="timeline-place" data-i18n="h.e2.place">Ensino superior politécnico · nível 5</p>
-              <p class="timeline-desc" data-i18n="h.e2.desc">Redes, segurança, virtualização e administração de servidores Linux e Windows.</p>
+              <p class="timeline-desc" data-i18n="h.e2.desc">Arquitetura de redes, encaminhamento e comutação, políticas
+                de segurança, virtualização e administração de servidores Linux e Windows.</p>
             </div>
           </li>
           <li class="timeline-item" data-anim-child>
             <p class="timeline-date" data-i18n="h.e3.date">2021 — 2024</p>
             <div>
-              <h3 class="timeline-title" data-i18n="h.e3.title">Curso profissional GEI (nível 4) e estágios na ClickTech</h3>
-              <p class="timeline-place" data-i18n="h.e3.place">Portugal</p>
-              <p class="timeline-desc" data-i18n="h.e3.desc">Dois estágios, no 11.º e no 12.º ano: PHP, servidores cloud Nextcloud, configuração de equipamentos, diagnóstico e reparação de computadores.</p>
+              <h3 class="timeline-title" data-i18n="h.e3.title">Curso profissional GEI (nível 4) e estágios na ClickTech
+              </h3>
+              <p class="timeline-place" data-i18n="h.e3.place">Amarante, Portugal</p>
+              <p class="timeline-desc" data-i18n="h.e3.desc">Dois estágios (11.º e 12.º ano): base PHP, servidor cloud
+                Nextcloud e configuração de equipamentos, além de diagnóstico e reparação de computadores.</p>
             </div>
           </li>
           <li class="timeline-item" data-anim-child>
@@ -400,21 +343,47 @@
             <div>
               <h3 class="timeline-title" data-i18n="h.e4.title">Escolaridade em França</h3>
               <p class="timeline-place" data-i18n="h.e4.place">França</p>
-              <p class="timeline-desc" data-i18n="h.e4.desc">Escola em França até ao 10.º ano, com um estágio de observação na Thales no 9.º ano.</p>
+              <p class="timeline-desc" data-i18n="h.e4.desc">Escola em França até ao 10.º ano, com um estágio de
+                observação na Thales no 9.º ano.</p>
             </div>
           </li>
-        </ol></div>
+        </ol>
+
+        <div class="skills">
+          <div>
+            <h3 data-i18n="h.sk.code">Código</h3>
+            <ul>
+              <li data-i18n="h.sk.c1">Linguagens: JavaScript, TypeScript, Python</li>
+              <li data-i18n="h.sk.c2">Interface: HTML, CSS, React, Vite</li>
+              <li data-i18n="h.sk.c3">Extensões de browser: Manifest V3</li>
+              <li data-i18n="h.sk.c4">Dados e APIs: Supabase, MySQL, REST, FastAPI</li>
+            </ul>
+          </div>
+          <div>
+            <h3 data-i18n="h.sk.sys">Sistemas e redes</h3>
+            <ul>
+              <li data-i18n="h.sk.s1">Rede: Fortinet (FortiGate, FortiSwitch), VLANs, encaminhamento</li>
+              <li data-i18n="h.sk.s2">Virtualização: Proxmox VE (VMs, LXC, clusters), iDRAC</li>
+              <li data-i18n="h.sk.s3">Sistemas: Debian, Ubuntu Server, Windows Server</li>
+              <li data-i18n="h.sk.s4">Cloud privada: Nextcloud</li>
+              <li data-i18n="h.sk.s5">Hardware: diagnóstico, reparação, cablagem</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ==================== 06 CONTACT ==================== -->
+    <!-- ==================== CONTACT ==================== -->
     <section id="contact" class="section section--contact">
       <div class="section-container">
-        <span class="eyebrow" data-i18n="h.ct.eyebrow">Nível final · Contacto</span>
+        <span class="eyebrow" data-i18n="h.ct.eyebrow">03 · Contacto</span>
         <h2 class="section-title" data-i18n="h.ct.title">Vamos falar.</h2>
-        <p class="section-lead" data-i18n="h.ct.lead">Procuro um estágio ou um primeiro emprego em programação, redes ou sistemas, no norte de Portugal ou em teletrabalho. Se a equipa gosta de trabalhar com bom humor, vamos entender-nos.</p>
+        <p class="section-lead" data-i18n="h.ct.lead">Procuro um estágio ou um primeiro emprego em programação, redes ou
+          sistemas, perto de Amarante e do Porto ou em teletrabalho.</p>
 
         <a href="mailto:contact.fabiocp@gmail.com" class="mail-big">contact.fabiocp@gmail.com</a>
-        <p class="mail-note" data-i18n="h.ct.note">Para propostas de trabalho e recrutamento. Respondo em português, francês ou inglês. Sou elegível para estágios IEFP (nível 5, Ativar.pt).</p>
+        <p class="mail-note" data-i18n="h.ct.note">Para propostas de trabalho e recrutamento. Respondo em português,
+          francês ou inglês.</p>
 
         <div class="contact-rows">
           <div class="contact-row"><span data-i18n="h.ct.r1">Projetos</span><a
@@ -423,7 +392,8 @@
               rel="noopener">devbyfab</a></div>
           <div class="contact-row"><span>GitHub</span><a href="https://github.com/devbyfab" target="_blank"
               rel="noopener">github.com/devbyfab</a></div>
-          <div class="contact-row"><span data-i18n="h.ct.r4">CV</span><a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" data-i18n="h.ct.r4v">Abrir o PDF (português)</a></div>
+          <div class="contact-row"><span data-i18n="h.ct.r4">CV</span><a href="assets/CV_DevByFab.pdf" download
+              data-i18n="h.ct.r4v">Descarregar em PDF (português)</a></div>
         </div>
       </div>
     </section>

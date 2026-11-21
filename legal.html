@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" data-perf="turbo">
+<html lang="fr" data-perf="turbo">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Legal notice for the DevByFab portfolio.">
-  <title>Legal notice — DevByFab</title>
+  <meta name="description" content="Mentions Légales — Portfolio de DevByFab.">
+  <meta name="i18n-base" content="i18n">
+  <title data-i18n="footer.legal">Mentions Légales — DevByFab</title>
   <link rel="icon" type="image/png" href="img/Logo_Sans_Fond.png">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/base.css">
@@ -16,31 +17,63 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
 
   <header class="site-header scrolled">
-    <nav class="nav-container" aria-label="Main">
+    <nav class="nav-container">
       <div class="nav-left">
-        <a href="index.html#hero" class="logo" aria-label="DevByFab, home">
-          <img src="img/Logo_Sans_Fond.png" alt="" width="28" height="34">
+        <a href="index.html" class="logo" aria-label="DevByFab Accueil">
+          <img src="img/Logo_Sans_Fond.png" alt="DevByFab Logo">
           <span class="logo-name">DevByFab</span>
         </a>
       </div>
 
-      <ul class="nav-links" id="nav-links">
-        <li><a href="index.html#code" class="nav-link">Code</a></li>
-        <li><a href="index.html#network" class="nav-link">Network</a></li>
-        <li><a href="index.html#modeling" class="nav-link">3D</a></li>
-        <li><a href="index.html#ai" class="nav-link">AI</a></li>
-        <li><a href="index.html#parcours" class="nav-link">Background</a></li>
-        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-        <li class="nav-cv-item"><a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="nav-link">CV</a></li>
+      <ul class="nav-links">
+        <li><a href="index.html#hero" class="nav-link" data-i18n="nav.home">Accueil</a></li>
+        <li><a href="index.html#code" class="nav-link" data-i18n="nav.code">Code</a></li>
+        <li><a href="index.html#parcours" class="nav-link" data-i18n="nav.path">Parcours</a></li>
+        <li><a href="index.html#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
       </ul>
 
       <div class="nav-right">
-        <a href="assets/CV_DevByFab.pdf" target="_blank" rel="noopener" class="nav-cv-btn">CV</a>
+        <a href="cv.html" class="nav-cv-btn" title="Consulter mon CV en ligne">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+          <span data-i18n="nav.cv">Mon CV</span>
+        </a>
 
-        <button class="burger-menu" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button type="button" class="lang-dropdown-trigger" id="lang-dropdown-trigger" aria-haspopup="true"
+            aria-expanded="false" aria-label="Choisir la langue">
+            <span class="lang-current" id="lang-current-label">FR</span>
+            <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="menu">
+            <button type="button" class="lang-dropdown-item active" data-lang-val="FR" role="menuitem"
+              aria-checked="true">
+              <span class="lang-name">Français</span>
+              <span class="lang-code">FR</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="PT" role="menuitem" aria-checked="false">
+              <span class="lang-name">Português</span>
+              <span class="lang-code">PT</span>
+            </button>
+            <button type="button" class="lang-dropdown-item" data-lang-val="EN" role="menuitem" aria-checked="false">
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="burger-menu" aria-label="Open menu">
           <span class="burger-line"></span>
           <span class="burger-line"></span>
         </button>
@@ -48,52 +81,45 @@
     </nav>
   </header>
 
-  <main id="main">
-    <section class="section pj-hero">
-      <div class="section-container">
-        <span class="eyebrow">Legal</span>
-        <h1 class="section-title">Legal notice</h1>
-      </div>
+  <main>
+    <section class="page-hero" style="text-align: center; padding: 7rem 1.5rem 2.5rem;">
+      <h1 class="section-title" data-i18n="footer.legal">Mentions Légales</h1>
     </section>
 
-    <section class="section pj-body">
-      <div class="section-container">
-        <div class="pj-list">
-          <div class="pj-row">
-            <h2 class="eyebrow">Publisher</h2>
-            <p>DevByFab</p>
-          </div>
-          <div class="pj-row">
-            <h2 class="eyebrow">Contact</h2>
-            <p>Recruitment: <a href="mailto:contact.fabiocp@gmail.com">contact.fabiocp@gmail.com</a><br>
-              Projects: <a href="mailto:devbyfab@gmail.com">devbyfab@gmail.com</a></p>
-          </div>
-          <div class="pj-row">
-            <h2 class="eyebrow">Hosting</h2>
-            <p><a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
-          </div>
-          <div class="pj-row">
-            <h2 class="eyebrow">Your data</h2>
-            <p>This is a personal portfolio. It has no cookies, no analytics and no tracking. Your browser stores
-              your language choice, and the game saves its progress, both in localStorage on your device only.</p>
-          </div>
-          <div class="pj-row">
-            <h2 class="eyebrow">Projects</h2>
-            <p>The projects shown here are my own work. Some, like BoTokard, are private and have no public code.</p>
-          </div>
+    <section class="section-container" style="max-width: 800px; padding: 0 1.5rem 5rem;">
+      <article class="glass-card spotlight-card" style="padding: 2.5rem;">
+        <div class="about-bio-body">
+          <p style="margin-bottom: 1.5rem;">
+            <strong>Éditeur du site :</strong> DevByFab<br>
+            <strong>Email Recrutement :</strong> <a href="mailto:contact.fabiocp@gmail.com"
+              style="color: var(--accent-light); text-decoration: underline;">contact.fabiocp@gmail.com</a><br>
+            <strong>Email Projets :</strong> <a href="mailto:devbyfab@gmail.com"
+              style="color: var(--accent-light); text-decoration: underline;">devbyfab@gmail.com</a><br>
+            <strong>Hébergement :</strong> <a href="https://pages.github.com" target="_blank" rel="noopener"
+              style="color: var(--accent-light); text-decoration: underline;">GitHub Pages</a>
+          </p>
+          <p style="color: var(--text-secondary); line-height: 1.7;">
+            Ce site web est un portfolio personnel à vocation professionnelle et d'information.<br>
+            Aucune donnée personnelle de pistage n'est collectée sans votre consentement. Le choix de langue est
+            mémorisé localement sur votre navigateur (localStorage).<br>
+            L'ensemble des projets présentés sont des travaux originaux et open-source réalisés par l'auteur.
+          </p>
         </div>
-      </div>
+      </article>
     </section>
   </main>
 
   <footer class="site-footer">
+    <div class="footer-separator"></div>
     <div class="footer-content">
-      <p class="footer-copy">&copy; DevByFab 2026 · All rights reserved. · <a href="legal.html">Legal notice</a></p>
+      <p class="footer-copy">&copy; DevByFab 2026. <span data-i18n="footer.rights">Tous droits réservés.</span> · <a
+          href="legal.html" data-i18n="footer.legal">Mentions Légales</a></p>
     </div>
   </footer>
 
   <script src="js/animations.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
 </body>
 
 </html>
