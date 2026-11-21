@@ -153,14 +153,6 @@ section[id] {
   top: 1rem;
 }
 
-.bg-gradient {
-  display: none;
-}
-
-html[data-perf="eco"] .infra-link {
-  animation: none !important;
-}
-
 /* --- Apparition au scroll (activée par js/animations.js) --- */
 .js [data-anim="fade-up"],
 .js [data-anim-child] {
