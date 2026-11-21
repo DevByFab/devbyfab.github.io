@@ -7,7 +7,7 @@ Portfolio de « DevByFab » (HTML/CSS/JS statique, GitHub Pages) + un jeu dans `
 Le propriétaire parle français (tutoiement, ton décontracté). Réponds-lui en français.
 
 ## Objectif
-- Trouver un poste (ou stage/alternance) **au Portugal, le plus près possible d'Amarante / Porto** (max 1 h 30 en transports), sinon en **télétravail**. Ouvert aux entreprises étrangères en télétravail (France).
+- Trouver un poste (ou stage/alternance) **dans le nord du Portugal**, sinon en **télétravail**. Ouvert aux entreprises étrangères en télétravail (France).
 - Langues du site : PT (défaut), FR, EN.
 - Il adore programmer et veut que la partie code soit visible.
 
@@ -15,6 +15,7 @@ Le propriétaire parle français (tutoiement, ton décontracté). Réponds-lui e
 - La marque est **DevByFab**. Le vrai nom ne doit apparaître nulle part sur le site ni dans les fichiers du dépôt. Pas d'âge, pas d'adresse.
 - Contact pro : l'adresse déjà présente dans `index.html`. Contact projets : `devbyfab@gmail.com`.
 - Ne jamais mettre d'infos perso dans un fichier du dépôt ou une requête vers un service externe.
+- **Aucune ville ni commune** (ni la sienne, ni celle des employeurs ou écoles) dans le site ni dans les docs : on écrit « nord du Portugal » ou « Portugal ». Pas d'état civil. Le PDF du CV public doit être sans nom, téléphone ni ville.
 - **Ne jamais `git push` sans demande explicite** : un push sur `main` redéploie le site.
 
 ## Direction artistique (validée)
@@ -51,3 +52,11 @@ On copie les dossiers de skills seulement (pas les hooks du plugin ponytail). Re
 - Chiffre RAM mesuré pour AeroTabs (le « 80 % » non vérifié a été retiré).
 - Pages `project/*.html` : texte à réécrire en prose FR ; vérifier `legal.html` (vie privée).
 - Projets : AeroTabs (bêta, soumission Chrome Web Store + Firefox Add-ons ; captures de store dans `C:\Users\fabcp\Documents\.Fab\AeroTabs-Store\screenshots`), BoTokard (terminé, non montrable), CipherVault (scolaire, ~70 %, repris de temps en temps).
+
+## État du site (21 nov. 2026)
+- Version en ligne = l'accueil « carte d'infra » (hero + carte interactive, Code, Parcours, Contact). Le propriétaire la préfère à la refonte « chapitres au scroll » ; celle-ci est gardée sur la branche locale `wip-chapitres` (non poussée), ne pas la remettre sans qu'il le demande.
+- Toutes les pages sont en PT / FR / EN : `index.html`, `legal.html`, `project/{extention,webgames,discordbot,clipython}.html` (HTML en PT, `data-i18n-inline="pt"`, les autres langues viennent de `i18n/*.json`). `meta.*` pour l'accueil, `lg.*` pour les mentions légales, `pr.*` pour les pages projet (`data-i18n-meta="<préfixe>"`).
+- Langue : choix mémorisé `devbyfab:lang`, sinon première langue de `navigator.languages` parmi PT/FR/EN, sinon EN.
+- Boutons « CV » : ouvrent `assets/CV_DevByFab.pdf` dans un nouvel onglet. `cv.html` est supprimé.
+- Pages projet courtes et personnelles (ce que c'est, pourquoi, le plus dur, où ça en est). Pas de blocs de code, pas d'émojis.
+- Test de langue : puppeteer-core, `navigator.languages` forcé (fr, pt, en, de, combinaisons) sur chaque page.
