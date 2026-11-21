@@ -1,4 +1,4 @@
-export type DashboardTab = 'dashboard' | 'cashflow' | 'messages' | 'war' | 'matrix';
+export type DashboardTab = 'dashboard' | 'cashflow' | 'messages' | 'war' | 'matrix' | 'story';
 
 export interface DashboardTabDefinition {
   id: DashboardTab;
@@ -12,6 +12,7 @@ export const DASHBOARD_TABS: ReadonlyArray<DashboardTabDefinition> = [
   { id: 'messages', labelKey: 'reboot.tabs.messages', minPhase: 2 },
   { id: 'war', labelKey: 'reboot.tabs.war', minPhase: 3 },
   { id: 'matrix', labelKey: 'reboot.tabs.matrix', minPhase: 4 },
+  { id: 'story', labelKey: 'reboot.tabs.story', minPhase: 4 },
 ];
 
 export interface UnlockHintDefinition {

@@ -8,6 +8,14 @@ export type PhaseId =
 
 export type InvestMode = 'stable' | 'aggressive';
 
+export type StoryPathId = 'vengeance' | 'resilience' | 'madness';
+
+export type EndingId = StoryPathId | 'prison';
+
+export type StoryProjectStatus = 'locked' | 'ready' | 'running' | 'done';
+
+export type StoryMissing = 'money' | 'bots' | 'war-wins' | 'suspicion';
+
 export type FbiRiskState = 'clear' | 'watch' | 'alert';
 
 export type FrontBusinessId =
@@ -186,6 +194,35 @@ export interface MessageSnapshot {
   nextInMs: number;
 }
 
+export interface StoryProjectSnapshot {
+  index: number;
+  status: StoryProjectStatus;
+  costMoney: number;
+  costBots: number;
+  minWarWins: number;
+  /** Suspicion (0 à 10000) à ne pas dépasser pour lancer le projet et le faire avancer. */
+  maxSuspicion: number;
+  durationMs: number;
+  progressBps: number;
+  /** Ce qui manque pour le lancer maintenant (vide si lançable). */
+  missing: StoryMissing[];
+  /** Le projet tourne mais la suspicion est trop haute : il n'avance plus. */
+  stalled: boolean;
+}
+
+export interface StorySnapshot {
+  path: StoryPathId | null;
+  projectsDone: number;
+  /** P4 atteinte, voie pas encore choisie : l'écran de choix doit s'ouvrir. */
+  choiceOpen: boolean;
+  /** P5 atteinte : les projets de la voie peuvent démarrer. */
+  projectsOpen: boolean;
+  projects: StoryProjectSnapshot[];
+  arrestActive: boolean;
+  arrestRemainingMs: number;
+  ending: EndingId | null;
+}
+
 export interface TelemetrySnapshot {
   botsPerSec: number;
   moneyPerSec: number;
@@ -252,6 +289,16 @@ export interface PersistedEngineUpgrades {
   totalMaxLevels: number;
 }
 
+export interface PersistedEngineStory {
+  path: StoryPathId | null;
+  projectsDone: number;
+  projectRunning: boolean;
+  projectProgressMs: number;
+  arrestActive: boolean;
+  arrestRemainingMs: number;
+  ending: EndingId | null;
+}
+
 export interface PersistedEngineTelemetry {
   botsPerSec: number;
   moneyPerSec: number;
@@ -272,6 +319,7 @@ export interface PersistedEngineState {
   messages: PersistedEngineMessages;
   upgrades: PersistedEngineUpgrades;
   milestones: ProgressionSnapshot;
+  story?: PersistedEngineStory;
   telemetry: PersistedEngineTelemetry;
   logSequence: number;
 }
@@ -294,6 +342,7 @@ export interface GameSnapshot {
   messages: MessageSnapshot;
   upgrades: UpgradesSnapshot;
   progression: ProgressionSnapshot;
+  story: StorySnapshot;
   telemetry: TelemetrySnapshot;
 }
 

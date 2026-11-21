@@ -1,4 +1,5 @@
 import type {
+  EndingId,
   FrontBusinessMode,
   GameSnapshot,
   InvestMode,
@@ -8,6 +9,7 @@ import type {
   PhaseSnapshot,
   PersistedFrontBusinessMap,
   PersistedGameState,
+  StoryPathId,
   UpgradeOfferSnapshot,
 } from '../game/types';
 import {
@@ -23,6 +25,7 @@ import {
   resolveFbiRiskState,
 } from './domain/economy/riskModel';
 import { resolvePhaseProgress } from './domain/phases';
+import { buildStorySnapshot, createInitialStory, sanitizeStory } from './domain/story';
 import { UPGRADE_CHAINS } from './domain/upgrades/chains';
 
 export interface EngineResources {
@@ -129,6 +132,16 @@ export interface EngineMilestones {
   messagesHandled: number;
 }
 
+export interface EngineStory {
+  path: StoryPathId | null;
+  projectsDone: number;
+  projectRunning: boolean;
+  projectProgressMs: number;
+  arrestActive: boolean;
+  arrestRemainingMs: number;
+  ending: EndingId | null;
+}
+
 export interface EngineTelemetry {
   botsPerSec: number;
   moneyPerSec: number;
@@ -149,6 +162,7 @@ export interface EngineState {
   messages: EngineMessages;
   upgrades: EngineUpgrades;
   milestones: EngineMilestones;
+  story: EngineStory;
   telemetry: EngineTelemetry;
   logSequence: number;
 }
@@ -441,6 +455,7 @@ export function createInitialEngineState(nowMs: number): EngineState {
       warWins: 0,
       messagesHandled: 0,
     },
+    story: createInitialStory(),
     telemetry: {
       botsPerSec: 0,
       moneyPerSec: 0,
@@ -559,6 +574,7 @@ export function toPersistedState(
         moneyPerSec: state.telemetry.moneyPerSec,
         heatPerSec: state.telemetry.heatPerSec,
       },
+      story: { ...state.story },
       logSequence: state.logSequence,
     },
   };
@@ -930,6 +946,7 @@ export function fromPersistedState(payload: PersistedGameState, fallbackNowMs: n
         Number.MAX_SAFE_INTEGER,
       ),
     },
+    story: sanitizeStory(persistedState.story),
     telemetry: {
       botsPerSec: parseNumberValue(persistedState.telemetry.botsPerSec, fallback.telemetry.botsPerSec),
       moneyPerSec: parseNumberValue(
@@ -1071,6 +1088,7 @@ export function toSnapshot(state: EngineState): GameSnapshot {
       warWins: state.milestones.warWins,
       messagesHandled: state.milestones.messagesHandled,
     },
+    story: buildStorySnapshot(state),
     telemetry: {
       botsPerSec: state.telemetry.botsPerSec,
       moneyPerSec: state.telemetry.moneyPerSec,

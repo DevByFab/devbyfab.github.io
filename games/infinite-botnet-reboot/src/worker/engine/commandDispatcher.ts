@@ -15,6 +15,7 @@ import {
 import { commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../domain/matrix';
 import { commandProcessMessage, commandQuarantineMessage } from '../domain/narrative';
 import { commandWarAttack, commandWarFortify, commandWarScrub } from '../domain/war';
+import { commandChoosePath, commandStartProject } from '../domain/story';
 import { commandPurchaseUpgrade } from '../domain/upgrades';
 import type { EngineState } from '../state';
 import type { EmitLog } from './types';
@@ -56,6 +57,11 @@ export function dispatchCommand(
   command: EngineActionCommand,
   emitLog: EmitLog,
 ): void {
+  // La partie est finie (une fin a été atteinte) : plus aucune commande, seul « nouvelle partie » reste.
+  if (state.story.ending) {
+    return;
+  }
+
   switch (command.type) {
     case 'SCAN': {
       const scanned = commandScan(state);
@@ -271,6 +277,36 @@ export function dispatchCommand(
         emitLog('Upgrade refusee: ressources insuffisantes.', 'warn');
       } else {
         emitLog('Upgrade achetee: ' + (command.payload?.chainId ?? 'unknown') + '.', 'info');
+      }
+      break;
+    }
+    case 'CHOOSE_PATH': {
+      const result = commandChoosePath(state, command.payload?.pathId);
+      if (result === 'chosen') {
+        emitLog('Voie choisie : ' + command.payload?.pathId + '. Le choix est définitif pour cette partie.', 'info');
+      } else if (result === 'already-chosen') {
+        emitLog('Ta voie est déjà choisie.', 'warn');
+      } else if (result === 'locked') {
+        emitLog('Le choix de la voie s\'ouvre en P4.', 'warn');
+      } else {
+        emitLog('Voie inconnue.', 'warn');
+      }
+      break;
+    }
+    case 'START_PROJECT': {
+      const result = commandStartProject(state);
+      if (result === 'started') {
+        emitLog('Projet lancé.', 'info');
+      } else if (result === 'no-path') {
+        emitLog('Choisis d\'abord ta voie.', 'warn');
+      } else if (result === 'locked') {
+        emitLog('Les projets s\'ouvrent en P5.', 'warn');
+      } else if (result === 'running') {
+        emitLog('Un projet est déjà en cours.', 'warn');
+      } else if (result === 'finished') {
+        emitLog('Tous les projets de ta voie sont terminés.', 'info');
+      } else {
+        emitLog('Projet impossible : il manque des ressources ou la suspicion est trop haute.', 'warn');
       }
       break;
     }

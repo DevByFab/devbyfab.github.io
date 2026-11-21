@@ -2,9 +2,14 @@
  * Joueur automatique : joue une partie complète avec les MÊMES fonctions que le worker
  * (runSimulationStep, syncDerivedState, commandes du domaine) et mesure la durée.
  *
- * Usage : npm run balance:sim -- [--hours=10] [--seeds=3] [--skill=relaxed|normal|focused|all] [--json] [--trace [--every=30]] [--step=100]
+ * Une partie se termine quand une fin est atteinte (3 projets de la voie, ou prison).
+ *
+ * Usage : npm run balance:sim -- [--hours=10] [--seeds=3] [--skill=relaxed|normal|focused|all]
+ *         [--path=vengeance|resilience|madness|prison|all] [--json] [--trace [--every=30]] [--step=100]
+ *   --path=all (défaut) : les graines se partagent les trois voies ; --path=prison : le joueur n'utilise jamais de contre-mesure FBI.
  */
-import type { FrontBusinessId, PhaseId } from '../../game/types';
+import { STORY_PATH_IDS, STORY_PROJECTS } from '../../game/story';
+import type { EndingId, FrontBusinessId, PhaseId, StoryPathId } from '../../game/types';
 import {
   commandCashoutPortfolio,
   commandExploit,
@@ -17,6 +22,7 @@ import {
 } from '../domain/economy';
 import { commandMatrixArm, commandMatrixInject, commandMatrixStabilize } from '../domain/matrix';
 import { commandProcessMessage, commandQuarantineMessage } from '../domain/narrative';
+import { commandChoosePath, commandStartProject } from '../domain/story';
 import { commandPurchaseUpgrade } from '../domain/upgrades';
 import { commandWarAttack, commandWarFortify, commandWarScrub } from '../domain/war';
 import { runSimulationStep } from '../engine/simulationStep';
@@ -28,6 +34,7 @@ let traceEveryMs = 1_800_000; // --every=<minutes> avec --trace
 const TARGET_MIN_HOURS = 3;
 const TARGET_MAX_HOURS = 5;
 const FINAL_PHASE: PhaseId = 'singularity-core';
+const NO_LIMIT = 10_000;
 const FRONT_BUSINESSES: ReadonlyArray<FrontBusinessId> = ['laundromat', 'car-dealership', 'freight-forwarder'];
 
 interface Skill {
@@ -57,6 +64,9 @@ interface Counters {
 interface RunResult {
   seed: number;
   skill: string;
+  path: PathMode;
+  ending: EndingId | null;
+  projectAtMin: number[];
   completedAtMin: number | null;
   finalPhase: PhaseId;
   phaseAtMin: Partial<Record<PhaseId, number>>;
@@ -67,6 +77,8 @@ interface RunResult {
   counters: Counters;
   finalBots: string;
 }
+
+type PathMode = StoryPathId | 'prison';
 
 function seededRandom(seed: number): () => number {
   let value = seed >>> 0;
@@ -89,8 +101,33 @@ function manualActions(state: EngineState): void {
   }
 }
 
-function interfaceCheck(state: EngineState, counters: Counters, second: number): void {
+/** Gestes d'un joueur raisonnable sur la voie choisie. Renvoie true s'il faut garder la monétisation coupée. */
+function storyActions(state: EngineState, mode: PathMode): boolean {
+  const path: StoryPathId = mode === 'prison' ? 'vengeance' : mode;
+  const { story, resources, systems } = state;
+
+  if (state.phase.index >= 4 && !story.path) commandChoosePath(state, path);
+  if (state.phase.index < 5 || !story.path) return false;
+
+  const definition = STORY_PROJECTS[path][story.projectsDone];
+  if (!definition) return false;
+
+  // Les avocats refusent un client trop exposé : on coupe la monétisation et on refroidit avant de lancer, puis on tient.
+  const needsCalm = path === 'vengeance' && definition.maxSuspicion < NO_LIMIT && mode !== 'prison';
+  const readyToSpend = story.projectRunning || resources.money >= definition.costMoney;
+  const hold = needsCalm && readyToSpend;
+  if (hold) {
+    if (systems.monetizeActive) commandToggleMonetize(state);
+    if (systems.fbiSuspicion > definition.maxSuspicion - 300) commandFbiCountermeasure(state);
+  }
+
+  if (!story.projectRunning) commandStartProject(state);
+  return hold;
+}
+
+function interfaceCheck(state: EngineState, counters: Counters, second: number, mode: PathMode): void {
   const { resources, systems, war, matrix, rates } = state;
+  const holdMonetize = storyActions(state, mode);
 
   // Améliorations : la liste est triée, on prend la première achetable.
   for (let guard = 0; guard < 6; guard += 1) {
@@ -103,11 +140,11 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
     }
   }
 
-  if (!systems.monetizeActive && resources.bots >= 70) {
+  if (!holdMonetize && !systems.monetizeActive && resources.bots >= 70) {
     commandToggleMonetize(state);
   }
 
-  if (state.phase.index >= 2 && systems.fbiSuspicion > 6200 && systems.fbiCountermeasureCooldownMs <= 0 &&
+  if (mode !== 'prison' && state.phase.index >= 2 && systems.fbiSuspicion > 6200 && systems.fbiCountermeasureCooldownMs <= 0 &&
     resources.money >= rates.fbiCountermeasureCostMoney) {
     commandFbiCountermeasure(state);
   }
@@ -163,7 +200,7 @@ function interfaceCheck(state: EngineState, counters: Counters, second: number):
   }
 }
 
-function playRun(seed: number, skill: Skill, maxHours: number, trace = false): RunResult {
+function playRun(seed: number, skill: Skill, mode: PathMode, maxHours: number, trace = false): RunResult {
   const realRandom = Math.random;
   Math.random = seededRandom(seed);
 
@@ -185,6 +222,8 @@ function playRun(seed: number, skill: Skill, maxHours: number, trace = false): R
     const bottleneck: Partial<Record<PhaseId, string>> = {};
     const reqMetAt: Record<string, number> = {};
     let completedAtMin: number | null = null;
+    const projectAtMin: number[] = [];
+    let projectsSeen = 0;
     let peakHeat = 0;
     let peakSuspicion = 0;
     let nextAction = 0;
@@ -197,7 +236,7 @@ function playRun(seed: number, skill: Skill, maxHours: number, trace = false): R
         nextAction = state.nowMs + skill.actionMs;
       }
       if (state.nowMs >= nextCheck) {
-        interfaceCheck(state, counters, Math.floor(state.nowMs / 1000));
+        interfaceCheck(state, counters, Math.floor(state.nowMs / 1000), mode);
         nextCheck = state.nowMs + skill.checkMs;
       }
 
@@ -236,11 +275,15 @@ function playRun(seed: number, skill: Skill, maxHours: number, trace = false): R
 
       if (state.war.heat > peakHeat) peakHeat = state.war.heat;
       if (state.systems.fbiSuspicion > peakSuspicion) peakSuspicion = state.systems.fbiSuspicion;
-      if (state.phase.id === FINAL_PHASE) completedAtMin = minute;
+      if (state.story.projectsDone > projectsSeen) {
+        projectsSeen = state.story.projectsDone;
+        projectAtMin.push(minute);
+      }
+      if (state.story.ending) completedAtMin = minute;
     }
 
     return {
-      seed, skill: skill.name, completedAtMin, finalPhase: state.phase.id, phaseAtMin, bottleneck,
+      seed, skill: skill.name, path: mode, ending: state.story.ending, projectAtMin, completedAtMin, finalPhase: state.phase.id, phaseAtMin, bottleneck,
       peakHeat, peakSuspicion, counters, finalBots: state.resources.bots.toString(),
     };
   } finally {
@@ -262,7 +305,7 @@ function fmtMin(minutes: number | null | undefined): string {
   return `${h}h${String(m).padStart(2, '0')}`.padStart(7);
 }
 
-function readArgs(): { step: number; every: number; hours: number; seeds: number; skills: Skill[]; json: boolean; trace: boolean } {
+function readArgs(): { step: number; every: number; hours: number; seeds: number; skills: Skill[]; json: boolean; trace: boolean; path: string } {
   const argv = (globalThis as unknown as { process?: { argv: string[] } }).process?.argv ?? [];
   const get = (name: string): string | undefined =>
     argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
@@ -275,18 +318,22 @@ function readArgs(): { step: number; every: number; hours: number; seeds: number
     skills: skillArg === 'all' ? Object.values(SKILLS) : [SKILLS[skillArg] ?? SKILLS.normal],
     json: argv.includes('--json'),
     trace: argv.includes('--trace'),
+    path: get('path') ?? 'all',
   };
 }
 
 function main(): void {
-  const { step, every, hours, seeds, skills, json, trace } = readArgs();
+  const { step, every, hours, seeds, skills, json, trace, path } = readArgs();
   stepMs = step;
   traceEveryMs = every * 60_000;
   const seedList = Array.from({ length: seeds }, (_, i) => 101 + i * 102);
   const results: RunResult[] = [];
 
   for (const skill of skills) {
-    for (const seed of seedList) results.push(playRun(seed, skill, hours, trace));
+    seedList.forEach((seed, index) => {
+      const mode: PathMode = path === 'all' ? STORY_PATH_IDS[index % STORY_PATH_IDS.length] : (path as PathMode);
+      results.push(playRun(seed, skill, mode, hours, trace));
+    });
   }
 
   if (json) {
@@ -296,12 +343,16 @@ function main(): void {
 
   const phases: PhaseId[] = ['garage', 'automation', 'monetization', 'botnet-war', 'matrix-breach', 'singularity-core'];
   console.log(`--- Infinite BotNet Reboot : joueur automatique (${seeds} graines, limite ${hours} h, tick ${stepMs} ms) ---`);
-  console.log(`Cible : ${TARGET_MIN_HOURS} h à ${TARGET_MAX_HOURS} h pour atteindre ${FINAL_PHASE}\n`);
+  console.log(`Cible : ${TARGET_MIN_HOURS} h à ${TARGET_MAX_HOURS} h pour atteindre une fin (P5 = ${FINAL_PHASE})\n`);
 
   for (const skill of skills) {
     const runs = results.filter((r) => r.skill === skill.name);
     const done = runs.filter((r) => r.completedAtMin !== null).map((r) => r.completedAtMin as number);
-    console.log(`Niveau "${skill.name}" : terminé ${done.length}/${runs.length}, médiane ${fmtMin(median(done))}`);
+    console.log(`Niveau "${skill.name}" : fin atteinte ${done.length}/${runs.length}, médiane ${fmtMin(median(done))}`);
+    for (const run of runs) {
+      const marks = run.projectAtMin.map((m) => fmtMin(m).trim()).join(' / ') || '-';
+      console.log(`  graine ${run.seed} voie ${run.path.padEnd(10)} -> ${(run.ending ?? 'aucune fin').padEnd(10)} à ${fmtMin(run.completedAtMin).trim()}  projets : ${marks}`);
+    }
     console.log('  phase atteinte à (médiane) :');
     for (const phase of phases) {
       const at = runs.map((r) => r.phaseAtMin[phase]).filter((v): v is number => v !== undefined);

@@ -1,6 +1,6 @@
 import { useCallback, type Dispatch, type SetStateAction } from 'react';
 import type { EngineActionCommand } from '../../game/protocol';
-import type { FrontBusinessId } from '../../game/types';
+import type { FrontBusinessId, StoryPathId } from '../../game/types';
 import type { AudioManager } from './useAudioManager';
 
 type UiCue = Parameters<AudioManager['playUiCue']>[0];
@@ -74,6 +74,8 @@ interface UseGameActionHandlersResult {
   matrixArm: () => void;
   matrixInject: () => void;
   matrixStabilize: () => void;
+  choosePath: (pathId: StoryPathId) => void;
+  startProject: () => void;
 }
 
 export function useGameActionHandlers(
@@ -122,6 +124,15 @@ export function useGameActionHandlers(
   }, [matrixCommand, playUiCue, sendCommand, setMatrixCommand]);
 
   const matrixStabilize = useSimpleCommandHandler(playUiCue, sendCommand, 'MATRIX_STABILIZE');
+  const startProject = useSimpleCommandHandler(playUiCue, sendCommand, 'START_PROJECT');
+
+  const choosePath = useCallback(
+    (pathId: StoryPathId) => {
+      playUiCue('scanClick');
+      sendCommand({ type: 'CHOOSE_PATH', payload: { pathId } });
+    },
+    [playUiCue, sendCommand],
+  );
 
   return {
     sendScan,
@@ -143,5 +154,7 @@ export function useGameActionHandlers(
     matrixArm,
     matrixInject,
     matrixStabilize,
+    choosePath,
+    startProject,
   };
 }

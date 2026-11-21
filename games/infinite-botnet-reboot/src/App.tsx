@@ -29,9 +29,12 @@ import {
   writeAudioSettings,
 } from './app/storage';
 import { ResourceCard } from './app/components/ResourceCard';
+import { ArrestBanner } from './app/components/ArrestBanner';
+import { EndingOverlay } from './app/components/overlays/EndingOverlay';
 import { GuideOverlay } from './app/components/overlays/GuideOverlay';
 import { LoreBridgeOverlay } from './app/components/overlays/LoreBridgeOverlay.tsx';
 import { LoreOverlay } from './app/components/overlays/LoreOverlay';
+import { PathChoiceOverlay } from './app/components/overlays/PathChoiceOverlay';
 import { SettingsOverlay } from './app/components/overlays/SettingsOverlay';
 import { UnlockHintOverlay } from './app/components/overlays/UnlockHintOverlay';
 import { CashflowTabPanel } from './app/components/tabs/CashflowTabPanel';
@@ -39,6 +42,7 @@ import { DashboardTabPanel } from './app/components/tabs/DashboardTabPanel';
 import { DashboardTabsNav } from './app/components/tabs/DashboardTabsNav';
 import { MatrixTabPanel } from './app/components/tabs/MatrixTabPanel';
 import { MessagesTabPanel } from './app/components/tabs/MessagesTabPanel';
+import { StoryTabPanel } from './app/components/tabs/StoryTabPanel';
 import { WarTabPanel } from './app/components/tabs/WarTabPanel';
 import { type AudioSettings, useAudioManager } from './app/hooks/useAudioManager';
 import { useGameWorker } from './app/hooks/useGameWorker';
@@ -77,6 +81,7 @@ function App() {
     readAudioSettings(AUDIO_SETTINGS_STORAGE_KEY),
   );
   const [activeTab, setActiveTab] = useState<DashboardTab>('dashboard');
+  const [choiceDismissed, setChoiceDismissed] = useState(false);
   const [guideRect, setGuideRect] = useState<GuideRect | null>(null);
   const [loreSceneIndex, setLoreSceneIndex] = useState(0);
   const [loreTransitionClass, setLoreTransitionClass] = useState<LoreTransitionClass>('');
@@ -469,6 +474,8 @@ function App() {
   const warUnlocked = snapshot.phase.index >= 3;
   const matrixUnlocked = snapshot.phase.index >= 4;
   const phaseGateBlocked = snapshot.phase.requirements.some((requirement) => !requirement.met);
+  const choiceOverlayOpen =
+    snapshot.story.choiceOpen && !choiceDismissed && introStep === null && !guideActive && !currentUnlockHint;
 
   return (
     <main className="app-shell compact-shell">
@@ -514,6 +521,8 @@ function App() {
       </header>
 
       {error ? <p className="error-banner">{t('reboot.header.workerErrorPrefix')}: {error}</p> : null}
+
+      <ArrestBanner snapshot={snapshot} t={t} />
 
       <section className="phase-progress panel-lite" aria-hidden="true">
         <div className="phase-progress-head">
@@ -626,6 +635,15 @@ function App() {
           />
         ) : null}
 
+        {activeTab === 'story' ? (
+          <StoryTabPanel
+            snapshot={snapshot}
+            onOpenChoice={() => setChoiceDismissed(false)}
+            onStartProject={gameActions.startProject}
+            t={t}
+          />
+        ) : null}
+
         {activeTab === 'matrix' ? (
           <MatrixTabPanel
             snapshot={snapshot}
@@ -685,6 +703,33 @@ function App() {
           onReplayLore={onboardingActions.replayLoreFromSettings}
           onReplayTutorial={() => onboardingActions.replayTutorialFromSettings(snapshot.phase.index)}
           onClose={onboardingActions.closeSettings}
+        />
+      ) : null}
+
+      {choiceOverlayOpen ? (
+        <PathChoiceOverlay
+          t={t}
+          onChoose={(pathId) => {
+            gameActions.choosePath(pathId);
+            setActiveTab('story');
+          }}
+          onLater={() => setChoiceDismissed(true)}
+        />
+      ) : null}
+
+      {snapshot.story.ending ? (
+        <EndingOverlay
+          t={t}
+          ending={snapshot.story.ending}
+          onRestart={() => {
+            playUiCue('scanClick');
+            clearLocalSave();
+            clearSeenPhaseTutorialIndexes(PHASE_TUTORIALS_STORAGE_KEY);
+            setSaveTransferText('');
+            setChoiceDismissed(false);
+            setActiveTab('dashboard');
+            resetSession();
+          }}
         />
       ) : null}
 

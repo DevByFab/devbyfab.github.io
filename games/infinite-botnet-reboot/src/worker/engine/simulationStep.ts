@@ -1,6 +1,7 @@
 import { applyEconomyTick } from '../domain/economy';
 import { applyMatrixTick } from '../domain/matrix';
 import { applyNarrativeTick } from '../domain/narrative';
+import { applyStoryTick } from '../domain/story';
 import { applyWarTick } from '../domain/war';
 import type { EngineState } from '../state';
 import type { EmitLog } from './types';
@@ -23,6 +24,11 @@ export function runSimulationStep(
     previousHeat: state.war.heat,
     previousPhaseId: state.phase.id,
   };
+
+  // Une fin a été atteinte : la partie est figée.
+  if (state.story.ending) {
+    return baseline;
+  }
 
   state.nowMs += scaledDeltaMs;
 
@@ -55,6 +61,17 @@ export function runSimulationStep(
   const messageGenerated = applyNarrativeTick(state);
   if (messageGenerated) {
     emitLog('Nouveau message intercepte dans la relay inbox.', 'info');
+  }
+
+  const storyOutcome = applyStoryTick(state, scaledDeltaMs);
+  if (storyOutcome.arrestStarted) {
+    emitLog('Mandat lancé : la police te colle au dos. Fais baisser la suspicion avant la fin du compte à rebours.', 'error');
+  }
+  if (storyOutcome.projectCompleted !== null) {
+    emitLog('Projet ' + (storyOutcome.projectCompleted + 1) + '/3 terminé.', 'info');
+  }
+  if (storyOutcome.ending) {
+    emitLog('Fin atteinte : ' + storyOutcome.ending + '.', 'info');
   }
 
   state.tick += 1;

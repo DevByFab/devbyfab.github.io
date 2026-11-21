@@ -3,6 +3,7 @@ import type {
   GameSnapshot,
   LogLine,
   PersistedGameState,
+  StoryPathId,
 } from './types';
 
 export type EngineActionType =
@@ -24,7 +25,9 @@ export type EngineActionType =
   | 'MATRIX_STABILIZE'
   | 'MESSAGE_PROCESS'
   | 'MESSAGE_QUARANTINE'
-  | 'PURCHASE_UPGRADE';
+  | 'PURCHASE_UPGRADE'
+  | 'CHOOSE_PATH'
+  | 'START_PROJECT';
 
 export interface EngineActionCommand {
   type: EngineActionType;
@@ -32,6 +35,7 @@ export interface EngineActionCommand {
     commandText?: string;
     chainId?: string;
     frontBusinessId?: FrontBusinessId;
+    pathId?: StoryPathId;
   };
 }
 
