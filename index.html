@@ -87,7 +87,7 @@
 
     <!-- ==================== HERO ==================== -->
     <section id="hero" class="section hero">
-      <div class="section-container hero-grid">
+      <div class="section-container">
 
         <div class="hero-copy">
           <p class="eyebrow">DevByFab · Portugal</p>
@@ -118,86 +118,6 @@
               <dd data-i18n="h.f4v">Elegível a estágios (nível 5, Ativar.pt)</dd>
             </div>
           </dl>
-        </div>
-
-        <!-- Carte d'infra : chaque noeud est un bouton, le texte vient du panneau dessous -->
-        <div class="infra">
-          <div class="infra-head">
-            <span data-i18n="h.infraTitle">Mapa de infra</span>
-            <span data-i18n="h.infraHint">passa o rato ou toca</span>
-          </div>
-
-          <svg class="infra-svg" viewBox="0 0 480 372" role="group"
-            aria-label="Mapa interativo da infraestrutura que já configurei" data-i18n-aria="h.infraLabel">
-            <text class="infra-ext-text" x="240" y="20">INTERNET</text>
-            <path class="infra-link" d="M240 28 V64" />
-            <path class="infra-link" d="M240 116 V176" />
-            <path class="infra-link" d="M200 228 V264 H82 V300" />
-            <path class="infra-link" d="M240 228 V300" />
-            <path class="infra-link" d="M280 228 V264 H398 V300" />
-
-            <g class="node" role="button" tabindex="0" data-node="fw" aria-pressed="false">
-              <rect x="165" y="64" width="150" height="52" rx="8" />
-              <text class="node-label" x="240" y="87">FortiGate</text>
-              <text class="node-sub" x="240" y="104" data-i18n="h.n.fw.sub">Firewall</text>
-            </g>
-
-            <g class="node" role="button" tabindex="0" data-node="sw" aria-pressed="false">
-              <rect x="165" y="176" width="150" height="52" rx="8" />
-              <text class="node-label" x="240" y="199">FortiSwitch</text>
-              <text class="node-sub" x="240" y="216" data-i18n="h.n.sw.sub">Switch</text>
-            </g>
-
-            <g class="node" role="button" tabindex="0" data-node="cab" aria-pressed="false">
-              <rect x="190" y="248" width="100" height="32" rx="16" />
-              <text class="node-label" x="240" y="268.5" data-i18n="h.n.cab.label">Cablagem</text>
-            </g>
-
-            <g class="node" role="button" tabindex="0" data-node="px" aria-pressed="false">
-              <rect x="12" y="300" width="140" height="56" rx="8" />
-              <text class="node-label" x="82" y="324">Proxmox VE</text>
-              <text class="node-sub" x="82" y="341" data-i18n="h.n.px.sub">Virtualização</text>
-            </g>
-
-            <g class="node" role="button" tabindex="0" data-node="nc" aria-pressed="false">
-              <rect x="170" y="300" width="140" height="56" rx="8" />
-              <text class="node-label" x="240" y="324">Nextcloud</text>
-              <text class="node-sub" x="240" y="341" data-i18n="h.n.nc.sub">Cloud privada</text>
-            </g>
-
-            <g class="node" role="button" tabindex="0" data-node="cam" aria-pressed="false">
-              <rect x="328" y="300" width="140" height="56" rx="8" />
-              <text class="node-label" x="398" y="324" data-i18n="h.n.cam.label">Câmara IP</text>
-              <text class="node-sub" x="398" y="341" data-i18n="h.n.cam.sub">Videovigilância</text>
-            </g>
-          </svg>
-
-          <div class="infra-panel" aria-live="polite">
-            <div data-panel="fw">
-              <h3>FortiGate</h3>
-              <p data-i18n="h.p.fw">Configurei e testei firewalls Fortinet de empresa durante o estágio na Proxsys Solutions.</p>
-            </div>
-            <div data-panel="sw">
-              <h3>FortiSwitch</h3>
-              <p data-i18n="h.p.sw">Configurei switches Fortinet e VLANs, e instalei-os em rack.</p>
-            </div>
-            <div data-panel="cab">
-              <h3 data-i18n="h.n.cab.label">Cablagem</h3>
-              <p data-i18n="h.p.cab">Instalei servidores e racks em clientes e identifiquei a cablagem de rede.</p>
-            </div>
-            <div data-panel="px">
-              <h3>Proxmox VE</h3>
-              <p data-i18n="h.p.px">Máquinas virtuais, contentores LXC e clusters em Proxmox VE, geridos à distância via iDRAC. É também onde corre o BoTokard.</p>
-            </div>
-            <div data-panel="nc">
-              <h3>Nextcloud</h3>
-              <p data-i18n="h.p.nc">Servidores cloud com Nextcloud (base PHP), configurados nos estágios na ClickTech.</p>
-            </div>
-            <div data-panel="cam">
-              <h3 data-i18n="h.n.cam.label">Câmara IP</h3>
-              <p data-i18n="h.p.cam">Instalei câmaras IP em clientes e integrei-as na rede local.</p>
-            </div>
-          </div>
         </div>
 
       </div>

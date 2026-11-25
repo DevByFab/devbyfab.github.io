@@ -116,35 +116,7 @@
     } catch (_) {}
   }
 
-  /* Carte d'infra : un noeud actif à la fois, le texte est dans le panneau */
-  function initInfra() {
-    var nodes = document.querySelectorAll('.node[data-node]');
-    var panels = document.querySelectorAll('[data-panel]');
-    if (!nodes.length) return;
-
-    function select(id) {
-      nodes.forEach(function (n) {
-        var on = n.getAttribute('data-node') === id;
-        n.classList.toggle('is-active', on);
-        n.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-      panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== id; });
-    }
-
-    nodes.forEach(function (n) {
-      var id = n.getAttribute('data-node');
-      n.addEventListener('click', function () { select(id); });
-      n.addEventListener('mouseenter', function () { select(id); });
-      n.addEventListener('focus', function () { select(id); });
-      n.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id); }
-      });
-    });
-    select('fw');
-  }
-
   function init() {
-    initInfra();
     initHeader(); initBurger(); initScrollSpy();
     initProjectFilters(); initSpotlightCards(); initBotnetSignal();
   }
