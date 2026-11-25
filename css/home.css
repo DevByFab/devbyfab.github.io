@@ -3,7 +3,14 @@
    ============================================ */
 
 /* --- LARGEUR : la page occupe presque tout l'écran (réglé ici, la nav et les sections suivent) --- */
-:root { --gutter: clamp(1.25rem, 5vw, 5rem); }
+:root {
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  /* Texte plus clair et traits plus discrets : plus de contraste, moins de lignes */
+  --text-2: #d0c9de;
+  --text-3: #b4abc7;
+  --line: rgba(237, 232, 244, 0.1);
+}
+.section { padding-block: clamp(6rem, 13vw, 11rem); }
 .section-container,
 .footer-content { max-width: 1680px; }
 .nav-container { max-width: calc(1680px + 2 * var(--gutter)); }
@@ -54,15 +61,14 @@
 }
 
 .hero-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem clamp(1.5rem, 3vw, 3rem);
   margin-top: clamp(3rem, 6vw, 5rem);
   font-size: 0.95rem;
   color: var(--text-3);
 }
 
-.hero-facts > div + div::before { content: '·'; margin-right: 2rem; }
 
 /* Les libellés restent pour les lecteurs d'écran, mais ne s'affichent plus */
 .hero-facts dt {
@@ -87,9 +93,16 @@
 }
 
 /* --- CODE --- */
+/* Section claire : on change seulement les variables, les composants suivent */
 .section--code {
-  background: var(--bg-2);
-  border-block: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--paper-text);
+  --text: var(--paper-text);
+  --text-2: #4a4160;
+  --text-3: #5c5273;
+  --line: rgba(27, 21, 39, 0.14);
+  --line-strong: rgba(27, 21, 39, 0.32);
+  --violet-ink: var(--violet);
 }
 
 .projects {
@@ -331,8 +344,7 @@
 @media (max-width: 960px) {
   .hero-copy { grid-template-columns: minmax(0, 1fr); row-gap: 1.75rem; }
   .hero-actions { justify-content: flex-start; }
-  .hero-facts { margin-top: 2rem; }
-  .hero-facts > div + div::before { content: none; }
+  .hero-facts { margin-top: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .skills {
     grid-template-columns: 1fr;
@@ -340,6 +352,7 @@
 }
 
 @media (max-width: 680px) {
+  .hero-facts { grid-template-columns: 1fr; }
   .project,
   .timeline-item,
   .stack-line,
